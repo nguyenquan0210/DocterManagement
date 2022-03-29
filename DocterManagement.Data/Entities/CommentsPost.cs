@@ -12,7 +12,7 @@ namespace DocterManagement.Data.Entities
         public DateTime Date { get; set; }
         public string Description { get; set; }
         public bool CheckLevel { get; set; }
-        public bool CheckComentId { get; set; }
+        public string CheckComentId { get; set; }
         public Guid UserId { get; set; }
         public AppUsers AppUsers { get; set; }
         public Guid PostId { get; set; }

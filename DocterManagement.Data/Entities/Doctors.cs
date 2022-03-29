@@ -13,8 +13,8 @@ namespace DocterManagement.Data.Entities
         public string Address { get; set; }
         public string Img { get; set; }
         public string Description { get; set; }
-        public Guid SpecialitiID { get; set; }
-        public Guid ClinicID { get; set; }
+        public Guid SpecialitiId { get; set; }
+        public Guid ClinicId { get; set; }
         
         public AppUsers AppUsers { get; set; }
         public Specialities Specialities { get; set; }

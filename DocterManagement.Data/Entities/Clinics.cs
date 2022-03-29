@@ -17,5 +17,7 @@ namespace DocterManagement.Data.Entities
         public Guid WardId { get; set; }
 
         public List<ImageClinics> ImageClinics { get; set; }
+        public List<Doctors> Doctors { get; set; }
+
     }
 }
