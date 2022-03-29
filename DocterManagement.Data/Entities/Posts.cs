@@ -10,7 +10,7 @@ namespace DocterManagement.Data.Entities
     public class Posts
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public Status Status { get; set; }
         public Doctors Doctors { get; set; }

@@ -18,8 +18,8 @@ namespace DocterManagement.Data.Entities
 
         public Patients Patients { get; set; }
         public SchedulesDetails SchedulesDetails { get; set; }
-        public MedicalRecord MedicalRecord { get; set; }
+        public MedicalRecord MedicalRecords { get; set; }
 
-        public List<Rates> Rates { get; set; }
+        public Rates Rates { get; set; }
     }
 }

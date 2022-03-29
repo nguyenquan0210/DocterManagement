@@ -12,7 +12,7 @@ namespace DocterManagement.Data.Entities
      
         public string Address { get; set; }
         public string Img { get; set; }
-        public AppUsers User { get; set; }
+        public AppUsers AppUsers { get; set; }
 
         public List<Appointments> Appointments { get; set; }
         public List<MedicalRecord> MedicalRecords { get; set; }
