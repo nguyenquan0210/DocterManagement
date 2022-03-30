@@ -1,8 +1,8 @@
-﻿using DocterManagement.WebApp.Models;
+﻿using DoctorManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace DocterManagement.WebApp.Controllers
+namespace DoctorManagement.WebApp.Controllers
 {
     public class HomeController : Controller
     {

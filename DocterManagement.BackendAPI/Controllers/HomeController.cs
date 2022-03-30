@@ -1,8 +1,8 @@
-﻿using DocterManagement.BackendAPI.Models;
+﻿using DoctorManagement.BackendAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace DocterManagement.BackendAPI.Controllers
+namespace DoctorManagement.BackendAPI.Controllers
 {
     public class HomeController : Controller
     {

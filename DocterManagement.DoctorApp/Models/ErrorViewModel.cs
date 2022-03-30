@@ -1,4 +1,4 @@
-namespace DocterManagement.DoctorApp.Models
+namespace DoctorManagement.DoctorApp.Models
 {
     public class ErrorViewModel
     {

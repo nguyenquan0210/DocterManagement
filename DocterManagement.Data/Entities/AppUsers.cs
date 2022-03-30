@@ -1,4 +1,4 @@
-﻿using DocterManagement.Data.Enums;
+﻿using DoctorManagement.Data.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DocterManagement.Data.Entities
+namespace DoctorManagement.Data.Entities
 {
     public class AppUsers : IdentityUser<Guid>
     {
