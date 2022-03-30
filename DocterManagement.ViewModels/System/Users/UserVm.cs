@@ -12,11 +12,8 @@ namespace DoctorManagement.ViewModels.System.Users
     {
         public Guid Id { get; set; }
 
-        [Display(Name = "Tên")]
-        public string FirstName { get; set; }
-
-        [Display(Name = "Họ")]
-        public string LastName { get; set; }
+        [Display(Name = "Họ Tên")]
+        public string Name { get; set; }
 
         [Display(Name = "Địa chỉ")]
         public string Address { get; set; }
@@ -32,6 +29,9 @@ namespace DoctorManagement.ViewModels.System.Users
 
         [Display(Name = "Ngày sinh")]
         public DateTime Dob { get; set; }
+
+        [Display(Name = "Giới tính")]
+        public Gender Gender { get; set; }
 
         [Display(Name = "Trạng thái")]
         public Status Status { get; set; }

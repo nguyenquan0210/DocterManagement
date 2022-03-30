@@ -10,11 +10,8 @@ namespace DoctorManagement.ViewModels.System.Users
 {
     public class ManageRegisterRequest
     {
-        [Display(Name = "Tên")]
-        public string FirstName { get; set; }
-
-        [Display(Name = "Họ")]
-        public string LastName { get; set; }
+        [Display(Name = "Họ Tên")]
+        public string Name { get; set; }
 
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]

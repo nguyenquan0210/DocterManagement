@@ -5,12 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.ViewModels.System.Users
+namespace DoctorManagement.ViewModels.Catalog.Speciality
 {
-    public class GetUserPagingRequest : PagingRequestBase
+    public class GetSpecialityPagingRequest : PagingResultBase
     {
         public string? Keyword { get; set; }
-
-        public string? RoleName { get; set; }
     }
 }

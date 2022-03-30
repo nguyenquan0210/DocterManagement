@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DocterManagement.Utilities\DoctorManagement.Utilities.csproj" />
     <ProjectReference Include="..\DocterManagement.ViewModels\DoctorManagement.ViewModels.csproj" />
   </ItemGroup>
 

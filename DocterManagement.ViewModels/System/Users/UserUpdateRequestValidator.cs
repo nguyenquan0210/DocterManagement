@@ -11,11 +11,8 @@ namespace DoctorManagement.ViewModels.System.Users
     {
         public UserUpdateRequestValidator()
         {
-            RuleFor(x => x.FirstName).NotEmpty().WithMessage("Họ là bắt buộc")
-                .MaximumLength(200).WithMessage("Họ không được quá 100 ký tự");
-
-            RuleFor(x => x.LastName).NotEmpty().WithMessage("Tên là bắt buộc")
-                .MaximumLength(200).WithMessage("Tên không được quá 100 ký tự");
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Họ tên là bắt buộc")
+                .MaximumLength(100).WithMessage("Họ không được quá 100 ký tự");
 
             RuleFor(x => x.Email).NotEmpty().WithMessage("E-mail là bắt buộc")
                 .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")

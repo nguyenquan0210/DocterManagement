@@ -11,11 +11,8 @@ namespace DoctorManagement.ViewModels.System.Users
     {
         public ManageRegisterRequestValidator()
         {
-            RuleFor(x => x.FirstName).NotEmpty().WithMessage("Họ là bắt buộc")
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Họ tên là bắt buộc")
                 .MaximumLength(100).WithMessage("Họ không được quá 100 ký tự");
-
-            RuleFor(x => x.LastName).NotEmpty().WithMessage("Tên là bắt buộc")
-                .MaximumLength(100).WithMessage("Tên không được quá 100 ký tự");
 
             RuleFor(x => x.Dob).NotEmpty().WithMessage("Ngày sinh là bắt buộc là bắt buộc");
 

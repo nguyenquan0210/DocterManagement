@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using DoctorManagement.ViewModels.System.Users;
+using DoctorManagement.Application.Catalog.Speciality;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,7 @@ builder.Services.AddTransient<UserManager<AppUsers>, UserManager<AppUsers>>();
 builder.Services.AddTransient<SignInManager<AppUsers>, SignInManager<AppUsers>>();
 builder.Services.AddTransient<RoleManager<AppRoles>, RoleManager<AppRoles>>();
 
-
+builder.Services.AddTransient<ISpecialityService, SpecialityService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
