@@ -97,10 +97,10 @@ namespace DoctorManagement.Application.Catalog.Speciality
             return pagedResult;
         }
 
-        public async Task<SpecialityVm> GetById(int Id)
+        public async Task<SpecialityVm> GetById(Guid Id)
         {
             var speciality = await _context.Specialities.FindAsync(Id);
-
+            if (speciality == null) throw new DoctorManageException($"Cannot find a speciality with id: { Id}");
             var rs = new SpecialityVm()
             {
                 Id = speciality.Id,
@@ -115,7 +115,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
         public async Task<int> Update(SpecialityUpdateRequest request)
         {
             var speciality = await _context.Specialities.FindAsync(request.Id);
-            if (speciality == null) throw new DoctorManageException($"Cannot find a specialitygory with id: { request.Id}");
+            if (speciality == null) throw new DoctorManageException($"Cannot find a speciality with id: { request.Id}");
             speciality.Title = request.Title;
             speciality.SortOrder = request.SortOrder;
             speciality.Description = request.Description;

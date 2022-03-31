@@ -5,22 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.Data.Entities
+namespace DoctorManagement.ViewModels.Catalog.Clinic
 {
-    public class Clinics
+    public class ClinicUpdateRequest
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string ImgLogo { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
-        public DateTime Date { get; set; }
-        public Status Status { get; set; }
-        public Wards Wards { get; set; }
         public Guid WardId { get; set; }
-
-        public List<ImageClinics> ImageClinics { get; set; }
-        public List<Doctors> Doctors { get; set; }
-
+        public Status Status { get; set; }
     }
 }

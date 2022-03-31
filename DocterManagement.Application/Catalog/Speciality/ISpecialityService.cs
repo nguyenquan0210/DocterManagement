@@ -20,6 +20,6 @@ namespace DoctorManagement.Application.Catalog.Speciality
 
         Task<List<SpecialityVm>> GetAll();
 
-        Task<SpecialityVm> GetById(int Id);
+        Task<SpecialityVm> GetById(Guid Id);
     }
 }

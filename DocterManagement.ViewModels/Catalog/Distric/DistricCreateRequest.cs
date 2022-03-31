@@ -5,16 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.ViewModels.Catalog.Speciality
+namespace DoctorManagement.ViewModels.Catalog.Distric
 {
-    public class SpecialityCreateRequest
+    public class DistricCreateRequest
     {
         [Required]
-        public string Title { get; set; }
-
-        public string? Description { get; set; }
-
+        public string Name { get; set; }
         public int SortOrder { get; set; }
-
     }
 }
