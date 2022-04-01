@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DocterManagement.Data.EF
+namespace DoctorManagement.Data.EF
 {
     public class DoctorManageDbContextFactory : IDesignTimeDbContextFactory<DoctorManageDbContext>
     {

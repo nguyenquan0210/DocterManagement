@@ -1,5 +1,6 @@
-﻿using DocterManagement.Data.Configuration;
-using DocterManagement.Data.Entities;
+﻿using DoctorManagement.Data.Configuration;
+using DoctorManagement.Data.Entities;
+using DoctorManagement.Data.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DocterManagement.Data.EF
+namespace DoctorManagement.Data.EF
 {
     public class DoctorManageDbContext : IdentityDbContext<AppUsers, AppRoles, Guid>
     {
@@ -43,7 +44,7 @@ namespace DocterManagement.Data.EF
             modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
 
             //Data seeding
-            //modelBuilder.Seed();
+            modelBuilder.Seed();
 
 
         }
@@ -63,6 +64,7 @@ namespace DocterManagement.Data.EF
         public DbSet<Rates> Rates { get; set; }
         public DbSet<Schedules> Schedules { get; set; }
         public DbSet<SchedulesDetails> SchedulesDetails { get; set; }
+        public DbSet<Specialities> Specialities { get; set; }
         public DbSet<Wards> Wards { get; set; }
     }
 }
