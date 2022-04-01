@@ -11,6 +11,16 @@ using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using DoctorManagement.ViewModels.System.Users;
 using DoctorManagement.Application.Catalog.Speciality;
+using DoctorManagement.Application.Catalog.Appointment;
+using DoctorManagement.Application.Catalog.Clinic;
+using DoctorManagement.Application.Catalog.Comment;
+using DoctorManagement.Application.Catalog.Distric;
+using DoctorManagement.Application.Catalog.MedicalRecords;
+using DoctorManagement.Application.Catalog.Post;
+using DoctorManagement.Application.Catalog.Rate;
+using DoctorManagement.Application.Catalog.Schedule;
+using DoctorManagement.Application.Catalog.ScheduleDetailt;
+using DoctorManagement.Application.Catalog.Ward;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +37,16 @@ builder.Services.AddTransient<UserManager<AppUsers>, UserManager<AppUsers>>();
 builder.Services.AddTransient<SignInManager<AppUsers>, SignInManager<AppUsers>>();
 builder.Services.AddTransient<RoleManager<AppRoles>, RoleManager<AppRoles>>();
 
+builder.Services.AddTransient<IClinicService, ClinicService>();
+builder.Services.AddTransient<IAppointmentService, AppointmentService>();
+builder.Services.AddTransient<ICommentService, CommentService>();
+builder.Services.AddTransient<IDistricService, DistricService>();
+builder.Services.AddTransient<IMedicalRecordService, MedicalRecordService>();
+builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<IRateService, RateService>();
+builder.Services.AddTransient<IScheduleService, ScheduleService>();
+builder.Services.AddTransient<ScheduleDetailtService, ScheduleDetailtService>();
+builder.Services.AddTransient<IWardService, WardService>();
 builder.Services.AddTransient<ISpecialityService, SpecialityService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddControllersWithViews();

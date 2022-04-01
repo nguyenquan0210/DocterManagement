@@ -64,7 +64,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(user);
         }
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(int Id)
+        public async Task<IActionResult> GetById(Guid Id)
         {
             var speciality = await _specialityService.GetById(Id);
             if (speciality == null)
