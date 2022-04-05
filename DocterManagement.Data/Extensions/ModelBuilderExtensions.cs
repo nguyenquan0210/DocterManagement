@@ -53,7 +53,8 @@ namespace DoctorManagement.Data.Extensions
                 Dob = new DateTime(2000, 10, 02),
                 Gender = Enums.Gender.Male,
                 Date = new DateTime(2021, 12, 17),
-                RoleId = roleId
+                RoleId = roleId,
+                Status = Enums.Status.Active
             });
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
             {

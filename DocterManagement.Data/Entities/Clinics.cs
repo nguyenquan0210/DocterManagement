@@ -17,6 +17,7 @@ namespace DoctorManagement.Data.Entities
         public DateTime Date { get; set; }
         public Status Status { get; set; }
         public Wards Wards { get; set; }
+        public string No { get; set; }
         public Guid WardId { get; set; }
 
         public List<ImageClinics> ImageClinics { get; set; }

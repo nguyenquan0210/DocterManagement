@@ -1,5 +1,5 @@
 using DoctorManagement.Application.System.Users;
-using Doctor.Utilities.Constants;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,6 +21,9 @@ using DoctorManagement.Application.Catalog.Rate;
 using DoctorManagement.Application.Catalog.Schedule;
 using DoctorManagement.Application.Catalog.ScheduleDetailt;
 using DoctorManagement.Application.Catalog.Ward;
+using DoctorManagement.Application.Common;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +39,8 @@ builder.Services.AddIdentity<AppUsers, AppRoles>()
 builder.Services.AddTransient<UserManager<AppUsers>, UserManager<AppUsers>>();
 builder.Services.AddTransient<SignInManager<AppUsers>, SignInManager<AppUsers>>();
 builder.Services.AddTransient<RoleManager<AppRoles>, RoleManager<AppRoles>>();
+
+builder.Services.AddTransient<IStorageService, FileStorageService>();
 
 builder.Services.AddTransient<IClinicService, ClinicService>();
 builder.Services.AddTransient<IAppointmentService, AppointmentService>();
@@ -54,7 +59,10 @@ builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidator
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger Doctor Manage Solution", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { 
+        Title = "Swagger Doctor Manage Solution", 
+        Version = "v1" 
+    });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
@@ -83,6 +91,25 @@ builder.Services.AddSwaggerGen(c =>
                         new List<string>()
                       }
                     });
+    c.TagActionsBy(api =>
+    {
+        if (api.GroupName != null)
+        {
+            return new[] { api.GroupName };
+        }
+
+        var controllerActionDescriptor = api.ActionDescriptor as ControllerActionDescriptor;
+        if (controllerActionDescriptor != null)
+        {
+            return new[] { controllerActionDescriptor.ControllerName };
+        }
+
+        throw new InvalidOperationException("Unable to determine tag for endpoint.");
+    });
+    c.DocInclusionPredicate((name, api) => true);
+    // Set the comments path for the Swagger JSON and UI.
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 string issuer = builder.Configuration.GetValue<string>("Tokens:Issuer");
@@ -135,8 +162,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger Doctor Manage Solution V1");
 });
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

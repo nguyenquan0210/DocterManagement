@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +19,10 @@
     <ProjectReference Include="..\DocterManagement.Data\DoctorManagement.Data.csproj" />
     <ProjectReference Include="..\DocterManagement.Utilities\DoctorManagement.Utilities.csproj" />
     <ProjectReference Include="..\DocterManagement.ViewModels\DoctorManagement.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\img\user-content\" />
   </ItemGroup>
 
 </Project>

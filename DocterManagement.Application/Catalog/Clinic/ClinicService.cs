@@ -23,6 +23,12 @@ namespace DoctorManagement.Application.Catalog.Clinic
         }
         public async Task<Guid> Create(ClinicCreateRequest request)
         {
+            string year = DateTime.Now.ToString("yy");
+            int count = await _context.Clinics.Where(x => x.No.Contains("PK-" + year)).CountAsync();
+            string str = "";
+            if (count < 10) str = "PK-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
+            else if (count < 100) str = "PK-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
+            else if (count < 1000) str = "PK-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
             var clinics = new Clinics()
             {
                 Name = request.Name,
@@ -30,7 +36,8 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 Description = request.Description,
                 Address = request.Address,
                 WardId = request.WardId,
-                Status = Status.Active
+                Status = Status.Active,
+                No = str
             };
             _context.Clinics.Add(clinics);
             await _context.SaveChangesAsync();

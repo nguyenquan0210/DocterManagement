@@ -13,6 +13,7 @@ namespace DoctorManagement.Data.Entities
         public string Address { get; set; }
         public string Img { get; set; }
         public string Description { get; set; }
+        public string No { get; set; }
         public Guid SpecialitiId { get; set; }
         public Guid ClinicId { get; set; }
         

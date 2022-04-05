@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,10 @@ namespace DoctorManagement.Application.System.Users
         Task<int> Delete(Guid id);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
+
+        Task<List<RoleVm>> GetAllRole();
+
+        Task<ApiResult<List<RoleVm>>> GetAllRoleData();
 
         List<UserVm> GetNewUser();
     }

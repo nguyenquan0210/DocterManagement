@@ -14,6 +14,10 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _clinicService = clinicService;
         }
+        /// <summary>
+        /// Tạo mới phòng khám
+        /// </summary>
+        /// 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] ClinicCreateRequest request)
@@ -28,6 +32,10 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok();
         }
+        /// <summary>
+        /// Xóa phòng khám
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] Guid Id)
@@ -41,6 +49,10 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Cập nhật phòng khám
+        /// </summary>
+        /// 
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> Update([FromBody] ClinicUpdateRequest request)
@@ -55,13 +67,20 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok();
         }
 
-
+        /// <summary>
+        /// Lấy danh sách phòng khám phân trang
+        /// </summary>
+        /// 
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetClinicPagingRequest request)
         {
             var user = await _clinicService.GetAllPaging(request);
             return Ok(user);
         }
+        /// <summary>
+        /// Lấy dữ liệu phòng khám theo id
+        /// </summary>
+        /// 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
@@ -70,7 +89,10 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest("Cannot find product");
             return Ok(result);
         }
-
+        /// <summary>
+        /// Lấy tất cả danh sách phòng khám
+        /// </summary>
+        /// 
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {

@@ -1,7 +1,11 @@
-﻿using DoctorManagement.Data.Entities;
+﻿using DoctorManagement.Application.Common;
+using DoctorManagement.Data.EF;
+using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,20 +26,23 @@ namespace DoctorManagement.Application.System.Users
         private readonly UserManager<AppUsers> _userManager;
         private readonly SignInManager<AppUsers> _signInManager;
         private readonly RoleManager<AppRoles> _roleManager;
+        private readonly DoctorManageDbContext _context; 
         private readonly IConfiguration _config;
-        //private readonly IStorageService _storageService;
+        private readonly IStorageService _storageService;
         public UserService(UserManager<AppUsers> userManager,
             SignInManager<AppUsers> signInManager,
             RoleManager<AppRoles> roleManager,
-            IConfiguration config
-            //IStorageService storageService
+            IConfiguration config,
+            DoctorManageDbContext context,
+            IStorageService storageService
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = config;
-            //_storageService = storageService;
+            _context = context;
+            _storageService = storageService;
         }
 
         public async Task<ApiResult<bool>> AddRoleUser(RequestRoleUser request)
@@ -139,6 +147,29 @@ namespace DoctorManagement.Application.System.Users
             }
             return check;
 
+        }
+
+        public async Task<List<RoleVm>> GetAllRole()
+        {
+            var result = _context.AppRoles;
+            return await result.Select(x => new RoleVm()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description
+            }).ToListAsync();
+        }
+
+        public async Task<ApiResult<List<RoleVm>>> GetAllRoleData()
+        {
+            var result = _context.AppRoles;
+            var data = await result.Select(x => new RoleVm()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description
+            }).ToListAsync();
+            return new ApiSuccessResult<List<RoleVm>>(data);
         }
 
         public async Task<ApiResult<UserVm>> GetById(Guid id)
@@ -271,7 +302,7 @@ namespace DoctorManagement.Application.System.Users
         public async Task<ApiResult<bool>> ManageRegister(ManageRegisterRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
-            var role = await _roleManager.FindByNameAsync(request.NameRole);
+            var role = await _roleManager.FindByNameAsync("doctor");
             if (user != null)
             {
                 return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
@@ -280,6 +311,12 @@ namespace DoctorManagement.Application.System.Users
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
+            string year = DateTime.Now.ToString("yy");
+            int count = await _context.Doctors.Where(x => x.No.Contains("DT-" + year)).CountAsync();
+            string str = "";
+            if(count<10) str = "DT-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
+            else if(count<100) str = "DT-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
+            else if(count<1000) str = "DT-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
 
             user = new AppUsers()
             {
@@ -289,8 +326,8 @@ namespace DoctorManagement.Application.System.Users
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber,
                 Status = Status.Active,
-                Date = DateTime.Now
-
+                Date = DateTime.Now,
+                RoleId = role.Id
             };
             var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -302,13 +339,34 @@ namespace DoctorManagement.Application.System.Users
 
                     if (rs.Succeeded)
                     {
+                        var userIdRs = await _userManager.FindByNameAsync(user.UserName);
+                        var doctor = new Doctors()
+                        {
+                            UserId = userIdRs.Id,
+                            SpecialitiId = request.SpecialitiId,
+                            ClinicId = request.ClinicId,
+                            No = str,
+                            Address = request.Address,
+                            Description = request.Name,
+                            Img = await this.SaveFile(request.ThumbnailImage)
+                        };
+                        await _context.Doctors.AddAsync(doctor);
+                        _context.SaveChanges();
                         return new ApiSuccessResult<bool>();
                     }
                 }
+               
+
             }
             return new ApiErrorResult<bool>("Đăng ký không thành công");
         }
-
+        private async Task<string> SaveFile(IFormFile file)
+        {
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+            return fileName;
+        }
         public async Task<ApiResult<bool>> Register(PublicRegisterRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);

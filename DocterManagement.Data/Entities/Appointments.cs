@@ -14,6 +14,7 @@ namespace DoctorManagement.Data.Entities
         
         public StatusAppointment Status { get; set; }
         public Guid SchedulesDetailId { get; set; }
+        public string No { get; set; }
         public Guid PatientId { get; set; }
 
         public Patients Patients { get; set; }

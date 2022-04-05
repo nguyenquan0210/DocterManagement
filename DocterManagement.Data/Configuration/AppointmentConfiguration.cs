@@ -16,6 +16,7 @@ namespace DoctorManagement.Data.Configuration
             builder.ToTable("Appointments");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.No).IsRequired().HasMaxLength(10);
 
             builder.HasOne(x => x.SchedulesDetails).WithOne(x => x.Appointments).HasForeignKey<Appointments>(x => x.SchedulesDetailId).OnDelete(DeleteBehavior.ClientCascade);
             builder.HasOne(x => x.Patients).WithMany(x => x.Appointments).HasForeignKey(x => x.PatientId);

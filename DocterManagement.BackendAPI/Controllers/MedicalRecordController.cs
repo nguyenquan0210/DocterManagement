@@ -14,6 +14,10 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _medicalRecordService = medicalRecordService;
         }
+        /// <summary>
+        /// Tạo mới hồ sơ bệnh án
+        /// </summary>
+        /// 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] MedicalRecordCreateRequest request)
@@ -28,6 +32,10 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok();
         }
+        /// <summary>
+        /// Xóa hồ sơ bệnh án
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] Guid Id)
@@ -41,6 +49,10 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Cập nhật hồ sơ bệnh án
+        /// </summary>
+        /// 
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> Update([FromBody] MedicalRecordUpdateRequest request)
@@ -54,14 +66,20 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest();
             return Ok();
         }
-
-
+        /// <summary>
+        /// Lấy danh sách phân trang của hồ sơ bệnh án
+        /// </summary>
+        /// 
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetMedicalRecordPagingRequest request)
         {
             var user = await _medicalRecordService.GetAllPaging(request);
             return Ok(user);
         }
+        /// <summary>
+        /// Lấy hồ sơ bệnh theo id
+        /// </summary>
+        /// 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
@@ -70,7 +88,10 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest("Cannot find product");
             return Ok(result);
         }
-
+        /// <summary>
+        /// Lấy tất cả danh sách hồ sơ bệnh
+        /// </summary>
+        /// 
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {

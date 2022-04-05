@@ -14,6 +14,10 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _scheduleService = scheduleService;
         }
+        /// <summary>
+        /// Tạo mới lịch khám
+        /// </summary>
+        /// 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] ScheduleCreateRequest request)
@@ -28,6 +32,10 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok();
         }
+        /// <summary>
+        /// Xóa lịch khám
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] Guid Id)
@@ -41,6 +49,10 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Cập nhật lịch khám
+        /// </summary>
+        /// 
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> Update([FromBody] ScheduleUpdateRequest request)
@@ -54,14 +66,20 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest();
             return Ok();
         }
-
-
+        /// <summary>
+        /// Lấy danh sách phân trang lịch khám 
+        /// </summary>
+        /// 
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetSchedulePagingRequest request)
         {
             var user = await _scheduleService.GetAllPaging(request);
             return Ok(user);
         }
+        /// <summary>
+        /// Lấy lịch khám theo id
+        /// </summary>
+        /// 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
@@ -70,7 +88,10 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest("Cannot find product");
             return Ok(result);
         }
-
+        /// <summary>
+        /// Lấy tất cả danh sách lịch khám
+        /// </summary>
+        /// 
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {

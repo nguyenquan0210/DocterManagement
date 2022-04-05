@@ -18,6 +18,7 @@ namespace DoctorManagement.Data.Configuration
             builder.HasKey(x => x.UserId);
             builder.Property(x => x.Address).HasMaxLength(150);
             builder.Property(x => x.Img).HasMaxLength(100);
+            builder.Property(x => x.No).IsRequired().HasMaxLength(10);
 
             builder.HasOne(x => x.AppUsers).WithOne(x => x.Patients).HasForeignKey<Patients>(x => x.UserId);
 

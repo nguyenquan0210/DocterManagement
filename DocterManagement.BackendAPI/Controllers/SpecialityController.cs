@@ -14,6 +14,10 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _specialityService = specialityService;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// Tạo mới chuyên khoa
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] SpecialityCreateRequest request)
@@ -28,6 +32,10 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok();
         }
+        /// <summary>
+        /// Xóa chuyên khoa
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] Guid Id)
@@ -41,6 +49,10 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(affectedResult);
         }
+        /// <summary>
+        /// Cập nhật chuyên khoa
+        /// </summary>
+        /// 
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> Update([FromBody] SpecialityUpdateRequest request)
@@ -54,8 +66,10 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest();
             return Ok();
         }
-
-
+        /// <summary>
+        /// Lấy danh sách phân trang chuyên khoa
+        /// </summary>
+        /// 
         //http://localhost/api/categories/paging?pageIndex=1&pageSize=10&keyword=
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetSpecialityPagingRequest request)
@@ -63,6 +77,10 @@ namespace DoctorManagement.BackendAPI.Controllers
             var user = await _specialityService.GetAllPaging(request);
             return Ok(user);
         }
+        /// <summary>
+        /// Lấy chuyên khoa theo id
+        /// </summary>
+        /// 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(Guid Id)
         {
@@ -71,7 +89,10 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest("Cannot find product");
             return Ok(speciality);
         }
-
+        /// <summary>
+        /// Lấy tất cả danh sách chuyên khoa
+        /// </summary>
+        /// 
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {

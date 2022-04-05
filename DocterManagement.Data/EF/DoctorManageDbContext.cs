@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.Data.EF
 {
+#pragma warning disable CS1591
     public class DoctorManageDbContext : IdentityDbContext<AppUsers, AppRoles, Guid>
     {
         public DoctorManageDbContext(DbContextOptions options) : base(options)
@@ -68,3 +69,4 @@ namespace DoctorManagement.Data.EF
         public DbSet<Wards> Wards { get; set; }
     }
 }
+#pragma warning restore CS1591

@@ -19,7 +19,10 @@ namespace DoctorManagement.BackendAPI.Controllers
             _userService = userService;
             //_activeUserService = activeUserService;
         }
-
+        /// <summary>
+        /// Đăng nhập
+        /// </summary>
+        /// 
         [HttpPost("authenticate")]
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
@@ -47,8 +50,28 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Đăng ký tài khoản bác sĩ từ người quản trị
+        /// </summary>
+        /// 
+        [HttpPost("register-doctor")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> ManageRegister([FromForm] ManageRegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        //PUT: http://localhost/api/users/id
+            var result = await _userService.ManageRegister(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        /// <summary>
+        /// Cập nhật tài khoản
+        /// </summary>
+        /// 
         [HttpPut("updateuser/{id}")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update(Guid id, [FromForm] UserUpdateRequest request)
@@ -63,6 +86,10 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             return Ok(result);
         }
+        /// <summary>
+        /// Thay đổi mật khẩu
+        /// </summary>
+        /// 
         [HttpPut("changepass")]
         public async Task<IActionResult> ChangePass([FromBody] ChangePasswordRequest request)
         {
@@ -76,6 +103,10 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             return Ok(result);
         }
+        /// <summary>
+        /// Thêm vai trong mới cho tài khoản
+        /// </summary>
+        /// 
         [HttpPut("{id}/roles")]
         public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
         {
@@ -89,8 +120,10 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             return Ok(result);
         }
-
-        //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
+        /// <summary>
+        /// Lấy danh sách phân trang tài khoản
+        /// </summary>
+        /// 
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
@@ -105,22 +138,31 @@ namespace DoctorManagement.BackendAPI.Controllers
             var user = await _userService.GetUsersAllPaging(request);
             return Ok(user);
         }
-
+        /// <summary>
+        /// Lấy tài khoản theo id
+        /// </summary>
+        /// 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var user = await _userService.GetById(id);
             return Ok(user);
         }
-
-        [HttpGet("getrequest{username}")]
+        /// <summary>
+        /// Lấy tài khoản theo tên tài khoản
+        /// </summary>
+        /// 
+        [HttpGet("get-request{username}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetByUserName(string username)
         {
             var user = await _userService.GetByUserName(username);
             return Ok(user);
         }
-
+        /// <summary>
+        /// Xóa tài khoản
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(Guid Id)
         {
@@ -133,6 +175,32 @@ namespace DoctorManagement.BackendAPI.Controllers
             var activeUsers = await _activeUserService.ListActiveUser();
             return Ok(activeUsers);
         }*/
+        /// <summary>
+        /// Lấy tất cả danh sách vai trò người dùng
+        /// </summary>
+        /// 
+        [HttpGet("get-all-role")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllRole()
+        {
+            var roles = await _userService.GetAllRole();
+            return Ok(roles);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách vai trò người dùng trả về data
+        /// </summary>
+        /// 
+        [HttpGet("get-all-role-data")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllRoleData()
+        {
+            var roles = await _userService.GetAllRoleData();
+            return Ok(roles);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách tài khoản theo vai trò người dùng bệnh nhân
+        /// </summary>
+        /// 
         [HttpGet("newuser")]
         public IActionResult GetNewUser()
         {
