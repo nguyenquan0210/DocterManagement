@@ -64,7 +64,7 @@ namespace DoctorManagement.Data.EF
         public DbSet<Posts> Posts { get; set; }
         public DbSet<Rates> Rates { get; set; }
         public DbSet<Schedules> Schedules { get; set; }
-        public DbSet<SchedulesDetails> SchedulesDetails { get; set; }
+        public DbSet<SchedulesDetailts> SchedulesDetails { get; set; }
         public DbSet<Specialities> Specialities { get; set; }
         public DbSet<Wards> Wards { get; set; }
     }

@@ -21,7 +21,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
         {
             _context = context;
         }
-        public async Task<Guid> Create(SpecialityCreateRequest request)
+        public async Task<ApiResult<Specialities>> Create(SpecialityCreateRequest request)
         {
             var specialities = new Specialities()
             {
@@ -31,14 +31,14 @@ namespace DoctorManagement.Application.Catalog.Speciality
             };
             _context.Specialities.Add(specialities);
             await _context.SaveChangesAsync();
-            return specialities.Id;
+            return new ApiSuccessResult<Specialities>(specialities);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var speciality = await _context.Specialities.FindAsync(Id);
             int check = 0;
-            if (speciality == null) return check;
+            if (speciality == null) return new ApiSuccessResult<int>(check);
             if (speciality.Status == Status.Active)
             {
                 speciality.Status = Status.InActive;
@@ -50,23 +50,24 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 check = 2;
             }
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<SpecialityVm>> GetAll()
+        public async Task<ApiResult<List<SpecialityVm>>> GetAll()
         {
             var query = _context.Specialities.Where(x => x.Status == Status.Active);
 
-            return await query.Select(x => new SpecialityVm()
+            var rs = await query.Select(x => new SpecialityVm()
             {
                 Id = x.Id,
                 Title = x.Title,
                 SortOrder = x.SortOrder,
                 Status = x.Status
             }).ToListAsync();
+            return new ApiSuccessResult<List<SpecialityVm>>(rs);
         }
 
-        public async Task<PagedResult<SpecialityVm>> GetAllPaging(GetSpecialityPagingRequest request)
+        public async Task<ApiResult<PagedResult<SpecialityVm>>> GetAllPaging(GetSpecialityPagingRequest request)
         {
             var query = from c in _context.Specialities select c;
             //2. filter
@@ -94,10 +95,10 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<SpecialityVm>>(pagedResult);
         }
 
-        public async Task<SpecialityVm> GetById(Guid Id)
+        public async Task<ApiResult<SpecialityVm>> GetById(Guid Id)
         {
             var speciality = await _context.Specialities.FindAsync(Id);
             if (speciality == null) throw new DoctorManageException($"Cannot find a speciality with id: { Id}");
@@ -109,10 +110,10 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 Status = speciality.Status
             };
 
-            return rs;
+            return new ApiSuccessResult<SpecialityVm>(rs);
         }
 
-        public async Task<int> Update(SpecialityUpdateRequest request)
+        public async Task<ApiResult<Specialities>> Update(SpecialityUpdateRequest request)
         {
             var speciality = await _context.Specialities.FindAsync(request.Id);
             if (speciality == null) throw new DoctorManageException($"Cannot find a speciality with id: { request.Id}");
@@ -121,7 +122,8 @@ namespace DoctorManagement.Application.Catalog.Speciality
             speciality.Description = request.Description;
             speciality.Status = request.Status ? Status.Active : Status.InActive;
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<Specialities>(speciality);
         }
     }
 }

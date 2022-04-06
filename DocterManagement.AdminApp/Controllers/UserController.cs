@@ -68,7 +68,7 @@ namespace DoctorManagement.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
-            return View(data.ResultObj);
+            return View(data.Data);
         }
         public async Task<IActionResult> ListRole()
         {
@@ -80,7 +80,7 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var result = await _userApiClient.GetById(id);
-            return View(result.ResultObj);
+            return View(result.Data);
         }
 
         [HttpGet]
@@ -114,7 +114,7 @@ namespace DoctorManagement.AdminApp.Controllers
             var result = await _userApiClient.GetById(id);
             if (result.IsSuccessed)
             {
-                var user = result.ResultObj;
+                var user = result.Data;
                 var updateRequest = new UserUpdateRequest()
                 {
                     Dob = user.Dob,
@@ -156,7 +156,7 @@ namespace DoctorManagement.AdminApp.Controllers
             var result = await _userApiClient.GetById(id);
             if (result.IsSuccessed)
             {
-                var user = result.ResultObj;
+                var user = result.Data;
                 var updateRequest = new UserVm()
                 {
                     Dob = user.Dob,

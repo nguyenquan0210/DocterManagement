@@ -36,12 +36,12 @@ namespace DoctorManagement.AdminApp.Controllers
                 return View(ModelState);
             request.Check = true;
             var result = await _userApiClient.Authenticate(request);
-            if (result.ResultObj == null)
+            if (result.Data == null)
             {
                 ModelState.AddModelError("", result.Message);
                 return View();
             }
-            var userPrincipal = this.ValidateToken(result.ResultObj);
+            var userPrincipal = this.ValidateToken(result.Data);
 
 
             var authProperties = new AuthenticationProperties
@@ -50,7 +50,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 IsPersistent = false
             };
 
-            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
+            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.Data);
 
 
             await HttpContext.SignInAsync(

@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Comment;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Comment;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Comment
 {
     public interface ICommentService
     {
-        Task<Guid> Create(CommentCreateRequest request);
+        Task<ApiResult<CommentsPost>> Create(CommentCreateRequest request);
 
-        Task<int> Update(CommentUpdateRequest request);
+        Task<ApiResult<CommentsPost>> Update(CommentUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<PagedResult<CommentVm>> GetAllPaging(GetCommentPagingRequest request);
+        Task<ApiResult<PagedResult<CommentVm>>> GetAllPaging(GetCommentPagingRequest request);
 
-        Task<List<CommentVm>> GetAll();
+        Task<ApiResult<List<CommentVm>>> GetAll();
 
-        Task<CommentVm> GetById(Guid Id);
+        Task<ApiResult<CommentVm>> GetById(Guid Id);
     }
 }

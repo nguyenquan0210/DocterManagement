@@ -21,14 +21,14 @@ namespace DoctorManagement.Application.Catalog.Clinic
         {
             _context = context;
         }
-        public async Task<Guid> Create(ClinicCreateRequest request)
+        public async Task<ApiResult<Clinics>> Create(ClinicCreateRequest request)
         {
             string year = DateTime.Now.ToString("yy");
             int count = await _context.Clinics.Where(x => x.No.Contains("PK-" + year)).CountAsync();
             string str = "";
-            if (count < 10) str = "PK-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
-            else if (count < 100) str = "PK-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
-            else if (count < 1000) str = "PK-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+            if (count < 9) str = "PK-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
+            else if (count < 99) str = "PK-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
+            else if (count < 999) str = "PK-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
             var clinics = new Clinics()
             {
                 Name = request.Name,
@@ -41,14 +41,14 @@ namespace DoctorManagement.Application.Catalog.Clinic
             };
             _context.Clinics.Add(clinics);
             await _context.SaveChangesAsync();
-            return  clinics.Id;
+            return new ApiSuccessResult<Clinics>(clinics);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var clinics = await _context.Clinics.FindAsync(Id);
             int check = 0;
-            if (clinics == null) return check;
+            if (clinics == null) return new ApiSuccessResult<int>(check);
 
             if (clinics.Status == Status.Active)
             {
@@ -62,14 +62,14 @@ namespace DoctorManagement.Application.Catalog.Clinic
             }
 
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check); ;
         }
 
-        public async Task<List<ClinicVm>> GetAll()
+        public async Task<ApiResult<List<ClinicVm>>> GetAll()
         {
             var query = _context.Clinics;
 
-            return await query.Select(x => new ClinicVm()
+            var rs =  await query.Select(x => new ClinicVm()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -79,9 +79,10 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 Address = x.Address,
                 Status = x.Status
             }).ToListAsync();
+            return new ApiSuccessResult<List<ClinicVm>>(rs); ;
         }
 
-        public async Task<PagedResult<ClinicVm>> GetAllPaging(GetClinicPagingRequest request)
+        public async Task<ApiResult<PagedResult<ClinicVm>>> GetAllPaging(GetClinicPagingRequest request)
         {
             var query = from c in _context.Clinics select c;
             //2. filter
@@ -100,8 +101,8 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     Id = x.Id,
                     ImgLogo = x.ImgLogo,
                     Status = x.Status,
-                    Address = x.Address
-
+                    Address = x.Address,
+                    WardId = x.WardId
                 }).ToListAsync();
 
             var pagedResult = new PagedResult<ClinicVm>()
@@ -111,10 +112,10 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return  new ApiSuccessResult<PagedResult<ClinicVm>>(pagedResult); 
         }
 
-        public async Task<ClinicVm> GetById(Guid Id)
+        public async Task<ApiResult<ClinicVm>> GetById(Guid Id)
         {
             var Clinics = await _context.Clinics.FindAsync(Id);
             if (Clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { Id}");
@@ -127,20 +128,20 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 Status = Clinics.Status
             };
 
-            return rs;
+            return new ApiSuccessResult<ClinicVm>(rs);
         }
 
-        public async Task<int> Update(ClinicUpdateRequest request)
+        public async Task<ApiResult<Clinics>> Update(ClinicUpdateRequest request)
         {
-            var Clinics = await _context.Clinics.FindAsync(request.Id);
-            if (Clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { request.Id}");
-            Clinics.Name = request.Name;
-            Clinics.Description = request.Description;
-            Clinics.Address = request.Address;
-            Clinics.WardId = request.WardId;
-            Clinics.Status = request.Status;
-
-            return await _context.SaveChangesAsync();
+            var clinics = await _context.Clinics.FindAsync(request.Id);
+            if (clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { request.Id}");
+            clinics.Name = request.Name;
+            clinics.Description = request.Description;
+            clinics.Address = request.Address;
+            clinics.WardId = request.WardId;
+            clinics.Status = request.Status;
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<Clinics>(clinics);
         }
     }
 }

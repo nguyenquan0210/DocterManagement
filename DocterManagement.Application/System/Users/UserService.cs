@@ -228,12 +228,24 @@ namespace DoctorManagement.Application.System.Users
 
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsersAllPaging(GetUserPagingRequest request)
         {
-            var query = _userManager.Users;
+            var query = from u in _context.AppUsers
+                        join r in _context.Roles on u.RoleId equals r.Id
+                        join d in _context.Doctors on u.Id equals d.UserId into dt
+                        from d in dt.DefaultIfEmpty()
+                        join p in _context.Doctors on u.Id equals p.UserId into pt
+                        from p in pt.DefaultIfEmpty()
+                        select new { u, r ,d , p };
+            
+            //var patient = _context.Patients;
 
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.UserName.Contains(request.Keyword)
-                 || x.PhoneNumber.Contains(request.Keyword));
+                query = query.Where(x => x.u.UserName.Contains(request.Keyword)
+                 || x.u.PhoneNumber.Contains(request.Keyword));
+            }
+            if (!string.IsNullOrEmpty(request.RoleName) && request.RoleName.ToUpper() != "ALL")
+            {
+                query = query.Where(x => x.r.Name.Contains(request.RoleName));
             }
 
             //3. Paging
@@ -243,13 +255,14 @@ namespace DoctorManagement.Application.System.Users
                 .Take(request.PageSize)
                 .Select(x => new UserVm()
                 {
-                    Email = x.Email,
-                    PhoneNumber = x.PhoneNumber,
-                    UserName = x.UserName,
-                    Gender = x.Gender,
-                    Id = x.Id,
-                    Name = x.Name,
-                    Status = x.Status
+                    Email = x.u.Email,
+                    PhoneNumber = x.u.PhoneNumber,
+                    UserName = x.u.UserName,
+                    Gender = x.u.Gender,
+                    Id = x.u.Id,
+                    Name = x.u.Name,
+                    Status = x.u.Status,
+                    Img =  x.r.Name == "doctor" ? x.d.Img : x.r.Name == "patient" ? x.p.Img : "user_default.png"
                 }).ToListAsync();
 
             //4. Select and projection
@@ -314,9 +327,9 @@ namespace DoctorManagement.Application.System.Users
             string year = DateTime.Now.ToString("yy");
             int count = await _context.Doctors.Where(x => x.No.Contains("DT-" + year)).CountAsync();
             string str = "";
-            if(count<10) str = "DT-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
-            else if(count<100) str = "DT-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
-            else if(count<1000) str = "DT-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+            if(count<9) str = "DT-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
+            else if(count<99) str = "DT-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
+            else if(count<999) str = "DT-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
 
             user = new AppUsers()
             {

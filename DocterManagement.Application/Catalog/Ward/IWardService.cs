@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Ward;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Ward;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Ward
 {
     public interface IWardService
     {
-        Task<Guid> Create(WardCreateRequest request);
+        Task<ApiResult<Wards>> Create(WardCreateRequest request);
 
-        Task<int> Update(WardUpdateRequest request);
+        Task<ApiResult<Wards>> Update(WardUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<PagedResult<WardVm>> GetAllPaging(GetWardPagingRequest request);
+        Task<ApiResult<PagedResult<WardVm>>> GetAllPaging(GetWardPagingRequest request);
 
-        Task<List<WardVm>> GetAll();
+        Task<ApiResult<List<WardVm>>> GetAll();
 
-        Task<WardVm> GetById(Guid Id);
+        Task<ApiResult<WardVm>> GetById(Guid Id);
     }
 }

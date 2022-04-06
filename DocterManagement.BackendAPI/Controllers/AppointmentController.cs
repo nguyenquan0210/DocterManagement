@@ -1,5 +1,7 @@
 ﻿using DoctorManagement.Application.Catalog.Appointment;
+using DoctorManagement.Data.Entities;
 using DoctorManagement.ViewModels.Catalog.Appointment;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,19 +22,18 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPost]
-       
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] AppointmentCreateRequest request)
+        public async Task<ActionResult<ApiResult<AppointmentVm>>> Create([FromBody] AppointmentCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _appointmentService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Xóa đặt khám
@@ -40,7 +41,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -57,16 +58,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] AppointmentUpdateRequest request)
+        public async Task<ActionResult<ApiResult<AppointmentVm>>> Update([FromBody] AppointmentUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _appointmentService.Update(request);
-            if (result == 0)
+            if (result == null)
                 return BadRequest();
-            return Ok();
+            return Ok(result);
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetAppointmentPagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<AppointmentVm>>>> GetAllPaging([FromQuery] GetAppointmentPagingRequest request)
         {
             var user = await _appointmentService.GetAllPaging(request);
             return Ok(user);
@@ -84,11 +85,11 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
+        public async Task<ActionResult<ApiResult<AppointmentVm>>> GetById(Guid Id)
         {
             var result = await _appointmentService.GetById(Id);
             if (result == null)
-                return BadRequest("Cannot find product");
+                return BadRequest("Cannot find appointment");
             return Ok(result);
         }
         /// <summary>
@@ -96,7 +97,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ApiResult<List<AppointmentVm>>>> GetAll()
         {
             var result = await _appointmentService.GetAll();
             return Ok(result);

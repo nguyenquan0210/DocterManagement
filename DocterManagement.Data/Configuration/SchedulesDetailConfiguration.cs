@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.Data.Configuration
 {
-    public class SchedulesDetailConfiguration : IEntityTypeConfiguration<SchedulesDetails>
+    public class SchedulesDetailConfiguration : IEntityTypeConfiguration<SchedulesDetailts>
     {
-        public void Configure(EntityTypeBuilder<SchedulesDetails> builder)
+        public void Configure(EntityTypeBuilder<SchedulesDetailts> builder)
         {
             builder.ToTable("SchedulesDetails");
 

@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,17 +21,17 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] ClinicCreateRequest request)
+        public async Task<ActionResult<ApiResult<ClinicVm>>> Create([FromBody] ClinicCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _clinicService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Xóa phòng khám
@@ -38,7 +39,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -55,16 +56,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] ClinicUpdateRequest request)
+        public async Task<ActionResult<ApiResult<ClinicVm>>> Update([FromBody] ClinicUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _clinicService.Update(request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
-            return Ok();
+            return Ok(result);
         }
 
         /// <summary>
@@ -72,21 +73,21 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetClinicPagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<ClinicVm>>>> GetAllPaging([FromQuery] GetClinicPagingRequest request)
         {
-            var user = await _clinicService.GetAllPaging(request);
-            return Ok(user);
+            var result = await _clinicService.GetAllPaging(request);
+            return Ok(result);
         }
         /// <summary>
         /// Lấy dữ liệu phòng khám theo id
         /// </summary>
         /// 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
+        public async Task<ActionResult<ApiResult<ClinicVm>>> GetById(Guid Id)
         {
             var result = await _clinicService.GetById(Id);
-            if (result == null)
-                return BadRequest("Cannot find product");
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find clinic");
             return Ok(result);
         }
         /// <summary>
@@ -94,7 +95,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ApiResult<List<ClinicVm>>>> GetAll()
         {
             var result = await _clinicService.GetAll();
             return Ok(result);

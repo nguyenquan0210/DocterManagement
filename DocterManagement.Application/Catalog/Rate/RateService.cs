@@ -20,7 +20,7 @@ namespace DoctorManagement.Application.Catalog.Rate
         {
             _context = context;
         }
-        public async Task<Guid> Create(RateCreateRequest request)
+        public async Task<ApiResult<Rates>> Create(RateCreateRequest request)
         {
             var rates = new Rates()
             {
@@ -32,25 +32,25 @@ namespace DoctorManagement.Application.Catalog.Rate
             };
             _context.Rates.Add(rates);
             await _context.SaveChangesAsync();
-            return rates.Id;
+            return new ApiSuccessResult<Rates>(rates);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var rates = await _context.Rates.FindAsync(Id);
             int check = 0;
-            if (rates == null) return check;
+            if (rates == null) return new ApiSuccessResult<int>(check);
             _context.Rates.Remove(rates);
             check = 2;
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<RateVm>> GetAll()
+        public async Task<ApiResult<List<RateVm>>> GetAll()
         {
             var query = _context.Rates;
 
-            return await query.Select(x => new RateVm()
+            var rs = await query.Select(x => new RateVm()
             {
                 Id = x.Id,
                 Title = x.Title,
@@ -59,9 +59,10 @@ namespace DoctorManagement.Application.Catalog.Rate
                 Date = x.Date,
                 AppointmentId = x.AppointmentId
             }).ToListAsync();
+            return new ApiSuccessResult<List<RateVm>>(rs);
         }
 
-        public async Task<PagedResult<RateVm>> GetAllPaging(GetRatePagingRequest request)
+        public async Task<ApiResult<PagedResult<RateVm>>> GetAllPaging(GetRatePagingRequest request)
         {
             var query = from c in _context.Rates select c;
             //2. filter
@@ -91,10 +92,10 @@ namespace DoctorManagement.Application.Catalog.Rate
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<RateVm>>(pagedResult);
         }
 
-        public async Task<RateVm> GetById(Guid Id)
+        public async Task<ApiResult<RateVm>> GetById(Guid Id)
         {
             var rates = await _context.Rates.FindAsync(Id);
             if (rates == null) throw new DoctorManageException($"Cannot find a rates with id: { Id}");
@@ -108,10 +109,10 @@ namespace DoctorManagement.Application.Catalog.Rate
                 Rating = rates.Rating
             };
 
-            return rs;
+            return new ApiSuccessResult<RateVm>(rs);
         }
 
-        public async Task<int> Update(RateUpdateRequest request)
+        public async Task<ApiResult<Rates>> Update(RateUpdateRequest request)
         {
             var rates = await _context.Rates.FindAsync(request.Id);
             if (rates == null) throw new DoctorManageException($"Cannot find a rates with id: { request.Id}");
@@ -119,7 +120,8 @@ namespace DoctorManagement.Application.Catalog.Rate
             rates.Description = request.Description;
             rates.Rating = request.Rating;
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<Rates>(rates);
         }
     }
 }

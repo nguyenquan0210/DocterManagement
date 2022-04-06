@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.Catalog.Comment;
 using DoctorManagement.ViewModels.Catalog.Comment;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,17 +21,17 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] CommentCreateRequest request)
+        public async Task<ActionResult<ApiResult<CommentVm>>> Create([FromBody] CommentCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _commentService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Xóa bình luận
@@ -38,7 +39,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -55,16 +56,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] CommentUpdateRequest request)
+        public async Task<ActionResult<ApiResult<CommentVm>>> Update([FromBody] CommentUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _commentService.Update(request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
-            return Ok();
+            return Ok(result);
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetCommentPagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<CommentVm>>>> GetAllPaging([FromQuery] GetCommentPagingRequest request)
         {
             var user = await _commentService.GetAllPaging(request);
             return Ok(user);
@@ -82,11 +83,11 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
+        public async Task<ActionResult<ApiResult<CommentVm>>> GetById(Guid Id)
         {
             var result = await _commentService.GetById(Id);
-            if (result == null)
-                return BadRequest("Cannot find product");
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find comment");
             return Ok(result);
         }
         /// <summary>
@@ -94,7 +95,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ApiResult<List<CommentVm>>>> GetAll()
         {
             var result = await _commentService.GetAll();
             return Ok(result);

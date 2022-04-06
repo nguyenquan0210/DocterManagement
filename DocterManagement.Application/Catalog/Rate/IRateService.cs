@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Rate;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Rate;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Rate
 {
     public interface IRateService
     {
-        Task<Guid> Create(RateCreateRequest request);
+        Task<ApiResult<Rates>> Create(RateCreateRequest request);
 
-        Task<int> Update(RateUpdateRequest request);
+        Task<ApiResult<Rates>> Update(RateUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<PagedResult<RateVm>> GetAllPaging(GetRatePagingRequest request);
+        Task<ApiResult<PagedResult<RateVm>>> GetAllPaging(GetRatePagingRequest request);
 
-        Task<List<RateVm>> GetAll();
+        Task<ApiResult<List<RateVm>>> GetAll();
 
-        Task<RateVm> GetById(Guid Id);
+        Task<ApiResult<RateVm>> GetById(Guid Id);
     }
 }

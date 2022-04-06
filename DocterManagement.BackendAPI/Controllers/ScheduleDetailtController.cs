@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.Catalog.ScheduleDetailt;
 using DoctorManagement.ViewModels.Catalog.ScheduleDetailt;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,17 +21,17 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] ScheduleDetailtCreateRequest request)
+        public async Task<ActionResult<ApiResult<ScheduleDetailtVm>>> Create([FromBody] ScheduleDetailtCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _scheduleDetailtService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Xóa chi tiết lịch khám
@@ -38,7 +39,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -55,14 +56,14 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] ScheduleDetailtUpdateRequest request)
+        public async Task<ActionResult<ApiResult<ScheduleDetailtVm>>> Update([FromBody] ScheduleDetailtUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _scheduleDetailtService.Update(request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
             return Ok();
         }
@@ -71,21 +72,21 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetScheduleDetailtPagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<ScheduleDetailtVm>>>> GetAllPaging([FromQuery] GetScheduleDetailtPagingRequest request)
         {
-            var user = await _scheduleDetailtService.GetAllPaging(request);
-            return Ok(user);
+            var result = await _scheduleDetailtService.GetAllPaging(request);
+            return Ok(result);
         }
         /// <summary>
         /// Lấy chi tiết lịch khám theo id
         /// </summary>
         /// 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
+        public async Task<ActionResult<ApiResult<ScheduleDetailtVm>>> GetById(Guid Id)
         {
             var result = await _scheduleDetailtService.GetById(Id);
-            if (result == null)
-                return BadRequest("Cannot find product");
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find schedule detailt");
             return Ok(result);
         }
         /// <summary>
@@ -93,7 +94,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ApiResult<List<ScheduleDetailtVm>>>> GetAll()
         {
             var result = await _scheduleDetailtService.GetAll();
             return Ok(result);

@@ -32,7 +32,7 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             var result = await _userService.Authencate(request);
 
-            if (string.IsNullOrEmpty(result.ResultObj))
+            if (string.IsNullOrEmpty(result.Data))
             {
                 return BadRequest(result);
             }
@@ -41,11 +41,11 @@ namespace DoctorManagement.BackendAPI.Controllers
                 var listActive = _activeUserService.ListActiveUser().Result.Where(x => x.DateActive.ToShortDateString() == DateTime.Now.ToShortDateString());
 
                 var user = await _userService.GetByUserName(request.UserName);
-                var activeUser = listActive.FirstOrDefault(x => x.UserId == user.ResultObj.Id);
+                var activeUser = listActive.FirstOrDefault(x => x.UserId == user.Data.Id);
                 if (activeUser != null)
                     await _activeUserService.UpdateActiveUser(activeUser.Id);
                 else
-                    await _activeUserService.AddActiveUser(user.ResultObj.Id);
+                    await _activeUserService.AddActiveUser(user.Data.Id);
             }*/
 
             return Ok(result);
@@ -125,16 +125,17 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("paging")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
-            if (request.RoleName != null)
+            /*if (request.RoleName != null)
             {
                 if (request.RoleName.ToUpper() != "ALL")
                 {
                     var userinrole = _userService.GetUsersPaging(request);
                     return Ok(userinrole);
                 }
-            }
+            }*/
             var user = await _userService.GetUsersAllPaging(request);
             return Ok(user);
         }

@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Post;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Post;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Post
 {
     public interface IPostService
     {
-        Task<Guid> Create(PostCreateRequest request);
+        Task<ApiResult<Posts>> Create(PostCreateRequest request);
 
-        Task<int> Update(PostUpdateRequest request);
-            
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<Posts>> Update(PostUpdateRequest request);
 
-        Task<PagedResult<PostVm>> GetAllPaging(GetPostPagingRequest request);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<List<PostVm>> GetAll();
+        Task<ApiResult<PagedResult<PostVm>>> GetAllPaging(GetPostPagingRequest request);
 
-        Task<PostVm> GetById(Guid Id);
+        Task<ApiResult<List<PostVm>>> GetAll();
+
+        Task<ApiResult<PostVm>> GetById(Guid Id);
     }
 }

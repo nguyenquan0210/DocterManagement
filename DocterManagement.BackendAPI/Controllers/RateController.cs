@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.Catalog.Rate;
 using DoctorManagement.ViewModels.Catalog.Rate;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,17 +21,17 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] RateCreateRequest request)
+        public async Task<ActionResult<ApiResult<RateVm>>> Create([FromBody] RateCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _rateService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Xóa đánh giá
@@ -38,7 +39,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -55,37 +56,37 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] RateUpdateRequest request)
+        public async Task<ActionResult<ApiResult<RateVm>>> Update([FromBody] RateUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _rateService.Update(request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Lấy danh sách phân trang đánh giá
         /// </summary>
         /// 
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetRatePagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<RateVm>>>> GetAllPaging([FromQuery] GetRatePagingRequest request)
         {
-            var user = await _rateService.GetAllPaging(request);
-            return Ok(user);
+            var result = await _rateService.GetAllPaging(request);
+            return Ok(result);
         }
         /// <summary>
         /// Lấy đánh giá theo id
         /// </summary>
         /// 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
+        public async Task<ActionResult<ApiResult<RateVm>>> GetById(Guid Id)
         {
             var result = await _rateService.GetById(Id);
-            if (result == null)
-                return BadRequest("Cannot find product");
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find rate");
             return Ok(result);
         }
         /// <summary>
@@ -93,7 +94,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ApiResult<List<RateVm>>>> GetAll()
         {
             var result = await _rateService.GetAll();
             return Ok(result);

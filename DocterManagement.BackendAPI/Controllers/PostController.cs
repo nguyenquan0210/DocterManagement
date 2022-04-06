@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.Catalog.Post;
 using DoctorManagement.ViewModels.Catalog.Post;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,17 +21,17 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] PostCreateRequest request)
+        public async Task<ActionResult<ApiResult<PostVm>>> Create([FromBody] PostCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _postService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Xóa bài viết
@@ -38,7 +39,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -55,14 +56,14 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] PostUpdateRequest request)
+        public async Task<ActionResult<ApiResult<PostVm>>> Update([FromBody] PostUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _postService.Update(request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
             return Ok();
         }
@@ -71,21 +72,21 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetPostPagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<PostVm>>>> GetAllPaging([FromQuery] GetPostPagingRequest request)
         {
-            var user = await _postService.GetAllPaging(request);
-            return Ok(user);
+            var result = await _postService.GetAllPaging(request);
+            return Ok(result);
         }
         /// <summary>
         /// Lấy bài viết theo id
         /// </summary>
         /// 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
+        public async Task<ActionResult<ApiResult<PostVm>>> GetById(Guid Id)
         {
             var result = await _postService.GetById(Id);
-            if (result == null)
-                return BadRequest("Cannot find product");
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find post");
             return Ok(result);
         }
         /// <summary>
@@ -93,7 +94,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ApiResult<List<PostVm>>>> GetAll()
         {
             var result = await _postService.GetAll();
             return Ok(result);

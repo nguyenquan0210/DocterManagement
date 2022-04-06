@@ -18,7 +18,7 @@ namespace DoctorManagement.Data.Entities
         public Guid PatientId { get; set; }
 
         public Patients Patients { get; set; }
-        public SchedulesDetails SchedulesDetails { get; set; }
+        public SchedulesDetailts SchedulesDetails { get; set; }
         public MedicalRecord MedicalRecords { get; set; }
 
         public Rates Rates { get; set; }

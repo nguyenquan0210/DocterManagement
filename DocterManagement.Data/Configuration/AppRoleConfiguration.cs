@@ -14,6 +14,7 @@ namespace DoctorManagement.Data.Configuration
         public void Configure(EntityTypeBuilder<AppRoles> builder)
         {
             builder.ToTable("AppRoles");
+            builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Description).IsRequired().HasMaxLength(200);
 
         }

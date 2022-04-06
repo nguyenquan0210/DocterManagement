@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.MedicalRecords;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.MedicalRecords;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
 {
     public interface IMedicalRecordService
     {
-        Task<Guid> Create(MedicalRecordCreateRequest request);
+        Task<ApiResult<MedicalRecord>> Create(MedicalRecordCreateRequest request);
 
-        Task<int> Update(MedicalRecordUpdateRequest request);
+        Task<ApiResult<MedicalRecord>> Update(MedicalRecordUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<PagedResult<MedicalRecordVm>> GetAllPaging(GetMedicalRecordPagingRequest request);
+        Task<ApiResult<PagedResult<MedicalRecordVm>>> GetAllPaging(GetMedicalRecordPagingRequest request);
 
-        Task<List<MedicalRecordVm>> GetAll();
+        Task<ApiResult<List<MedicalRecordVm>>> GetAll();
 
-        Task<MedicalRecordVm> GetById(Guid Id);
+        Task<ApiResult<MedicalRecordVm>> GetById(Guid Id);
     }
 }

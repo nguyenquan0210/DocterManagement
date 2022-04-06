@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Speciality;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Speciality
 {
     public interface ISpecialityService
     {
-        Task<Guid> Create(SpecialityCreateRequest request);
+        Task<ApiResult<Specialities>> Create(SpecialityCreateRequest request);
 
-        Task<int> Update(SpecialityUpdateRequest request);
+        Task<ApiResult<Specialities>> Update(SpecialityUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<PagedResult<SpecialityVm>> GetAllPaging(GetSpecialityPagingRequest request);
+        Task<ApiResult<PagedResult<SpecialityVm>>> GetAllPaging(GetSpecialityPagingRequest request);
 
-        Task<List<SpecialityVm>> GetAll();
+        Task<ApiResult<List<SpecialityVm>>> GetAll();
 
-        Task<SpecialityVm> GetById(Guid Id);
+        Task<ApiResult<SpecialityVm>> GetById(Guid Id);
     }
 }

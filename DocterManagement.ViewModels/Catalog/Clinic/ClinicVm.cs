@@ -15,6 +15,7 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         public string Description { get; set; }
         public string Address { get; set; }
         public Guid WardId { get; set; }
+        public string WardName { get; set; }
         public Status Status { get; set; }
     }
 }

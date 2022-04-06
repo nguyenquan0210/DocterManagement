@@ -57,12 +57,10 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { 
-        Title = "Swagger Doctor Manage Solution", 
-        Version = "v1" 
-    });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger Doctor Manage Solution", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
@@ -161,7 +159,9 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger Doctor Manage Solution V1");
 });
-
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
 app.Run();

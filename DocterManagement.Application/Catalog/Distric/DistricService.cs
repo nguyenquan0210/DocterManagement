@@ -20,44 +20,45 @@ namespace DoctorManagement.Application.Catalog.Distric
         {
             _context = context;
         }
-        public async Task<Guid> Create(DistricCreateRequest request)
+        public async Task<ApiResult<Districs>> Create(DistricCreateRequest request)
         {
-            var districs = new Districs()
+            var rs = new Districs()
             {
                 Name = request.Name,
                 SortOrder = request.SortOrder
             };
-            _context.Districs.Add(districs);
+            _context.Districs.Add(rs);
             await _context.SaveChangesAsync();
-            return districs.Id;
+            return new ApiSuccessResult<Districs>(rs);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var districs = await _context.Districs.FindAsync(Id);
             int check = 0;
-            if (districs == null) return check;
-            
-                _context.Districs.Remove(districs);
+            if (districs == null) return new ApiSuccessResult<int>(check);
+
+            _context.Districs.Remove(districs);
                 check = 2;
             
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<DistricVm>> GetAll()
+        public async Task<ApiResult<List<DistricVm>>> GetAll()
         {
             var query = _context.Districs;
 
-            return await query.Select(x => new DistricVm()
+            var rs = await query.Select(x => new DistricVm()
             {
                 Id = x.Id,
                 Name = x.Name,
                 SortOrder = x.SortOrder
             }).ToListAsync();
+            return new ApiSuccessResult<List<DistricVm>>(rs);
         }
 
-        public async Task<PagedResult<DistricVm>> GetAllPaging(GetDistricPagingRequest request)
+        public async Task<ApiResult<PagedResult<DistricVm>>> GetAllPaging(GetDistricPagingRequest request)
         {
             var query = from c in _context.Districs select c;
             //2. filter
@@ -84,10 +85,10 @@ namespace DoctorManagement.Application.Catalog.Distric
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<DistricVm>>(pagedResult);
         }
 
-        public async Task<DistricVm> GetById(Guid Id)
+        public async Task<ApiResult<DistricVm>> GetById(Guid Id)
         {
             var Distric = await _context.Districs.FindAsync(Id);
             if (Distric == null) throw new DoctorManageException($"Cannot find a distric with id: { Id}");
@@ -98,17 +99,17 @@ namespace DoctorManagement.Application.Catalog.Distric
                 SortOrder = Distric.SortOrder
             };
 
-            return rs;
+            return new ApiSuccessResult<DistricVm>(rs);
         }
 
-        public async Task<int> Update(DistricUpdateRequest request)
+        public async Task<ApiResult<Districs>> Update(DistricUpdateRequest request)
         {
-            var Distric = await _context.Districs.FindAsync(request.Id);
-            if (Distric == null) throw new DoctorManageException($"Cannot find a distric with id: { request.Id}");
-            Distric.Name = request.Name;
-            Distric.SortOrder = request.SortOrder;
-
-            return await _context.SaveChangesAsync();
+            var districs = await _context.Districs.FindAsync(request.Id);
+            if (districs == null) throw new DoctorManageException($"Cannot find a distric with id: { request.Id}");
+            districs.Name = request.Name;
+            districs.SortOrder = request.SortOrder;
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<Districs>(districs);
         }
     }
 }

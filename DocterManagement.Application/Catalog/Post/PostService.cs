@@ -21,7 +21,7 @@ namespace DoctorManagement.Application.Catalog.Post
         {
             _context = context;
         }
-        public async Task<Guid> Create(PostCreateRequest request)
+        public async Task<ApiResult<Posts>> Create(PostCreateRequest request)
         {
             var posts = new Posts()
             {
@@ -33,14 +33,14 @@ namespace DoctorManagement.Application.Catalog.Post
             };
             _context.Posts.Add(posts);
             await _context.SaveChangesAsync();
-            return posts.Id;
+            return new ApiSuccessResult<Posts>(posts);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var posts = await _context.Posts.FindAsync(Id);
             int check = 0;
-            if (posts == null) return check;
+            if (posts == null) return new ApiSuccessResult<int>(check);
             if (posts.Status == Status.Active)
             {
                 posts.Status = Status.InActive;
@@ -52,14 +52,14 @@ namespace DoctorManagement.Application.Catalog.Post
                 check = 2;
             }
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<PostVm>> GetAll()
+        public async Task<ApiResult<List<PostVm>>> GetAll()
         {
             var query = _context.Posts.Where(x => x.Status == Status.Active);
 
-            return await query.Select(x => new PostVm()
+            var rs = await query.Select(x => new PostVm()
             {
                 Id = x.Id,
                 Title = x.Title,
@@ -68,9 +68,10 @@ namespace DoctorManagement.Application.Catalog.Post
                 Date = x.Date,
                 DoctorId = x.DoctorId
             }).ToListAsync();
+            return new ApiSuccessResult<List<PostVm>>(rs);
         }
 
-        public async Task<PagedResult<PostVm>> GetAllPaging(GetPostPagingRequest request)
+        public async Task<ApiResult<PagedResult<PostVm>>> GetAllPaging(GetPostPagingRequest request)
         {
             var query = from c in _context.Posts select c;
             //2. filter
@@ -100,10 +101,10 @@ namespace DoctorManagement.Application.Catalog.Post
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<PostVm>>(pagedResult);
         }
 
-        public async Task<PostVm> GetById(Guid Id)
+        public async Task<ApiResult<PostVm>> GetById(Guid Id)
         {
             var post = await _context.Posts.FindAsync(Id);
             if (post == null) throw new DoctorManageException($"Cannot find a Post with id: { Id}");
@@ -117,19 +118,20 @@ namespace DoctorManagement.Application.Catalog.Post
                 Status = post.Status
             };
 
-            return rs;
+            return new ApiSuccessResult<PostVm>(rs);
         }
 
-        public async Task<int> Update(PostUpdateRequest request)
+        public async Task<ApiResult<Posts>> Update(PostUpdateRequest request)
         {
-            var post = await _context.Posts.FindAsync(request.Id);
-            if (post == null) throw new DoctorManageException($"Cannot find a post with id: { request.Id}");
-            post.Title = request.Title;
-            post.DoctorId = request.DoctorId;
-            post.Description = request.Description;
-            post.Status = request.Status ? Status.Active : Status.InActive;
+            var posts = await _context.Posts.FindAsync(request.Id);
+            if (posts == null) throw new DoctorManageException($"Cannot find a post with id: { request.Id}");
+            posts.Title = request.Title;
+            posts.DoctorId = request.DoctorId;
+            posts.Description = request.Description;
+            posts.Status = request.Status ? Status.Active : Status.InActive;
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<Posts>(posts);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Schedule;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Schedule;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Schedule
 {
     public interface IScheduleService
     {
-        Task<Guid> Create(ScheduleCreateRequest request);
+        Task<ApiResult<Schedules>> Create(ScheduleCreateRequest request);
 
-        Task<int> Update(ScheduleUpdateRequest request);
+        Task<ApiResult<Schedules>> Update(ScheduleUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<PagedResult<ScheduleVm>> GetAllPaging(GetSchedulePagingRequest request);
+        Task<ApiResult<PagedResult<ScheduleVm>>> GetAllPaging(GetSchedulePagingRequest request);
 
-        Task<List<ScheduleVm>> GetAll();
+        Task<ApiResult<List<ScheduleVm>>> GetAll();
 
-        Task<ScheduleVm> GetById(Guid Id);
+        Task<ApiResult<ScheduleVm>> GetById(Guid Id);
     }
 }

@@ -20,7 +20,7 @@ namespace DoctorManagement.Application.Catalog.Ward
         {
             _context = context;
         }
-        public async Task<Guid> Create(WardCreateRequest request)
+        public async Task<ApiResult<Wards>> Create(WardCreateRequest request)
         {
             var wards = new Wards()
             {
@@ -30,36 +30,37 @@ namespace DoctorManagement.Application.Catalog.Ward
             };
             _context.Wards.Add(wards);
             await _context.SaveChangesAsync();
-            return wards.Id;
+            return new ApiSuccessResult<Wards>(wards);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var wards = await _context.Wards.FindAsync(Id);
             int check = 0;
-            if (wards == null) return check;
+            if (wards == null) return new ApiSuccessResult<int>(check);
 
             _context.Wards.Remove(wards);
             check = 2;
 
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<WardVm>> GetAll()
+        public async Task<ApiResult<List<WardVm>>> GetAll()
         {
             var query = _context.Wards;
 
-            return await query.Select(x => new WardVm()
+            var rs = await query.Select(x => new WardVm()
             {
                 Id = x.Id,
                 Name = x.Name,
                 SortOrder = x.SortOrder,
                 DisticId = x.DisticId
             }).ToListAsync();
+            return new ApiSuccessResult<List<WardVm>>(rs);
         }
 
-        public async Task<PagedResult<WardVm>> GetAllPaging(GetWardPagingRequest request)
+        public async Task<ApiResult<PagedResult<WardVm>>> GetAllPaging(GetWardPagingRequest request)
         {
             var query = from c in _context.Wards select c;
             //2. filter
@@ -87,10 +88,10 @@ namespace DoctorManagement.Application.Catalog.Ward
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<WardVm>>(pagedResult);
         }
 
-        public async Task<WardVm> GetById(Guid Id)
+        public async Task<ApiResult<WardVm>> GetById(Guid Id)
         {
             var wards = await _context.Wards.FindAsync(Id);
             if (wards == null) throw new DoctorManageException($"Cannot find a Ward with id: { Id}");
@@ -102,10 +103,10 @@ namespace DoctorManagement.Application.Catalog.Ward
                 DisticId = wards.DisticId
             };
 
-            return rs;
+            return new ApiSuccessResult<WardVm>(rs);
         }
 
-        public async Task<int> Update(WardUpdateRequest request)
+        public async Task<ApiResult<Wards>> Update(WardUpdateRequest request)
         {
             var wards = await _context.Wards.FindAsync(request.Id);
             if (wards == null) throw new DoctorManageException($"Cannot find a Ward with id: { request.Id}");
@@ -113,7 +114,7 @@ namespace DoctorManagement.Application.Catalog.Ward
             wards.SortOrder = request.SortOrder;
             wards.DisticId = request.DisticId;
 
-            return await _context.SaveChangesAsync();
+            return new ApiSuccessResult<Wards>(wards);
         }
     }
 }
