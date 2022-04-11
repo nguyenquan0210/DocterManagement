@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoctorManagement.ViewModels.Catalog.Post;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace DoctorManagement.Application.Common
         string GetFileUrl(string fileName);
 
         Task SaveFileAsync(Stream mediaBinaryStream, string fileName);
+        Task<ImagesVm> SaveFileImgAsync(Stream mediaBinaryStream, string fileName);
 
         Task DeleteFileAsync(string fileName);
 

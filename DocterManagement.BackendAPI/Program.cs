@@ -51,7 +51,7 @@ builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IRateService, RateService>();
 builder.Services.AddTransient<IScheduleService, ScheduleService>();
 builder.Services.AddTransient<ScheduleDetailtService, ScheduleDetailtService>();
-builder.Services.AddTransient<IWardService, WardService>();
+builder.Services.AddTransient<ILocationService, LocationService>();
 builder.Services.AddTransient<ISpecialityService, SpecialityService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddControllersWithViews();

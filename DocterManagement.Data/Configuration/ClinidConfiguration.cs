@@ -22,7 +22,7 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Description).IsRequired().HasMaxLength(int.MaxValue);
             builder.Property(x => x.ImgLogo).IsRequired().HasMaxLength(100);
 
-            builder.HasOne(x => x.Wards).WithMany(x => x.Clinics).HasForeignKey(x => x.WardId);
+            builder.HasOne(x => x.Locations).WithMany(x => x.Clinics).HasForeignKey(x => x.LocationId);
         }
     }
 }

@@ -94,7 +94,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Lấy tất cả danh sách chuyên khoa
         /// </summary>
         /// 
-        [HttpGet("all")]
+        [HttpGet("get-all-speciality")]
         public async Task<ActionResult<ApiResult<List<SpecialityVm>>>> GetAll()
         {
             var speciality = await _specialityService.GetAll();

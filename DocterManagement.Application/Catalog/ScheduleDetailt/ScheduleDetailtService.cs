@@ -123,6 +123,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
             schedulesDetails.FromTime = request.FromTime;
             schedulesDetails.ToTime = request.ToTime;
             schedulesDetails.Status = request.Status;
+            _context.SaveChanges();
             return new ApiSuccessResult<SchedulesDetailts>(schedulesDetails);
         }
     }

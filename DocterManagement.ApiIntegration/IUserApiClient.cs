@@ -1,7 +1,9 @@
-﻿using DoctorManagement.ViewModels.Common;
+﻿using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.ActiveUsers;
 using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +26,9 @@ namespace DoctorManagement.ApiIntegration
 
         Task<ApiResult<bool>> AddUserRole(RequestRoleUser request);
 
-        Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request);
+        Task<ApiResult<bool>> UpdateDoctor(Guid id, UserUpdateRequest request);
+        Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request);
+        Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request);
 
         Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request);
 
@@ -33,6 +37,9 @@ namespace DoctorManagement.ApiIntegration
         Task<ApiResult<UserVm>> GetByUserName(string username);
 
         Task<int> Delete(Guid Id);
+
+        Task<List<SelectListItem>> GetAllClinic(Guid? clinicId);
+        Task<List<SelectListItem>> GetAllSpeciality(Guid? specialityId);
 
         Task<ApiResult<bool>> UpdateStatus(Guid id, UserUpdateStatusRequest request);
 

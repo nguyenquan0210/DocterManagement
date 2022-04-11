@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using DoctorManagement.ViewModels.Catalog.Post;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,13 @@ namespace DoctorManagement.Application.Common
     {
         private readonly string _userContentFolder;
         private readonly string _postContentFolder;
-        private const string USER_CONTENT_FOLDER_NAME = "img/user-content";
+        private const string IMG_CONTENT_FOLDER_NAME = "img";
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
         private const string POST_CONTENT_FOLDER_NAME = "post-content";
 
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
-            _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME);
+            _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, Path.Combine(IMG_CONTENT_FOLDER_NAME , USER_CONTENT_FOLDER_NAME));
             _postContentFolder = Path.Combine(webHostEnvironment.WebRootPath, POST_CONTENT_FOLDER_NAME);
 
         }
@@ -24,7 +26,7 @@ namespace DoctorManagement.Application.Common
 
         public string GetFileUrl(string fileName)
         {
-            return $"/{USER_CONTENT_FOLDER_NAME}/{fileName}";
+            return $"/img/{USER_CONTENT_FOLDER_NAME}/{fileName}";
         }
 
         public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
@@ -32,6 +34,17 @@ namespace DoctorManagement.Application.Common
             var filePath = Path.Combine(_userContentFolder, fileName);
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
+        }
+        public async Task<ImagesVm> SaveFileImgAsync(Stream mediaBinaryStream, string fileName)
+        {
+            var filePath = Path.Combine(_userContentFolder, fileName);
+            using var output = new FileStream(filePath, FileMode.Create);
+            await mediaBinaryStream.CopyToAsync(output);
+            return new ImagesVm()
+            {
+                FileUrl = filePath,
+                Container = USER_CONTENT_FOLDER_NAME
+            };
         }
 
         public async Task DeleteFileAsync(string fileName)

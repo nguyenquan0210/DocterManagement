@@ -3,6 +3,8 @@ using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Patient;
 using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -75,10 +78,13 @@ namespace DoctorManagement.Application.System.Users
             {
                 return new ApiErrorResult<string>("Đăng nhập không đúng.");
             }
-            var roles = await _userManager.GetRolesAsync(user);
-            var checkrole = roles.Where(x => x.ToUpper() == "ADMIN");
 
-            if (checkrole.Count() == 0 && request.Check) return new ApiErrorResult<string>("Chỉ nhận quản trị viên.");
+            var roles = await _roleManager.FindByIdAsync(user.RoleId.ToString());
+            if(request.Check == true)
+            {
+                if (roles.Name.ToUpper() != "ADMIN" ) return new ApiErrorResult<string>("Chỉ nhận quản trị viên.");
+            }
+            
 
             var claims = new[]
             {
@@ -117,17 +123,23 @@ namespace DoctorManagement.Application.System.Users
             return new ApiErrorResult<bool>("Đổi mật khẩu không thành công!");
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var user = await _userManager.FindByIdAsync(Id.ToString());
             int check = 0;
-            var role = await _roleManager.FindByNameAsync("staff");
-            if (user == null) return check;
+            var role = await _roleManager.FindByIdAsync(user.RoleId.ToString());
+            if (user == null) return new ApiSuccessResult<int>(check);
             if (user.Status == Status.Active)
             {
                 user.Status = Status.InActive;
-                var reultupdate = await _userManager.UpdateAsync(user);
+                await _userManager.UpdateAsync(user);
                 check = 1;
+            }
+            else if (user.Status == Status.InActive)
+            {
+                user.Status = Status.NotActivate;
+                await _userManager.UpdateAsync(user);
+                check = -1;
             }
             else
             {
@@ -145,7 +157,7 @@ namespace DoctorManagement.Application.System.Users
                     check = 2;
                 }
             }
-            return check;
+            return new ApiSuccessResult<int>(check);
 
         }
 
@@ -175,11 +187,16 @@ namespace DoctorManagement.Application.System.Users
         public async Task<ApiResult<UserVm>> GetById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
+            var role = await _roleManager.FindByIdAsync(user.RoleId.ToString());
+            
             if (user == null)
             {
                 return new ApiErrorResult<UserVm>("User không tồn tại");
             }
-            var roles = await _userManager.GetRolesAsync(user);
+            var doctor = await _context.Doctors.FindAsync(user.Id);
+            var patient = await _context.Patients.FindAsync(user.Id);
+
+            //var roles = await _userManager.GetRolesAsync(user);
             var userVm = new UserVm()
             {
                 Email = user.Email,
@@ -190,7 +207,25 @@ namespace DoctorManagement.Application.System.Users
                 Id = user.Id,
                 UserName = user.UserName,
                 Status = user.Status,
-                Roles = roles
+                RoleId = role.Id,
+                RoleName = role.Name,
+                DoctorVm = role.Name.ToUpper() == "DOCTOR" ? new DoctorVm()
+                {
+                    UserId = doctor.UserId,
+                    Description = doctor.Description,
+                    Address = doctor.Address,
+                    ClinicId = doctor.ClinicId,
+                    SpecialityId = doctor.SpecialityId,
+                    Img = doctor.Img,
+                    No = doctor.No
+                } : new DoctorVm()
+                    ,
+                PatientVm = role.Name.ToUpper() == "PATIENT" ? new PatientVm()
+                {
+                    UserId = patient.UserId,
+                    Address = patient.Address,
+                    Img = patient.Img
+                } : new PatientVm()
             };
             return new ApiSuccessResult<UserVm>(userVm);
         }
@@ -232,7 +267,7 @@ namespace DoctorManagement.Application.System.Users
                         join r in _context.Roles on u.RoleId equals r.Id
                         join d in _context.Doctors on u.Id equals d.UserId into dt
                         from d in dt.DefaultIfEmpty()
-                        join p in _context.Doctors on u.Id equals p.UserId into pt
+                        join p in _context.Patients on u.Id equals p.UserId into pt
                         from p in pt.DefaultIfEmpty()
                         select new { u, r ,d , p };
             
@@ -260,9 +295,30 @@ namespace DoctorManagement.Application.System.Users
                     UserName = x.u.UserName,
                     Gender = x.u.Gender,
                     Id = x.u.Id,
+                    RoleId = x.r.Id,
+                    RoleName = x.r.Name,
                     Name = x.u.Name,
                     Status = x.u.Status,
-                    Img =  x.r.Name == "doctor" ? x.d.Img : x.r.Name == "patient" ? x.p.Img : "user_default.png"
+                    Img =  x.r.Name.ToUpper() == "DOCTOR" ? x.d.Img : x.r.Name == "PATIENT" ? x.p.Img : "user_default.png",
+                    Dob = x.u.Dob,
+                    Date = x.u.Date,
+                    DoctorVm = x.r.Name == "DOCTOR" ? new DoctorVm() 
+                    {
+                        UserId = x.d.UserId,
+                        Description = x.d.Description,
+                        Address = x.d.Address,
+                        ClinicId = x.d.ClinicId,
+                        SpecialityId = x.d.SpecialityId,
+                        Img = x.d.Img,
+                        No = x.d.No
+                    }: new DoctorVm()
+                    ,
+                    PatientVm = x.r.Name == "PATIENT" ? new PatientVm()
+                    {
+                        UserId = x.p.UserId,
+                        Address = x.p.Address,
+                        Img = x.p.Img
+                    }: new PatientVm()
                 }).ToListAsync();
 
             //4. Select and projection
@@ -356,11 +412,11 @@ namespace DoctorManagement.Application.System.Users
                         var doctor = new Doctors()
                         {
                             UserId = userIdRs.Id,
-                            SpecialitiId = request.SpecialitiId,
+                            SpecialityId = request.SpecialityId,
                             ClinicId = request.ClinicId,
                             No = str,
                             Address = request.Address,
-                            Description = request.Name,
+                            Description = "<p><strong>Bác sĩ “Nguyễn Văn A” </strong>……….</p><p><strong>Quá trình học tập/Bằng cấp chuyên môn:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Quá trình công tác:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Các dịch vụ của phòng khám:</strong></p><ul><li>…</li><li>…</li></ul>",
                             Img = await this.SaveFile(request.ThumbnailImage)
                         };
                         await _context.Doctors.AddAsync(doctor);
@@ -373,9 +429,11 @@ namespace DoctorManagement.Application.System.Users
             }
             return new ApiErrorResult<bool>("Đăng ký không thành công");
         }
-        private async Task<string> SaveFile(IFormFile file)
+        private async Task<string> SaveFile(IFormFile? file)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
@@ -444,30 +502,97 @@ namespace DoctorManagement.Application.System.Users
         public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
+            var doctor = await _context.Doctors.FindAsync(user.Id);
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
-            /*if (request.ThumbnailImage != null)
-            {
-                if (user.Img != null)
-                {
-                    await _storageService.DeleteFileAsync(user.Img);
-                }
-
-                user.Img = await this.SaveFile(request.ThumbnailImage);
-
-            }*/
 
             user.Dob = request.Dob;
             user.Email = request.Email;
             user.Name = request.Name;
             user.PhoneNumber = request.PhoneNumber;
-            user.Status = request.Status ? Status.Active : Status.InActive;
+            user.Status = request.Status == true ? Status.Active : Status.InActive;
+           
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                if (doctor != null)
+                {
+                    if (request.ThumbnailImage != null)
+                    {
+                        if (doctor.Img != null)
+                        {
+                            await _storageService.DeleteFileAsync(doctor.Img);
+                        }
+                        doctor.Img = await this.SaveFile(request.ThumbnailImage);
+                    }
+                    doctor.Address = request.Address;
+                    doctor.ClinicId = request.ClinicId;
+                    doctor.SpecialityId = request.SpecialityId;
+                    doctor.Description = WebUtility.HtmlDecode(request.Description);
+                    _context.SaveChanges();
+                }
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Cập nhật không thành công");
+        }
+
+        public async Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(request.Id.ToString());
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != request.Id))
+            {
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
+            }
+
+            user.Dob = request.Dob;
+            user.Gender = request.Gender;
+            user.Email = request.Email;
+            user.Name = request.Name;
+            user.PhoneNumber = request.PhoneNumber;
+            user.Status = request.Status == true ? Status.Active : Status.InActive;
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Cập nhật không thành công");
+        }
+
+        public async Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            var patient = await _context.Patients.FindAsync(user.Id);
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
+            {
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
+            }
+
+            user.Dob = request.Dob;
+            user.Email = request.Email;
+            user.Name = request.Name;
+            user.PhoneNumber = request.PhoneNumber;
+            user.Status = request.Status == true ? Status.Active : Status.InActive;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                if (patient != null)
+                {
+                    if (request.ThumbnailImage != null)
+                    {
+                        if (patient.Img != null)
+                        {
+                            await _storageService.DeleteFileAsync(patient.Img);
+                        }
+                        patient.Img = await this.SaveFile(request.ThumbnailImage);
+                       
+                    }
+                    patient.Address = request.Address;
+                    _context.SaveChanges();
+                }
                 return new ApiSuccessResult<bool>();
             }
             return new ApiErrorResult<bool>("Cập nhật không thành công");

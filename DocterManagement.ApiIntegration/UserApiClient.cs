@@ -13,6 +13,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using DoctorManagement.ViewModels.System.Roles;
+using DoctorManagement.ViewModels.Catalog.Clinic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using DoctorManagement.ViewModels.Catalog.Speciality;
 
 namespace DoctorManagement.ApiIntegration
 {
@@ -67,14 +70,7 @@ namespace DoctorManagement.ApiIntegration
 
         public async Task<int> Delete(Guid Id)
         {
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-            var response = await client.DeleteAsync($"/api/users/{Id}");
-            var result = await response.Content.ReadAsStringAsync();
-
-            return int.Parse(result);
+            return await Delete($"/api/users" + Id);
         }
         public async Task<ApiResult<bool>> UpdateStatus(Guid id, UserUpdateStatusRequest request)
         {
@@ -93,18 +89,9 @@ namespace DoctorManagement.ApiIntegration
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
         }
 
-        public async Task<ApiResult<UserVm>> GetById(Guid id)
+        public async Task<ApiResult<UserVm>> GetById(Guid Id)
         {
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-            var response = await client.GetAsync($"/api/users/{id}");
-            var body = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<UserVm>>(body);
-
-            return JsonConvert.DeserializeObject<ApiErrorResult<UserVm>>(body);
+            return await GetAsync<UserVm>($"/api/user/{Id}");
         }
 
         public async Task<ApiResult<UserVm>> GetByUserName(string username)
@@ -158,15 +145,16 @@ namespace DoctorManagement.ApiIntegration
 
             requestContent.Add(new StringContent(registerRequest.UserName.ToString()), "userName");
             requestContent.Add(new StringContent(registerRequest.Password.ToString()), "password");
-
-            requestContent.Add(new StringContent(registerRequest.Name.ToString()), "lastName");
-            requestContent.Add(new StringContent(registerRequest.Name.ToString()), "firstName");
+            requestContent.Add(new StringContent(registerRequest.SpecialityId.ToString()), "specialityId");
+            requestContent.Add(new StringContent(registerRequest.ClinicId.ToString()), "clinicId");
+            requestContent.Add(new StringContent(registerRequest.Name.ToString()), "name");
+            requestContent.Add(new StringContent(registerRequest.Gender.ToString()), "gender");
             requestContent.Add(new StringContent(registerRequest.Dob.ToString()), "dob");
             requestContent.Add(new StringContent(registerRequest.Address.ToString()), "address");
             requestContent.Add(new StringContent(registerRequest.Email.ToString()), "email");
             requestContent.Add(new StringContent(registerRequest.PhoneNumber.ToString()), "phoneNumber");
 
-            var response = await client.PostAsync($"/api/users/manageregister", requestContent);
+            var response = await client.PostAsync($"/api/users/register-doctor", requestContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
@@ -179,7 +167,7 @@ namespace DoctorManagement.ApiIntegration
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateDoctor(Guid id, UserUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -202,14 +190,19 @@ namespace DoctorManagement.ApiIntegration
 
             requestContent.Add(new StringContent(request.Status.ToString()), "status");
 
-            requestContent.Add(new StringContent(request.Name.ToString()), "lastName");
-            requestContent.Add(new StringContent(request.Name.ToString()), "firstName");
+            requestContent.Add(new StringContent(request.Name.ToString()), "name");
             requestContent.Add(new StringContent(request.Dob.ToString()), "dob");
             requestContent.Add(new StringContent(request.Address.ToString()), "address");
             requestContent.Add(new StringContent(request.Email.ToString()), "email");
             requestContent.Add(new StringContent(request.PhoneNumber.ToString()), "phoneNumber");
+            requestContent.Add(new StringContent(request.SpecialityId.ToString()), "specialityId");
+            requestContent.Add(new StringContent(request.ClinicId.ToString()), "clinicId");
+            requestContent.Add(new StringContent(request.Gender.ToString()), "gender");
+            requestContent.Add(new StringContent(request.Dob.ToString()), "dob");
+            requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
-            var response = await client.PutAsync($"/api/users/updateuser/{id}", requestContent);
+
+            var response = await client.PutAsync($"/api/users/update-doctor/{id}", requestContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
@@ -256,11 +249,11 @@ namespace DoctorManagement.ApiIntegration
             var response = await GetListAsync<ActiveUserVm>($"/api/users/activeusers");
 
             List<GetMonth> counts = new List<GetMonth>();
-            var date = response.Where(x => x.DateActive.ToString("MM/yyyy") == month.ToString() + "/" + year.ToString()).Select(x => x.DateActive.ToString("dd/MM/yyyy")).Distinct();
+            var date = response.Data.Where(x => x.DateActive.ToString("MM/yyyy") == month.ToString() + "/" + year.ToString()).Select(x => x.DateActive.ToString("dd/MM/yyyy")).Distinct();
 
             foreach (var item in date)
             {
-                counts.Add(new GetMonth { date = item, count = response.Count(x => x.DateActive.ToString("dd/MM/yyyy") == item) });
+                counts.Add(new GetMonth { date = item, count = response.Data.Count(x => x.DateActive.ToString("dd/MM/yyyy") == item) });
 
             }
             return counts;
@@ -268,19 +261,19 @@ namespace DoctorManagement.ApiIntegration
         public async Task<List<RoleVm>> GetAllRole()
         {
             var data = await GetListAsync<RoleVm>($"/api/users/get-all-role");
-            return data;
+            return data.Data;
         }
 
         public async Task<List<UserVm>> GetNewUsers()
         {
             var data = await GetListAsync<UserVm>($"/api/users/newuser");
-            return data;
+            return data.Data;
         }
 
         public async Task<List<ActiveUserVm>> GetActiveUser()
         {
             var data = await GetListAsync<ActiveUserVm>($"/api/users/activeusers");
-            return data;
+            return data.Data;
         }
 
         public Task<List<StatisticNews>> GetUserStatiticMonth(string month, string year)
@@ -296,6 +289,86 @@ namespace DoctorManagement.ApiIntegration
         public Task<List<StatisticNews>> GetUserStatiticYear(string year)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<SelectListItem>> GetAllClinic(Guid? clinicId)
+        {
+            var data = await GetListAsync<ClinicVm>($"/api/clinic/get-all-clinic");
+            var select = data.Data.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = clinicId.HasValue && clinicId.Value == x.Id
+            });
+            return select.ToList();
+        }
+        public async Task<List<SelectListItem>> GetAllSpeciality(Guid? specialityId)
+        {
+            var data = await GetListAsync<SpecialityVm>($"/api/speciality/get-all-speciality");
+            var select = data.Data.Select(x => new SelectListItem()
+            {
+                Text = x.Title,
+                Value = x.Id.ToString(),
+                Selected = specialityId.HasValue && specialityId.Value == x.Id
+            });
+            return select.ToList();
+        }
+
+        public async Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/users/update-admin", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var requestContent = new MultipartFormDataContent();
+
+            if (request.ThumbnailImage != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
+                }
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
+            }
+
+            requestContent.Add(new StringContent(request.Status.ToString()), "status");
+
+            requestContent.Add(new StringContent(request.Name.ToString()), "name");
+            requestContent.Add(new StringContent(request.Gender.ToString()), "gender");
+            requestContent.Add(new StringContent(request.Dob.ToString()), "dob");
+            requestContent.Add(new StringContent(request.Address.ToString()), "address");
+            requestContent.Add(new StringContent(request.Email.ToString()), "email");
+            requestContent.Add(new StringContent(request.PhoneNumber.ToString()), "phoneNumber");
+
+            var response = await client.PutAsync($"/api/users/update-patient/{id}", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
     }
 }

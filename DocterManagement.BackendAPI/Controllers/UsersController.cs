@@ -14,7 +14,6 @@ namespace DoctorManagement.BackendAPI.Controllers
         //private readonly IActiveUserService _activeUserService;
 
         public UsersController(IUserService userService )//IActiveUserService activeUserService
-                                                         
         {
             _userService = userService;
             //_activeUserService = activeUserService;
@@ -72,14 +71,41 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Cập nhật tài khoản
         /// </summary>
         /// 
-        [HttpPut("updateuser/{id}")]
+        [HttpPut("update-doctor/{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update(Guid id, [FromForm] UserUpdateRequest request)
+        public async Task<IActionResult> UpdateDoctor(Guid id, [FromForm] UserUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var result = await _userService.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("update-admin")]
+        public async Task<IActionResult> UpdateAdmin([FromBody] UserUpdateAdminRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.UpdateAdmin(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("update-patient/{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdatePatient(Guid id, [FromForm] UserUpdatePatientRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.UpdatePatient(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

@@ -1,4 +1,6 @@
 ﻿using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Patient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -39,7 +41,11 @@ namespace DoctorManagement.ViewModels.System.Users
         [Display(Name = "Hình ảnh")]
         public string Img { get; set; }
 
-        public IList<string> Roles { get; set; }
+        public Guid RoleId { get; set; }
+        public string RoleName { get; set; }
+
+        public DoctorVm? DoctorVm { get; set; }
+        public PatientVm? PatientVm { get; set; }
 
         public DateTime Date { get; set; }
     }

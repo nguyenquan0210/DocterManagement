@@ -3,7 +3,7 @@
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0" href="@Url.Action("Index", "Home", new { })">
             <img src="~/img/logo_bacsi.png" class="navbar-brand-img h-100" alt="main_logo">
-            <span class="ms-1 font-weight-bold">Quản Lý Bác Sĩ</span>
+            <span class="ms-1 font-weight-bold">DoctorManage</span>
         </a>
 
 
@@ -137,14 +137,14 @@
                 <div class="collapse " id="quanlychude">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_tpic" class="nav-link  " aria-expanded="false" asp-controller="Topic" asp-action="Index">
+                            <a id="a_tpic" class="nav-link  " aria-expanded="false" asp-controller="Clinic" asp-action="Index">
                                 <span class="sidenav-mini-icon"> CĐ </span>
                                 <span class="sidenav-normal"> Danh sách phòng khám <b class="caret"></b></span>
                             </a>
 
                         </li>
                         <li class="nav-item ">
-                            <a id="a_ctetpic" class="nav-link   " aria-expanded="false" asp-controller="Topic" asp-action="Create">
+                            <a id="a_ctetpic" class="nav-link   " aria-expanded="false" asp-controller="Clinic" asp-action="Create">
                                 <span class="sidenav-mini-icon"> TCĐ </span>
                                 <span class="sidenav-normal"> Thêm phòng khám <b class="caret"></b></span>
                             </a>
@@ -178,16 +178,16 @@
                 <div class="collapse " id="quanlysukien">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_evt" class="nav-link  " aria-expanded="false" asp-controller="Event" asp-action="Index">
-                                <span class="sidenav-mini-icon"> SK </span>
-                                <span class="sidenav-normal"> Danh sách quận/huyện <b class="caret"></b></span>
+                            <a id="a_evt" class="nav-link  " aria-expanded="false" asp-controller="Location" asp-action="Index">
+                                <span class="sidenav-mini-icon"> ĐĐ </span>
+                                <span class="sidenav-normal"> Danh sách địa điểm <b class="caret"></b></span>
                             </a>
 
                         </li>
                         <li class="nav-item ">
-                            <a id="a_cteevt" class="nav-link   " aria-expanded="false" asp-controller="Event" asp-action="Create">
-                                <span class="sidenav-mini-icon"> TSK </span>
-                                <span class="sidenav-normal"> Thêm quận/huyện <b class="caret"></b></span>
+                            <a id="a_cteevt" class="nav-link   " aria-expanded="false" asp-controller="Location" asp-action="Create">
+                                <span class="sidenav-mini-icon"> TĐĐ </span>
+                                <span class="sidenav-normal"> Thêm địa điểm <b class="caret"></b></span>
                             </a>
 
                         </li>

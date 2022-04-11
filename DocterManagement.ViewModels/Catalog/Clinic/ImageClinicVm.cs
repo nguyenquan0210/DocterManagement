@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.ViewModels.Catalog.Ward
+namespace DoctorManagement.ViewModels.Catalog.Clinic
 {
-    public class WardCreateRequest
+    public class ImageClinicVm
     {
-        public string Name { get; set; }
+        public Guid Id { get; set; }
+        public string Img { get; set; }
         public int SortOrder { get; set; }
-        public Guid DisticId { get; set; }
     }
 }

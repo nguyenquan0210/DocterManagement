@@ -132,6 +132,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
             schedules.ToTime = request.ToTime;
             schedules.Qty = request.Qty;
             schedules.Status = request.Status;
+            _context.SaveChanges();
             return new ApiSuccessResult<Schedules>(schedules);
         }
     }

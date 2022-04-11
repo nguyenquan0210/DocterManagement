@@ -25,6 +25,8 @@ builder.Services.AddSession(options =>
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+builder.Services.AddTransient<IClinicApiClient, ClinicApiClient>();
+builder.Services.AddTransient<ILocationApiClient, LocationApiClient>();
 
 IMvcBuilder builde = builder.Services.AddRazorPages();
 

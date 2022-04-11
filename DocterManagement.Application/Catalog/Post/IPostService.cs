@@ -22,5 +22,7 @@ namespace DoctorManagement.Application.Catalog.Post
         Task<ApiResult<List<PostVm>>> GetAll();
 
         Task<ApiResult<PostVm>> GetById(Guid Id);
+
+        Task<ApiResult<ImagesVm>> AddImage(ImageCreateRequest request);
     }
 }

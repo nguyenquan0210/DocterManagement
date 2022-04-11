@@ -1,13 +1,16 @@
-﻿using DoctorManagement.Data.EF;
+﻿using DoctorManagement.Application.Common;
+using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Post;
 using DoctorManagement.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +19,44 @@ namespace DoctorManagement.Application.Catalog.Post
     public class PostService : IPostService
     {
         private readonly DoctorManageDbContext _context;
-
-        public PostService(DoctorManageDbContext context)
+        private readonly IStorageService _storageService;
+        public PostService(DoctorManageDbContext context,
+            IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
+        }
+
+        public async Task<ApiResult<ImagesVm>> AddImage(ImageCreateRequest request)
+        {
+            var img = new ImagesVm();
+            if (request.File != null)
+            {
+                img = await this.SaveFile(request.File);
+                //var dt = request.File.Length;
+            }
+            
+            //await _context.SaveChangesAsync();
+            return new ApiSuccessResult<ImagesVm>(img);
+        }
+        private async Task<ImagesVm> SaveFile(IFormFile? file)
+        {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var orgFileExtension = Path.GetExtension(originalFileName);
+            var guid = Guid.NewGuid();
+            var fileName = $"{guid}{orgFileExtension}";
+            var fileRequest = await _storageService.SaveFileImgAsync(file.OpenReadStream(), fileName);
+            return new ImagesVm()
+            {
+                Id = guid,
+                FileName = fileName,
+                OrgFileName = originalFileName,
+                OrgFileExtension = orgFileExtension,
+                FileUrl = fileRequest.FileUrl,
+                Container = fileRequest.Container
+            };
         }
         public async Task<ApiResult<Posts>> Create(PostCreateRequest request)
         {
@@ -29,7 +66,11 @@ namespace DoctorManagement.Application.Catalog.Post
                 Date = DateTime.Now,
                 Description = request.Description,
                 Status = Data.Enums.Status.Active,
-                DoctorId = request.DoctorId
+                DoctorId = request.DoctorId,
+                ImagePosts = new List<ImagePost>()
+                {
+
+                }
             };
             _context.Posts.Add(posts);
             await _context.SaveChangesAsync();

@@ -15,8 +15,6 @@ namespace DoctorManagement.Data.Entities
         public Gender Gender { get; set; }
         public DateTime Dob { get; set; }
         public Status Status { get; set; }
-        public Guid Roles { get; set; }
-
         public AppRoles AppRoles { get; set; }
         public Guid RoleId { get; set; }
         public Doctors Doctors { get; set; }

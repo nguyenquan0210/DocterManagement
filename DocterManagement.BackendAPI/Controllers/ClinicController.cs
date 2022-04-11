@@ -94,7 +94,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Lấy tất cả danh sách phòng khám
         /// </summary>
         /// 
-        [HttpGet("all")]
+        [HttpGet("get-all-clinic")]
         public async Task<ActionResult<ApiResult<List<ClinicVm>>>> GetAll()
         {
             var result = await _clinicService.GetAll();

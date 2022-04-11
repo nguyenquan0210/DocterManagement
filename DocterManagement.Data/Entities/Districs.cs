@@ -12,7 +12,7 @@ namespace DoctorManagement.Data.Entities
         public string Name { get; set; }
         public int SortOrder { get; set; }
         
-        public List<Wards> Wards { get; set; }
+        //public List<Locations> Wards { get; set; }
 
     }
 }

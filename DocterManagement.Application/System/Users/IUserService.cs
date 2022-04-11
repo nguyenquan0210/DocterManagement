@@ -23,6 +23,9 @@ namespace DoctorManagement.Application.System.Users
 
         Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
 
+        Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request);
+        Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request);
+
         ApiResult<PagedResult<UserVm>> GetUsersPaging(GetUserPagingRequest request);
 
         Task<ApiResult<PagedResult<UserVm>>> GetUsersAllPaging(GetUserPagingRequest request);
@@ -31,7 +34,7 @@ namespace DoctorManagement.Application.System.Users
 
         Task<ApiResult<UserVm>> GetByUserName(string username);
 
-        Task<int> Delete(Guid id);
+        Task<ApiResult<int>> Delete(Guid id);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
 

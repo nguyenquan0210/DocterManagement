@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.ViewModels.Catalog.Ward
+namespace DoctorManagement.ViewModels.Catalog.Location
 {
-    public class GetWardPagingRequest : PagingResultBase
+    public class GetLocationPagingRequest : PagingResultBase
     {
+        public string? Type { get; set; }
         public string? Keyword { get; set; }
     }
 }

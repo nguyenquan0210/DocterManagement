@@ -27,7 +27,8 @@ namespace DoctorManagement.Application.Catalog.Speciality
             {
                 Title = request.Title,
                 SortOrder = request.SortOrder,
-                Description = request.Description
+                Description = request.Description,
+                Status = Status.Active
             };
             _context.Specialities.Add(specialities);
             await _context.SaveChangesAsync();

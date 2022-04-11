@@ -22,7 +22,8 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Img).IsRequired().HasMaxLength(100);
 
             builder.HasOne(x => x.AppUsers).WithOne(x => x.Doctors).HasForeignKey<Doctors>(x => x.UserId);
-            builder.HasOne(x => x.Specialities).WithMany(x => x.Doctors).HasForeignKey(x => x.SpecialitiId);
+            builder.HasOne(x => x.Specialities).WithMany(x => x.Doctors).HasForeignKey(x => x.SpecialityId);
+            builder.HasOne(x => x.Clinics).WithMany(x => x.Doctors).HasForeignKey(x => x.ClinicId);
             builder.HasOne(x => x.Clinics).WithMany(x => x.Doctors).HasForeignKey(x => x.ClinicId);
 
         }

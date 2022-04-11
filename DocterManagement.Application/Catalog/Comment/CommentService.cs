@@ -119,6 +119,7 @@ namespace DoctorManagement.Application.Catalog.Comment
             var comments = await _context.CommentsPost.FindAsync(request.Id);
             if (comments == null) throw new DoctorManageException($"Cannot find a Comment with id: { request.Id}");
             comments.Description = request.Description;
+            _context.SaveChanges();
             return new ApiSuccessResult<CommentsPost>(comments);
         }
     }

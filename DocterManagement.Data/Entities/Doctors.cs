@@ -14,9 +14,9 @@ namespace DoctorManagement.Data.Entities
         public string Img { get; set; }
         public string Description { get; set; }
         public string No { get; set; }
-        public Guid SpecialitiId { get; set; }
+        public Guid SpecialityId { get; set; }
         public Guid ClinicId { get; set; }
-        
+
         public AppUsers AppUsers { get; set; }
         public Specialities Specialities { get; set; }
         public Clinics Clinics { get; set; }

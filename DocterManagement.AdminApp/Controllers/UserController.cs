@@ -27,31 +27,13 @@ namespace DoctorManagement.AdminApp.Controllers
         {
             if (ViewBag.Role != null)
             {
-                var role = ViewBag.Role;
+                rolename = ViewBag.Role;
             }
-            List<SelectListItem> selectListItems = new List<SelectListItem>()
+            if (rolename == null)
             {
-                new SelectListItem(text: "Bác sĩ", value: "doctor"),
-                new SelectListItem(text: "Bệnh nhân", value: "patient")
-            };
-            if (User.IsInRole("admin"))
-            {
-                selectListItems.Add(new SelectListItem(text: "Tất cả", value: "all"));
-                selectListItems.Add(new SelectListItem(text: "Quản trị", value: "admin"));
+                rolename = "all";
             }
-            else
-            {
-                if (rolename == null)
-                {
-                    rolename = "user";
-                }
-            }
-            ViewBag.rolename = selectListItems.Select(x => new SelectListItem()
-            {
-                Text = x.Text,
-                Value = x.Value,
-                Selected = rolename == x.Value
-            });
+            ViewBag.rolename = SeletectRole(rolename);
 
             var request = new GetUserPagingRequest()
             {
@@ -70,6 +52,24 @@ namespace DoctorManagement.AdminApp.Controllers
             }
             return View(data.Data);
         }
+        public List<SelectListItem> SeletectRole(string str)
+        {
+            List<SelectListItem> role = new List<SelectListItem>()
+            {
+                new SelectListItem(text: "Bác sĩ", value: "doctor"),
+                new SelectListItem(text: "Bệnh nhân", value: "patient"),
+                new SelectListItem(text: "Tất cả", value: "all"),
+                new SelectListItem(text: "Quản trị", value: "admin")
+            };
+           
+            var rs = role.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = str == x.Value
+            }).ToList();
+            return rs;
+        }
         public async Task<IActionResult> ListRole()
         {
             var data = await _userApiClient.GetAllRole();
@@ -84,8 +84,11 @@ namespace DoctorManagement.AdminApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Clinic = await _userApiClient.GetAllClinic(new Guid());
+            ViewBag.Speciality = await _userApiClient.GetAllSpeciality(new Guid());
+            ViewBag.Gender = SeletectGender("0");
             return View();
         }
 
@@ -93,6 +96,9 @@ namespace DoctorManagement.AdminApp.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ManageRegisterRequest request)
         {
+            ViewBag.Clinic = await _userApiClient.GetAllClinic(request.ClinicId);
+            ViewBag.Speciality = await _userApiClient.GetAllSpeciality(request.SpecialityId);
+            ViewBag.Gender = SeletectGender(request.Gender.ToString());
             if (!ModelState.IsValid)
                 return View();
             
@@ -112,6 +118,12 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             var result = await _userApiClient.GetById(id);
+            ViewBag.Img = result.Data.DoctorVm.Img;
+            //var doctor = await _userApiClient.Get
+            ViewBag.Gender = SeletectGender(result.Data.Gender.ToString());
+
+            ViewBag.Clinic = await _userApiClient.GetAllClinic(result.Data.DoctorVm.ClinicId);
+            ViewBag.Speciality = await _userApiClient.GetAllSpeciality(result.Data.DoctorVm.SpecialityId);
             if (result.IsSuccessed)
             {
                 var user = result.Data;
@@ -121,10 +133,14 @@ namespace DoctorManagement.AdminApp.Controllers
                     Email = user.Email,
                     Name = user.Name,
                     PhoneNumber = user.PhoneNumber,
+                    Gender = user.Gender,
                     Id = id,
-                    Address = user.Address,
+                    Address = user.DoctorVm.Address,
                     Status = user.Status == Status.Active ? true : false,
-                    img = user.Img
+                    SpecialityId = user.DoctorVm.SpecialityId,
+                    ClinicId = user.DoctorVm.ClinicId,
+                    img = user.DoctorVm.Img,
+                    Description = user.DoctorVm.Description
                 };
                 return View(updateRequest);
             }
@@ -135,10 +151,12 @@ namespace DoctorManagement.AdminApp.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] UserUpdateRequest request)
         {
+            ViewBag.Img = request.img;
+            ViewBag.Gender = SeletectGender(request.Gender.ToString());
             if (!ModelState.IsValid)
                 return View();
 
-            var result = await _userApiClient.UpdateUser(request.Id, request);
+            var result = await _userApiClient.UpdateDoctor(request.Id, request);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin người dùng thành công";
@@ -149,7 +167,112 @@ namespace DoctorManagement.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        public List<SelectListItem> SeletectGender(string id)
+        {
+            List<SelectListItem> gender = new List<SelectListItem>()
+            {
+                new SelectListItem(text: "Nam", value: "0"),
+                new SelectListItem(text: "Nữ", value: "1")
+            };
+            var rs = gender.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = id == x.Value
+            }).ToList();
+            return rs;
+        }
+        [HttpGet]
+        public async Task<IActionResult> UpdateAdmin(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+            //var doctor = await _userApiClient.Get
+            ViewBag.Gender = SeletectGender(result.Data.Gender.ToString());
 
+            if (result.IsSuccessed)
+            {
+                var user = result.Data;
+                var updateRequest = new UserUpdateAdminRequest()
+                {
+                    Dob = user.Dob,
+                    Email = user.Email,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber,
+                    Gender = user.Gender,
+                    Id = id,
+                    Status = user.Status == Status.Active ? true : false
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAdmin(UserUpdateAdminRequest request)
+        {
+            ViewBag.Gender = SeletectGender(request.Gender.ToString());
+            if (!ModelState.IsValid)
+                return View();
+            
+            var result = await _userApiClient.UpdateAdmin(request);
+            if (result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = "Thay đổi thông tin người dùng thành công";
+                TempData["AlertType"] = "alert-success";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+        [HttpGet]
+        public async Task<IActionResult> UpdatePatient(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+            ViewBag.Img = result.Data.PatientVm.Img;
+            //var doctor = await _userApiClient.Get
+            ViewBag.Gender = SeletectGender(result.Data.Gender.ToString());
+
+
+            if (result.IsSuccessed)
+            {
+                var user = result.Data;
+                var updateRequest = new UserUpdatePatientRequest()
+                {
+                    Dob = user.Dob,
+                    Email = user.Email,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber,
+                    Gender = user.Gender,
+                    Id = id,
+                    Address = user.PatientVm.Address,
+                    Status = user.Status == Status.Active ? true : false
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdatePatient([FromForm] UserUpdatePatientRequest request)
+        {
+            ViewBag.Img = request.img;
+            ViewBag.Gender = SeletectGender(request.Gender.ToString());
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _userApiClient.UpdatePatient(request.Id, request);
+            if (result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = "Thay đổi thông tin người dùng thành công";
+                TempData["AlertType"] = "alert-success";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
         [HttpGet]
         public async Task<IActionResult> Detailt(Guid id)
         {
