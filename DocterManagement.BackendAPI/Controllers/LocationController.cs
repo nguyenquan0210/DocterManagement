@@ -93,20 +93,20 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Lấy tất cả danh sách phường/xã
         /// </summary>
         /// 
-        [HttpGet("get-all-subDistrict")]
-        public async Task<ActionResult<ApiResult<List<LocationVm>>>> GetAllSubDistrict()
+        [HttpGet("{districtId}/get-all-subDistrict")]
+        public async Task<ActionResult<ApiResult<List<LocationVm>>>> GetAllSubDistrict(Guid districtId)
         {
-            var result = await _locationService.GetAllSubDistrict();
+            var result = await _locationService.GetAllSubDistrict(districtId);
             return Ok(result);
         }
         /// <summary>
         /// Lấy tất cả danh sách quận/huyện
         /// </summary>
         /// 
-        [HttpGet("get-all-district")]
-        public async Task<ActionResult<ApiResult<List<LocationVm>>>> GetAllDictrict()
+        [HttpGet("{provinceId}/get-all-district")]
+        public async Task<ActionResult<ApiResult<List<LocationVm>>>> GetAllDictrict(Guid provinceId)
         {
-            var result = await _locationService.GetAllSubDistrict();
+            var result = await _locationService.GetAllDistrict(provinceId);
             return Ok(result);
         }
         /// <summary>
@@ -116,7 +116,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         [HttpGet("get-all-province")]
         public async Task<ActionResult<ApiResult<List<LocationVm>>>> GetAllProvince()
         {
-            var result = await _locationService.GetAllSubDistrict();
+            var result = await _locationService.GetAllProvince();
             return Ok(result);
         }
     }

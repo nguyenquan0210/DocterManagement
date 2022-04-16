@@ -41,7 +41,6 @@
 		</div>
 	</form>
 }
-
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
@@ -60,7 +59,6 @@
                 </div>
                 @if (TempData["AlertMessage"] != null)
                 {
-
                     <div id="AlertBox" data-notify="container" class="col-xs-12 col-sm-12 alert @TempData["AlertType"] alert-with-icon hide1" role="alert" data-notify-position="top-center" style="">
 
                         <span data-notify="title"></span> <span data-notify="message">@TempData["AlertMessage"]</span>
@@ -120,14 +118,13 @@
                                     </tr>
                                     i++;
                                 }
-
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Họ tên</th>
-                                    <th>phòng khám</th>
-                                    <th>Số điện thoại</th>
-                                    <th>E-mail</th>
+                                    <th>Mã phòng khám</th>
+                                    <th>Tên phòng khám</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Mô tả</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>

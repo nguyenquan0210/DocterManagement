@@ -118,15 +118,15 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             var result = await _userApiClient.GetById(id);
-            ViewBag.Img = result.Data.DoctorVm.Img;
             //var doctor = await _userApiClient.Get
-            ViewBag.Gender = SeletectGender(result.Data.Gender.ToString());
-
-            ViewBag.Clinic = await _userApiClient.GetAllClinic(result.Data.DoctorVm.ClinicId);
-            ViewBag.Speciality = await _userApiClient.GetAllSpeciality(result.Data.DoctorVm.SpecialityId);
             if (result.IsSuccessed)
             {
                 var user = result.Data;
+                ViewBag.Gender = SeletectGender(user.Gender.ToString());
+                ViewBag.Status = SeletectStatus(user.Status);
+                ViewBag.Img = user.PatientVm.Img;
+                ViewBag.Clinic = await _userApiClient.GetAllClinic(user.DoctorVm.GetClinic.Id);
+                ViewBag.Speciality = await _userApiClient.GetAllSpeciality(user.DoctorVm.GetSpeciality.Id);
                 var updateRequest = new UserUpdateRequest()
                 {
                     Dob = user.Dob,
@@ -136,9 +136,9 @@ namespace DoctorManagement.AdminApp.Controllers
                     Gender = user.Gender,
                     Id = id,
                     Address = user.DoctorVm.Address,
-                    Status = user.Status == Status.Active ? true : false,
-                    SpecialityId = user.DoctorVm.SpecialityId,
-                    ClinicId = user.DoctorVm.ClinicId,
+                    Status = user.Status ,
+                    SpecialityId = user.DoctorVm.GetSpeciality.Id,
+                    ClinicId = user.DoctorVm.GetClinic.Id,
                     img = user.DoctorVm.Img,
                     Description = user.DoctorVm.Description
                 };
@@ -153,6 +153,7 @@ namespace DoctorManagement.AdminApp.Controllers
         {
             ViewBag.Img = request.img;
             ViewBag.Gender = SeletectGender(request.Gender.ToString());
+            ViewBag.Status = SeletectStatus(request.Status);
             if (!ModelState.IsValid)
                 return View();
 
@@ -187,11 +188,11 @@ namespace DoctorManagement.AdminApp.Controllers
         {
             var result = await _userApiClient.GetById(id);
             //var doctor = await _userApiClient.Get
-            ViewBag.Gender = SeletectGender(result.Data.Gender.ToString());
-
             if (result.IsSuccessed)
             {
                 var user = result.Data;
+                ViewBag.Gender = SeletectGender(user.Gender.ToString());
+                ViewBag.Status = SeletectStatus(user.Status);
                 var updateRequest = new UserUpdateAdminRequest()
                 {
                     Dob = user.Dob,
@@ -200,7 +201,7 @@ namespace DoctorManagement.AdminApp.Controllers
                     PhoneNumber = user.PhoneNumber,
                     Gender = user.Gender,
                     Id = id,
-                    Status = user.Status == Status.Active ? true : false
+                    Status = user.Status 
                 };
                 return View(updateRequest);
             }
@@ -211,6 +212,7 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> UpdateAdmin(UserUpdateAdminRequest request)
         {
             ViewBag.Gender = SeletectGender(request.Gender.ToString());
+            ViewBag.Status = SeletectStatus(request.Status);
             if (!ModelState.IsValid)
                 return View();
             
@@ -229,14 +231,15 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> UpdatePatient(Guid id)
         {
             var result = await _userApiClient.GetById(id);
-            ViewBag.Img = result.Data.PatientVm.Img;
+            
             //var doctor = await _userApiClient.Get
-            ViewBag.Gender = SeletectGender(result.Data.Gender.ToString());
-
-
+           
             if (result.IsSuccessed)
             {
                 var user = result.Data;
+                ViewBag.Gender = SeletectGender(user.Gender.ToString());
+                ViewBag.Status = SeletectStatus(user.Status);
+                ViewBag.Img = user.PatientVm.Img;
                 var updateRequest = new UserUpdatePatientRequest()
                 {
                     Dob = user.Dob,
@@ -246,7 +249,7 @@ namespace DoctorManagement.AdminApp.Controllers
                     Gender = user.Gender,
                     Id = id,
                     Address = user.PatientVm.Address,
-                    Status = user.Status == Status.Active ? true : false
+                    Status = user.Status 
                 };
                 return View(updateRequest);
             }
@@ -259,6 +262,7 @@ namespace DoctorManagement.AdminApp.Controllers
         {
             ViewBag.Img = request.img;
             ViewBag.Gender = SeletectGender(request.Gender.ToString());
+            ViewBag.Status = SeletectStatus(request.Status);
             if (!ModelState.IsValid)
                 return View();
 
@@ -274,12 +278,85 @@ namespace DoctorManagement.AdminApp.Controllers
             return View(request);
         }
         [HttpGet]
+        public async Task<IActionResult> DetailtDoctor(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+            if (result.IsSuccessed)
+            {
+                var user = result.Data;
+                ViewBag.Img = user.DoctorVm.Img;
+                ViewBag.Gender = user.Gender == Gender.Male ? "Nam" : "Nữ";
+                ViewBag.Dob = user.Dob.ToShortDateString();
+                ViewBag.Status = user.Status == Status.NotActivate ? "Ngừng hoạt động" : user.Status == Status.Active ? "Hoạt động": "không hoạt động";
+                var updateRequest = new UserVm()
+                {
+                    Email = user.Email,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber,
+                    Id = id,
+                    Address = user.Address,
+                    Img = user.Img,
+                    UserName = user.UserName,
+                    GetRole = user.GetRole,
+                    DoctorVm = user.DoctorVm,
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        public List<SelectListItem> SeletectStatus(Status status)
+        {
+            List<SelectListItem> lstatus = new List<SelectListItem>()
+            {
+                new SelectListItem(text: "Ngừng hoạt động", value: Status.NotActivate.ToString()),
+                new SelectListItem(text: "Hoạt động", value: Status.Active.ToString()),
+                new SelectListItem(text: "Không hoạt động", value: Status.InActive.ToString())
+            };
+            var rs = lstatus.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = status.ToString() == x.Value
+            }).ToList();
+            return rs;
+        }
+        [HttpGet]
+        public async Task<IActionResult> DetailtPatient(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+            if (result.IsSuccessed)
+            {
+                var user = result.Data;
+                ViewBag.Img = user.DoctorVm.Img;
+                ViewBag.Gender = user.Gender == Gender.Male ? "Nam" : "Nữ";
+                ViewBag.Dob = user.Dob.ToShortDateString();
+                ViewBag.Status = user.Status == Status.NotActivate ? "Ngừng hoạt động" : user.Status == Status.Active ? "Hoạt động" : "không hoạt động";
+                var updateRequest = new UserVm()
+                {
+                    Dob = user.Dob,
+                    Email = user.Email,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber,
+                    Id = id,
+                    Address = user.Address,
+                    Img = user.Img,
+                    UserName = user.UserName,
+                    Status = user.Status //== Status.Active ? true : false
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpGet]
         public async Task<IActionResult> Detailt(Guid id)
         {
             var result = await _userApiClient.GetById(id);
             if (result.IsSuccessed)
             {
                 var user = result.Data;
+                ViewBag.Gender = user.Gender == Gender.Male ? "Nam" : "Nữ";
+                ViewBag.Dob = user.Dob.ToShortDateString();
+                ViewBag.Status = user.Status == Status.NotActivate ? "Ngừng hoạt động" : user.Status == Status.Active ? "Hoạt động" : "không hoạt động";
                 var updateRequest = new UserVm()
                 {
                     Dob = user.Dob,

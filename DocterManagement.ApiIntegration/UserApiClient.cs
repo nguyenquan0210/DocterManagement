@@ -70,7 +70,7 @@ namespace DoctorManagement.ApiIntegration
 
         public async Task<int> Delete(Guid Id)
         {
-            return await Delete($"/api/users" + Id);
+            return await Delete($"/api/users/{Id}" );
         }
         public async Task<ApiResult<bool>> UpdateStatus(Guid id, UserUpdateStatusRequest request)
         {
@@ -91,7 +91,7 @@ namespace DoctorManagement.ApiIntegration
 
         public async Task<ApiResult<UserVm>> GetById(Guid Id)
         {
-            return await GetAsync<UserVm>($"/api/user/{Id}");
+            return await GetAsync<UserVm>($"/api/users/{Id}");
         }
 
         public async Task<ApiResult<UserVm>> GetByUserName(string username)

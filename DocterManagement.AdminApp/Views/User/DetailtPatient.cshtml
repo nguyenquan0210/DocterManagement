@@ -1,7 +1,7 @@
-﻿@model DoctorManagement.ViewModels.System.Users.UserUpdateAdminRequest
+﻿@model DoctorManagement.ViewModels.System.Users.UserVm
 
 @{
-    ViewData["Title"] = "UpdateAdmin";
+    ViewData["Title"] = "DetailtPatient";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -43,7 +43,7 @@
     <div class="row mb-5">
         <div class="col-lg-12 mt-lg-0 mt-4">
 
-           <form asp-action="UpdateAdmin" enctype="multipart/form-data" method="post">
+          
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
@@ -52,74 +52,72 @@
                             Tài khoản nhân viên.
                         </p>
                     </div>
-
-                    @if (TempData["AlertMessage"] != null)
-                    {
-
-                        <div id="AlertBox" data-notify="container" class="col-xs-12 col-sm-12 alert @TempData["AlertType"] alert-with-icon hide1" role="alert" data-notify-position="top-center" style="">
-
-                            <span data-notify="title"></span> <span data-notify="message">@TempData["AlertMessage"]</span>
-                            <a href="#" target="_blank" data-notify="url"></a>
-                        </div>
-
-                        <style>
-                            .seachvisble {
-                                display: none;
-                            }
-                        </style>
-                    }
                 <div class="card-body pt-0">
-                    
-                    <div class="row">
-                        <div class="col-6">
-                            <label asp-for="Name" class="form-label mt-4"></label>
-                            <input asp-for="Name" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-
-                        </div>
-                        <div class="col-3">
-                            <label asp-for="Gender" class="form-label mt-4"></label>
-                             <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
-                                    
-                                </select>
-                            <span asp-validation-for="Gender" class="text-danger"></span>
-
-                        </div>
-                        <div class="col-3">
-                            <label asp-for="Status" class="form-label mt-4"></label>
-                             <select asp-for="Status" asp-items="ViewBag.Status" class= "multisteps-form__input form-control" >
-                                    
-                                </select>
-                            <span asp-validation-for="Status" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-2">
-                            <label asp-for="Dob" class="form-label mt-4"></label>
-                            <input asp-for="Dob" class="form-control datetimepicker"  />
-                            <span asp-validation-for="Dob" class="text-danger"></span>
-                        </div>
-
-                        <div class="col-5">
-                            <label asp-for="Email" class="form-label mt-4"></label>
-                            <input asp-for="Email" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-
-                        </div>
-                        <div class="col-5">
-
-                            <label asp-for="PhoneNumber" class="form-label mt-4"></label>
-                            <input asp-for="PhoneNumber" class="multisteps-form__input form-control"  />
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                        </div>
-                    </div>
                    
-                    <input asp-for="Id" type = "hidden"/>
+                     <div class="row">
+                       
+                        <div class="col-4 ">
+                                    <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(ViewBag.Img ==null ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/user-content/" + ViewBag.Img)" alt="">
+                        </div>
+                        <div class="col-8 ">
+                             <div class="row ">
+                                    <div class="col-4">
+                                        <label asp-for="PatientVm.No" class="form-label mt-4"></label>
+                                        <input asp-for="PatientVm.No" class="multisteps-form__input form-control"readonly />
+
+                                    </div>
+                                    <div class="col-4">
+                                        <label asp-for="UserName" class="form-label mt-4"></label>
+                                        <input asp-for="UserName" class="multisteps-form__input form-control" readonly />
+                                    </div>
+                                     <div class="col-4">
+                                        <label asp-for="Name" class="form-label mt-4"></label>
+                                        <input asp-for="Name" class="multisteps-form__input form-control" readonly />
+                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <label asp-for="Gender" class="form-label mt-4"></label>
+                                    <input  class="multisteps-form__input form-control" readonly value="@ViewBag.Gender"/>
+                                </div>
+                                <div class="col-4">
+                                    <label asp-for="Dob" class="form-label mt-4"></label>
+                                    <input value = "@ViewBag.Dob" class="form-control " readonly />
+                                </div>
+                                <div class="col-4">
+                                     <label asp-for="Status" class="form-label mt-4"></label>
+                                    <input  class="multisteps-form__input form-control" readonly value ="@ViewBag.Status" />
+                                </div>
+                            </div>
+                            <div class = "row" >
+                                 <div class="col-12">
+                                    <label asp-for="PatientVm.Address" class="form-label mt-4"></label>
+                                    <input asp-for="PatientVm.Address" class="multisteps-form__input form-control" readonly/>
+                                </div>
+                            </div>
+                             <div class="row">
+
+                                <div class="col-6">
+                                    <label asp-for="Email" class="form-label mt-4"></label>
+                                    <input asp-for="Email" class="multisteps-form__input form-control" readonly/>
+                                </div>
+                                <div class="col-6">
+
+                                    <label asp-for="PhoneNumber" class="form-label mt-4"></label>
+                                    <input asp-for="PhoneNumber" class="multisteps-form__input form-control" readonly />
+                           
+                                </div> 
+                       
+                            </div>
+                        </div>
+                   </div>
+                    
+                   
+                  
                     <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
                 </div>
                 </div>
-           </form>
+    
 
 
         </div>
@@ -131,32 +129,8 @@
     <script src="~/js/plugins/quill.min.js"></script>
     <script src="~/js/plugins/flatpickr.min.js"></script>
     <script src="~/js/plugins/dropzone.min.js"></script>
-    <script>
-      
-         if (document.getElementById('Gender')) {
-            var gender = document.getElementById('Gender');
-            const example = new Choices(gender, {
-                        searchEnabled: false
-                    });
-        }
-        
-             
-        if (document.querySelector('.datetimepicker')) {
-            flatpickr('.datetimepicker', {
-                allowInput: true,
-                maxDate: new Date().fp_incr(-6570),
-                // sideBySide: true,
-                dateFormat: "d/m/Y",
-               
-
-            }); // flatpickr
-        }
-
-      
-
-
-    </script>
    
+  
     @* Kanban scripts *@
     <script src="~/js/plugins/dragula/dragula.min.js"></script>
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
@@ -176,5 +150,16 @@
 
 
     </script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
+    <script>
+        
+     ClassicEditor
+    .create( document.querySelector( '#DoctorVm_Description' ), {
+        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+        
+    } )
+    .catch( error => {
+        console.log( error );
+    } );
+    </script>
 }
-

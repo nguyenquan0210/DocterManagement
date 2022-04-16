@@ -115,8 +115,8 @@
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
+                   <div class="row">
+                        <div class="col-4">
                             <label asp-for="ThumbnailImage" class="form-label mt-4"></label>
                             <input asp-for="ThumbnailImage" type = "file" class="multisteps-form__input form-control"  />
                             <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
@@ -124,13 +124,13 @@
                         <div class="col-3 text-center mt-4 ">
                                     <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(ViewBag.Img ==null ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/user-content/" + ViewBag.Img)" alt="">
                          </div>
-                         <div class="col-3">
-
+                          <div class="col-5">
                             <label asp-for="Status" class="form-label mt-4"></label>
-                            <div class="form-check form-switch ps-0">
-                                <input  asp-for="Status" class="form-check-input mt-1 ms-auto " type ="checkbox" />
-                                <span asp-validation-for="Status" class="text-danger"></span>
-                            </div>
+                             <select asp-for="Status" asp-items="ViewBag.Status" class= "multisteps-form__input form-control" >
+                                    
+                                </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+
                         </div>
                     </div>
                     <input asp-for="Id" type = "hidden"/>

@@ -57,7 +57,7 @@ namespace DoctorManagement.ApiIntegration
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                JsonConvert.DeserializeObject<ApiSuccessResult<List<T>>>(body);
+                var demo = JsonConvert.DeserializeObject<ApiSuccessResult<List<T>>>(body);
                 var data = JsonConvert.DeserializeObject(body, typeof(ApiSuccessResult<List<T>>));
                 return (ApiResult<List<T>>)data;
             }

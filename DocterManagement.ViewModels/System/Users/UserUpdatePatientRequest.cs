@@ -23,14 +23,14 @@ namespace DoctorManagement.ViewModels.System.Users
         [DataType(DataType.Date)]
         public DateTime Dob { get; set; }
 
-        [Display(Name = "Hòm thư")]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
 
         [Display(Name = "Số điện thoại")]
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Trạng thái")]
-        public bool Status { get; set; }
+        public Status Status { get; set; }
 
         public string Address { get; set; }
 

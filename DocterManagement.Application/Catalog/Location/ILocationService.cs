@@ -19,8 +19,8 @@ namespace DoctorManagement.Application.Catalog.Ward
 
         Task<ApiResult<PagedResult<LocationVm>>> GetAllPaging(GetLocationPagingRequest request);
 
-        Task<ApiResult<List<LocationVm>>> GetAllSubDistrict();
-        Task<ApiResult<List<LocationVm>>> GetAllDistrict();
+        Task<ApiResult<List<LocationVm>>> GetAllSubDistrict(Guid districtId);
+        Task<ApiResult<List<LocationVm>>> GetAllDistrict(Guid provinceId);
         Task<ApiResult<List<LocationVm>>> GetAllProvince();
 
         Task<ApiResult<LocationVm>> GetById(Guid Id);

@@ -1,7 +1,7 @@
-﻿@model DoctorManagement.ViewModels.System.Users.UserUpdateRequest
+﻿@model DoctorManagement.ViewModels.System.Users.UserVm
 
 @{
-    ViewData["Title"] = "Update";
+    ViewData["Title"] = "Detailt";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -43,7 +43,7 @@
     <div class="row mb-5">
         <div class="col-lg-12 mt-lg-0 mt-4">
 
-           <form asp-action="Update" enctype="multipart/form-data" method="post">
+           <form asp-action="UpdateAdmin" enctype="multipart/form-data" method="post">
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
@@ -69,98 +69,40 @@
                         </style>
                     }
                 <div class="card-body pt-0">
-                   
-                     <div class="row ">
-                            <div class="col-6">
-                                 <label asp-for="ClinicId" class="control-label mt-4"></label>
-                                <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn phòng khám --</option>
-                                </select>
-                                <span asp-validation-for="ClinicId" class="text-danger"></span>
-                            </div>
-                            <div class="col-6">
-                                 <label asp-for="SpecialityId" class="control-label mt-4"></label>
-                                <select asp-for="SpecialityId" asp-items="ViewBag.Speciality" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn chuyên khoa --</option>
-                                </select>
-                                <span asp-validation-for="SpecialityId" class="text-danger"></span>
-
-                            </div>
-                            
-                        </div>
+                    
                     <div class="row">
                         <div class="col-6">
                             <label asp-for="Name" class="form-label mt-4"></label>
-                            <input asp-for="Name" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-
+                            <input asp-for="Name" class="multisteps-form__input form-control" readonly />
                         </div>
-                        <div class="col-6">
-                            <label asp-for="Gender" class="form-label mt-4"></label>
-                             <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
-                                    
-                                </select>
-                            <span asp-validation-for="Gender" class="text-danger"></span>
-
-                        </div>
+                        <div class="col-3">
+                                    <label asp-for="Gender" class="form-label mt-4"></label>
+                                    <input  class="multisteps-form__input form-control" readonly  value="@ViewBag.Gender"/>
+                                </div>
+                        <div class="col-3">
+                                    <label asp-for="Status" class="form-label mt-4"></label>
+                                    <input  class="multisteps-form__input form-control" readonly value="@ViewBag.Status"/>
+                                </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-2">
                             <label asp-for="Dob" class="form-label mt-4"></label>
-                            <input asp-for="Dob" class="form-control datetimepicker"  />
-                            <span asp-validation-for="Dob" class="text-danger"></span>
+                            <input value="@ViewBag.Dob" class="form-control datetimepicker" readonly  />
                         </div>
-                        <div class="col-8">
-                            <label asp-for="Address" class="form-label mt-4"></label>
-                            <input asp-for="Address" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Address" class="text-danger"></span>
-                        </div>
-                       
-                    </div>
-                    <div class="row">
 
-                        <div class="col-6">
+                        <div class="col-5">
                             <label asp-for="Email" class="form-label mt-4"></label>
-                            <input asp-for="Email" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="Email" class="multisteps-form__input form-control" readonly />
 
                         </div>
-                        <div class="col-6">
+                        <div class="col-5">
 
                             <label asp-for="PhoneNumber" class="form-label mt-4"></label>
-                            <input asp-for="PhoneNumber" class="multisteps-form__input form-control"  />
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            <input asp-for="PhoneNumber" class="multisteps-form__input form-control" readonly />
                         </div>
                     </div>
-                     <div class="row">
-                        <div class="col-12">
-                            <label asp-for="Description" class="form-label mt-4"></label>
-                            <textarea asp-for="Description" class="multisteps-form__input form-control"  >  </textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <label asp-for="ThumbnailImage" class="form-label mt-4"></label>
-                            <input asp-for="ThumbnailImage" type = "file" class="multisteps-form__input form-control"  />
-                            <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
-                        </div>
-                        <div class="col-3 text-center mt-4 ">
-                                    <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(ViewBag.Img ==null ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/user-content/" + ViewBag.Img)" alt="">
-                         </div>
-                          <div class="col-5">
-                            <label asp-for="Status" class="form-label mt-4"></label>
-                             <select asp-for="Status" asp-items="@ViewBag.Status" class= "multisteps-form__input form-control" >
-                                    
-                                </select>
-                            <span asp-validation-for="Status" class="text-danger"></span>
-
-                        </div>
-                    </div>
-                    <input asp-for="Id" type = "hidden"/>
-                    <input asp-for="img" type = "hidden"/>
-                    <input asp-for="Description" type = "hidden"/>
+                   
                     <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
                 </div>
                 </div>
@@ -176,51 +118,8 @@
     <script src="~/js/plugins/quill.min.js"></script>
     <script src="~/js/plugins/flatpickr.min.js"></script>
     <script src="~/js/plugins/dropzone.min.js"></script>
-    <script>
-        if (document.getElementById('ClinicId')) {
-            var clinic = document.getElementById('ClinicId');
-            const example = new Choices(clinic);
-        }
-        if (document.getElementById('SpecialityId')) {
-            var speciality = document.getElementById('SpecialityId');
-            const example = new Choices(speciality);
-        }
-         if (document.getElementById('Gender')) {
-            var gender = document.getElementById('Gender');
-            const example = new Choices(gender, {
-                        searchEnabled: false
-                    });
-        }
-        
-             
-        if (document.querySelector('.datetimepicker')) {
-            flatpickr('.datetimepicker', {
-                allowInput: true,
-                maxDate: new Date().fp_incr(-6570),
-                // sideBySide: true,
-                dateFormat: "d/m/Y",
-               
-
-            }); // flatpickr
-        }
-
-      
-
-
-    </script>
-    <script>
-       
-        $("#ThumbnailImage").change(function (event) {
-                            var files = event.target.files;
-            $("#src_img").attr("src", window.URL.createObjectURL(files[0]));
-                        });
-        $("#ThumbnailImage").change(function () {
-                            var files = $('#ThumbnailImage').val();
-            $("#ThumbnailImage").attr("value", files.slice(12));
-                        });
-       
-
-    </script>
+   
+  
     @* Kanban scripts *@
     <script src="~/js/plugins/dragula/dragula.min.js"></script>
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
@@ -244,7 +143,7 @@
     <script>
         
      ClassicEditor
-    .create( document.querySelector( '#Description' ), {
+    .create( document.querySelector( '#DoctorVm_Description' ), {
         toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
         
     } )
@@ -253,4 +152,3 @@
     } );
     </script>
 }
-

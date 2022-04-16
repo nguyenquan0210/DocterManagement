@@ -35,7 +35,7 @@ namespace DoctorManagement.ViewModels.System.Users
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Trạng thái")]
-        public bool Status { get; set; }
+        public Status Status { get; set; }
 
         [Display(Name = "Hình ảnh")]
         public IFormFile? ThumbnailImage { get; set; }

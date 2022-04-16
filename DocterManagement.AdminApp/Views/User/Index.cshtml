@@ -119,10 +119,10 @@
                                             <span class="badge @(item.Status == Status.Active ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.Status == Status.Active ? "Hoạt động" : "đã khóa")</span>
                                         </td>
                                         <td class="text-sm">
-                                            <a asp-controller = "User" asp-action = "Detailt" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
+                                            <a asp-controller = "User" asp-action = "@(item.GetRole.Name.ToUpper() == "DOCTOR" ? "DetailtDoctor" : item.GetRole.Name.ToUpper() == "ADMIN" ? "Detailt" : "DetailtPatient")" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
                                                 <i class="fas fa-eye text-secondary"></i>
                                             </a>
-                                            <a asp-controller = "User" asp-action = "@(item.RoleName.ToUpper() == "DOCTOR" ? "Update" : item.RoleName.ToUpper() == "ADMIN" ? "UpdateAdmin" : "UpdatePatient")" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
+                                            <a asp-controller = "User" asp-action = "@(item.GetRole.Name.ToUpper() == "DOCTOR" ? "Update" : item.GetRole.Name.ToUpper() == "ADMIN" ? "UpdateAdmin" : "UpdatePatient")" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
                                                 <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
                                             <a id = "User_@i" onclick="@(item.Status == Status.Active? "ConfirmStatus("+@i+")": "ConfirmDelete("+@i+")")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
@@ -298,7 +298,7 @@
                         document.getElementById("status_" + empId).classList.toggle('badge-success');
                         document.getElementById("status_" + empId).classList.toggle('badge-danger');
                         $("#status_" + empId).html("đã khóa");
-                        $("#title").html("Chăn Thành Công");
+                        $("#title").html("Chặn Thành Công");
                         $("#descript").html("Chặn người dùng thành công.");
                     }else{
                         $("#title").html("Lỗi sever!");

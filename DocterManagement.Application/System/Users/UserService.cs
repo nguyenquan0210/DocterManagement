@@ -2,6 +2,8 @@
 using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Patient;
@@ -127,7 +129,7 @@ namespace DoctorManagement.Application.System.Users
         {
             var user = await _userManager.FindByIdAsync(Id.ToString());
             int check = 0;
-            var role = await _roleManager.FindByIdAsync(user.RoleId.ToString());
+            //var role = await _roleManager.FindByIdAsync(user.RoleId.ToString());
             if (user == null) return new ApiSuccessResult<int>(check);
             if (user.Status == Status.Active)
             {
@@ -139,37 +141,38 @@ namespace DoctorManagement.Application.System.Users
             {
                 user.Status = Status.NotActivate;
                 await _userManager.UpdateAsync(user);
-                check = -1;
+                check = 2;
             }
-            else
+            /*else
             {
                 var reult = await _userManager.DeleteAsync(user);
                 if (reult.Succeeded)
                 {
-                    /*if (user.Img != null)
+                    *//*if (user.Img != null)
                     {
                         await _storageService.DeleteFileAsync(user.Img);
-                    }*/
+                    }*//*
                     if (await _userManager.IsInRoleAsync(user, role.Id.ToString()) == true)
                     {
                         await _userManager.RemoveFromRoleAsync(user, role.Id.ToString());
                     }
                     check = 2;
                 }
-            }
+            }*/
             return new ApiSuccessResult<int>(check);
 
         }
 
-        public async Task<List<RoleVm>> GetAllRole()
+        public async Task<ApiResult<List<RoleVm>>> GetAllRole()
         {
             var result = _context.AppRoles;
-            return await result.Select(x => new RoleVm()
+            var data = await result.Select(x => new RoleVm()
             {
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description
             }).ToListAsync();
+            return new ApiSuccessResult<List<RoleVm>>(data);
         }
 
         public async Task<ApiResult<List<RoleVm>>> GetAllRoleData()
@@ -194,6 +197,8 @@ namespace DoctorManagement.Application.System.Users
                 return new ApiErrorResult<UserVm>("User không tồn tại");
             }
             var doctor = await _context.Doctors.FindAsync(user.Id);
+            var clinic = await _context.Clinics.FindAsync(doctor != null ? doctor.ClinicId: new Guid());
+            var speciality = await _context.Specialities.FindAsync(doctor != null ? doctor.SpecialityId: new Guid());
             var patient = await _context.Patients.FindAsync(user.Id);
 
             //var roles = await _userManager.GetRolesAsync(user);
@@ -207,24 +212,28 @@ namespace DoctorManagement.Application.System.Users
                 Id = user.Id,
                 UserName = user.UserName,
                 Status = user.Status,
-                RoleId = role.Id,
-                RoleName = role.Name,
+                GetRole = new GetRoleVm()
+                {
+                    Id = role.Id,
+                    Name = role.Name
+                },
                 DoctorVm = role.Name.ToUpper() == "DOCTOR" ? new DoctorVm()
                 {
                     UserId = doctor.UserId,
                     Description = doctor.Description,
                     Address = doctor.Address,
-                    ClinicId = doctor.ClinicId,
-                    SpecialityId = doctor.SpecialityId,
                     Img = doctor.Img,
-                    No = doctor.No
+                    No = doctor.No,
+                    GetClinic = new GetClinicVm(){ Id = clinic.Id, Name = clinic.Name},
+                    GetSpeciality = new GetSpecialityVm(){ Id = speciality.Id, Title = speciality.Title}
                 } : new DoctorVm()
                     ,
                 PatientVm = role.Name.ToUpper() == "PATIENT" ? new PatientVm()
                 {
                     UserId = patient.UserId,
                     Address = patient.Address,
-                    Img = patient.Img
+                    Img = patient.Img,
+                    No = patient.No
                 } : new PatientVm()
             };
             return new ApiSuccessResult<UserVm>(userVm);
@@ -267,9 +276,13 @@ namespace DoctorManagement.Application.System.Users
                         join r in _context.Roles on u.RoleId equals r.Id
                         join d in _context.Doctors on u.Id equals d.UserId into dt
                         from d in dt.DefaultIfEmpty()
+                        join s in _context.Specialities on d.SpecialityId equals s.Id into spe
+                        from s in spe.DefaultIfEmpty()
+                        join c in _context.Clinics on d.ClinicId equals c.Id into cli
+                        from c in cli.DefaultIfEmpty()
                         join p in _context.Patients on u.Id equals p.UserId into pt
                         from p in pt.DefaultIfEmpty()
-                        select new { u, r ,d , p };
+                        select new { u, r ,d , p , s, c};
             
             //var patient = _context.Patients;
 
@@ -295,24 +308,26 @@ namespace DoctorManagement.Application.System.Users
                     UserName = x.u.UserName,
                     Gender = x.u.Gender,
                     Id = x.u.Id,
-                    RoleId = x.r.Id,
-                    RoleName = x.r.Name,
                     Name = x.u.Name,
                     Status = x.u.Status,
                     Img =  x.r.Name.ToUpper() == "DOCTOR" ? x.d.Img : x.r.Name == "PATIENT" ? x.p.Img : "user_default.png",
                     Dob = x.u.Dob,
                     Date = x.u.Date,
+                    GetRole = new GetRoleVm()
+                    {
+                        Id = x.r.Id,
+                        Name =x.r.Name
+                    },
                     DoctorVm = x.r.Name == "DOCTOR" ? new DoctorVm() 
                     {
                         UserId = x.d.UserId,
                         Description = x.d.Description,
                         Address = x.d.Address,
-                        ClinicId = x.d.ClinicId,
-                        SpecialityId = x.d.SpecialityId,
                         Img = x.d.Img,
-                        No = x.d.No
-                    }: new DoctorVm()
-                    ,
+                        No = x.d.No,
+                        GetSpeciality = new GetSpecialityVm() { Id = x.s.Id , Title = x.s.Title},
+                        GetClinic = new GetClinicVm() { Id= x.c.Id , Name = x.c.Name}
+                    }: new DoctorVm(),
                     PatientVm = x.r.Name == "PATIENT" ? new PatientVm()
                     {
                         UserId = x.p.UserId,
@@ -512,7 +527,8 @@ namespace DoctorManagement.Application.System.Users
             user.Email = request.Email;
             user.Name = request.Name;
             user.PhoneNumber = request.PhoneNumber;
-            user.Status = request.Status == true ? Status.Active : Status.InActive;
+            user.Status = request.Status;
+            user.Gender = request.Gender;
            
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -551,7 +567,7 @@ namespace DoctorManagement.Application.System.Users
             user.Email = request.Email;
             user.Name = request.Name;
             user.PhoneNumber = request.PhoneNumber;
-            user.Status = request.Status == true ? Status.Active : Status.InActive;
+            user.Status = request.Status ;
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -574,8 +590,8 @@ namespace DoctorManagement.Application.System.Users
             user.Email = request.Email;
             user.Name = request.Name;
             user.PhoneNumber = request.PhoneNumber;
-            user.Status = request.Status == true ? Status.Active : Status.InActive;
-
+            user.Status = request.Status ;
+            user.Gender = request.Gender;
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {

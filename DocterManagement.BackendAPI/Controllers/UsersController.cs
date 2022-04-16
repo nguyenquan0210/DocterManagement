@@ -1,4 +1,6 @@
 ﻿using DoctorManagement.Application.System.Users;
+using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -169,10 +171,10 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Lấy tài khoản theo id
         /// </summary>
         /// 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetById(Guid Id)
         {
-            var user = await _userService.GetById(id);
+            var user = await _userService.GetById(Id);
             return Ok(user);
         }
         /// <summary>
@@ -208,7 +210,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpGet("get-all-role")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllRole()
+        public async Task<ActionResult<ApiResult<List<RoleVm>>>> GetAllRole()
         {
             var roles = await _userService.GetAllRole();
             return Ok(roles);

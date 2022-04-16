@@ -47,9 +47,9 @@ namespace DoctorManagement.Application.Catalog.Ward
             return new ApiSuccessResult<int>(2);
         }
 
-        public async Task<ApiResult<List<LocationVm>>> GetAllSubDistrict()
+        public async Task<ApiResult<List<LocationVm>>> GetAllSubDistrict(Guid districtId)
         {
-            var query = _context.Locations.Where(x=>x.Type.ToUpper()=="SUBDISTRICT");
+            var query = _context.Locations.Where(x=>x.ParentId == districtId && x.Type.ToUpper()=="SUBDISTRICT");
 
             var rs = await query.Select(x => new LocationVm()
             {
@@ -60,9 +60,9 @@ namespace DoctorManagement.Application.Catalog.Ward
             }).ToListAsync();
             return new ApiSuccessResult<List<LocationVm>>(rs);
         }
-        public async Task<ApiResult<List<LocationVm>>> GetAllDistrict()
+        public async Task<ApiResult<List<LocationVm>>> GetAllDistrict(Guid provinceId)
         {
-            var query = _context.Locations.Where(x => x.Type.ToUpper() == "DISTRICT");
+            var query = _context.Locations.Where(x => x.ParentId == provinceId && x.Type.ToUpper() == "DISTRICT");
 
             var rs = await query.Select(x => new LocationVm()
             {
@@ -126,7 +126,7 @@ namespace DoctorManagement.Application.Catalog.Ward
         public async Task<ApiResult<LocationVm>> GetById(Guid Id)
         {
             var Locations = await _context.Locations.FindAsync(Id);
-            if (Locations == null) throw new DoctorManageException($"Cannot find a Ward with id: { Id}");
+            if (Locations == null) throw new DoctorManageException($"Cannot find a location with id: { Id}");
             var rs = new LocationVm()
             {
                 Id = Locations.Id,
