@@ -54,7 +54,14 @@
                                Quản lý tất cả phòng khám.
                             </p>
                         </div>
-                        
+                        <div class="ms-auto my-auto mt-lg-0 mt-4 col-5">
+                           
+                            <div class="ms-auto my-auto">
+                                
+                                <a asp-action="Create" asp-controller="Clinic"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm phòng khám</a>
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @if (TempData["AlertMessage"] != null)
@@ -94,7 +101,7 @@
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
                                         <td class="text-xs font-weight-bold">
                                             <div class="d-flex align-items-center">
-                                                <img src="@(Configuration["BaseAddress"] + "/img/user-content/" + @item.ImgLogo)" class="avatar avatar-xs me-2" alt="user image">
+                                                <img src="@(Configuration["BaseAddress"] + "/img/" + @item.ImgLogo)" class="avatar avatar-xs me-2" alt="user image">
                                                 <span>@item.Name</span>
                                             </div>
                                         </td>

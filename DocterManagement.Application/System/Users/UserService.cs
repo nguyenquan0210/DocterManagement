@@ -34,6 +34,7 @@ namespace DoctorManagement.Application.System.Users
         private readonly DoctorManageDbContext _context; 
         private readonly IConfiguration _config;
         private readonly IStorageService _storageService;
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
         public UserService(UserManager<AppUsers> userManager,
             SignInManager<AppUsers> signInManager,
             RoleManager<AppRoles> roleManager,
@@ -197,8 +198,8 @@ namespace DoctorManagement.Application.System.Users
                 return new ApiErrorResult<UserVm>("User không tồn tại");
             }
             var doctor = await _context.Doctors.FindAsync(user.Id);
-            var clinic = await _context.Clinics.FindAsync(doctor != null ? doctor.ClinicId: new Guid());
-            var speciality = await _context.Specialities.FindAsync(doctor != null ? doctor.SpecialityId: new Guid());
+            var clinic = await _context.Clinics.FindAsync(doctor != null ? doctor.ClinicId : new Guid());
+            var speciality = await _context.Specialities.FindAsync(doctor != null ? doctor.SpecialityId : new Guid());
             var patient = await _context.Patients.FindAsync(user.Id);
 
             //var roles = await _userManager.GetRolesAsync(user);
@@ -219,7 +220,7 @@ namespace DoctorManagement.Application.System.Users
                 },
                 DoctorVm = role.Name.ToUpper() == "DOCTOR" ? new DoctorVm()
                 {
-                    UserId = doctor.UserId,
+                    UserId =doctor.UserId,
                     Description = doctor.Description,
                     Address = doctor.Address,
                     Img = doctor.Img,
@@ -273,7 +274,7 @@ namespace DoctorManagement.Application.System.Users
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsersAllPaging(GetUserPagingRequest request)
         {
             var query = from u in _context.AppUsers
-                        join r in _context.Roles on u.RoleId equals r.Id
+                        /*join r in _context.Roles on u.RoleId equals r.Id
                         join d in _context.Doctors on u.Id equals d.UserId into dt
                         from d in dt.DefaultIfEmpty()
                         join s in _context.Specialities on d.SpecialityId equals s.Id into spe
@@ -281,19 +282,19 @@ namespace DoctorManagement.Application.System.Users
                         join c in _context.Clinics on d.ClinicId equals c.Id into cli
                         from c in cli.DefaultIfEmpty()
                         join p in _context.Patients on u.Id equals p.UserId into pt
-                        from p in pt.DefaultIfEmpty()
-                        select new { u, r ,d , p , s, c};
+                        from p in pt.DefaultIfEmpty()*/
+                        select u;
             
             //var patient = _context.Patients;
 
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.u.UserName.Contains(request.Keyword)
-                 || x.u.PhoneNumber.Contains(request.Keyword));
+                query = query.Where(x => x.UserName.Contains(request.Keyword)
+                 || x.PhoneNumber.Contains(request.Keyword));
             }
             if (!string.IsNullOrEmpty(request.RoleName) && request.RoleName.ToUpper() != "ALL")
             {
-                query = query.Where(x => x.r.Name.Contains(request.RoleName));
+                query = query.Where(x => x.AppRoles.Name.Contains(request.RoleName));
             }
 
             //3. Paging
@@ -303,36 +304,36 @@ namespace DoctorManagement.Application.System.Users
                 .Take(request.PageSize)
                 .Select(x => new UserVm()
                 {
-                    Email = x.u.Email,
-                    PhoneNumber = x.u.PhoneNumber,
-                    UserName = x.u.UserName,
-                    Gender = x.u.Gender,
-                    Id = x.u.Id,
-                    Name = x.u.Name,
-                    Status = x.u.Status,
-                    Img =  x.r.Name.ToUpper() == "DOCTOR" ? x.d.Img : x.r.Name == "PATIENT" ? x.p.Img : "user_default.png",
-                    Dob = x.u.Dob,
-                    Date = x.u.Date,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    UserName = x.UserName,
+                    Gender = x.Gender,
+                    Id = x.Id,
+                    Name = x.Name,
+                    Status = x.Status,
+                    Img =  x.AppRoles.Name.ToUpper() == "DOCTOR" ? x.Doctors.Img : x.AppRoles.Name == "PATIENT" ? x.Patients.Img : "user_default.png",
+                    Dob = x.Dob,
+                    Date = x.Date,
                     GetRole = new GetRoleVm()
                     {
-                        Id = x.r.Id,
-                        Name =x.r.Name
+                        Id = x.AppRoles.Id,
+                        Name =x.AppRoles.Name
                     },
-                    DoctorVm = x.r.Name == "DOCTOR" ? new DoctorVm() 
+                    DoctorVm = x.AppRoles.Name == "DOCTOR" ? new DoctorVm() 
                     {
-                        UserId = x.d.UserId,
-                        Description = x.d.Description,
-                        Address = x.d.Address,
-                        Img = x.d.Img,
-                        No = x.d.No,
-                        GetSpeciality = new GetSpecialityVm() { Id = x.s.Id , Title = x.s.Title},
-                        GetClinic = new GetClinicVm() { Id= x.c.Id , Name = x.c.Name}
+                        UserId = x.Doctors.UserId,
+                        Description = x.Doctors.Description,
+                        Address = x.Doctors.Address,
+                        Img = x.Doctors.Img,
+                        No = x.Doctors.No,
+                        GetSpeciality = new GetSpecialityVm() { Id = x.Doctors.Specialities.Id , Title = x.Doctors.Specialities.Title },
+                        GetClinic = new GetClinicVm() { Id= x.Doctors.Clinics.Id , Name = x.Doctors.Clinics.Name }
                     }: new DoctorVm(),
-                    PatientVm = x.r.Name == "PATIENT" ? new PatientVm()
+                    PatientVm = x.AppRoles.Name == "PATIENT" ? new PatientVm()
                     {
-                        UserId = x.p.UserId,
-                        Address = x.p.Address,
-                        Img = x.p.Img
+                        UserId = x.Id,
+                        Address = x.Patients.Address,
+                        Img = x.Patients.Img
                     }: new PatientVm()
                 }).ToListAsync();
 
@@ -414,7 +415,7 @@ namespace DoctorManagement.Application.System.Users
                 RoleId = role.Id
             };
             var result = await _userManager.CreateAsync(user, request.Password);
-
+            
             if (result.Succeeded)
             {
                 if (await _userManager.IsInRoleAsync(user, role.Name) == false)
@@ -432,7 +433,7 @@ namespace DoctorManagement.Application.System.Users
                             No = str,
                             Address = request.Address,
                             Description = "<p><strong>Bác sĩ “Nguyễn Văn A” </strong>……….</p><p><strong>Quá trình học tập/Bằng cấp chuyên môn:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Quá trình công tác:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Các dịch vụ của phòng khám:</strong></p><ul><li>…</li><li>…</li></ul>",
-                            Img = await this.SaveFile(request.ThumbnailImage)
+                            Img = await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME)
                         };
                         await _context.Doctors.AddAsync(doctor);
                         _context.SaveChanges();
@@ -444,13 +445,13 @@ namespace DoctorManagement.Application.System.Users
             }
             return new ApiErrorResult<bool>("Đăng ký không thành công");
         }
-        private async Task<string> SaveFile(IFormFile? file)
+        private async Task<string> SaveFile(IFormFile? file, string folderName)
         {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+            await _storageService.SaveFileAsyncs(file.OpenReadStream(), fileName, folderName);
             return fileName;
         }
         public async Task<ApiResult<bool>> Register(PublicRegisterRequest request)
@@ -539,9 +540,9 @@ namespace DoctorManagement.Application.System.Users
                     {
                         if (doctor.Img != null)
                         {
-                            await _storageService.DeleteFileAsync(doctor.Img);
+                            await _storageService.DeleteFileAsyncs(doctor.Img, USER_CONTENT_FOLDER_NAME);
                         }
-                        doctor.Img = await this.SaveFile(request.ThumbnailImage);
+                        doctor.Img = await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME);
                     }
                     doctor.Address = request.Address;
                     doctor.ClinicId = request.ClinicId;
@@ -603,7 +604,7 @@ namespace DoctorManagement.Application.System.Users
                         {
                             await _storageService.DeleteFileAsync(patient.Img);
                         }
-                        patient.Img = await this.SaveFile(request.ThumbnailImage);
+                        patient.Img = await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME);
                        
                     }
                     patient.Address = request.Address;

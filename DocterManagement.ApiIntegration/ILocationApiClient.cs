@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Location;
 using DoctorManagement.ViewModels.Common;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace DoctorManagement.ApiIntegration
 
         Task<int> Delete(Guid Id);
 
-        Task<ApiResult<List<LocationVm>>> GetAllSubDistrict();
-        Task<ApiResult<List<LocationVm>>> GetAllDistrict();
-        Task<ApiResult<List<LocationVm>>> GetAllProvince();
+        Task<List<SelectListItem>> GetAllSubDistrict(Guid? subDistricyId);
+        Task<List<SelectListItem>> GetAllDistrict(Guid? districyId);
+        Task<List<SelectListItem>> GetAllProvince(Guid? provinceId);
 
         Task<ApiResult<LocationVm>> GetById(Guid Id);
     }

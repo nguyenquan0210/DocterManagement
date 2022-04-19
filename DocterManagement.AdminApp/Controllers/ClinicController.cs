@@ -8,12 +8,14 @@ namespace DoctorManagement.AdminApp.Controllers
     {
         private readonly IClinicApiClient _clinicApiClient;
         private readonly IConfiguration _configuration;
+        private readonly ILocationApiClient _locationApiClient;
 
         public ClinicController(IClinicApiClient clinicApiClient,
-            IConfiguration configuration)
+            IConfiguration configuration, ILocationApiClient locationApiClient)
         {
             _clinicApiClient = clinicApiClient;
             _configuration = configuration;
+            _locationApiClient = locationApiClient;
         }
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
@@ -32,6 +34,32 @@ namespace DoctorManagement.AdminApp.Controllers
                 ViewBag.SuccessMsg = TempData["result"];
             }
             return View(data.Data);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.Location = await _locationApiClient.GetAllProvince(new Guid());
+
+            return View();
+        }
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] ClinicCreateRequest request)
+        {
+            ViewBag.Location = await _locationApiClient.GetAllProvince(new Guid());
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _clinicApiClient.Create(request);
+
+            if (result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = "Thêm mới người dùng thành công";
+                TempData["AlertType"] = "alert-success";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
         }
     }
 }

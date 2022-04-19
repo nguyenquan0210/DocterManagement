@@ -124,7 +124,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 var user = result.Data;
                 ViewBag.Gender = SeletectGender(user.Gender.ToString());
                 ViewBag.Status = SeletectStatus(user.Status);
-                ViewBag.Img = user.PatientVm.Img;
+                ViewBag.Img = user.DoctorVm.Img;
                 ViewBag.Clinic = await _userApiClient.GetAllClinic(user.DoctorVm.GetClinic.Id);
                 ViewBag.Speciality = await _userApiClient.GetAllSpeciality(user.DoctorVm.GetSpeciality.Id);
                 var updateRequest = new UserUpdateRequest()

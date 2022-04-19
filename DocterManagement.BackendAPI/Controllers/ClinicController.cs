@@ -20,8 +20,9 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPost]
+        [Consumes("multipart/form-data")]
         [Authorize]
-        public async Task<ActionResult<ApiResult<ClinicVm>>> Create([FromBody] ClinicCreateRequest request)
+        public async Task<ActionResult<ApiResult<ClinicVm>>> Create([FromForm] ClinicCreateRequest request)
         {
             if (!ModelState.IsValid)
             {

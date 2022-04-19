@@ -1,6 +1,7 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Location;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -52,22 +53,40 @@ namespace DoctorManagement.ApiIntegration
             return await Delete($"/api/location/delete" + Id);
         }
 
-        public async Task<ApiResult<List<LocationVm>>> GetAllDistrict()
+        public async Task<List<SelectListItem>> GetAllDistrict(Guid? provinceId)
         {
             var data = await GetListAsync<LocationVm>($"/api/location/get-all-district");
-            return data;
+            var select = data.Data.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = provinceId.HasValue && provinceId.Value == x.Id
+            });
+            return select.ToList();
         }
 
-        public async Task<ApiResult<List<LocationVm>>> GetAllProvince()
+        public async Task<List<SelectListItem>> GetAllProvince(Guid? provinceId)
         {
             var data = await GetListAsync<LocationVm>($"/api/location/get-all-province");
-            return data;
+            var select = data.Data.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = provinceId.HasValue && provinceId.Value == x.Id
+            });
+            return select.ToList();
         }
 
-        public async Task<ApiResult<List<LocationVm>>> GetAllSubDistrict()
+        public async Task<List<SelectListItem>> GetAllSubDistrict(Guid? provinceId)
         {
             var data = await GetListAsync<LocationVm>($"/api/location/get-all-subDistrict");
-            return data;
+            var select = data.Data.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = provinceId.HasValue && provinceId.Value == x.Id
+            });
+            return select.ToList();
         }
 
         public async Task<ApiResult<LocationVm>> GetById(Guid Id)

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -32,20 +33,49 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<bool>> Create(ClinicCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var requestContent = new MultipartFormDataContent();
+            if (request.ImgClinics != null)
+            {
+                byte[] data;
+                foreach (var imgClinic in request.ImgClinics)
+                {
+                    using (var br = new BinaryReader(imgClinic.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)imgClinic.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, "imgClinics", imgClinic.FileName);
+                }
+                
+            }
 
-            var response = await client.PostAsync($"/api/clinic/", httpContent);
-            var body = await response.Content.ReadAsStringAsync();
+            if (request.ImgLogo != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.ImgLogo.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.ImgLogo.OpenReadStream().Length);
+                }
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "imgLogo", request.ImgLogo.FileName);
+            }
+
+          
+            requestContent.Add(new StringContent(request.LocationId.ToString()), "locationId");
+            requestContent.Add(new StringContent(request.Name.ToString()), "name");
+            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            requestContent.Add(new StringContent(request.Address.ToString()), "address");
+
+            var response = await client.PostAsync($"/api/clinic", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
         public async Task<int> Delete(Guid Id)

@@ -1,14 +1,17 @@
-﻿using DoctorManagement.Data.EF;
+﻿using DoctorManagement.Application.Common;
+using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
 using DoctorManagement.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,10 +20,13 @@ namespace DoctorManagement.Application.Catalog.Clinic
     public class ClinicService : IClinicService
     {
         private readonly DoctorManageDbContext _context;
-
-        public ClinicService(DoctorManageDbContext context)
+        private readonly IStorageService _storageService;
+        private const string CLINIC_CONTENT_FOLDER_NAME = "clinic-content";
+        private const string CLINICS_CONTENT_FOLDER_NAME = "clinics-content";
+        public ClinicService(DoctorManageDbContext context, IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
         }
         public async Task<ApiResult<Clinics>> Create(ClinicCreateRequest request)
         {
@@ -30,21 +36,45 @@ namespace DoctorManagement.Application.Catalog.Clinic
             if (count < 9) str = "PK-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
             else if (count < 99) str = "PK-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
             else if (count < 999) str = "PK-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+         
             var clinics = new Clinics()
             {
                 Name = request.Name,
-                ImgLogo = request.ImgLogo.ToString(),
+                ImgLogo = await SaveFile(request.ImgLogo, CLINIC_CONTENT_FOLDER_NAME),
                 Description = request.Description,
                 Address = request.Address,
                 LocationId = request.LocationId,
                 Status = Status.Active,
                 No = str
             };
-            var rs1 = _context.Clinics.Add(clinics);
-            var rs = await _context.SaveChangesAsync();
+            var i = 0;
+            if (request.ImgClinics != null)
+            {
+                clinics.ImageClinics = new List<ImageClinics>();
+
+                foreach (var file in request.ImgClinics)
+                {
+                    var image = new ImageClinics()
+                    {
+                        Img = await SaveFile(file, CLINICS_CONTENT_FOLDER_NAME),
+                        SortOrder = i + 1
+                    };
+                    clinics.ImageClinics.Add(image);
+                }
+            }
+            _context.Clinics.Add(clinics);
+            await _context.SaveChangesAsync();
             return new ApiSuccessResult<Clinics>(clinics);
         }
-
+        private async Task<string> SaveFile(IFormFile? file, string folderName)
+        {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsyncs(file.OpenReadStream(), fileName, folderName);
+            return fileName;
+        }
         public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var clinics = await _context.Clinics.FindAsync(Id);
@@ -106,7 +136,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     Name = x.c.Name,
                     Description = x.c.Description,
                     Id = x.c.Id,
-                    ImgLogo = x.c.ImgLogo,
+                    ImgLogo = CLINIC_CONTENT_FOLDER_NAME + "/" + x.c.ImgLogo,
                     Status = x.c.Status,
                     Address = x.c.Address,
                     No = x.c.No,
@@ -140,10 +170,10 @@ namespace DoctorManagement.Application.Catalog.Clinic
                             }
                         }
                     },
-                    Images = img.Where(i=>i.ClinicId == x.c.Id).Select(i=> new ImageClinicVm()
+                    Images = x.c.ImageClinics.Select(i=> new ImageClinicVm()
                     {
                         Id = i.Id,
-                        Img = i.Img,
+                        Img = CLINICS_CONTENT_FOLDER_NAME + "/" + i.Img,
                         SortOrder = i.SortOrder
                     }).ToList()
                 }).ToListAsync();
@@ -174,7 +204,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 Address = clinics.Address,
                 Status = clinics.Status,
                 No = clinics.No,
-                ImgLogo = clinics.ImgLogo,
+                ImgLogo = CLINIC_CONTENT_FOLDER_NAME + "/" + clinics.ImgLogo,
                 LocationVm = new LocationVm()
                 {
                     Id = sd.Id,
@@ -208,7 +238,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 Images = img.Where(i => i.ClinicId == clinics.Id).Select(i => new ImageClinicVm()
                 {
                     Id = i.Id,
-                    Img = i.Img,
+                    Img = CLINICS_CONTENT_FOLDER_NAME + "/" + i.Img,
                     SortOrder = i.SortOrder
                 }).ToList()
             };

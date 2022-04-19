@@ -16,6 +16,10 @@ namespace DoctorManagement.Application.Common
 
         Task DeleteFileAsync(string fileName);
 
+        string GetFileUrls(string fileName, string folderName);
+
+        Task SaveFileAsyncs(Stream mediaBinaryStream, string fileName, string folderName);
+        Task DeleteFileAsyncs(string fileName, string folderName);
         string GetFilePostUrl(string fileName);
 
         Task SaveFilePostAsync(Stream mediaBinaryStream, string fileName);
