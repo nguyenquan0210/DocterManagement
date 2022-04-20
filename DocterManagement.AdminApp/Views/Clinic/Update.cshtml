@@ -1,0 +1,338 @@
+﻿@using DoctorManagement.ViewModels.Catalog.Clinic
+@model DoctorManagement.ViewModels.Catalog.Clinic.ClinicUpdateRequest
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<ImageClinicVm> images = ViewBag.Imgs;
+    var i = 0;
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@section Search{
+	<form asp-controller="User" asp-action="Index"  method="get">
+		<div class="input-group">
+			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
+			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
+		</div>
+	</form>
+}
+<style>
+    .dropzone .dz-preview .dz-error-mark svg {
+    display: none;
+    }
+    .dropzone .dz-preview:hover .dz-error-mark svg {
+    display: block;
+    }
+</style>
+@section Header{
+    <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li class="breadcrumb-item text-sm">
+            <a class="opacity-3 text-dark" href="javascript:;">
+                <svg width="12px" height="12px" class="mb-1" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <title>Bác Sĩ </title>
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-1716.000000, -439.000000)" fill="#252f40" fill-rule="nonzero">
+                            <g transform="translate(1716.000000, 291.000000)">
+                                <g transform="translate(0.000000, 148.000000)">
+                                    <path d="M46.7199583,10.7414583 L40.8449583,0.949791667 C40.4909749,0.360605034 39.8540131,0 39.1666667,0 L7.83333333,0 C7.1459869,0 6.50902508,0.360605034 6.15504167,0.949791667 L0.280041667,10.7414583 C0.0969176761,11.0460037 -1.23209662e-05,11.3946378 -1.23209662e-05,11.75 C-0.00758042603,16.0663731 3.48367543,19.5725301 7.80004167,19.5833333 L7.81570833,19.5833333 C9.75003686,19.5882688 11.6168794,18.8726691 13.0522917,17.5760417 C16.0171492,20.2556967 20.5292675,20.2556967 23.494125,17.5760417 C26.4604562,20.2616016 30.9794188,20.2616016 33.94575,17.5760417 C36.2421905,19.6477597 39.5441143,20.1708521 42.3684437,18.9103691 C45.1927731,17.649886 47.0084685,14.8428276 47.0000295,11.75 C47.0000295,11.3946378 46.9030823,11.0460037 46.7199583,10.7414583 Z"></path>
+                                    <path d="M39.198,22.4912623 C37.3776246,22.4928106 35.5817531,22.0149171 33.951625,21.0951667 L33.92225,21.1107282 C31.1430221,22.6838032 27.9255001,22.9318916 24.9844167,21.7998837 C24.4750389,21.605469 23.9777983,21.3722567 23.4960833,21.1018359 L23.4745417,21.1129513 C20.6961809,22.6871153 17.4786145,22.9344611 14.5386667,21.7998837 C14.029926,21.6054643 13.533337,21.3722507 13.0522917,21.1018359 C11.4250962,22.0190609 9.63246555,22.4947009 7.81570833,22.4912623 C7.16510551,22.4842162 6.51607673,22.4173045 5.875,22.2911849 L5.875,44.7220845 C5.875,45.9498589 6.7517757,46.9451667 7.83333333,46.9451667 L19.5833333,46.9451667 L19.5833333,33.6066734 L27.4166667,33.6066734 L27.4166667,46.9451667 L39.1666667,46.9451667 C40.2482243,46.9451667 41.125,45.9498589 41.125,44.7220845 L41.125,22.2822926 C40.4887822,22.4116582 39.8442868,22.4815492 39.198,22.4912623 Z"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+            </a>
+        </li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+    </ol>
+    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+}
+
+
+<div class="container-fluid my-3 py-3">
+    <div class="row mb-5">
+        <div class="col-lg-12 mt-lg-0 mt-4">
+
+           <form asp-action="Update" enctype="multipart/form-data" method="post">
+                @Html.AntiForgeryToken()
+                <div class="card mt-4" id="basic-info">
+                    <div class="card-header">
+                        <h5>Thêm Tài khoản</h5>
+                        <p class="text-sm mb-0">
+                            Tài khoản nhân viên.
+                        </p>
+                    </div>
+
+                    @if (TempData["AlertMessage"] != null)
+                    {
+
+                        <div id="AlertBox" data-notify="container" class="col-xs-12 col-sm-12 alert @TempData["AlertType"] alert-with-icon hide1" role="alert" data-notify-position="top-center" style="">
+
+                            <span data-notify="title"></span> <span data-notify="message">@TempData["AlertMessage"]</span>
+                            <a href="#" target="_blank" data-notify="url"></a>
+                        </div>
+
+                        <style>
+                            .seachvisble {
+                                display: none;
+                            }
+                        </style>
+                    }
+                <div class="card-body pt-0">
+                    <div class="row">
+                        <div class="col-6">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Description" class="form-label"></label>
+                            <input asp-for="Description" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+
+                        </div>
+
+                    </div>
+                     <div class="row ">
+
+                        <div class="col-6">
+                              
+                            <label asp-for="LocationId" class="control-label "></label>
+                                <select asp-for="LocationId" asp-items="ViewBag.Location" class= "multisteps-form__input form-control" >
+                                    <option>-- Chọn phòng khám --</option>
+                                </select>
+                                <span asp-validation-for="LocationId" class="text-danger"></span>
+                            </div>
+                        <div class="col-6">
+                            <label asp-for="Address" class="form-label"></label>
+                            <input asp-for="Address" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+
+                        </div>    
+                         
+                            
+                        </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label asp-for="ImgLogo" class="form-label "></label>
+                            <input asp-for="ImgLogo" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="ImgLogo" class="text-danger"></span>
+
+                        </div>
+                         <div class="col-2 text-center mt-4 ">
+                               <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(Configuration["BaseAddress"] + "/img/" + ViewBag.Img)" alt="">
+                         </div>
+                         <div class="col-5">
+                            <label asp-for="Status" class="form-label mt-4"></label>
+                             <select asp-for="Status" asp-items="@ViewBag.Status" class= "multisteps-form__input form-control" >
+                                    
+                                </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+
+                        </div>
+                    </div>
+
+                  
+                    <div class="row">
+                        <div class="col-4">
+                            <label asp-for="ImgClinics" class="form-label mt-4"></label>
+                            <input  asp-for="ImgClinics"  class="multisteps-form__input form-control"   />
+                            <span asp-validation-for="ImgClinics" class="text-danger"></span>
+                        </div>
+                        <div class="col-8  " >
+                            <div class="row form-control dropzone dz-clickable dz-started mt-5" >
+                                
+                                 @foreach(var img in images)
+                                 {
+                                     <div class="col-3  dz-preview dz-processing dz-image-preview dz-error dz-complete" id ="row_@img.Id">
+                                         <div id = "Img_@i" onclick="ConfirmDelete(@i)" data-id="@img.Id" >
+                                              <div class="dz-image"><img class="col-2 w-100 border-radius-lg shadow-lg mx-auto" data-dz-thumbnail="" alt="" src="@(Configuration["BaseAddress"] + "/img/" + img.Img)"></div>
+                                              <div class="dz-details"><div class="dz-size"></div><div class="dz-filename"></div></div>
+                                              <div style="left: 42%;" class="dz-error-mark"> <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
+                                                  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                  <title>Error</title>
+                                                  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
+                                                      <path
+                                                        d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z">
+                                                      </path>
+                                                    </g>
+                                                  </g>
+                                                </svg> 
+                                              </div>
+                                            </div>
+                                        </div>
+                                        i++;
+                                    }
+                                    <div id="listImg"></div>
+                                </div>
+                               
+                         </div>
+
+                        
+                    </div>
+                     <input asp-for="Id" type = "hidden"/>
+                   
+                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                </div>
+                </div>
+           </form>
+
+       
+        </div>
+    </div>
+    <div id="myModel" onclick="EnableQuesion()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-warning swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
+            <div class="swal2-icon swal2-warning swal2-icon-show" style="display: flex;">
+                <div class="swal2-icon-content">!</div>
+            </div>
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">Bạn có chắc không?</h2>
+            <div id="quesion" class="swal2-html-container" style="display: block;">Bạn sẽ không thể hoàn nguyên điều này!</div>
+            <div class="swal2-actions">
+                <div class="swal2-loader"></div>
+                <button id="okok" type="button" class="swal2-confirm btn bg-gradient-success" aria-label="" onclick="Delete()" style="display: inline-block;">Có, xóa nó!</button>
+                <button type="button" class="swal2-cancel btn bg-gradient-danger" aria-label="" onclick="Enable()" style="display: inline-block;">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+    <div id="loaderDir" onclick="EnableDel()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-success swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
+
+            <div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;">
+                <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div>
+                <span class="swal2-success-line-tip"></span>
+                <span class="swal2-success-line-long"></span>
+                <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div>
+                <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
+            </div>
+
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">
+                <font style="vertical-align: inherit;">
+                    <font id = "title" style="vertical-align: inherit;">Đã xóa!</font>
+                </font>
+            </h2>
+            <div class="swal2-html-container" style="display: block;">
+                <font style="vertical-align: inherit;">
+                    <font id = "descript" style="vertical-align: inherit;">Tệp của bạn đã bị xóa.</font>
+                </font>
+            </div>
+
+
+
+            <div class="swal2-actions">
+                <div class="swal2-loader"></div>
+                <button type="button" onclick="Enable()" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">
+                    <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">VÂNG</font></font>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+    <input type="hidden" id="hiddenEmployeeId" />
+</div>
+
+@section jsFooter{
+    <script src="~/js/plugins/quill.min.js"></script>
+    <script src="~/js/plugins/flatpickr.min.js"></script>
+   
+    <script>
+        if (document.getElementById('LocationId')) {
+            var clinic = document.getElementById('LocationId');
+            const example = new Choices(clinic);
+        }
+    
+    </script>
+    <script>
+       
+        $("#ImgLogo").change(function (event) {
+            var file = event.target.files;
+            $("#src_img").attr("src", window.URL.createObjectURL(file[0]));
+        });
+        $("#ImgLogo").change(function () {
+            var file = $('#ImgLogo').val();
+            $("#ImgLogo").attr("value", file.slice(12));
+        });
+       $("#ImgClinics").change(function (event) {
+            var files = event.target.files;
+            $("#listImg").empty();
+            for(let i = 0; i < files.length; i++){
+                var mgabyte = files[i].size / 1000000 ;
+                var fileName = files[i].name;
+                var lImg = "<div class='col-3  dz-preview dz-processing dz-image-preview dz-error dz-complete'>"
+                      +"<div class='dz-image'><img id='src_imgs_" + i + "' class='col-2 w-100 border-radius-lg shadow-lg mx-auto' data-dz-thumbnail alt='' src=''></div>"
+                      +"<div class='dz-details' style='left: -25px;'><div class='dz-size'><span data-dz-size=''><strong>"
+                      +"<font style='vertical-align: inherit;'><font style='vertical-align: inherit;'>" + mgabyte.toFixed(3) + "</font></font></strong>"
+                      +"<font style='vertical-align: inherit;'><font style='vertical-align: inherit;'> MB</font></font></span></div>"
+                      +"<div class='dz-filename'>"
+                      +"<span data-dz-name=''><font style='vertical-align: inherit;'><font style='vertical-align: inherit;'>"+fileName+"</font></font></span></div></div>"
+                      +"<div class='dz-progress'><span class='dz-upload' data-dz-uploadprogress='' style='width: 100%;'></span></div></div>"
+                $("#listImg").append(lImg);
+                $("#src_imgs_"+i).attr("src", window.URL.createObjectURL(files[i]));
+            }
+            //$("#src_imgs").attr("src", window.URL.createObjectURL(files[0]));
+        });
+
+    </script>
+     <script>
+
+        var ok = document.getElementById("loaderDir");
+        var cel = document.getElementById("myModel");
+
+        var EnableQuesion = function () {
+            cel.classList.add("delete_none");
+            cel.classList.remove("delete_block");
+
+        }
+        var EnableDel = function () {
+            ok.classList.add("delete_none");
+            ok.classList.remove("delete_block");
+
+        }
+
+        var ConfirmDelete = function (Id) {
+            var idImg = $("#Img_"+Id).attr("data-id");
+            $("#hiddenEmployeeId").val(idImg);
+            document.getElementById("myModel").classList.toggle('delete_none');
+            document.getElementById("myModel").classList.toggle('delete_block');
+            $("#quesion").html("Bạn sẽ không thể hoàn nguyên điều này!");
+            $("#okok").html("Có, xóa nó!");
+        }
+
+        var Delete = function () {
+            EnableQuesion();
+            var empId = $("#hiddenEmployeeId").val();
+
+            $.ajax({
+                url: "/Clinic/DeleteImg",
+                data: { imgId: empId},
+                dataType: "json",
+                type: "POST",
+                success: function (result) {
+                    if (result.response == 2) {
+                        $("#row_" + empId).remove();
+                          $("#title").html("Xóa Thành Công");
+                        $("#descript").html("Xóa người dùng thành công.");
+                    } else{
+                        $("#title").html("Lỗi sever!");
+                        $("#descript").html("Không thể thực hiện chức năng này.");
+                    }
+
+                }
+            })
+
+            document.getElementById("loaderDir").classList.toggle('delete_none');
+            document.getElementById("loaderDir").classList.toggle('delete_block');
+        }
+    </script>
+    @* Kanban scripts *@
+    <script src="~/js/plugins/dragula/dragula.min.js"></script>
+    <script src="~/js/plugins/jkanban/jkanban.js"></script>
+    <script>
+
+       
+
+    </script>
+}

@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Clinic;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -80,9 +81,12 @@ namespace DoctorManagement.ApiIntegration
 
         public async Task<int> Delete(Guid Id)
         {
-            return await Delete($"/api/clinic" + Id);
+            return await Delete($"/api/clinic/" + Id);
         }
-
+        public async Task<int> DeleteImg(Guid Id)
+        {
+            return await Delete($"/api/clinic/images/" + Id);
+        }
         public async Task<ApiResult<ClinicVm>> GetById(Guid Id)
         {
             return await GetAsync<ClinicVm>($"/api/clinic/{Id}");
@@ -105,20 +109,51 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<bool>> Update(ClinicUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var requestContent = new MultipartFormDataContent();
+            if (request.ImgClinics != null)
+            {
+                byte[] data;
+                foreach (var imgClinic in request.ImgClinics)
+                {
+                    using (var br = new BinaryReader(imgClinic.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)imgClinic.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, "imgClinics", imgClinic.FileName);
+                }
 
-            var response = await client.PutAsync($"/api/clinic/", httpContent);
-            var body = await response.Content.ReadAsStringAsync();
+            }
+
+            if (request.ImgLogo != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.ImgLogo.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.ImgLogo.OpenReadStream().Length);
+                }
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "imgLogo", request.ImgLogo.FileName);
+            }
+
+            requestContent.Add(new StringContent(request.Id.ToString()), "id");
+            requestContent.Add(new StringContent(request.LocationId.ToString()), "locationId");
+            requestContent.Add(new StringContent(request.Name.ToString()), "name");
+            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            requestContent.Add(new StringContent(request.Address.ToString()), "address");
+            requestContent.Add(new StringContent(request.Status.ToString()), "status");
+
+            var response = await client.PutAsync($"/api/clinic", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+
         }
     }
 }

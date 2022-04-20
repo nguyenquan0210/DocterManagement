@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DoctorManagement.Data.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,7 +36,22 @@ namespace DoctorManagement.AdminApp.Controllers
             }).ToList();
             return rs;
         }
-
+        public List<SelectListItem> SeletectStatus(Status status)
+        {
+            List<SelectListItem> lstatus = new List<SelectListItem>()
+            {
+                new SelectListItem(text: "Ngừng hoạt động", value: Status.NotActivate.ToString()),
+                new SelectListItem(text: "Hoạt động", value: Status.Active.ToString()),
+                new SelectListItem(text: "Không hoạt động", value: Status.InActive.ToString())
+            };
+            var rs = lstatus.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = status.ToString() == x.Value
+            }).ToList();
+            return rs;
+        }
         public List<SelectListItem> SeletectMonth(string month)
         {
             List<SelectListItem> selectListMonth = new List<SelectListItem>();

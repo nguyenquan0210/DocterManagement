@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.Application.Catalog.Clinic;
+using DoctorManagement.Data.Entities;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +23,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         [HttpPost]
         [Consumes("multipart/form-data")]
         [Authorize]
-        public async Task<ActionResult<ApiResult<ClinicVm>>> Create([FromForm] ClinicCreateRequest request)
+        public async Task<ActionResult<ApiResult<Clinics>>> Create([FromForm] ClinicCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -52,12 +53,30 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
+        /// Xóa hình ảnh phòng khám
+        /// </summary>
+        /// 
+        [HttpDelete("images/{Id}")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<int>>> DeleteImageClinic([FromRoute] Guid Id)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _clinicService.DeleteImg(Id);
+
+            return Ok(result);
+        }
+        /// <summary>
         /// Cập nhật phòng khám
         /// </summary>
         /// 
         [HttpPut]
+        [Consumes("multipart/form-data")]
         [Authorize]
-        public async Task<ActionResult<ApiResult<ClinicVm>>> Update([FromBody] ClinicUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromForm] ClinicUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

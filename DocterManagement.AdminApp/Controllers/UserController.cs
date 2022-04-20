@@ -304,7 +304,7 @@ namespace DoctorManagement.AdminApp.Controllers
             }
             return RedirectToAction("Error", "Home");
         }
-        public List<SelectListItem> SeletectStatus(Status status)
+        /*public List<SelectListItem> SeletectStatus(Status status)
         {
             List<SelectListItem> lstatus = new List<SelectListItem>()
             {
@@ -319,7 +319,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 Selected = status.ToString() == x.Value
             }).ToList();
             return rs;
-        }
+        }*/
         [HttpGet]
         public async Task<IActionResult> DetailtPatient(Guid id)
         {

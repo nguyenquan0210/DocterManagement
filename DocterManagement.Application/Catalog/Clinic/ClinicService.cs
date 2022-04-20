@@ -28,7 +28,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
             _context = context;
             _storageService = storageService;
         }
-        public async Task<ApiResult<Clinics>> Create(ClinicCreateRequest request)
+        public async Task<ApiResult<bool>> Create(ClinicCreateRequest request)
         {
             string year = DateTime.Now.ToString("yy");
             int count = await _context.Clinics.Where(x => x.No.Contains("PK-" + year)).CountAsync();
@@ -62,9 +62,10 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     clinics.ImageClinics.Add(image);
                 }
             }
-            _context.Clinics.Add(clinics);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Clinics>(clinics);
+           _context.Clinics.Add(clinics);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
         {
@@ -92,6 +93,20 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 clinics.Status = Status.NotActivate;
                 check = 2;
             }
+
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<int>(check); ;
+        }
+        public async Task<ApiResult<int>> DeleteImg(Guid Id)
+        {
+            var image = await _context.ImageClinics.FindAsync(Id);
+            int check = 0;
+            if (image == null) return new ApiSuccessResult<int>(check);
+            
+            await _storageService.DeleteFileAsyncs(image.Img,CLINICS_CONTENT_FOLDER_NAME);
+            _context.ImageClinics.Remove(image);
+            check = 2;
+           
 
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check); ;
@@ -246,8 +261,9 @@ namespace DoctorManagement.Application.Catalog.Clinic
             return new ApiSuccessResult<ClinicVm>(rs);
         }
 
-        public async Task<ApiResult<Clinics>> Update(ClinicUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(ClinicUpdateRequest request)
         {
+            var i = _context.ImageClinics.Where(x=> x.ClinicId == request.Id).Count();
             var clinics = await _context.Clinics.FindAsync(request.Id);
             if (clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { request.Id}");
             clinics.Name = request.Name;
@@ -255,8 +271,30 @@ namespace DoctorManagement.Application.Catalog.Clinic
             clinics.Address = request.Address;
             clinics.LocationId = request.LocationId;
             clinics.Status = request.Status;
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Clinics>(clinics);
+            if(request.ImgLogo != null)
+            {
+                if(clinics.ImgLogo != null) await _storageService.DeleteFileAsyncs(clinics.ImgLogo, CLINIC_CONTENT_FOLDER_NAME);
+                clinics.ImgLogo = await SaveFile(request.ImgLogo, CLINIC_CONTENT_FOLDER_NAME);
+            }
+                
+           
+            if (request.ImgClinics != null)
+            {
+                clinics.ImageClinics = new List<ImageClinics>();
+
+                foreach (var file in request.ImgClinics)
+                {
+                    var image = new ImageClinics()
+                    {
+                        Img = await SaveFile(file, CLINICS_CONTENT_FOLDER_NAME),
+                        SortOrder = i + 1
+                    };
+                    clinics.ImageClinics.Add(image);
+                }
+            }
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }
