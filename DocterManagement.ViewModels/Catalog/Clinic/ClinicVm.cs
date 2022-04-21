@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Catalog.Location;
+using DoctorManagement.ViewModels.System.Doctors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         public Status Status { get; set; }
 
         public List<ImageClinicVm> Images { get; set; }
+        public List<DoctorVm> DoctorVms { get; set; }
     }
 }

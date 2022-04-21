@@ -5,7 +5,10 @@ using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
+using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,6 +26,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
         private readonly IStorageService _storageService;
         private const string CLINIC_CONTENT_FOLDER_NAME = "clinic-content";
         private const string CLINICS_CONTENT_FOLDER_NAME = "clinics-content";
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
         public ClinicService(DoctorManageDbContext context, IStorageService storageService)
         {
             _context = context;
@@ -210,6 +214,11 @@ namespace DoctorManagement.Application.Catalog.Clinic
             var d = await _context.Locations.FindAsync(sd.ParentId);
             var p = await _context.Locations.FindAsync(d.ParentId);
             var img = from i in _context.ImageClinics select i;
+            var user = from u in _context.Users
+                       join r in _context.Roles on u.RoleId equals r.Id
+                       join dt in _context.Doctors on u.Id equals dt.UserId
+                       where r.Name.ToUpper() == "DOCTOR" && dt.ClinicId == Id
+                       select dt;
             if (clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { Id}");
             var rs = new ClinicVm()
             {
@@ -255,7 +264,33 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     Id = i.Id,
                     Img = CLINICS_CONTENT_FOLDER_NAME + "/" + i.Img,
                     SortOrder = i.SortOrder
-                }).ToList()
+                }).ToList(),
+                DoctorVms = user.Select(u => new DoctorVm()
+				{
+                    Img = USER_CONTENT_FOLDER_NAME + "/" + u.Img,
+                    No = u.No,
+                    UserId = u.UserId,
+                    User = new UserVm()
+					{
+                        Name = u.AppUsers.Name,
+                        Email = u.AppUsers.Email,
+                        PhoneNumber = u.AppUsers.PhoneNumber,
+                        Gender = u.AppUsers.Gender,
+                        Dob = u.AppUsers.Dob
+					},
+                    GetSpeciality = new GetSpecialityVm()
+					{
+                        Id = u.Specialities.Id,
+                        Title = u.Specialities.Title
+					},
+                    Rates = u.Rates.Select(r => new RateVm()
+					{
+                        Id = r.Id,
+                        Description = r.Description,
+                        Rating = r.Rating,
+                        Title = r.Title,
+					}).ToList()
+				}).ToList()
             };
 
             return new ApiSuccessResult<ClinicVm>(rs);

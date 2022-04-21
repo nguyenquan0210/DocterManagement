@@ -15,5 +15,7 @@ namespace DoctorManagement.Data.Entities
         public int Rating { get; set; }
         public Guid AppointmentId { get; set; }
         public Appointments Appointments { get; set; }
+        public Guid UserId { get; set; }
+        public Doctors Doctors { get; set; }
     }
 }

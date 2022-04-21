@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Speciality;
+using DoctorManagement.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,7 +21,11 @@ namespace DoctorManagement.ViewModels.System.Doctors
         public string Description { get; set; }
         [Display(Name = "Mã bác sĩ")]
         public string No { get; set; }
+
+        public UserVm User { get; set; }
         public GetSpecialityVm GetSpeciality { get; set; }
         public GetClinicVm GetClinic { get; set; }
+
+        public List<RateVm> Rates { get; set; }
     }
 }

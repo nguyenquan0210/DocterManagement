@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DoctorManagement.ApiIntegration;
+using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using Microsoft.AspNetCore.Mvc;
 
@@ -112,6 +113,31 @@ namespace DoctorManagement.AdminApp.Controllers
 
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Detailt(Guid id)
+        {
+            var result = await _clinicApiClient.GetById(id);
+            if (result.IsSuccessed)
+            {
+                var clinicdata = result.Data;
+                ViewBag.Img = clinicdata.ImgLogo;
+                ViewBag.Imgs = clinicdata.Images;
+                ViewBag.Status = clinicdata.Status == Status.NotActivate ? "Ngừng hoạt động" : clinicdata.Status == Status.Active ? "Hoạt động" : "không hoạt động";
+                var clinic = new ClinicVm()/*_mapper.Map<ClinicVm>(clinicdata);*/
+				{
+					Name = clinicdata.Name,
+                    Id = id,
+                    Description = clinicdata.Description,
+                    Address = clinicdata.Address,
+                    Status = clinicdata.Status, //== Status.Active ? true : false
+                    DoctorVms = clinicdata.DoctorVms,
+                    LocationVm = clinicdata.LocationVm,
+                    No = clinicdata.No,
+				};
+				return View(clinic);
+            }
+            return RedirectToAction("Error", "Home");
         }
         [HttpPost]
         public async Task<IActionResult> DeleteImg(Guid imgId)
