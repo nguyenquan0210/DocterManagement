@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.Data.Configuration
 {
-    public class SpecialitiConfiguration : IEntityTypeConfiguration<Specialities>
+    public class SpecialityConfiguration : IEntityTypeConfiguration<Specialities>
     {
         public void Configure(EntityTypeBuilder<Specialities> builder)
         {
@@ -17,6 +17,7 @@ namespace DoctorManagement.Data.Configuration
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Title).IsRequired().HasMaxLength(255);
+            builder.Property(x => x.No).IsRequired().HasMaxLength(10);
             builder.Property(x => x.Description).HasMaxLength(255);
         }
     }

@@ -7,6 +7,7 @@ using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.Common.Extensions;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
@@ -295,7 +296,9 @@ namespace DoctorManagement.Application.Catalog.Clinic
 
             return new ApiSuccessResult<ClinicVm>(rs);
         }
+     
 
+      
         public async Task<ApiResult<bool>> Update(ClinicUpdateRequest request)
         {
             var i = _context.ImageClinics.Where(x=> x.ClinicId == request.Id).Count();

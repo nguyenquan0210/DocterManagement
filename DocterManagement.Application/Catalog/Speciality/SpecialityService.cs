@@ -21,18 +21,26 @@ namespace DoctorManagement.Application.Catalog.Speciality
         {
             _context = context;
         }
-        public async Task<ApiResult<Specialities>> Create(SpecialityCreateRequest request)
+        public async Task<ApiResult<bool>> Create(SpecialityCreateRequest request)
         {
+            string year = DateTime.Now.ToString("yy");
+            int count = await _context.Clinics.Where(x => x.No.Contains("SP-" + year)).CountAsync();
+            string str = "";
+            if (count < 9) str = "SP-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
+            else if (count < 99) str = "SP-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
+            else if (count < 999) str = "SP-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
             var specialities = new Specialities()
             {
                 Title = request.Title,
-                SortOrder = request.SortOrder,
+                SortOrder = count + 1,
                 Description = request.Description,
-                Status = Status.Active
+                Status = Status.Active,
+                No = str
             };
             _context.Specialities.Add(specialities);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Specialities>(specialities);
+            var rs = await _context.SaveChangesAsync();
+            if(rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -63,7 +71,8 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 Id = x.Id,
                 Title = x.Title,
                 SortOrder = x.SortOrder,
-                Status = x.Status
+                Status = x.Status,
+                No = x.No
             }).ToListAsync();
             return new ApiSuccessResult<List<SpecialityVm>>(rs);
         }
@@ -85,8 +94,9 @@ namespace DoctorManagement.Application.Catalog.Speciality
                     Title = x.Title,
                     SortOrder = x.SortOrder,
                     Id = x.Id,
-                    Status = x.Status
-
+                    Status = x.Status,
+                    No = x.No,
+                    Description = x.Description
                 }).ToListAsync();
 
             var pagedResult = new PagedResult<SpecialityVm>()
@@ -108,23 +118,25 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 Id = speciality.Id,
                 Title = speciality.Title,
                 SortOrder = speciality.SortOrder,
-                Status = speciality.Status
+                Status = speciality.Status,
+                No = speciality.No,
+                Description = speciality.Description
             };
 
             return new ApiSuccessResult<SpecialityVm>(rs);
         }
 
-        public async Task<ApiResult<Specialities>> Update(SpecialityUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(SpecialityUpdateRequest request)
         {
             var speciality = await _context.Specialities.FindAsync(request.Id);
-            if (speciality == null) throw new DoctorManageException($"Cannot find a speciality with id: { request.Id}");
+            if (speciality == null) return new ApiSuccessResult<bool>(false);
             speciality.Title = request.Title;
             speciality.SortOrder = request.SortOrder;
             speciality.Description = request.Description;
-            speciality.Status = request.Status ? Status.Active : Status.InActive;
+            speciality.Status = request.Status;
 
             await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Specialities>(speciality);
+            return new ApiSuccessResult<bool>(true);
         }
     }
 }

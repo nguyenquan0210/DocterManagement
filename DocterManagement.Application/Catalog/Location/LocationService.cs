@@ -156,5 +156,27 @@ namespace DoctorManagement.Application.Catalog.Ward
 
             return new ApiSuccessResult<Locations>(Locations);
         }
+
+        public async Task<ApiResult<List<LocationVm>>> GetListAllPaging(string? type)
+        {
+            var query = from l in _context.Locations select l;
+            //2. filter
+           
+            if (!string.IsNullOrEmpty(type) && type.ToUpper() != "ALL")
+            {
+                query = query.Where(x => x.Type.ToUpper() == type.ToUpper());
+            }
+            var rs = await query.Select(x => new LocationVm()
+            {
+                Name = x.Name,
+                SortOrder = x.SortOrder,
+                Id = x.Id,
+                ParentId = x.ParentId,
+                Code = x.Code,
+                IsDeleted = x.IsDeleted,
+                Type = x.Type
+            }).ToListAsync();
+            return new ApiSuccessResult<List<LocationVm>>(rs);
+        }
     }
 }

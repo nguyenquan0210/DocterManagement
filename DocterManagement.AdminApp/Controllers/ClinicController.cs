@@ -11,7 +11,6 @@ namespace DoctorManagement.AdminApp.Controllers
         private readonly IClinicApiClient _clinicApiClient;
         private readonly IConfiguration _configuration;
         private readonly ILocationApiClient _locationApiClient;
-        private readonly IMapper _mapper;
 
         public ClinicController(IClinicApiClient clinicApiClient,
             IConfiguration configuration, ILocationApiClient locationApiClient)

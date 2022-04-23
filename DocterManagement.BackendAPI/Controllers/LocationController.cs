@@ -68,13 +68,23 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok();
         }
         /// <summary>
-        /// Lấy danh sách phân trang phường/xã
+        /// Lấy danh sách phân trang địa chỉ
         /// </summary>
         /// 
         [HttpGet("get-paging-location")]
         public async Task<ActionResult<ApiResult<PagedResult<LocationVm>>>> GetAllPaging([FromQuery] GetLocationPagingRequest request)
         {
             var result = await _locationService.GetAllPaging(request);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách 
+        /// </summary>
+        /// 
+        [HttpGet("get-paging-all-location")]
+        public async Task<ActionResult<ApiResult<List<LocationVm>>>> GetListAllPaging([FromQuery] string? type)
+        {
+            var result = await _locationService.GetListAllPaging(type);
             return Ok(result);
         }
         /// <summary>

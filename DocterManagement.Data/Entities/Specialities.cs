@@ -15,6 +15,7 @@ namespace DoctorManagement.Data.Entities
         public int SortOrder { get; set; }
 
         public Status Status { get; set; }
+        public string No { get; set; }
 
         public List<Doctors> Doctors { get; set; }
     }

@@ -11,9 +11,9 @@ namespace DoctorManagement.Application.Catalog.Speciality
 {
     public interface ISpecialityService
     {
-        Task<ApiResult<Specialities>> Create(SpecialityCreateRequest request);
+        Task<ApiResult<bool>> Create(SpecialityCreateRequest request);
 
-        Task<ApiResult<Specialities>> Update(SpecialityUpdateRequest request);
+        Task<ApiResult<bool>> Update(SpecialityUpdateRequest request);
 
         Task<ApiResult<int>> Delete(Guid Id);
 

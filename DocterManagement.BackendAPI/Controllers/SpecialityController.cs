@@ -21,7 +21,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Tạo mới chuyên khoa
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<SpecialityVm>>> Create([FromBody] SpecialityCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] SpecialityCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ApiResult<SpecialityVm>>> Update([FromBody] SpecialityUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] SpecialityUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

@@ -11,6 +11,7 @@ namespace DoctorManagement.ViewModels.Catalog.Speciality
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public string No { get; set; }
 
         public string Description { get; set; }
 

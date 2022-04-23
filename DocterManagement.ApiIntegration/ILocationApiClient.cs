@@ -12,6 +12,7 @@ namespace DoctorManagement.ApiIntegration
     public interface ILocationApiClient
     {
         Task<ApiResult<PagedResult<LocationVm>>> GetLocationPagings(GetLocationPagingRequest request);
+        Task<ApiResult<List<LocationVm>>> GetLocationAllPagings(string type);
         Task<ApiResult<bool>> Update(LocationUpdateRequest request);
         Task<ApiResult<bool>> Create(LocationCreateRequest request);
 

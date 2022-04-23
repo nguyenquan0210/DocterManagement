@@ -8,13 +8,10 @@ namespace DoctorManagement.AdminApp.Controllers
     public class LocationController : BaseController
     {
         private readonly ILocationApiClient _LocationApiClient;
-        private readonly IConfiguration _configuration;
 
-        public LocationController(ILocationApiClient LocationApiClient,
-            IConfiguration configuration)
+        public LocationController(ILocationApiClient LocationApiClient)
         {
             _LocationApiClient = LocationApiClient;
-            _configuration = configuration;
         }
 
         public async Task<IActionResult> Index(string keyword, string Type, int pageIndex = 1, int pageSize = 10)
@@ -45,6 +42,28 @@ namespace DoctorManagement.AdminApp.Controllers
             }
             return View(data.Data);
         }
+        /* public async Task<IActionResult> Index(string Type)
+         {
+             if (ViewBag.Type != null)
+             {
+                 Type = ViewBag.Type;
+             }
+             if (Type == null)
+             {
+                 Type = "all";
+             }
+             ViewBag.Types = SeletectType(Type);
+
+             var data = await _LocationApiClient.GetLocationAllPagings(Type);
+
+             if (Type != null)
+                 ViewBag.Type = Type;
+             if (TempData["result"] != null)
+             {
+                 ViewBag.SuccessMsg = TempData["result"];
+             }
+             return View(data.Data);
+         }*/
         public List<SelectListItem> SeletectType(string str)
         {
             List<SelectListItem> type = new List<SelectListItem>()

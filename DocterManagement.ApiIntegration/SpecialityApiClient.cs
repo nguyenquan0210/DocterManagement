@@ -49,7 +49,7 @@ namespace DoctorManagement.ApiIntegration
 
         public async Task<int> Delete(Guid Id)
         {
-            return await Delete($"/api/speciality" + Id);
+            return await Delete($"/api/speciality/" + Id);
         }
 
         public async Task<ApiResult<SpecialityVm>> GetById(Guid Id)

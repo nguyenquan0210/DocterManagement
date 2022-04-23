@@ -94,6 +94,11 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<LocationVm>($"/api/location/get-by-id/{Id}");
         }
 
+        public async Task<ApiResult<List<LocationVm>>> GetLocationAllPagings(string type)
+        {
+            return await GetAsync<List<LocationVm>>($"/api/location/get-paging-all-location?type={type}");
+        }
+
         public async Task<ApiResult<PagedResult<LocationVm>>> GetLocationPagings(GetLocationPagingRequest request)
         {
             return await GetAsync<PagedResult<LocationVm>>(

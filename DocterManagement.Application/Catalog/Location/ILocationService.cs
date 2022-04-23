@@ -18,6 +18,7 @@ namespace DoctorManagement.Application.Catalog.Ward
         Task<ApiResult<int>> Delete(Guid Id);
 
         Task<ApiResult<PagedResult<LocationVm>>> GetAllPaging(GetLocationPagingRequest request);
+        Task<ApiResult<List<LocationVm>>> GetListAllPaging(string? type);
 
         Task<ApiResult<List<LocationVm>>> GetAllSubDistrict(Guid districtId);
         Task<ApiResult<List<LocationVm>>> GetAllDistrict(Guid provinceId);
