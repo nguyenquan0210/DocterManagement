@@ -3,6 +3,7 @@ using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DoctorManagement.AdminApp.Controllers
 {
@@ -40,15 +41,17 @@ namespace DoctorManagement.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Location = await _locationApiClient.GetAllProvince(new Guid());
-
+            ViewBag.District = await _locationApiClient.GetAllDistrict(new Guid());
+            ViewBag.Location = new List<SelectListItem>();
             return View();
         }
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ClinicCreateRequest request)
         {
-            ViewBag.Location = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = await _locationApiClient.GetAllDistrict(request.DistrictId);
+            ViewBag.Location = await _locationApiClient.GetAllSubDistrict(request.LocationId,request.DistrictId);
+
             if (!ModelState.IsValid)
                 return View();
 
@@ -64,6 +67,7 @@ namespace DoctorManagement.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -72,7 +76,8 @@ namespace DoctorManagement.AdminApp.Controllers
             if (result.IsSuccessed)
             {
                 var clinic = result.Data;
-                ViewBag.Location = await _locationApiClient.GetAllProvince(clinic.LocationVm.Id);
+                ViewBag.District = await _locationApiClient.GetAllDistrict(clinic.LocationVm.District.Id);
+                ViewBag.Location = await _locationApiClient.GetAllSubDistrict(clinic.LocationVm.Id, clinic.LocationVm.District.Id);
                 ViewBag.Img = clinic.ImgLogo;
                 ViewBag.Imgs = clinic.Images;
                 ViewBag.Status = SeletectStatus(clinic.Status);
@@ -84,18 +89,30 @@ namespace DoctorManagement.AdminApp.Controllers
                     Address = clinic.Address,
                     Status = clinic.Status,
                     Description = clinic.Description,
-                    LocationId = clinic.LocationVm.Id
+                    LocationId = clinic.LocationVm.Id,
+                    DistrictId = clinic.LocationVm.District.Id
                 };
                 return View(updateRequest);
             }
             return RedirectToAction("Error", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetSubDistrict(Guid DistrictId)
+        {
+            if (!string.IsNullOrWhiteSpace(DistrictId.ToString()))
+            {
+                var district = await _locationApiClient.GetAllSubDistrict(null, DistrictId);
+                return Json(district);
+            }
+            return null;
         }
 
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] ClinicUpdateRequest request)
         {
-            ViewBag.Location = await _locationApiClient.GetAllProvince(request.LocationId);
+            ViewBag.District = await _locationApiClient.GetAllDistrict(request.DistrictId);
+            ViewBag.Location = await _locationApiClient.GetAllSubDistrict(request.LocationId, request.DistrictId);
             ViewBag.Img = request.ImgLogo;
             ViewBag.Imgs = request.ImgClinics;
             ViewBag.Status = SeletectStatus(request.Status);

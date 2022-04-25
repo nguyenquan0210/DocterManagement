@@ -41,13 +41,13 @@ namespace DoctorManagement.Application.Catalog.Clinic
             if (count < 9) str = "PK-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
             else if (count < 99) str = "PK-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
             else if (count < 999) str = "PK-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
-         
+            
             var clinics = new Clinics()
             {
                 Name = request.Name,
                 ImgLogo = await SaveFile(request.ImgLogo, CLINIC_CONTENT_FOLDER_NAME),
                 Description = request.Description,
-                Address = request.Address,
+                Address = request.Address ,
                 LocationId = request.LocationId,
                 Status = Status.Active,
                 No = str
@@ -148,7 +148,6 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 query = query.Where(x => x.c.Name.Contains(request.Keyword));
             }
             int totalRow = await query.CountAsync();
-
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new ClinicVm()
@@ -158,7 +157,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     Id = x.c.Id,
                     ImgLogo = CLINIC_CONTENT_FOLDER_NAME + "/" + x.c.ImgLogo,
                     Status = x.c.Status,
-                    Address = x.c.Address,
+                    Address =  x.c.Address,
                     No = x.c.No,
                     LocationVm = new LocationVm()
                     {
@@ -304,6 +303,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
             var i = _context.ImageClinics.Where(x=> x.ClinicId == request.Id).Count();
             var clinics = await _context.Clinics.FindAsync(request.Id);
             if (clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { request.Id}");
+            request.Address = request.Address;
             clinics.Name = request.Name;
             clinics.Description = request.Description;
             clinics.Address = request.Address;

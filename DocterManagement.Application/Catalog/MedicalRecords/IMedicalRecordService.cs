@@ -11,9 +11,9 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
 {
     public interface IMedicalRecordService
     {
-        Task<ApiResult<MedicalRecord>> Create(MedicalRecordCreateRequest request);
+        Task<ApiResult<bool>> Create(MedicalRecordCreateRequest request);
 
-        Task<ApiResult<MedicalRecord>> Update(MedicalRecordUpdateRequest request);
+        Task<ApiResult<bool>> Update(MedicalRecordUpdateRequest request);
 
         Task<ApiResult<int>> Delete(Guid Id);
 

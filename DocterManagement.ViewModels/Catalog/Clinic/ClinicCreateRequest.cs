@@ -20,7 +20,10 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         public string Address { get; set; }
         [Required]
         public Guid LocationId { get; set; }
-    
+       
+        [Required]
+        public Guid DistrictId { get; set; }
+
         [Required]
         public IFormFileCollection ImgClinics { get; set; }
     }

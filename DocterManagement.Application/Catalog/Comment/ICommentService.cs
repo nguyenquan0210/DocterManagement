@@ -11,9 +11,9 @@ namespace DoctorManagement.Application.Catalog.Comment
 {
     public interface ICommentService
     {
-        Task<ApiResult<CommentsPost>> Create(CommentCreateRequest request);
+        Task<ApiResult<bool>> Create(CommentCreateRequest request);
 
-        Task<ApiResult<CommentsPost>> Update(CommentUpdateRequest request);
+        Task<ApiResult<bool>> Update(CommentUpdateRequest request);
 
         Task<ApiResult<int>> Delete(Guid Id);
 

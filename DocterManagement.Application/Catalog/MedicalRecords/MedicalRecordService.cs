@@ -21,9 +21,9 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
         {
             _context = context;
         }
-        public async Task<ApiResult<MedicalRecord>> Create(MedicalRecordCreateRequest request)
+        public async Task<ApiResult<bool>> Create(MedicalRecordCreateRequest request)
         {
-            var rs = new MedicalRecord()
+            var medical = new MedicalRecord()
             {
                 Diagnose = request.Diagnose,
                 Note = request.Note,
@@ -35,9 +35,10 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 AppointmentId = request.AppointmentId,
                 DoctorId = request.DoctorId
             };
-            _context.MedicalRecords.Add(rs);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<MedicalRecord>(rs);
+            _context.MedicalRecords.Add(medical);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -136,18 +137,19 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             return new ApiSuccessResult<MedicalRecordVm>(rs);
         }
 
-        public async Task<ApiResult<MedicalRecord>> Update(MedicalRecordUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(MedicalRecordUpdateRequest request)
         {
             var medical = await _context.MedicalRecords.FindAsync(request.Id);
-            if (medical == null) throw new DoctorManageException($"Cannot find a MedicalRecord with id: { request.Id}");
+            if (medical == null) return new ApiSuccessResult<bool>(false);
 
             medical.Status = request.Status;
             medical.Prescription = request.Prescription;
             medical.Diagnose = request.Diagnose;
             medical.StatusIllness = request.StatusIllness;
             medical.Note = request.Note;
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<MedicalRecord>(medical);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

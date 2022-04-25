@@ -21,7 +21,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
         {
             _context = context;
         }
-        public async Task<ApiResult<Schedules>> Create(ScheduleCreateRequest request)
+        public async Task<ApiResult<bool>> Create(ScheduleCreateRequest request)
         {
             var schedules = new Schedules()
             {
@@ -33,8 +33,9 @@ namespace DoctorManagement.Application.Catalog.Schedule
                 DoctorId = request.DoctorId
             };
             _context.Schedules.Add(schedules);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Schedules>(schedules);    
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -124,16 +125,17 @@ namespace DoctorManagement.Application.Catalog.Schedule
             return new ApiSuccessResult<ScheduleVm>(rs);
         }
 
-        public async Task<ApiResult<Schedules>> Update(ScheduleUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(ScheduleUpdateRequest request)
         {
             var schedules = await _context.Schedules.FindAsync(request.Id);
-            if (schedules == null) throw new DoctorManageException($"Cannot find a Schedule with id: { request.Id}");
+            if (schedules == null) return new ApiSuccessResult<bool>(false);
             schedules.FromTime = request.FromTime;
             schedules.ToTime = request.ToTime;
             schedules.Qty = request.Qty;
             schedules.Status = request.Status;
-            _context.SaveChanges();
-            return new ApiSuccessResult<Schedules>(schedules);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

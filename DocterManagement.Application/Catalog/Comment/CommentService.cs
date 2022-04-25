@@ -20,7 +20,7 @@ namespace DoctorManagement.Application.Catalog.Comment
         {
             _context = context;
         }
-        public async Task<ApiResult<CommentsPost>> Create(CommentCreateRequest request)
+        public async Task<ApiResult<bool>> Create(CommentCreateRequest request)
         {
             var comments = new CommentsPost()
             {
@@ -31,9 +31,10 @@ namespace DoctorManagement.Application.Catalog.Comment
                 UserId = request.UserId,
                 PostId = request.PostId
             };
-            _context.CommentsPost.Add(comments);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<CommentsPost>(comments);
+            _context.CommentsPost.Add(comments); 
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -114,13 +115,14 @@ namespace DoctorManagement.Application.Catalog.Comment
             return new ApiSuccessResult<CommentVm>(rs);
         }
 
-        public async Task<ApiResult<CommentsPost>> Update(CommentUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(CommentUpdateRequest request)
         {
             var comments = await _context.CommentsPost.FindAsync(request.Id);
-            if (comments == null) throw new DoctorManageException($"Cannot find a Comment with id: { request.Id}");
+            if (comments == null) return new ApiSuccessResult<bool>(false);
             comments.Description = request.Description;
-            _context.SaveChanges();
-            return new ApiSuccessResult<CommentsPost>(comments);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

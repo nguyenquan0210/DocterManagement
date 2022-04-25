@@ -21,7 +21,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<CommentVm>>> Create([FromBody] CommentCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] CommentCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ApiResult<CommentVm>>> Update([FromBody] CommentUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] CommentUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

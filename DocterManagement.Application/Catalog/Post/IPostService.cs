@@ -11,9 +11,9 @@ namespace DoctorManagement.Application.Catalog.Post
 {
     public interface IPostService
     {
-        Task<ApiResult<Posts>> Create(PostCreateRequest request);
+        Task<ApiResult<bool>> Create(PostCreateRequest request);
 
-        Task<ApiResult<Posts>> Update(PostUpdateRequest request);
+        Task<ApiResult<bool>> Update(PostUpdateRequest request);
 
         Task<ApiResult<int>> Delete(Guid Id);
 

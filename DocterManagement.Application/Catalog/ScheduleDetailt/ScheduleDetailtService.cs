@@ -21,7 +21,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
         {
             _context = context;
         }
-        public async Task<ApiResult<SchedulesDetailts>> Create(ScheduleDetailtCreateRequest request)
+        public async Task<ApiResult<bool>> Create(ScheduleDetailtCreateRequest request)
         {
             var schedulesDetails = new SchedulesDetailts()
             {
@@ -31,8 +31,9 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 ScheduleId = request.ScheduleId
             };
             _context.SchedulesDetails.Add(schedulesDetails);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<SchedulesDetailts>(schedulesDetails);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -116,15 +117,16 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
             return new ApiSuccessResult<ScheduleDetailtVm>(rs);
         }
 
-        public async Task<ApiResult<SchedulesDetailts>> Update(ScheduleDetailtUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(ScheduleDetailtUpdateRequest request)
         {
             var schedulesDetails = await _context.SchedulesDetails.FindAsync(request.Id);
-            if (schedulesDetails == null) throw new DoctorManageException($"Cannot find a Schedule with id: { request.Id}");
+            if (schedulesDetails == null) return new ApiSuccessResult<bool>(false);
             schedulesDetails.FromTime = request.FromTime;
             schedulesDetails.ToTime = request.ToTime;
             schedulesDetails.Status = request.Status;
-            _context.SaveChanges();
-            return new ApiSuccessResult<SchedulesDetailts>(schedulesDetails);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

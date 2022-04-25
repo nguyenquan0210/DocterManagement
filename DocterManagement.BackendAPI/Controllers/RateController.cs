@@ -15,13 +15,14 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _rateService = rateService;
         }
+       
         /// <summary>
         /// Tạo mới đánh giá
         /// </summary>
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<RateVm>>> Create([FromBody] RateCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] RateCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -33,6 +34,7 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(result);
         }
+
         /// <summary>
         /// Xóa đánh giá
         /// </summary>
@@ -56,7 +58,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ApiResult<RateVm>>> Update([FromBody] RateUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] RateUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +74,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("paging")]
-        public async Task<ActionResult<ApiResult<PagedResult<RateVm>>>> GetAllPaging([FromQuery] GetRatePagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<RatesVm>>>> GetAllPaging([FromQuery] GetRatePagingRequest request)
         {
             var result = await _rateService.GetAllPaging(request);
             return Ok(result);
@@ -82,7 +84,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("{Id}")]
-        public async Task<ActionResult<ApiResult<RateVm>>> GetById(Guid Id)
+        public async Task<ActionResult<ApiResult<RatesVm>>> GetById(Guid Id)
         {
             var result = await _rateService.GetById(Id);
             if (!result.IsSuccessed)
@@ -94,10 +96,11 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<ActionResult<ApiResult<List<RateVm>>>> GetAll()
+        public async Task<ActionResult<ApiResult<List<RatesVm>>>> GetAll()
         {
             var result = await _rateService.GetAll();
             return Ok(result);
         }
+       
     }
 }

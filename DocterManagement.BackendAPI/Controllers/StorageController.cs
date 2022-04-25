@@ -19,7 +19,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPost("images")]
-        public async Task<ActionResult<ApiResult<ImagesVm>>> Create([FromForm] ImageCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromForm] ImageCreateRequest request)
         {
             if (!ModelState.IsValid)
             {

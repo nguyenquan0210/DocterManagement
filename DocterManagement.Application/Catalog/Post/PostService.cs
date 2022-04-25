@@ -58,7 +58,7 @@ namespace DoctorManagement.Application.Catalog.Post
                 Container = fileRequest.Container
             };
         }
-        public async Task<ApiResult<Posts>> Create(PostCreateRequest request)
+        public async Task<ApiResult<bool>> Create(PostCreateRequest request)
         {
             var posts = new Posts()
             {
@@ -73,8 +73,9 @@ namespace DoctorManagement.Application.Catalog.Post
                 }
             };
             _context.Posts.Add(posts);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Posts>(posts);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -162,17 +163,18 @@ namespace DoctorManagement.Application.Catalog.Post
             return new ApiSuccessResult<PostVm>(rs);
         }
 
-        public async Task<ApiResult<Posts>> Update(PostUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(PostUpdateRequest request)
         {
             var posts = await _context.Posts.FindAsync(request.Id);
-            if (posts == null) throw new DoctorManageException($"Cannot find a post with id: { request.Id}");
+            if (posts == null) return new ApiSuccessResult<bool>(false);
             posts.Title = request.Title;
             posts.DoctorId = request.DoctorId;
             posts.Description = request.Description;
             posts.Status = request.Status ? Status.Active : Status.InActive;
 
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Posts>(posts);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

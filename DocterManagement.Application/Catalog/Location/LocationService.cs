@@ -1,4 +1,5 @@
-﻿using DoctorManagement.Data.EF;
+﻿using DoctorManagement.Application.Catalog.Location;
+using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Location;
@@ -20,7 +21,7 @@ namespace DoctorManagement.Application.Catalog.Ward
         {
             _context = context;
         }
-        public async Task<ApiResult<Locations>> Create(LocationCreateRequest request)
+        public async Task<ApiResult<bool>> Create(LocationCreateRequest request)
         {
             var locations = new Locations()
             {
@@ -32,8 +33,9 @@ namespace DoctorManagement.Application.Catalog.Ward
                 Type = request.Type
             };
             _context.Locations.Add(locations);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Locations>(locations);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -76,6 +78,20 @@ namespace DoctorManagement.Application.Catalog.Ward
         public async Task<ApiResult<List<LocationVm>>> GetAllProvince()
         {
             var query = _context.Locations.Where(x => x.Type.ToUpper() == "PROVINCE");
+
+            var rs = await query.Select(x => new LocationVm()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                SortOrder = x.SortOrder,
+                ParentId = x.ParentId
+            }).ToListAsync();
+            return new ApiSuccessResult<List<LocationVm>>(rs);
+        }
+        public async Task<ApiResult<List<LocationVm>>> GetAllDistrictDaNangCity()
+        {
+            var danangCity = await _context.Locations.FirstOrDefaultAsync(x => x.Name == "Thành phố Đà Nẵng");
+            var query = _context.Locations.Where(x => x.ParentId == danangCity.Id && x.Type.ToUpper() == "DISTRICT");
 
             var rs = await query.Select(x => new LocationVm()
             {
@@ -141,10 +157,10 @@ namespace DoctorManagement.Application.Catalog.Ward
             return new ApiSuccessResult<LocationVm>(rs);
         }
 
-        public async Task<ApiResult<Locations>> Update(LocationUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(LocationUpdateRequest request)
         {
             var Locations = await _context.Locations.FindAsync(request.Id);
-            if (Locations == null) throw new DoctorManageException($"Cannot find a Ward with id: { request.Id}");
+            if (Locations == null) return new ApiSuccessResult<bool>(false);
             Locations.Name = request.Name;
             Locations.SortOrder = request.SortOrder;
             Locations.ParentId = request.ParentId;
@@ -152,9 +168,9 @@ namespace DoctorManagement.Application.Catalog.Ward
             Locations.Code = request.Code;
             Locations.Type = request.Type;
 
-            _context.SaveChanges();
-
-            return new ApiSuccessResult<Locations>(Locations);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<List<LocationVm>>> GetListAllPaging(string? type)

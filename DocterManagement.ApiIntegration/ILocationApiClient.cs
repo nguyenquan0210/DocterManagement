@@ -18,9 +18,9 @@ namespace DoctorManagement.ApiIntegration
 
         Task<int> Delete(Guid Id);
 
-        Task<List<SelectListItem>> GetAllSubDistrict(Guid? subDistricyId);
-        Task<List<SelectListItem>> GetAllDistrict(Guid? districyId);
-        Task<List<SelectListItem>> GetAllProvince(Guid? provinceId);
+        Task<List<SelectListItem>> GetAllSubDistrict(Guid? SubDistricyId, Guid DistricyId);
+        Task<List<SelectListItem>> GetAllDistrict(Guid? DistricyId);
+        Task<List<SelectListItem>> GetAllProvince(Guid? ProvinceId);
 
         Task<ApiResult<LocationVm>> GetById(Guid Id);
     }

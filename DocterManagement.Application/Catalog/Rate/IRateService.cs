@@ -11,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Rate
 {
     public interface IRateService
     {
-        Task<ApiResult<Rates>> Create(RateCreateRequest request);
+        Task<ApiResult<bool>> Create(RateCreateRequest request);
 
-        Task<ApiResult<Rates>> Update(RateUpdateRequest request);
+        Task<ApiResult<bool>> Update(RateUpdateRequest request);
 
         Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<ApiResult<PagedResult<RateVm>>> GetAllPaging(GetRatePagingRequest request);
+        Task<ApiResult<PagedResult<RatesVm>>> GetAllPaging(GetRatePagingRequest request);
 
-        Task<ApiResult<List<RateVm>>> GetAll();
+        Task<ApiResult<List<RatesVm>>> GetAll();
 
-        Task<ApiResult<RateVm>> GetById(Guid Id);
+        Task<ApiResult<RatesVm>> GetById(Guid Id);
     }
 }

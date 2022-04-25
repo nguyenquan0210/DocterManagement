@@ -21,7 +21,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<ScheduleVm>>> Create([FromBody] ScheduleCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] ScheduleCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ApiResult<ScheduleVm>>> Update([FromBody] ScheduleUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] ScheduleUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

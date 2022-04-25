@@ -9,7 +9,7 @@
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @section Search{
-	<form asp-controller="User" asp-action="Index"  method="get">
+	<form asp-action="Index"  method="get">
 		<div class="input-group">
 			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
 			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
@@ -43,7 +43,7 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý tài khoản</a></li>
         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
     </ol>
     <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
@@ -96,15 +96,32 @@
 
                     </div>
                      <div class="row ">
+                         <div class="col-6">
+                            <label  class="form-label">Thành phố</label>
+                            <input value="TP Đà Nẵng" class="multisteps-form__input form-control" readonly />
+                            <span  class="text-danger"></span>
 
+                        </div>
                         <div class="col-6">
+                            <label asp-for="DistrictId" class="control-label "></label>
+                                <select  asp-for="DistrictId"  asp-items="ViewBag.District" class= "multisteps-form__input form-control" >
+                                    <option>-- Chọn Quận Huyện --</option>
+                                </select>
+                            <span asp-validation-for="DistrictId" class="text-danger"></span>
+                        </div>  
+                    </div>
+                    <div class="row " id="mainselect">
+
+                        <div class="col-6" id="sdistric">
                               
                             <label asp-for="LocationId" class="control-label "></label>
+                            <div id="feature">
                                 <select asp-for="LocationId" asp-items="ViewBag.Location" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn phòng khám --</option>
+                                    <option>-- Chọn Phường Xã --</option>
                                 </select>
-                                <span asp-validation-for="LocationId" class="text-danger"></span>
                             </div>
+                            <span asp-validation-for="LocationId" class="text-danger"></span>
+                        </div>
                         <div class="col-6">
                             <label asp-for="Address" class="form-label"></label>
                             <input asp-for="Address" class="multisteps-form__input form-control" />
@@ -239,11 +256,14 @@
     <script src="~/js/plugins/flatpickr.min.js"></script>
    
     <script>
-        if (document.getElementById('LocationId')) {
-            var clinic = document.getElementById('LocationId');
-            const example = new Choices(clinic);
+         if (document.getElementById('DistrictId')) {
+            var District = document.getElementById('DistrictId');
+            const example = new Choices(District);
         }
-    
+       if (document.getElementById('LocationId')) {
+              var Location = document.getElementById('LocationId');
+              const example = new Choices(Location);
+        }
     </script>
     <script>
        
@@ -327,12 +347,52 @@
             document.getElementById("loaderDir").classList.toggle('delete_block');
         }
     </script>
+    <script>
+        var DistrictId = "";
+        $(document).ready(function () {
+             $('#DistrictId').change(function () {
+                //$('#sdistric div.choices div.choices__list--dropdown div.choices__list div.choices__item').remove();
+                $('#feature div.choices').remove();
+                $('#sdistric #feature').html('<select  class="multisteps-form__input form-control" data-val="true" data-val-required="The LocationId field is required." id="LocationId" name="LocationId"></select>');
+                DistrictId = $('#DistrictId option:selected').val();
+                if (DistrictId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Clinic/GetSubDistrict?DistrictId= + ' + DistrictId, 
+                        success: function (result) {
+                            var s = '<option >-- Chọn Phường Xã --</option>';
+                            //var j =2;
+                            //var s = '<div id="choices--LocationId-item-choice-1" class="choices__item choices__item--choice is-selected choices__item--selectable is-highlighted" role="option" data-choice="" data-id="1" data-value="-- Chọn Phường Xã --" data-select-text="Press to select" data-choice-selectable="" aria-selected="true">-- Chọn Phường Xã --</div>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option value="' + result[i].value +'">' + result[i].text + '</option>';
+                                //'<div id="choices--DistrictId-item-choice-' + j +'" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="' + j +'" data-value="' + result[i].value +'" data-select-text="Press to select" data-choice-selectable="" aria-selected="true">' + result[i].text +'</div>';
+                                //j++;
+                            }
+                            $('#LocationId').html(s);
+                        }
+                    });
+                }
+            });
+           
+        });
+         $("#mainselect").click(function() {
+              if (document.getElementById('LocationId')) {
+                      var Location = document.getElementById('LocationId');
+                      const example = new Choices(Location);
+                    }
+            });
+        
+   </script>
     @* Kanban scripts *@
     <script src="~/js/plugins/dragula/dragula.min.js"></script>
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
     <script>
-
-       
-
+         var menu_bd = document.getElementById("menu_clinic");
+        menu_bd.classList.add("active");
+        menu_bd.classList.remove("collapsed");
+        var a_xbd = document.getElementById("a_createclinic");
+        a_xbd.classList.add("active");
+        var usersExample = document.getElementById("manageclinic");
+        usersExample.classList.add("show");
     </script>
 }

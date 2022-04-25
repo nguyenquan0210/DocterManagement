@@ -11,9 +11,9 @@ namespace DoctorManagement.Application.Catalog.Schedule
 {
     public interface IScheduleService
     {
-        Task<ApiResult<Schedules>> Create(ScheduleCreateRequest request);
+        Task<ApiResult<bool>> Create(ScheduleCreateRequest request);
 
-        Task<ApiResult<Schedules>> Update(ScheduleUpdateRequest request);
+        Task<ApiResult<bool>> Update(ScheduleUpdateRequest request);
 
         Task<ApiResult<int>> Delete(Guid Id);
 

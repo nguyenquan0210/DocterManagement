@@ -11,9 +11,9 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
 {
     public interface IScheduleDetailtService
     {
-        Task<ApiResult<SchedulesDetailts>> Create(ScheduleDetailtCreateRequest request);
+        Task<ApiResult<bool>> Create(ScheduleDetailtCreateRequest request);
 
-        Task<ApiResult<SchedulesDetailts>> Update(ScheduleDetailtUpdateRequest request);
+        Task<ApiResult<bool>> Update(ScheduleDetailtUpdateRequest request);
 
         Task<ApiResult<int>> Delete(Guid Id);
 

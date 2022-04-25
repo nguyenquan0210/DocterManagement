@@ -20,10 +20,10 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Tạo mới phòng khám
         /// </summary>
         /// 
+        [Authorize]
         [HttpPost]
         [Consumes("multipart/form-data")]
-        [Authorize]
-        public async Task<ActionResult<ApiResult<Clinics>>> Create([FromForm] ClinicCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromForm] ClinicCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -73,9 +73,9 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Cập nhật phòng khám
         /// </summary>
         /// 
+        [Authorize]
         [HttpPut]
         [Consumes("multipart/form-data")]
-        [Authorize]
         public async Task<ActionResult<ApiResult<bool>>> Update([FromForm] ClinicUpdateRequest request)
         {
             if (!ModelState.IsValid)

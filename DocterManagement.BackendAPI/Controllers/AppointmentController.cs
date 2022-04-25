@@ -23,7 +23,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<AppointmentVm>>> Create([FromBody] AppointmentCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] AppointmentCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -58,7 +58,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ApiResult<AppointmentVm>>> Update([FromBody] AppointmentUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] AppointmentUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

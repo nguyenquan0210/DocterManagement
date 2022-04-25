@@ -20,7 +20,7 @@ namespace DoctorManagement.Application.Catalog.Rate
         {
             _context = context;
         }
-        public async Task<ApiResult<Rates>> Create(RateCreateRequest request)
+        public async Task<ApiResult<bool>> Create(RateCreateRequest request)
         {
             var rates = new Rates()
             {
@@ -31,8 +31,9 @@ namespace DoctorManagement.Application.Catalog.Rate
                 AppointmentId = request.AppointmentId
             };
             _context.Rates.Add(rates);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Rates>(rates);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -46,11 +47,11 @@ namespace DoctorManagement.Application.Catalog.Rate
             return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<ApiResult<List<RateVm>>> GetAll()
+        public async Task<ApiResult<List<RatesVm>>> GetAll()
         {
             var query = _context.Rates;
 
-            var rs = await query.Select(x => new RateVm()
+            var rs = await query.Select(x => new RatesVm()
             {
                 Id = x.Id,
                 Title = x.Title,
@@ -59,10 +60,10 @@ namespace DoctorManagement.Application.Catalog.Rate
                 Date = x.Date,
                 AppointmentId = x.AppointmentId
             }).ToListAsync();
-            return new ApiSuccessResult<List<RateVm>>(rs);
+            return new ApiSuccessResult<List<RatesVm>>(rs);
         }
 
-        public async Task<ApiResult<PagedResult<RateVm>>> GetAllPaging(GetRatePagingRequest request)
+        public async Task<ApiResult<PagedResult<RatesVm>>> GetAllPaging(GetRatePagingRequest request)
         {
             var query = from c in _context.Rates select c;
             //2. filter
@@ -74,7 +75,7 @@ namespace DoctorManagement.Application.Catalog.Rate
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new RateVm()
+                .Select(x => new RatesVm()
                 {
                     Title = x.Title,
                     Description = x.Description,
@@ -85,21 +86,21 @@ namespace DoctorManagement.Application.Catalog.Rate
 
                 }).ToListAsync();
 
-            var pagedResult = new PagedResult<RateVm>()
+            var pagedResult = new PagedResult<RatesVm>()
             {
                 TotalRecords = totalRow,
                 PageSize = request.PageSize,
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return new ApiSuccessResult<PagedResult<RateVm>>(pagedResult);
+            return new ApiSuccessResult<PagedResult<RatesVm>>(pagedResult);
         }
 
-        public async Task<ApiResult<RateVm>> GetById(Guid Id)
+        public async Task<ApiResult<RatesVm>> GetById(Guid Id)
         {
             var rates = await _context.Rates.FindAsync(Id);
             if (rates == null) throw new DoctorManageException($"Cannot find a rates with id: { Id}");
-            var rs = new RateVm()
+            var rs = new RatesVm()
             {
                 Id = rates.Id,
                 Title = rates.Title,
@@ -109,19 +110,20 @@ namespace DoctorManagement.Application.Catalog.Rate
                 Rating = rates.Rating
             };
 
-            return new ApiSuccessResult<RateVm>(rs);
+            return new ApiSuccessResult<RatesVm>(rs);
         }
 
-        public async Task<ApiResult<Rates>> Update(RateUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(RateUpdateRequest request)
         {
             var rates = await _context.Rates.FindAsync(request.Id);
-            if (rates == null) throw new DoctorManageException($"Cannot find a rates with id: { request.Id}");
+            if (rates == null) return new ApiSuccessResult<bool>(false);
             rates.Title = request.Title;
             rates.Description = request.Description;
             rates.Rating = request.Rating;
 
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Rates>(rates);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

@@ -67,6 +67,7 @@ namespace DoctorManagement.ApiIntegration
 
           
             requestContent.Add(new StringContent(request.LocationId.ToString()), "locationId");
+            requestContent.Add(new StringContent(request.DistrictId.ToString()), "districtId");
             requestContent.Add(new StringContent(request.Name.ToString()), "name");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
             requestContent.Add(new StringContent(request.Address.ToString()), "address");
@@ -142,6 +143,7 @@ namespace DoctorManagement.ApiIntegration
 
             requestContent.Add(new StringContent(request.Id.ToString()), "id");
             requestContent.Add(new StringContent(request.LocationId.ToString()), "locationId");
+            requestContent.Add(new StringContent(request.DistrictId.ToString()), "districtId");
             requestContent.Add(new StringContent(request.Name.ToString()), "name");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
             requestContent.Add(new StringContent(request.Address.ToString()), "address");

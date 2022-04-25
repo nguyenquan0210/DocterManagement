@@ -24,6 +24,7 @@ using DoctorManagement.Application.Catalog.Ward;
 using DoctorManagement.Application.Common;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using System.Reflection;
+using DoctorManagement.Application.Catalog.Location;
 
 var builder = WebApplication.CreateBuilder(args);
 

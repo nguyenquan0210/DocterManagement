@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.Application.Catalog.Ward
+namespace DoctorManagement.Application.Catalog.Location
 {
     public interface ILocationService
     {
-        Task<ApiResult<Locations>> Create(LocationCreateRequest request);
+        Task<ApiResult<bool>> Create(LocationCreateRequest request);
 
-        Task<ApiResult<Locations>> Update(LocationUpdateRequest request);
+        Task<ApiResult<bool>> Update(LocationUpdateRequest request);
 
         Task<ApiResult<int>> Delete(Guid Id);
 
@@ -22,6 +22,7 @@ namespace DoctorManagement.Application.Catalog.Ward
 
         Task<ApiResult<List<LocationVm>>> GetAllSubDistrict(Guid districtId);
         Task<ApiResult<List<LocationVm>>> GetAllDistrict(Guid provinceId);
+        Task<ApiResult<List<LocationVm>>> GetAllDistrictDaNangCity();
         Task<ApiResult<List<LocationVm>>> GetAllProvince();
 
         Task<ApiResult<LocationVm>> GetById(Guid Id);

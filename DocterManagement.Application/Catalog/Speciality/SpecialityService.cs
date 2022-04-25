@@ -122,7 +122,6 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 No = speciality.No,
                 Description = speciality.Description
             };
-
             return new ApiSuccessResult<SpecialityVm>(rs);
         }
 

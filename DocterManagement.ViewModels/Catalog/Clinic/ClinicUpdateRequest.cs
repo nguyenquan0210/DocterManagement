@@ -23,6 +23,9 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         [Required]
         public Guid LocationId { get; set; }
 
+        [Required]
+        public Guid DistrictId { get; set; }
+
         public IFormFileCollection? ImgClinics { get; set; }
         public Guid Id { get; set; }
         public Status Status { get; set; }

@@ -53,38 +53,38 @@ namespace DoctorManagement.ApiIntegration
             return await Delete($"/api/location/delete" + Id);
         }
 
-        public async Task<List<SelectListItem>> GetAllDistrict(Guid? provinceId)
+        public async Task<List<SelectListItem>> GetAllDistrict(Guid? DistrictId)
         {
-            var data = await GetListAsync<LocationVm>($"/api/location/get-all-district");
+            var data = await GetListAsync<LocationVm>($"/api/location/danang-city/get-all-district");
             var select = data.Data.Select(x => new SelectListItem()
             {
                 Text = x.Name,
                 Value = x.Id.ToString(),
-                Selected = provinceId.HasValue && provinceId.Value == x.Id
+                Selected = DistrictId.HasValue && DistrictId.Value == x.Id
             });
             return select.ToList();
         }
 
-        public async Task<List<SelectListItem>> GetAllProvince(Guid? provinceId)
+        public async Task<List<SelectListItem>> GetAllProvince(Guid? ProvinceId)
         {
             var data = await GetListAsync<LocationVm>($"/api/location/get-all-province");
             var select = data.Data.Select(x => new SelectListItem()
             {
                 Text = x.Name,
                 Value = x.Id.ToString(),
-                Selected = provinceId.HasValue && provinceId.Value == x.Id
+                Selected = ProvinceId.HasValue && ProvinceId.Value == x.Id
             });
             return select.ToList();
         }
 
-        public async Task<List<SelectListItem>> GetAllSubDistrict(Guid? provinceId)
+        public async Task<List<SelectListItem>> GetAllSubDistrict(Guid? SubDistrictId, Guid DistrictId)
         {
-            var data = await GetListAsync<LocationVm>($"/api/location/get-all-subDistrict");
+            var data = await GetListAsync<LocationVm>($"/api/location/{DistrictId}/get-all-subDistrict");
             var select = data.Data.Select(x => new SelectListItem()
             {
                 Text = x.Name,
                 Value = x.Id.ToString(),
-                Selected = provinceId.HasValue && provinceId.Value == x.Id
+                Selected = SubDistrictId.HasValue && SubDistrictId.Value == x.Id
             });
             return select.ToList();
         }

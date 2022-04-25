@@ -1,4 +1,4 @@
-﻿using DoctorManagement.Application.Catalog.Ward;
+﻿using DoctorManagement.Application.Catalog.Location;
 using DoctorManagement.ViewModels.Catalog.Location;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +21,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost("create-location")]
         [Authorize]
-        public async Task<ActionResult<ApiResult<LocationVm>>> Create([FromBody] LocationCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] LocationCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut("update-location")]
         [Authorize]
-        public async Task<ActionResult<ApiResult<LocationVm>>> Update([FromBody] LocationUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] LocationUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -117,6 +117,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         public async Task<ActionResult<ApiResult<List<LocationVm>>>> GetAllDictrict(Guid provinceId)
         {
             var result = await _locationService.GetAllDistrict(provinceId);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách quận/huyện thành phố Đà Nẵng
+        /// </summary>
+        /// 
+        [HttpGet("danang-city/get-all-district")]
+        public async Task<ActionResult<ApiResult<List<LocationVm>>>> GetAllDistrictDaNangCity()
+        {
+            var result = await _locationService.GetAllDistrictDaNangCity();
             return Ok(result);
         }
         /// <summary>
