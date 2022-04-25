@@ -21,7 +21,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
         {
             _context = context;
         }
-        public async Task<Guid> Create(ScheduleCreateRequest request)
+        public async Task<ApiResult<bool>> Create(ScheduleCreateRequest request)
         {
             var schedules = new Schedules()
             {
@@ -33,15 +33,16 @@ namespace DoctorManagement.Application.Catalog.Schedule
                 DoctorId = request.DoctorId
             };
             _context.Schedules.Add(schedules);
-            await _context.SaveChangesAsync();
-            return schedules.Id;
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var schedules = await _context.Schedules.FindAsync(Id);
             int check = 0;
-            if (schedules == null) return check;
+            if (schedules == null) return new ApiSuccessResult<int>(check);
             if (schedules.Status == Status.Active)
             {
                 schedules.Status = Status.InActive;
@@ -53,14 +54,14 @@ namespace DoctorManagement.Application.Catalog.Schedule
                 check = 2;
             }
             await _context.SaveChangesAsync();
-            return check;
+             return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<ScheduleVm>> GetAll()
+        public async Task<ApiResult<List<ScheduleVm>>> GetAll()
         {
             var query = _context.Schedules;
 
-            return await query.Select(x => new ScheduleVm()
+            var rs = await query.Select(x => new ScheduleVm()
             {
                 Id = x.Id,
                 CheckInDate = x.CheckInDate,
@@ -70,9 +71,10 @@ namespace DoctorManagement.Application.Catalog.Schedule
                 Qty = x.Qty,
                 Status = x.Status
             }).ToListAsync();
+            return new ApiSuccessResult<List<ScheduleVm>>(rs);
         }
 
-        public async Task<PagedResult<ScheduleVm>> GetAllPaging(GetSchedulePagingRequest request)
+        public async Task<ApiResult<PagedResult<ScheduleVm>>> GetAllPaging(GetSchedulePagingRequest request)
         {
             var query = from c in _context.Schedules select c;
             //2. filter
@@ -103,10 +105,10 @@ namespace DoctorManagement.Application.Catalog.Schedule
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<ScheduleVm>>(pagedResult);
         }
 
-        public async Task<ScheduleVm> GetById(Guid Id)
+        public async Task<ApiResult<ScheduleVm>> GetById(Guid Id)
         {
             var schedules = await _context.Schedules.FindAsync(Id);
             if (schedules == null) throw new DoctorManageException($"Cannot find a Schedule with id: { Id}");
@@ -120,18 +122,20 @@ namespace DoctorManagement.Application.Catalog.Schedule
                 Qty = schedules.Qty,
                 Status = schedules.Status
             };
-            return rs;
+            return new ApiSuccessResult<ScheduleVm>(rs);
         }
 
-        public async Task<int> Update(ScheduleUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(ScheduleUpdateRequest request)
         {
             var schedules = await _context.Schedules.FindAsync(request.Id);
-            if (schedules == null) throw new DoctorManageException($"Cannot find a Schedule with id: { request.Id}");
+            if (schedules == null) return new ApiSuccessResult<bool>(false);
             schedules.FromTime = request.FromTime;
             schedules.ToTime = request.ToTime;
             schedules.Qty = request.Qty;
             schedules.Status = request.Status;
-            return await _context.SaveChangesAsync();
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

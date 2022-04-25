@@ -12,6 +12,6 @@ namespace DoctorManagement.ViewModels.Common
 
         public string Message { get; set; }
 
-        public T ResultObj { get; set; }
+        public T Data { get; set; }
     }
 }

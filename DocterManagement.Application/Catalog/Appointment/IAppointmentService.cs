@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Appointment;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Appointment
 {
     public interface IAppointmentService
     {
-        Task<Guid> Create(AppointmentCreateRequest request);
+        Task<ApiResult<Appointments>> Create(AppointmentCreateRequest request);
 
-        Task<int> Update(AppointmentUpdateRequest request);
+        Task<ApiResult<Appointments>> Update(AppointmentUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<PagedResult<AppointmentVm>> GetAllPaging(GetAppointmentPagingRequest request);
+        Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPaging(GetAppointmentPagingRequest request);
 
-        Task<List<AppointmentVm>> GetAll();
+        Task<ApiResult<List<AppointmentVm>>> GetAll();
 
-        Task<AppointmentVm> GetById(Guid Id);
+        Task<ApiResult<AppointmentVm>> GetById(Guid Id);
     }
 }

@@ -20,7 +20,7 @@ namespace DoctorManagement.Application.Catalog.Comment
         {
             _context = context;
         }
-        public async Task<Guid> Create(CommentCreateRequest request)
+        public async Task<ApiResult<bool>> Create(CommentCreateRequest request)
         {
             var comments = new CommentsPost()
             {
@@ -31,27 +31,28 @@ namespace DoctorManagement.Application.Catalog.Comment
                 UserId = request.UserId,
                 PostId = request.PostId
             };
-            _context.CommentsPost.Add(comments);
-            await _context.SaveChangesAsync();
-            return comments.Id;
+            _context.CommentsPost.Add(comments); 
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var comments = await _context.CommentsPost.FindAsync(Id);
             int check = 0;
-            if (comments == null) return check;
+            if (comments == null) return new ApiSuccessResult<int>(check);
             _context.CommentsPost.Remove(comments);
             check = 2;
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<CommentVm>> GetAll()
+        public async Task<ApiResult<List<CommentVm>>> GetAll()
         {
             var query = _context.CommentsPost;
 
-            return await query.Select(x => new CommentVm()
+            var rs = await query.Select(x => new CommentVm()
             {
                 Id = x.Id,
                 Date = x.Date,
@@ -61,9 +62,11 @@ namespace DoctorManagement.Application.Catalog.Comment
                 CheckLevel = x.CheckLevel,
                 CheckComentId = x.CheckComentId
             }).ToListAsync();
+
+            return new ApiSuccessResult<List<CommentVm>>(rs); ;
         }
 
-        public async Task<PagedResult<CommentVm>> GetAllPaging(GetCommentPagingRequest request)
+        public async Task<ApiResult<PagedResult<CommentVm>>> GetAllPaging(GetCommentPagingRequest request)
         {
             var query = from c in _context.CommentsPost select c;
             //2. filter
@@ -92,10 +95,10 @@ namespace DoctorManagement.Application.Catalog.Comment
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<CommentVm>>(pagedResult); ;
         }
 
-        public async Task<CommentVm> GetById(Guid Id)
+        public async Task<ApiResult<CommentVm>> GetById(Guid Id)
         {
             var comments = await _context.CommentsPost.FindAsync(Id);
             if (comments == null) throw new DoctorManageException($"Cannot find a Comment with id: { Id}");
@@ -109,15 +112,17 @@ namespace DoctorManagement.Application.Catalog.Comment
                 UserId= comments.UserId,
                 PostId = comments.PostId
             };
-            return rs;
+            return new ApiSuccessResult<CommentVm>(rs);
         }
 
-        public async Task<int> Update(CommentUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(CommentUpdateRequest request)
         {
             var comments = await _context.CommentsPost.FindAsync(request.Id);
-            if (comments == null) throw new DoctorManageException($"Cannot find a Comment with id: { request.Id}");
+            if (comments == null) return new ApiSuccessResult<bool>(false);
             comments.Description = request.Description;
-            return await _context.SaveChangesAsync();
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

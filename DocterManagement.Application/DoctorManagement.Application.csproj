@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DocterManagement.Utilities\DoctorManagement.Utilities.csproj" />
     <ProjectReference Include="..\DocterManagement.ViewModels\DoctorManagement.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="System\Doctor\" />
   </ItemGroup>
 
 </Project>

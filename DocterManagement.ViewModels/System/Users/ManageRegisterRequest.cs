@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DoctorManagement.Data.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,33 +12,38 @@ namespace DoctorManagement.ViewModels.System.Users
     public class ManageRegisterRequest
     {
         [Display(Name = "Họ Tên")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]
         public DateTime Dob { get; set; }
+        [Display(Name = "Giới tính")]
+        public Gender? Gender { get; set; }
 
         [Display(Name = "Địa chỉ")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
-        [Display(Name = "Hòm thư")]
-        public string Email { get; set; }
+        [Display(Name = "E-mail")]
+        public string? Email { get; set; }
 
         [Display(Name = "Số điện thoại")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Display(Name = "Tài khoản")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [Display(Name = "Mật khẩu")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Display(Name = "Hình ảnh")]
 
-        public IFormFile ThumbnailImage { get; set; }
+        public IFormFile? ThumbnailImage { get; set; }
 
-        public string NameRole { get; set; }
+        [Display(Name = "Chuyên Khoa")]
+        public Guid SpecialityId { get; set; }
+        [Display(Name = "Phòng Khám")]
+        public Guid ClinicId { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Clinic;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,17 @@ namespace DoctorManagement.Application.Catalog.Clinic
 {
     public interface IClinicService
     {
-        Task<Guid> Create(ClinicCreateRequest request);
+        Task<ApiResult<bool>> Create(ClinicCreateRequest request);
 
-        Task<int> Update(ClinicUpdateRequest request);
+        Task<ApiResult<bool>> Update(ClinicUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
+        Task<ApiResult<int>> DeleteImg(Guid Id);
 
-        Task<PagedResult<ClinicVm>> GetAllPaging(GetClinicPagingRequest request);
+        Task<ApiResult<PagedResult<ClinicVm>>> GetAllPaging(GetClinicPagingRequest request);
 
-        Task<List<ClinicVm>> GetAll();
+        Task<ApiResult<List<ClinicVm>>> GetAll();
 
-        Task<ClinicVm> GetById(Guid Id);
+        Task<ApiResult<ClinicVm>> GetById(Guid Id);
     }
 }

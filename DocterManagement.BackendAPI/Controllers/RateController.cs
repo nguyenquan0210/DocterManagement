@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.Catalog.Rate;
 using DoctorManagement.ViewModels.Catalog.Rate;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,23 +15,33 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _rateService = rateService;
         }
+       
+        /// <summary>
+        /// Tạo mới đánh giá
+        /// </summary>
+        /// 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] RateCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] RateCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _rateService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
+
+        /// <summary>
+        /// Xóa đánh giá
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -41,41 +52,55 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Cập nhật đánh giá
+        /// </summary>
+        /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] RateUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] RateUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _rateService.Update(request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
-            return Ok();
-        }
-
-
-        [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetRatePagingRequest request)
-        {
-            var user = await _rateService.GetAllPaging(request);
-            return Ok(user);
-        }
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
-        {
-            var result = await _rateService.GetById(Id);
-            if (result == null)
-                return BadRequest("Cannot find product");
             return Ok(result);
         }
-
+        /// <summary>
+        /// Lấy danh sách phân trang đánh giá
+        /// </summary>
+        /// 
+        [HttpGet("paging")]
+        public async Task<ActionResult<ApiResult<PagedResult<RatesVm>>>> GetAllPaging([FromQuery] GetRatePagingRequest request)
+        {
+            var result = await _rateService.GetAllPaging(request);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy đánh giá theo id
+        /// </summary>
+        /// 
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<ApiResult<RatesVm>>> GetById(Guid Id)
+        {
+            var result = await _rateService.GetById(Id);
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find rate");
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách đánh giá
+        /// </summary>
+        /// 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ApiResult<List<RatesVm>>>> GetAll()
         {
             var result = await _rateService.GetAll();
             return Ok(result);
         }
+       
     }
 }

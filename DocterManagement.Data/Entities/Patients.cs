@@ -12,6 +12,8 @@ namespace DoctorManagement.Data.Entities
      
         public string Address { get; set; }
         public string Img { get; set; }
+        public string No { get; set; }
+
         public AppUsers AppUsers { get; set; }
 
         public List<Appointments> Appointments { get; set; }

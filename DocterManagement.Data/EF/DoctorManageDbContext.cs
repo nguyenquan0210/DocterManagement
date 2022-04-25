@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.Data.EF
 {
+#pragma warning disable CS1591
     public class DoctorManageDbContext : IdentityDbContext<AppUsers, AppRoles, Guid>
     {
         public DoctorManageDbContext(DbContextOptions options) : base(options)
@@ -25,7 +26,7 @@ namespace DoctorManagement.Data.EF
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new ClinidConfiguration());
             modelBuilder.ApplyConfiguration(new CommentsPostConfiguration());
-            modelBuilder.ApplyConfiguration(new DistricConfiguration());
+            //modelBuilder.ApplyConfiguration(new DistricConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());
             modelBuilder.ApplyConfiguration(new ImageClinicConfiguration());
             modelBuilder.ApplyConfiguration(new ImagePostConfiguration());
@@ -35,7 +36,7 @@ namespace DoctorManagement.Data.EF
             modelBuilder.ApplyConfiguration(new RateConfiguration());
             modelBuilder.ApplyConfiguration(new SchedulesConfiguration());
             modelBuilder.ApplyConfiguration(new SchedulesDetailConfiguration());
-            modelBuilder.ApplyConfiguration(new WardConfiguration());
+            modelBuilder.ApplyConfiguration(new LocationConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -63,8 +64,9 @@ namespace DoctorManagement.Data.EF
         public DbSet<Posts> Posts { get; set; }
         public DbSet<Rates> Rates { get; set; }
         public DbSet<Schedules> Schedules { get; set; }
-        public DbSet<SchedulesDetails> SchedulesDetails { get; set; }
+        public DbSet<SchedulesDetailts> SchedulesDetails { get; set; }
         public DbSet<Specialities> Specialities { get; set; }
-        public DbSet<Wards> Wards { get; set; }
+        public DbSet<Locations> Locations { get; set; }
     }
 }
+#pragma warning restore CS1591

@@ -8,7 +8,8 @@ namespace DoctorManagement.Data.Enums
 {
     public enum Status
     {
-        InActive,
-        Active
+        NotActivate,
+        Active, 
+        InActive
     }
 }

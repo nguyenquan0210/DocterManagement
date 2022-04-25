@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Catalog.Distric;
+﻿using DoctorManagement.Data.Entities;
+using DoctorManagement.ViewModels.Catalog.Distric;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace DoctorManagement.Application.Catalog.Distric
 {
     public interface IDistricService
     {
-        Task<Guid> Create(DistricCreateRequest request);
+        Task<ApiResult<Districs>> Create(DistricCreateRequest request);
 
-        Task<int> Update(DistricUpdateRequest request);
+        Task<ApiResult<Districs>> Update(DistricUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id);
 
-        Task<PagedResult<DistricVm>> GetAllPaging(GetDistricPagingRequest request);
+        Task<ApiResult<PagedResult<DistricVm>>> GetAllPaging(GetDistricPagingRequest request);
 
-        Task<List<DistricVm>> GetAll();
+        Task<ApiResult<List<DistricVm>>> GetAll();
 
-        Task<DistricVm> GetById(Guid Id);
+        Task<ApiResult<DistricVm>> GetById(Guid Id);
     }
 }

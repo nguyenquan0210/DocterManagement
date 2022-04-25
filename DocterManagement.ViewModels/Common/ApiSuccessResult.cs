@@ -9,10 +9,10 @@ namespace DoctorManagement.ViewModels.Common
     public class ApiSuccessResult<T> : ApiResult<T>
     {
       
-        public ApiSuccessResult(T resultObj)
+        public ApiSuccessResult(T data)
         {
             IsSuccessed = true;
-            ResultObj = resultObj;
+            Data = data;
         }
 
         public ApiSuccessResult()

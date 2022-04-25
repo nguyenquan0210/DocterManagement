@@ -1,4 +1,9 @@
 ﻿using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.Catalog.Speciality;
+using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Roles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,7 +29,7 @@ namespace DoctorManagement.ViewModels.System.Users
         [Display(Name = "Tài khoản")]
         public string UserName { get; set; }
 
-        [Display(Name = "Email")]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
 
         [Display(Name = "Ngày sinh")]
@@ -39,8 +44,12 @@ namespace DoctorManagement.ViewModels.System.Users
         [Display(Name = "Hình ảnh")]
         public string Img { get; set; }
 
-        public IList<string> Roles { get; set; }
+        public GetRoleVm GetRole { get; set; }
 
+        public DoctorVm? DoctorVm { get; set; }
+        public PatientVm? PatientVm { get; set; }
+        [Display(Name = "Ngày đăng ký")]
         public DateTime Date { get; set; }
+        
     }
 }

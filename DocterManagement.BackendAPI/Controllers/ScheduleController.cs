@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.Catalog.Schedule;
 using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,23 +15,31 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _scheduleService = scheduleService;
         }
+        /// <summary>
+        /// Tạo mới lịch khám
+        /// </summary>
+        /// 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] ScheduleCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] ScheduleCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _scheduleService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
+        /// <summary>
+        /// Xóa lịch khám
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -41,38 +50,51 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Cập nhật lịch khám
+        /// </summary>
+        /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] ScheduleUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] ScheduleUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _scheduleService.Update(request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
             return Ok();
         }
-
-
+        /// <summary>
+        /// Lấy danh sách phân trang lịch khám 
+        /// </summary>
+        /// 
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetSchedulePagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<ScheduleVm>>>> GetAllPaging([FromQuery] GetSchedulePagingRequest request)
         {
-            var user = await _scheduleService.GetAllPaging(request);
-            return Ok(user);
-        }
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
-        {
-            var result = await _scheduleService.GetById(Id);
-            if (result == null)
-                return BadRequest("Cannot find product");
+            var result = await _scheduleService.GetAllPaging(request);
             return Ok(result);
         }
-
+        /// <summary>
+        /// Lấy lịch khám theo id
+        /// </summary>
+        /// 
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<ApiResult<ScheduleVm>>> GetById(Guid Id)
+        {
+            var result = await _scheduleService.GetById(Id);
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find schedule");
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách lịch khám
+        /// </summary>
+        /// 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ApiResult<List<ScheduleVm>>>> GetAll()
         {
             var result = await _scheduleService.GetAll();
             return Ok(result);

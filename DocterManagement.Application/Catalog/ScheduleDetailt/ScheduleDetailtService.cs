@@ -21,9 +21,9 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
         {
             _context = context;
         }
-        public async Task<Guid> Create(ScheduleDetailtCreateRequest request)
+        public async Task<ApiResult<bool>> Create(ScheduleDetailtCreateRequest request)
         {
-            var schedulesDetails = new SchedulesDetails()
+            var schedulesDetails = new SchedulesDetailts()
             {
                 FromTime = request.FromTime,
                 ToTime = request.ToTime,
@@ -31,15 +31,16 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 ScheduleId = request.ScheduleId
             };
             _context.SchedulesDetails.Add(schedulesDetails);
-            await _context.SaveChangesAsync();
-            return schedulesDetails.Id;
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var schedulesDetails = await _context.SchedulesDetails.FindAsync(Id);
             int check = 0;
-            if (schedulesDetails == null) return check;
+            if (schedulesDetails == null) return new ApiSuccessResult<int>(check);
             if (schedulesDetails.Status == Status.Active)
             {
                 schedulesDetails.Status = Status.InActive;
@@ -51,14 +52,14 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 check = 2;
             }
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<ScheduleDetailtVm>> GetAll()
+        public async Task<ApiResult<List<ScheduleDetailtVm>>> GetAll()
         {
             var query = _context.SchedulesDetails;
 
-            return await query.Select(x => new ScheduleDetailtVm()
+            var rs = await query.Select(x => new ScheduleDetailtVm()
             {
                 Id = x.Id,
                 FromTime = x.FromTime,
@@ -66,9 +67,10 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 ScheduleId = x.ScheduleId,
                 Status = x.Status
             }).ToListAsync();
+            return new ApiSuccessResult<List<ScheduleDetailtVm>>(rs);
         }
 
-        public async Task<PagedResult<ScheduleDetailtVm>> GetAllPaging(GetScheduleDetailtPagingRequest request)
+        public async Task<ApiResult<PagedResult<ScheduleDetailtVm>>> GetAllPaging(GetScheduleDetailtPagingRequest request)
         {
             var query = from c in _context.SchedulesDetails select c;
             //2. filter
@@ -97,10 +99,10 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<ScheduleDetailtVm>>(pagedResult);
         }
 
-        public async Task<ScheduleDetailtVm> GetById(Guid Id)
+        public async Task<ApiResult<ScheduleDetailtVm>> GetById(Guid Id)
         {
             var schedules = await _context.SchedulesDetails.FindAsync(Id);
             if (schedules == null) throw new DoctorManageException($"Cannot find a Schedule with id: { Id}");
@@ -112,17 +114,19 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 ScheduleId = schedules.ScheduleId,
                 Status = schedules.Status
             };
-            return rs;
+            return new ApiSuccessResult<ScheduleDetailtVm>(rs);
         }
 
-        public async Task<int> Update(ScheduleDetailtUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(ScheduleDetailtUpdateRequest request)
         {
-            var schedules = await _context.SchedulesDetails.FindAsync(request.Id);
-            if (schedules == null) throw new DoctorManageException($"Cannot find a Schedule with id: { request.Id}");
-            schedules.FromTime = request.FromTime;
-            schedules.ToTime = request.ToTime;
-            schedules.Status = request.Status;
-            return await _context.SaveChangesAsync();
+            var schedulesDetails = await _context.SchedulesDetails.FindAsync(request.Id);
+            if (schedulesDetails == null) return new ApiSuccessResult<bool>(false);
+            schedulesDetails.FromTime = request.FromTime;
+            schedulesDetails.ToTime = request.ToTime;
+            schedulesDetails.Status = request.Status;
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

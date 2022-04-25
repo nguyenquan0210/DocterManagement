@@ -13,9 +13,10 @@ namespace DoctorManagement.Data.Entities
         public string Address { get; set; }
         public string Img { get; set; }
         public string Description { get; set; }
-        public Guid SpecialitiId { get; set; }
+        public string No { get; set; }
+        public Guid SpecialityId { get; set; }
         public Guid ClinicId { get; set; }
-        
+
         public AppUsers AppUsers { get; set; }
         public Specialities Specialities { get; set; }
         public Clinics Clinics { get; set; }
@@ -23,5 +24,6 @@ namespace DoctorManagement.Data.Entities
         public List<Posts> Posts { get; set; }
         public List<Schedules> Schedules { get; set; }
         public List<MedicalRecord> MedicalRecords { get; set; }
+        public List<Rates> Rates { get; set; }
     }
 }

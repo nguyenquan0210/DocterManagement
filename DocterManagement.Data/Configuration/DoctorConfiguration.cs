@@ -18,10 +18,12 @@ namespace DoctorManagement.Data.Configuration
             builder.HasKey(x => x.UserId);
             builder.Property(x => x.Address).IsRequired().HasMaxLength(150);
             builder.Property(x => x.Description).IsRequired().HasMaxLength(int.MaxValue);
+            builder.Property(x => x.No).IsRequired().HasMaxLength(10);
             builder.Property(x => x.Img).IsRequired().HasMaxLength(100);
 
             builder.HasOne(x => x.AppUsers).WithOne(x => x.Doctors).HasForeignKey<Doctors>(x => x.UserId);
-            builder.HasOne(x => x.Specialities).WithMany(x => x.Doctors).HasForeignKey(x => x.SpecialitiId);
+            builder.HasOne(x => x.Specialities).WithMany(x => x.Doctors).HasForeignKey(x => x.SpecialityId);
+            builder.HasOne(x => x.Clinics).WithMany(x => x.Doctors).HasForeignKey(x => x.ClinicId);
             builder.HasOne(x => x.Clinics).WithMany(x => x.Doctors).HasForeignKey(x => x.ClinicId);
 
         }

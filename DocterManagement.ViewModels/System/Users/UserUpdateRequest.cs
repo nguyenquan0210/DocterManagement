@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DoctorManagement.Data.Enums;
+using Microsoft.AspNetCore.Http;
 
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,13 @@ namespace DoctorManagement.ViewModels.System.Users
 
         [Display(Name = "Họ Tên")]
         public string Name { get; set; }
+        [Display(Name = "Giới thiệu")]
+        public string Description { get; set; }
 
         [Display(Name = "Địa chỉ")]
         public string Address { get; set; }
+        [Display(Name = "Giới tính")]
+        public Gender Gender { get; set; }
 
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]
@@ -30,10 +35,15 @@ namespace DoctorManagement.ViewModels.System.Users
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Trạng thái")]
-        public bool Status { get; set; }
+        public Status Status { get; set; }
 
         [Display(Name = "Hình ảnh")]
-        public IFormFile ThumbnailImage { get; set; }
-        public string img { get; set; }
+        public IFormFile? ThumbnailImage { get; set; }
+        public string? img { get; set; }
+
+        [Display(Name = "Chuyên Khoa")]
+        public Guid SpecialityId { get; set; }
+        [Display(Name = "Phòng Khám")]
+        public Guid ClinicId { get; set; }
     }
 }

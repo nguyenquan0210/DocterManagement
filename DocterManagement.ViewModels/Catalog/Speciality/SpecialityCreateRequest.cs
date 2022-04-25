@@ -14,7 +14,5 @@ namespace DoctorManagement.ViewModels.Catalog.Speciality
 
         public string? Description { get; set; }
 
-        public int SortOrder { get; set; }
-
     }
 }

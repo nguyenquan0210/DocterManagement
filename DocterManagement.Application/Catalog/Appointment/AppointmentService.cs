@@ -1,4 +1,5 @@
-﻿using DoctorManagement.Data.EF;
+﻿using AutoMapper;
+using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
@@ -16,49 +17,59 @@ namespace DoctorManagement.Application.Catalog.Appointment
     public class AppointmentService : IAppointmentService
     {
         private readonly DoctorManageDbContext _context;
+        private readonly IMapper _mapper;
 
         public AppointmentService(DoctorManageDbContext context)
         {
             _context = context;
         }
-        public async Task<Guid> Create(AppointmentCreateRequest request)
+        public async Task<ApiResult<Appointments>> Create(AppointmentCreateRequest request)
         {
+            var sch = _context.SchedulesDetails.FindAsync(request.SchedulesDetailId);
+           
+            string day = DateTime.Now.ToString("dd") + "-" + sch.Result.ScheduleId.ToString().Remove(2);
+            int count = await _context.Doctors.Where(x => x.No.Contains("DK-" + day)).CountAsync();
+            string str = "";
+            if (count < 9) str = "DK-" + day + "-00" + (count + 1);
+            else if (count < 99) str = "DK-" + day + "-0" + (count + 1);
+            else if (count < 999) str = "DK-" + day + "-" + (count + 1);
             var appointments = new Appointments()
             {
                 Date = DateTime.Now,
-                Status = Data.Enums.StatusAppointment.pending,
+                Status = StatusAppointment.pending,
                 PatientId = request.PatientId,
+                No = str,
                 SchedulesDetailId = request.SchedulesDetailId
             };
             _context.Appointments.Add(appointments);
             await _context.SaveChangesAsync();
-            return  appointments.Id;
+            return new ApiSuccessResult<Appointments>(appointments);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
-            var Appointments = await _context.Appointments.FindAsync(Id);
+            var rs = await _context.Appointments.FindAsync(Id);
             int check = 0;
-            if (Appointments == null) return check;
-            if (Appointments.Status == StatusAppointment.pending)
+            if (rs == null) return new ApiSuccessResult<int>(check);
+            if (rs.Status == StatusAppointment.pending)
             {
-                Appointments.Status = StatusAppointment.approved;
+                rs.Status = StatusAppointment.approved;
                 check = 1;
             }
             else
             {
-                Appointments.Status = StatusAppointment.complete;
+                rs.Status = StatusAppointment.complete;
                 check = 2;
             }
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<AppointmentVm>> GetAll()
+        public async Task<ApiResult<List<AppointmentVm>>> GetAll()
         {
             var query = _context.Appointments;
 
-            return await query.Select(x => new AppointmentVm()
+            var rs = await query.Select(x => new AppointmentVm()
             {
                 Id = x.Id,
                 Date = x.Date,
@@ -66,9 +77,10 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 PatientId = x.PatientId,
                 Status = x.Status
             }).ToListAsync();
+            return new ApiSuccessResult<List<AppointmentVm>> (rs);
         }
 
-        public async Task<PagedResult<AppointmentVm>> GetAllPaging(GetAppointmentPagingRequest request)
+        public async Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPaging(GetAppointmentPagingRequest request)
         {
             var query = from c in _context.Appointments select c;
             //2. filter
@@ -97,10 +109,10 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<AppointmentVm>> (pagedResult);
         }
 
-        public async Task<AppointmentVm> GetById(Guid Id)
+        public async Task<ApiResult<AppointmentVm>> GetById(Guid Id)
         {
             var Appointments = await _context.Appointments.FindAsync(Id);
             if (Appointments == null) throw new DoctorManageException($"Cannot find a Appointment with id: { Id}");
@@ -112,16 +124,17 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 SchedulesDetailId = Appointments.SchedulesDetailId,
                 Status = Appointments.Status
             };
-            return rs;
+            return new ApiSuccessResult<AppointmentVm>(rs);
         }
 
-        public async Task<int> Update(AppointmentUpdateRequest request)
+        public async Task<ApiResult<Appointments>> Update(AppointmentUpdateRequest request)
         {
-            var Appointments = await _context.Appointments.FindAsync(request.Id);
-            if (Appointments == null) throw new DoctorManageException($"Cannot find a Appointment with id: { request.Id}");
+            var appointments = await _context.Appointments.FindAsync(request.Id);
+            if (appointments == null) throw new DoctorManageException($"Cannot find a Appointment with id: { request.Id}");
             
-            Appointments.Status = request.Status;
-            return await _context.SaveChangesAsync();
+            appointments.Status = request.Status;
+            await _context.SaveChangesAsync();
+            return  new ApiSuccessResult<Appointments>(appointments);
         }
     }
 }

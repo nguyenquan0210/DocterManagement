@@ -21,9 +21,9 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
         {
             _context = context;
         }
-        public async Task<Guid> Create(MedicalRecordCreateRequest request)
+        public async Task<ApiResult<bool>> Create(MedicalRecordCreateRequest request)
         {
-            var MedicalRecords = new MedicalRecord()
+            var medical = new MedicalRecord()
             {
                 Diagnose = request.Diagnose,
                 Note = request.Note,
@@ -35,16 +35,17 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 AppointmentId = request.AppointmentId,
                 DoctorId = request.DoctorId
             };
-            _context.MedicalRecords.Add(MedicalRecords);
-            await _context.SaveChangesAsync();
-            return MedicalRecords.Id;
+            _context.MedicalRecords.Add(medical);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var medicalRecord = await _context.MedicalRecords.FindAsync(Id);
             int check = 0;
-            if (medicalRecord == null) return check;
+            if (medicalRecord == null) return new ApiSuccessResult<int>(check);
             if (medicalRecord.Status == Status.Active)
             {
                 medicalRecord.Status = Status.InActive;
@@ -56,14 +57,14 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 check = 2;
             }
             await _context.SaveChangesAsync();
-            return check;
+            return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<List<MedicalRecordVm>> GetAll()
+        public async Task<ApiResult<List<MedicalRecordVm>>> GetAll()
         {
             var query = _context.MedicalRecords;
 
-            return await query.Select(x => new MedicalRecordVm()
+            var rs = await query.Select(x => new MedicalRecordVm()
             {
                 Id = x.Id,
                 Date = x.Date,
@@ -76,9 +77,10 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 StatusIllness = x.StatusIllness,
                 Status = x.Status
             }).ToListAsync();
+            return new ApiSuccessResult<List<MedicalRecordVm>>(rs);
         }
 
-        public async Task<PagedResult<MedicalRecordVm>> GetAllPaging(GetMedicalRecordPagingRequest request)
+        public async Task<ApiResult<PagedResult<MedicalRecordVm>>> GetAllPaging(GetMedicalRecordPagingRequest request)
         {
             var query = from c in _context.MedicalRecords select c;
             //2. filter
@@ -112,10 +114,10 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<MedicalRecordVm>>(pagedResult);
         }
 
-        public async Task<MedicalRecordVm> GetById(Guid Id)
+        public async Task<ApiResult<MedicalRecordVm>> GetById(Guid Id)
         {
             var medicalRecords = await _context.MedicalRecords.FindAsync(Id);
             if (medicalRecords == null) throw new DoctorManageException($"Cannot find a MedicalRecord with id: { Id}");
@@ -132,20 +134,22 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 Prescription = medicalRecords.Prescription,
                 Status = medicalRecords.Status
             };
-            return rs;
+            return new ApiSuccessResult<MedicalRecordVm>(rs);
         }
 
-        public async Task<int> Update(MedicalRecordUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(MedicalRecordUpdateRequest request)
         {
-            var medicalRecords = await _context.MedicalRecords.FindAsync(request.Id);
-            if (medicalRecords == null) throw new DoctorManageException($"Cannot find a MedicalRecord with id: { request.Id}");
+            var medical = await _context.MedicalRecords.FindAsync(request.Id);
+            if (medical == null) return new ApiSuccessResult<bool>(false);
 
-            medicalRecords.Status = request.Status;
-            medicalRecords.Prescription = request.Prescription;
-            medicalRecords.Diagnose = request.Diagnose;
-            medicalRecords.StatusIllness = request.StatusIllness;
-            medicalRecords.Note = request.Note;
-            return await _context.SaveChangesAsync();
+            medical.Status = request.Status;
+            medical.Prescription = request.Prescription;
+            medical.Diagnose = request.Diagnose;
+            medical.StatusIllness = request.StatusIllness;
+            medical.Note = request.Note;
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(false);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using DoctorManagement.Application.Catalog.Clinic;
+using DoctorManagement.Data.Entities;
 using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,23 +16,32 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _clinicService = clinicService;
         }
-        [HttpPost]
+        /// <summary>
+        /// Tạo mới phòng khám
+        /// </summary>
+        /// 
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] ClinicCreateRequest request)
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromForm] ClinicCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _clinicService.Create(request);
-            if (result.ToString() == null)
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
+        /// <summary>
+        /// Xóa phòng khám
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -41,38 +52,70 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(result);
         }
-        [HttpPut]
+        /// <summary>
+        /// Xóa hình ảnh phòng khám
+        /// </summary>
+        /// 
+        [HttpDelete("images/{Id}")]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] ClinicUpdateRequest request)
+        public async Task<ActionResult<ApiResult<int>>> DeleteImageClinic([FromRoute] Guid Id)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _clinicService.DeleteImg(Id);
+
+            return Ok(result);
+        }
+        /// <summary>
+        /// Cập nhật phòng khám
+        /// </summary>
+        /// 
+        [Authorize]
+        [HttpPut]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromForm] ClinicUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _clinicService.Update(request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
-            return Ok();
-        }
-
-
-        [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetClinicPagingRequest request)
-        {
-            var user = await _clinicService.GetAllPaging(request);
-            return Ok(user);
-        }
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
-        {
-            var result = await _clinicService.GetById(Id);
-            if (result == null)
-                return BadRequest("Cannot find product");
             return Ok(result);
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        /// <summary>
+        /// Lấy danh sách phòng khám phân trang
+        /// </summary>
+        /// 
+        [HttpGet("paging")]
+        public async Task<ActionResult<ApiResult<PagedResult<ClinicVm>>>> GetAllPaging([FromQuery] GetClinicPagingRequest request)
+        {
+            var result = await _clinicService.GetAllPaging(request);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy dữ liệu phòng khám theo id
+        /// </summary>
+        /// 
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<ApiResult<ClinicVm>>> GetById(Guid Id)
+        {
+            var result = await _clinicService.GetById(Id);
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find clinic");
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách phòng khám
+        /// </summary>
+        /// 
+        [HttpGet("get-all-clinic")]
+        public async Task<ActionResult<ApiResult<List<ClinicVm>>>> GetAll()
         {
             var result = await _clinicService.GetAll();
             return Ok(result);

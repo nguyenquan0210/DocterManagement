@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.Catalog.Speciality;
 using DoctorManagement.ViewModels.Catalog.Speciality;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,23 +15,31 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             _specialityService = specialityService;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// Tạo mới chuyên khoa
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] SpecialityCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] SpecialityCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var newsId = await _specialityService.Create(request);
-            if (newsId.ToString() == null)
+            var result = await _specialityService.Create(request);
+            if (!result.IsSuccessed)
                 return BadRequest();
 
-            return Ok();
+            return Ok(result);
         }
+        /// <summary>
+        /// Xóa chuyên khoa
+        /// </summary>
+        /// 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
 
             if (!ModelState.IsValid)
@@ -41,39 +50,52 @@ namespace DoctorManagement.BackendAPI.Controllers
 
             return Ok(affectedResult);
         }
+        /// <summary>
+        /// Cập nhật chuyên khoa
+        /// </summary>
+        /// 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] SpecialityUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] SpecialityUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var affectedResult = await _specialityService.Update(request);
-            if (affectedResult == 0)
+            var result = await _specialityService.Update(request);
+            if (!result.IsSuccessed)
                 return BadRequest();
-            return Ok();
+            return Ok(result);
         }
-
-
+        /// <summary>
+        /// Lấy danh sách phân trang chuyên khoa
+        /// </summary>
+        /// 
         //http://localhost/api/categories/paging?pageIndex=1&pageSize=10&keyword=
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetSpecialityPagingRequest request)
+        public async Task<ActionResult<ApiResult<PagedResult<SpecialityVm>>>> GetAllPaging([FromQuery] GetSpecialityPagingRequest request)
         {
-            var user = await _specialityService.GetAllPaging(request);
-            return Ok(user);
+            var result = await _specialityService.GetAllPaging(request);
+            return Ok(result);
         }
+        /// <summary>
+        /// Lấy chuyên khoa theo id
+        /// </summary>
+        /// 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(Guid Id)
+        public async Task<ActionResult<ApiResult<SpecialityVm>>> GetById(Guid Id)
         {
-            var speciality = await _specialityService.GetById(Id);
-            if (speciality == null)
-                return BadRequest("Cannot find product");
-            return Ok(speciality);
+            var result = await _specialityService.GetById(Id);
+            if (!result.IsSuccessed)
+                return BadRequest("Cannot find speciality");
+            return Ok(result);
         }
-
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        /// <summary>
+        /// Lấy tất cả danh sách chuyên khoa
+        /// </summary>
+        /// 
+        [HttpGet("get-all-speciality")]
+        public async Task<ActionResult<ApiResult<List<SpecialityVm>>>> GetAll()
         {
             var speciality = await _specialityService.GetAll();
             return Ok(speciality);

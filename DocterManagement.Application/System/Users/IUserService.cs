@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,9 @@ namespace DoctorManagement.Application.System.Users
 
         Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
 
+        Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request);
+        Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request);
+
         ApiResult<PagedResult<UserVm>> GetUsersPaging(GetUserPagingRequest request);
 
         Task<ApiResult<PagedResult<UserVm>>> GetUsersAllPaging(GetUserPagingRequest request);
@@ -30,9 +34,13 @@ namespace DoctorManagement.Application.System.Users
 
         Task<ApiResult<UserVm>> GetByUserName(string username);
 
-        Task<int> Delete(Guid id);
+        Task<ApiResult<int>> Delete(Guid id);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
+
+        Task<ApiResult<List<RoleVm>>> GetAllRole();
+
+        Task<ApiResult<List<RoleVm>>> GetAllRoleData();
 
         List<UserVm> GetNewUser();
     }
