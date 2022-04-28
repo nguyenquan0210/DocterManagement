@@ -87,11 +87,18 @@ namespace DoctorManagement.Application.System.Users
             }
 
             var roles = await _roleManager.FindByIdAsync(user.RoleId.ToString());
-            if(request.Check == true)
+            if(request.Check.ToUpper() == "ADMIN")
             {
                 if (roles.Name.ToUpper() != "ADMIN" ) return new ApiErrorResult<string>("Chỉ nhận quản trị viên.");
             }
-            
+            if (request.Check.ToUpper() == "DOCTOR")
+            {
+                if (roles.Name.ToUpper() != "DOCTOR") return new ApiErrorResult<string>("Chỉ nhận tài khoản bác sĩ.");
+            }
+            if (request.Check.ToUpper() == "PATIENT")
+            {
+                if (roles.Name.ToUpper() != "PATIENT") return new ApiErrorResult<string>("Chỉ nhận tài khoản bệnh nhân.");
+            }
 
             var claims = new[]
             {
@@ -264,19 +271,51 @@ namespace DoctorManagement.Application.System.Users
         public async Task<ApiResult<UserVm>> GetByUserName(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
+            var role = await _roleManager.FindByIdAsync(user.RoleId.ToString());
+
             if (user == null)
             {
-                return new ApiErrorResult<UserVm>("Tài khoản không tồn tại");
+                return new ApiErrorResult<UserVm>("User không tồn tại");
             }
+            var doctor = await _context.Doctors.FindAsync(user.Id);
+            var clinic = await _context.Clinics.FindAsync(doctor != null ? doctor.ClinicId : new Guid());
+            var speciality = await _context.Specialities.FindAsync(doctor != null ? doctor.SpecialityId : new Guid());
+            var patient = await _context.Patients.FindAsync(user.Id);
+
+            //var roles = await _userManager.GetRolesAsync(user);
             var userVm = new UserVm()
             {
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Name = user.Name,
+                Gender = user.Gender,
                 Dob = user.Dob,
                 Id = user.Id,
                 UserName = user.UserName,
-                Gender = user.Gender
+                Status = user.Status,
+                GetRole = new GetRoleVm()
+                {
+                    Id = role.Id,
+                    Name = role.Name
+                },
+                DoctorVm = role.Name.ToUpper() == "DOCTOR" ? new DoctorVm()
+                {
+                    UserId = doctor.UserId,
+                    Description = doctor.Description,
+                    Address = doctor.Address,
+                    Img = doctor.Img,
+                    No = doctor.No,
+                    GetClinic = new GetClinicVm() { Id = clinic.Id, Name = clinic.Name },
+                    GetSpeciality = new GetSpecialityVm() { Id = speciality.Id, Title = speciality.Title }
+                } : new DoctorVm()
+                    ,
+                PatientVm = role.Name.ToUpper() == "PATIENT" ? new PatientVm()
+                {
+                    UserId = patient.UserId,
+                    Address = patient.Address,
+                    Img = patient.Img,
+                    No = patient.No
+                } : new PatientVm()
             };
             return new ApiSuccessResult<UserVm>(userVm);
         }

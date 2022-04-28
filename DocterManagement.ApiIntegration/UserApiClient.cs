@@ -96,16 +96,7 @@ namespace DoctorManagement.ApiIntegration
 
         public async Task<ApiResult<UserVm>> GetByUserName(string username)
         {
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-            var response = await client.GetAsync($"/api/users/getrequest{username}");
-            var body = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<UserVm>>(body);
-
-            return JsonConvert.DeserializeObject<ApiErrorResult<UserVm>>(body);
+            return await GetAsync<UserVm>($"/api/users/get-by-username/{username}");
         }
 
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsersPagings(GetUserPagingRequest request)

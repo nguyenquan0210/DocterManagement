@@ -10,11 +10,16 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DocterManagement.ApiIntegration\DoctorManagement.ApiIntegration.csproj" />
     <ProjectReference Include="..\DocterManagement.ViewModels\DoctorManagement.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\img\advertise\" />
   </ItemGroup>
 
 </Project>

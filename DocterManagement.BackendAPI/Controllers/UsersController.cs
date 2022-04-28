@@ -181,7 +181,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Lấy tài khoản theo tên tài khoản
         /// </summary>
         /// 
-        [HttpGet("get-request{username}")]
+        [HttpGet("get-by-username/{username}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetByUserName(string username)
         {
