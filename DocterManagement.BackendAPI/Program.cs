@@ -25,6 +25,7 @@ using DoctorManagement.Application.Common;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using System.Reflection;
 using DoctorManagement.Application.Catalog.Location;
+using DoctorManagement.ViewModels.System.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,7 @@ builder.Services.AddTransient<ScheduleDetailtService, ScheduleDetailtService>();
 builder.Services.AddTransient<ILocationService, LocationService>();
 builder.Services.AddTransient<ISpecialityService, SpecialityService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
@@ -74,7 +76,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                  {
+    {
                     {
                       new OpenApiSecurityScheme
                       {
@@ -89,7 +91,7 @@ builder.Services.AddSwaggerGen(c =>
                         },
                         new List<string>()
                       }
-                    });
+                    });              
     c.TagActionsBy(api =>
     {
         if (api.GroupName != null)
@@ -110,7 +112,7 @@ builder.Services.AddSwaggerGen(c =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
-
+builder.Services.Configure<SMTPConfigModel>(builder.Configuration.GetSection("SMTPConfig"));
 string issuer = builder.Configuration.GetValue<string>("Tokens:Issuer");
 string signingKey = builder.Configuration.GetValue<string>("Tokens:Key");
 byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);

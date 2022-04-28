@@ -6,6 +6,7 @@ using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Models;
 using DoctorManagement.ViewModels.System.Patient;
 using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
@@ -34,12 +35,14 @@ namespace DoctorManagement.Application.System.Users
         private readonly DoctorManageDbContext _context; 
         private readonly IConfiguration _config;
         private readonly IStorageService _storageService;
+        private readonly IEmailService _emailService;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
         public UserService(UserManager<AppUsers> userManager,
             SignInManager<AppUsers> signInManager,
             RoleManager<AppRoles> roleManager,
             IConfiguration config,
             DoctorManageDbContext context,
+            IEmailService emailService,
             IStorageService storageService
             )
         {
@@ -48,6 +51,7 @@ namespace DoctorManagement.Application.System.Users
             _roleManager = roleManager;
             _config = config;
             _context = context;
+            _emailService = emailService;
             _storageService = storageService;
         }
 
@@ -129,6 +133,7 @@ namespace DoctorManagement.Application.System.Users
         public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var user = await _userManager.FindByIdAsync(Id.ToString());
+            var doctor = await _context.Doctors.FindAsync(user.Id);
             int check = 0;
             //var role = await _roleManager.FindByIdAsync(user.RoleId.ToString());
             if (user == null) return new ApiSuccessResult<int>(check);
@@ -143,6 +148,22 @@ namespace DoctorManagement.Application.System.Users
                 user.Status = Status.NotActivate;
                 await _userManager.UpdateAsync(user);
                 check = 2;
+            }
+            else if (user.Status == Status.NotActivate)
+            {
+                var reult = await _userManager.DeleteAsync(user);
+                if (reult.Succeeded)
+                {
+                    if (doctor.Img != null)
+                    {
+                        await _storageService.DeleteFileAsyncs(doctor.Img, USER_CONTENT_FOLDER_NAME);
+                    }
+                    if (await _userManager.IsInRoleAsync(user,user.RoleId.ToString()) == true)
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, user.RoleId.ToString());
+                    }
+                    check = 2;
+                }
             }
             /*else
             {
@@ -437,6 +458,8 @@ namespace DoctorManagement.Application.System.Users
                         };
                         await _context.Doctors.AddAsync(doctor);
                         _context.SaveChanges();
+                        user.PasswordHash = request.Password;
+                        await GenerateEmailConfirmationTokenAsync(user);
                         return new ApiSuccessResult<bool>();
                     }
                 }
@@ -444,6 +467,33 @@ namespace DoctorManagement.Application.System.Users
 
             }
             return new ApiErrorResult<bool>("Đăng ký không thành công");
+        }
+        public async Task GenerateEmailConfirmationTokenAsync(AppUsers user)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            if (!string.IsNullOrEmpty(token))
+            {
+                await SendEmailConfirmationEmail(user, token);
+            }
+        }
+        private async Task SendEmailConfirmationEmail(AppUsers user, string token)
+        {
+            string appDomain = _config.GetSection("Application:AppDomain").Value;
+            string confirmationLink = _config.GetSection("Application:EmailConfirmation").Value;
+
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string>() { user.Email },
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", user.UserName),
+                    new KeyValuePair<string, string>("{{PasswordHash}}", user.PasswordHash),
+                    new KeyValuePair<string, string>("{{Link}}",
+                        string.Format(appDomain + confirmationLink, user.Id, token))
+                }
+            };
+
+            await _emailService.SendEmailForEmailConfirmation(options);
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
         {
