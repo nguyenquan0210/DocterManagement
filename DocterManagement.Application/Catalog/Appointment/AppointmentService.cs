@@ -17,7 +17,6 @@ namespace DoctorManagement.Application.Catalog.Appointment
     public class AppointmentService : IAppointmentService
     {
         private readonly DoctorManageDbContext _context;
-        private readonly IMapper _mapper;
 
         public AppointmentService(DoctorManageDbContext context)
         {

@@ -23,16 +23,53 @@ namespace DoctorManagement.Application.Catalog.Schedule
         }
         public async Task<ApiResult<bool>> Create(ScheduleCreateRequest request)
         {
-            var schedules = new Schedules()
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x=>x.UserName == request.Username);
+            if(user == null) return new ApiErrorResult<bool>("Tài khoản này không được phép!");
+            var manyday = request.ToDay - request.FromDay;
+            var manytime = request.ToTime - request.FromTime;
+            var minutes = (manytime.Minutes + (manytime.Hours * 60)) / request.Qty;
+            var fromtime = request.FromTime.Add(TimeSpan.FromMinutes(minutes));
+            var day = request.FromDay;
+            var listschedule = await _context.Schedules.Where(x=>x.DoctorId == user.Id && x.CheckInDate >= request.FromDay && x.CheckInDate <= request.ToDay).ToListAsync();
+            if (listschedule.Any())
             {
-                FromTime = request.FromTime,
-                ToTime = request.ToTime,
-                CheckInDate = request.CheckInDate,
-                Status = Data.Enums.Status.Active,
-                Qty = request.Qty,
-                DoctorId = request.DoctorId
-            };
-            _context.Schedules.Add(schedules);
+                foreach (var remove in listschedule)
+                {
+                    _context.Schedules.Remove(remove);
+                }
+            }
+            for(var i = 1; i <= manyday.Days; i++)
+            {
+                if(day.ToString("dddd") == request.WeekDay)
+                {
+                    var schedules = new Schedules()
+                    {
+                        FromTime = request.FromTime,
+                        ToTime = request.ToTime,
+                        CheckInDate = day,
+                        Status = Status.Active,
+                        Qty = request.Qty,
+                        DoctorId = user.Id
+                    };
+                    schedules.SchedulesDetails = new List<SchedulesDetailts>();
+                    for (var j = 1; j <= request.Qty; j++)
+                    {
+
+                        var scheduledetailt = new SchedulesDetailts()
+                        {
+                            FromTime = fromtime,
+                            ToTime = fromtime.Add(TimeSpan.FromMinutes(minutes)),
+                            Status = Status.Active
+                        };
+                        schedules.SchedulesDetails.Add(scheduledetailt);
+                        fromtime = fromtime.Add(TimeSpan.FromMinutes(minutes));
+                    }
+                    _context.Schedules.Add(schedules);
+                }
+                
+                day = day.AddDays(i);
+            }
+           
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
             return new ApiSuccessResult<bool>(false);

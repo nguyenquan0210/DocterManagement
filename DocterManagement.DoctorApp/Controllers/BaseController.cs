@@ -20,6 +20,7 @@ namespace DoctorManagement.DoctorApp.Controllers
 
             base.OnActionExecuting(context);
         }
+        
 
         public List<SelectListItem> SeletectDay(string day)
         {
@@ -49,6 +50,21 @@ namespace DoctorManagement.DoctorApp.Controllers
                 Text = x.Text,
                 Value = x.Value,
                 Selected = status.ToString() == x.Value
+            }).ToList();
+            return rs;
+        }
+        public List<SelectListItem> SeletectWeek(string week)
+        {
+            List<SelectListItem> selectListMonth = new List<SelectListItem>();
+            for (int i = 1; i <= 4; i++)
+            {
+                selectListMonth.Add(new SelectListItem(text: "Tuần " + i, value: i.ToString()));
+            }
+            var rs = selectListMonth.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = week.ToString() == x.Value
             }).ToList();
             return rs;
         }

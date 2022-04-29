@@ -1,7 +1,7 @@
 ﻿<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-        <a class="navbar-brand m-0" href="@Url.Action("Index", "Home", new { })">
+        <a class="navbar-brand m-0" asp-controller="Home" asp-action="Index">
             <img src="~/img/logo_bacsi.png" class="navbar-brand-img h-100" alt="main_logo">
             <span class="ms-1 font-weight-bold">DoctorManage</span>
         </a>
@@ -11,7 +11,6 @@
     <hr class="horizontal dark mt-0">
     <div class="collapse navbar-collapse  w-auto h-auto max-height-vh-100 h-100" id="sidenav-collapse-main">
         <ul class="navbar-nav">
-           
                 <li class="nav-item">
                 <a id="menu_acc" data-bs-toggle="collapse" href="#QUANLYTAIKHOAN" class="nav-link collapsed" aria-controls="QUANLYTAIKHOAN" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
@@ -29,91 +28,31 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Quản lý tài khoản</span>
+                    <span class="nav-link-text ms-1">Thông tin bác sĩ</span>
                 </a>
                 <div class="collapse   " id="QUANLYTAIKHOAN">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_accc" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#quanlynhanvien">
-                                <span class="sidenav-mini-icon"> NV </span>
-                                <span class="sidenav-normal"> Quản lý  tài khoản <b class="caret"></b></span>
-                            </a>
-                            <div class="collapse " id="quanlynhanvien">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a id="a_acc" class="nav-link" asp-controller="User" asp-action="Index">
-                                            <span class="sidenav-mini-icon text-xs"> TK </span>
-                                            <span class="sidenav-normal"> Danh sách tài khoản </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a id="a_cteacc" class="nav-link " asp-controller="User" asp-action="Create">
-                                            <span class="sidenav-mini-icon text-xs"> TTK </span>
-                                            <span class="sidenav-normal"> Thêm tài khoản </span>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </div>
+                           <a id="a_acc" class="nav-link" asp-controller="User" asp-action="DetailtDoctor" asp-route-userName="@User.Identity.Name">
+                               <span class="sidenav-mini-icon text-xs"> TK </span>
+                               <span class="sidenav-normal"> Xem thông tin </span>
+                           </a>   
                         </li>
                         <li class="nav-item ">
-                            <a id="a_typeaccc" class="nav-link "  asp-controller="User" asp-action="ListRole" >
-                                <span class="sidenav-mini-icon"> T </span>
-                                <span class="sidenav-normal"> Danh sách vai trò <b class="caret"></b></span>
+                            <a id="a_cteacc" class="nav-link " asp-controller="User" asp-action="Update" asp-route-userName="@User.Identity.Name">
+                                <span class="sidenav-mini-icon text-xs"> TTK </span>
+                                <span class="sidenav-normal"> Chỉnh sửa thông tin </span>
                             </a>
-                           
                         </li>
                       
                     </ul>
                 </div>
             </li>
-          
-            
-
             <li class="nav-item mt-3">
                 <hr class="horizontal dark" />
                 <h6 class="ps-4  ms-2 text-uppercase text-xs font-weight-bolder opacity-6">PAGES</h6>
             </li>
-            <li class="nav-item">
-                <a id="menu_speciality" data-bs-toggle="collapse" href="#managespeciality" class="nav-link " aria-controls="managespeciality" role="button" aria-expanded="false">
-                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <title>office</title>
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                                    <g transform="translate(1716.000000, 291.000000)">
-                                        <g id="office" transform="translate(153.000000, 2.000000)">
-                                            <path class="color-background" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z" opacity="0.6"></path>
-                                            <path class="color-background" d="M40.25,14 L24.5,14 C23.53225,14 22.75,14.78225 22.75,15.75 L22.75,38.5 L19.25,38.5 L19.25,22.75 C19.25,21.78225 18.46775,21 17.5,21 L1.75,21 C0.78225,21 0,21.78225 0,22.75 L0,40.25 C0,41.21775 0.78225,42 1.75,42 L40.25,42 C41.21775,42 42,41.21775 42,40.25 L42,15.75 C42,14.78225 41.21775,14 40.25,14 Z M12.25,36.75 L7,36.75 L7,33.25 L12.25,33.25 L12.25,36.75 Z M12.25,29.75 L7,29.75 L7,26.25 L12.25,26.25 L12.25,29.75 Z M35,36.75 L29.75,36.75 L29.75,33.25 L35,33.25 L35,36.75 Z M35,29.75 L29.75,29.75 L29.75,26.25 L35,26.25 L35,29.75 Z M35,22.75 L29.75,22.75 L29.75,19.25 L35,19.25 L35,22.75 Z"></path>
-                                        </g>
-                                    </g>
-                                </g>
-                            </g>
-                        </svg>
-                    </div>
-                    <span class="nav-link-text ms-1">Quản lý chuyên khoa</span>
-                </a>
-                <div class="collapse " id="managespeciality">
-                    <ul class="nav ms-4 ps-3">
-                        <li class="nav-item ">
-                            <a id="a_speciality" class="nav-link " aria-expanded="false" asp-controller="Speciality" asp-action="Index">
-                                <span class="sidenav-mini-icon"> CK </span>
-                                <span class="sidenav-normal"> Danh sách chuyên khoa<b class="caret"></b></span>
-                            </a>
-
-                        </li>
-                        <li class="nav-item ">
-                            <a id="a_createspeciality" class="nav-link " aria-expanded="false" asp-controller="Speciality" asp-action="Create">
-                                <span class="sidenav-mini-icon"> TCK </span>
-                                <span class="sidenav-normal">Thêm chuyên khoa <b class="caret"></b></span>
-                            </a>
-
-                        </li>
-
-
-                    </ul>
-                </div>
-            </li>
+            
             <li class="nav-item">
                 <a id="menu_clinic" href="#manageclinic" class="nav-link " aria-controls="manageclinic" role="button" data-bs-toggle="collapse">
 
@@ -137,20 +76,56 @@
                 <div class="collapse " id="manageclinic">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_clinic" class="nav-link  " aria-expanded="false" asp-controller="Clinic" asp-action="Index">
+                            <a id="a_clinic" class="nav-link  " aria-expanded="false" asp-controller="Clinic" asp-action="Detailt" asp-route-userName="@User.Identity.Name">
                                 <span class="sidenav-mini-icon"> CĐ </span>
-                                <span class="sidenav-normal"> Danh sách phòng khám <b class="caret"></b></span>
+                                <span class="sidenav-normal"> Phòng khám <b class="caret"></b></span>
                             </a>
 
                         </li>
                         <li class="nav-item ">
-                            <a id="a_createclinic" class="nav-link   " aria-expanded="false" asp-controller="Clinic" asp-action="Create">
+                            <a id="a_createclinic" class="nav-link   " aria-expanded="false" asp-controller="Clinic" asp-action="Update" asp-route-userName="@User.Identity.Name">
                                 <span class="sidenav-mini-icon"> TCĐ </span>
-                                <span class="sidenav-normal"> Thêm phòng khám <b class="caret"></b></span>
+                                <span class="sidenav-normal"> Chỉnh sửa phòng khám <b class="caret"></b></span>
                             </a>
 
                         </li>
 
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a id="menu_post" data-bs-toggle="collapse" href="#managepost" class="nav-link " aria-controls="managepost" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <title>office</title>
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                                    <g transform="translate(1716.000000, 291.000000)">
+                                        <g id="office" transform="translate(153.000000, 2.000000)">
+                                            <path class="color-background" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z" opacity="0.6"></path>
+                                            <path class="color-background" d="M40.25,14 L24.5,14 C23.53225,14 22.75,14.78225 22.75,15.75 L22.75,38.5 L19.25,38.5 L19.25,22.75 C19.25,21.78225 18.46775,21 17.5,21 L1.75,21 C0.78225,21 0,21.78225 0,22.75 L0,40.25 C0,41.21775 0.78225,42 1.75,42 L40.25,42 C41.21775,42 42,41.21775 42,40.25 L42,15.75 C42,14.78225 41.21775,14 40.25,14 Z M12.25,36.75 L7,36.75 L7,33.25 L12.25,33.25 L12.25,36.75 Z M12.25,29.75 L7,29.75 L7,26.25 L12.25,26.25 L12.25,29.75 Z M35,36.75 L29.75,36.75 L29.75,33.25 L35,33.25 L35,36.75 Z M35,29.75 L29.75,29.75 L29.75,26.25 L35,26.25 L35,29.75 Z M35,22.75 L29.75,22.75 L29.75,19.25 L35,19.25 L35,22.75 Z"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Quản lý đăng bài</span>
+                </a>
+                <div class="collapse " id="managepost">
+                    <ul class="nav ms-4 ps-3">
+                        <li class="nav-item ">
+                            <a id="a_post" class="nav-link " aria-expanded="false" asp-controller="Post" asp-action="Index">
+                                <span class="sidenav-mini-icon"> CK </span>
+                                <span class="sidenav-normal"> Danh sách bài đăng <b class="caret"></b></span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a id="a_createpost" class="nav-link " aria-expanded="false" asp-controller="Post" asp-action="Create">
+                                <span class="sidenav-mini-icon"> TCK </span>
+                                <span class="sidenav-normal">Thêm bài đăng <b class="caret"></b></span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>
@@ -173,21 +148,21 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Quản lý quận/huyện</span>
+                    <span class="nav-link-text ms-1">Quản lý lịch khám</span>
                 </a>
                 <div class="collapse " id="managelocation">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_loacation" class="nav-link  " aria-expanded="false" asp-controller="Location" asp-action="Index">
-                                <span class="sidenav-mini-icon"> ĐĐ </span>
-                                <span class="sidenav-normal"> Danh sách địa điểm <b class="caret"></b></span>
+                            <a id="a_loacation" class="nav-link  " aria-expanded="false" asp-controller="Schedule" asp-action="Index">
+                                <span class="sidenav-mini-icon"> LK </span>
+                                <span class="sidenav-normal"> Danh sách lịch khám <b class="caret"></b></span>
                             </a>
 
                         </li>
                         <li class="nav-item ">
-                            <a id="a_createlocation" class="nav-link   " aria-expanded="false" asp-controller="Location" asp-action="Create">
-                                <span class="sidenav-mini-icon"> TĐĐ </span>
-                                <span class="sidenav-normal"> Thêm địa điểm <b class="caret"></b></span>
+                            <a id="a_createlocation" class="nav-link   " aria-expanded="false" asp-controller="Schedule" asp-action="Create">
+                                <span class="sidenav-mini-icon"> TLK </span>
+                                <span class="sidenav-normal"> Thêm lịch khám <b class="caret"></b></span>
                             </a>
 
                         </li>
@@ -213,19 +188,19 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Quản lý phường/xã</span>
+                    <span class="nav-link-text ms-1">Quản lý đặt khám</span>
                 </a>
                 <div class="collapse " id="quanlythanhpho">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_city" class="nav-link  " aria-expanded="false" asp-controller="City" asp-action="Index">
-                                <span class="sidenav-mini-icon"> TP </span>
-                                <span class="sidenav-normal"> Danh sách phường/xã <b class="caret"></b></span>
+                            <a id="a_city" class="nav-link  " aria-expanded="false" asp-controller="Appoinment" asp-action="Index">
+                                <span class="sidenav-mini-icon"> ĐK </span>
+                                <span class="sidenav-normal"> Danh sách đặt khám <b class="caret"></b></span>
                             </a>
 
                         </li>
                         <li class="nav-item ">
-                            <a id="a_ctecity" class="nav-link   " aria-expanded="false" asp-controller="City" asp-action="Create">
+                            <a id="a_ctecity" class="nav-link   " aria-expanded="false" asp-controller="Appoinment" asp-action="Create">
                                 <span class="sidenav-mini-icon"> TTP </span>
                                 <span class="sidenav-normal"> Thêm phường/xã <b class="caret"></b></span>
                             </a>
