@@ -3,6 +3,7 @@ using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.Catalog.ScheduleDetailt;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,14 +29,16 @@ namespace DoctorManagement.Application.Catalog.Schedule
             var manyday = request.ToDay - request.FromDay;
             var manytime = request.ToTime - request.FromTime;
             var minutes = (manytime.Minutes + (manytime.Hours * 60)) / request.Qty;
-            var fromtime = request.FromTime.Add(TimeSpan.FromMinutes(minutes));
+            var fromtime = request.FromTime;
             var day = request.FromDay;
             var listschedule = await _context.Schedules.Where(x=>x.DoctorId == user.Id && x.CheckInDate >= request.FromDay && x.CheckInDate <= request.ToDay).ToListAsync();
             if (listschedule.Any())
             {
                 foreach (var remove in listschedule)
                 {
-                    _context.Schedules.Remove(remove);
+                    var removeschedule = await _context.Schedules.FindAsync(remove.Id);
+                    if (removeschedule != null)
+                        _context.Schedules.Remove(removeschedule);
                 }
             }
             for(var i = 1; i <= manyday.Days; i++)
@@ -54,7 +57,6 @@ namespace DoctorManagement.Application.Catalog.Schedule
                     schedules.SchedulesDetails = new List<SchedulesDetailts>();
                     for (var j = 1; j <= request.Qty; j++)
                     {
-
                         var scheduledetailt = new SchedulesDetailts()
                         {
                             FromTime = fromtime,
@@ -66,13 +68,12 @@ namespace DoctorManagement.Application.Catalog.Schedule
                     }
                     _context.Schedules.Add(schedules);
                 }
-                
-                day = day.AddDays(i);
+                day = day.AddDays(1);
             }
            
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Tạo lịch khám không thành công!!!");
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -87,7 +88,8 @@ namespace DoctorManagement.Application.Catalog.Schedule
             }
             else
             {
-                _context.Schedules.Remove(schedules);
+                //_context.Schedules.Remove(schedules);
+                schedules.Status = Status.NotActivate;
                 check = 2;
             }
             await _context.SaveChangesAsync();
@@ -132,7 +134,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
                     Qty = x.Qty,
                     Status = x.Status,
                     DoctorId = x.DoctorId
-
+                    
                 }).ToListAsync();
 
             var pagedResult = new PagedResult<ScheduleVm>()
@@ -147,17 +149,25 @@ namespace DoctorManagement.Application.Catalog.Schedule
 
         public async Task<ApiResult<ScheduleVm>> GetById(Guid Id)
         {
-            var schedules = await _context.Schedules.FindAsync(Id);
-            if (schedules == null) throw new DoctorManageException($"Cannot find a Schedule with id: { Id}");
+            var schedule = await _context.Schedules.FindAsync(Id);
+            var scheduledetailts = _context.SchedulesDetails.Where(x=>x.ScheduleId == schedule.Id);
+            if (schedule == null) throw new DoctorManageException($"Cannot find a Schedule with id: { Id}");
             var rs = new ScheduleVm()
             {
-                Id = schedules.Id,
-                CheckInDate = schedules.CheckInDate,
-                FromTime = schedules.FromTime,
-                ToTime = schedules.ToTime,
-                DoctorId = schedules.DoctorId,
-                Qty = schedules.Qty,
-                Status = schedules.Status
+                Id = schedule.Id,
+                CheckInDate = schedule.CheckInDate,
+                FromTime = schedule.FromTime,
+                ToTime = schedule.ToTime,
+                DoctorId = schedule.DoctorId,
+                Qty = schedule.Qty,
+                Status = schedule.Status,
+                ScheduleDetailts = scheduledetailts.Select(x=> new ScheduleDetailtVm()
+                {
+                    Id = x.Id,
+                    FromTime = x.FromTime,
+                    ToTime = x.ToTime,
+                    Status = x.Status,
+                }).ToList()
             };
             return new ApiSuccessResult<ScheduleVm>(rs);
         }
@@ -165,14 +175,42 @@ namespace DoctorManagement.Application.Catalog.Schedule
         public async Task<ApiResult<bool>> Update(ScheduleUpdateRequest request)
         {
             var schedules = await _context.Schedules.FindAsync(request.Id);
-            if (schedules == null) return new ApiSuccessResult<bool>(false);
+            if (schedules == null) return new ApiErrorResult<bool>("Lịch khám không tồn tại!!!");
+            if (schedules.FromTime != request.FromTime || schedules.ToTime != request.ToTime
+                || schedules.Qty != request.Qty)
+            {
+                var scheduledetailts = _context.SchedulesDetails.Where(x => x.ScheduleId == schedules.Id);
+                foreach (var remove in scheduledetailts)
+                {
+                    var removescheduledetailt = await _context.SchedulesDetails.FindAsync(remove.Id);
+                    if(removescheduledetailt != null)
+                        _context.SchedulesDetails.Remove(removescheduledetailt);
+                    
+                }
+                var manytime = request.ToTime - request.FromTime;
+                var minutes = (manytime.Minutes + (manytime.Hours * 60)) / request.Qty;
+                var fromtime = request.FromTime;
+                schedules.SchedulesDetails = new List<SchedulesDetailts>();
+                for (var j = 1; j <= request.Qty; j++)
+                {
+                    var scheduledetailt = new SchedulesDetailts()
+                    {
+                        FromTime = fromtime,
+                        ToTime = fromtime.Add(TimeSpan.FromMinutes(minutes)),
+                        Status = Status.Active
+                    };
+                    schedules.SchedulesDetails.Add(scheduledetailt);
+                    fromtime = fromtime.Add(TimeSpan.FromMinutes(minutes));
+                }
+            }
             schedules.FromTime = request.FromTime;
             schedules.ToTime = request.ToTime;
             schedules.Qty = request.Qty;
-            schedules.Status = request.Status;
+            schedules.Status = request.Status? Status.Active:Status.InActive;
+
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Cập nhật không thành công!!!");
         }
     }
 }

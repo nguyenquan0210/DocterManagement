@@ -1,7 +1,7 @@
-﻿@model DoctorManagement.ViewModels.Catalog.Schedule.ScheduleCreateRequest
+﻿@model DoctorManagement.ViewModels.Catalog.Schedule.ScheduleUpdateRequest
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Update";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -43,7 +43,7 @@
     <div class="row mb-5">
         <div class="col-lg-12 mt-lg-0 mt-4">
 
-           <form asp-action="Create" enctype="multipart/form-data" method="post">
+           <form asp-action="Update" enctype="multipart/form-data" method="post">
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
@@ -69,51 +69,42 @@
                         </style>
                     }
                 <div class="card-body pt-0">
-                    <div class="row" id="mainselect">
-                        <div class="col-4">
-                            <label asp-for="WeekDay" class="form-label"></label>
-                            <select  asp-for="WeekDay"  asp-items="@ViewBag.WeekDay" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn ngày trong tuân --</option>
-                            </select>
-                            <span asp-validation-for="WeekDay" class="text-danger"></span>
-
-                        </div>
-                        <div class="col-4">
-                            <label asp-for="FromDay" class="form-label"></label>
-                            <input asp-for="FromDay" readonly class="multisteps-form__input form-control flatpickr" />
-                            <span asp-validation-for="FromDay" class="text-danger"></span>
-
-                        </div>
-                       <div class="col-4">
-                            <label asp-for="ToDay" class="form-label"></label>
-                            <input asp-for="ToDay" type = "text" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="ToDay" class="text-danger"></span>
-
-                        </div>
-
-                    </div>
+                    
                     <div class="row ">
-                         <div class="col-5">
+                         <div class="col-4">
+                            <label  class="form-label">Ngày Khám</label>
+                            <input value="@ViewBag.Date"  readonly class="multisteps-form__input form-control" />
+                           
+                        </div>
+                         <div class="col-4">
                             <label asp-for="FromTime" class="form-label"></label>
                             <input asp-for="FromTime" class="multisteps-form__input form-control datetimepicker" />
                             <span asp-validation-for="FromTime" class="text-danger"></span>
 
                         </div>
-                        <div class="col-5">
+                        <div class="col-4">
                             <label asp-for="ToTime" class="form-label"></label>
                             <input asp-for="ToTime" class="multisteps-form__input form-control datetimepicker" />
                             <span id="errorTime"class="text-danger" ></span>
                             <span asp-validation-for="ToTime" class="text-danger"></span>
                         </div>  
-                        <div class="col-2" >
+                    </div>
+                    <div class="row mt-4" >
+                        <div class="col-3" >
                             <label asp-for="Qty" class="form-label"></label>
                             <input asp-for="Qty" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Qty" class="text-danger"></span>   
+                            <span asp-validation-for="Qty" class="text-danger"></span>
                         </div>
+                        <div class="col-2">
+                                <label asp-for="Status" class="form-label"></label>
+                                <div class="form-check form-switch ps-0">
+                                    <input asp-for="Status"  class="form-check-input mt-1 ms-auto " />
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>
+                            </div>
                     </div>
                    
-                   
-                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Chỉnh sửa</button>
                 </div>
                 </div>
            </form>
@@ -134,67 +125,10 @@
 
     <script src="~/js/plugins/weekSelect/weekSelect.js"></script>
    
+   
+
     <script>
-      
-        if (document.getElementById('WeekDay')) {
-              var weekDay = document.getElementById('WeekDay');
-              const example = new Choices(weekDay);
-        }
-    </script>
-@*    
-    @*<script>
-        var TimeLineId = "";
-        $(document).ready(function () {
-             $('#TimeLine').change(function () {
-                //$('#sdistric div.choices div.choices__list--dropdown div.choices__list div.choices__item').remove();
-                $('#feature div.choices').remove();
-                $('#choseselection #feature').html('<select  class="multisteps-form__input form-control" data-val="true" data-val-required="The Selection field is required." id="Selection" name="Selection"></select>');
-                TimeLineId = $('#TimeLine option:selected').val();
-                if (TimeLineId != "") {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/Schedule/GetSelection?chose= + ' + TimeLineId,   
-                        success: function (result) {
-                            var s = '<option >-- Chọn Khoảng Thời Gian --</option>';
-                            //var j =2;
-                            //var s = '<div id="choices--LocationId-item-choice-1" class="choices__item choices__item--choice is-selected choices__item--selectable is-highlighted" role="option" data-choice="" data-id="1" data-value="-- Chọn Phường Xã --" data-select-text="Press to select" data-choice-selectable="" aria-selected="true">-- Chọn Phường Xã --</div>';
-                            for (var i = 0; i < result.length; i++) {
-                                s += '<option value="' + result[i].value +'">' + result[i].text + '</option>';
-                                //'<div id="choices--DistrictId-item-choice-' + j +'" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="' + j +'" data-value="' + result[i].value +'" data-select-text="Press to select" data-choice-selectable="" aria-selected="true">' + result[i].text +'</div>';
-                                //j++;
-                            }
-                            $('#Selection').html(s);
-                        }
-                    });
-                }
-            });
-           
-        });
-         $("#choseselection").click(function() {
-              if (document.getElementById('Selection')) {
-                      var selection = document.getElementById('Selection');
-                      const example = new Choices(selection);
-                    }
-            });
-        
-   </script>*@
-   <script>
-                        flatpickr.defaultConfig.animate = window.navigator.userAgent.indexOf('MSIE') === -1;
-                        flatpickr(".flatpickr");
-
-                        var examples = document.querySelectorAll(".flatpickr");
-
-                        var configs = {
-                            FromDay: {
-                                    "dateFormat": "d/m/Y",
-                                    "minDate": new Date(),
-                                    "plugins": [new rangePlugin({ input: "#ToDay" })]
-                            }
-                        }
-                        for (var i = 0; i < examples.length; i++) {
-                            flatpickr(examples[i], configs[examples[i].getAttribute("id")] || {});
-                        }
-                 if (document.querySelector('.datetimepicker')) {
+        if (document.querySelector('.datetimepicker')) {
                     flatpickr('.datetimepicker', {
                         enableTime: true,
                         noCalendar: true,
@@ -204,9 +138,6 @@
                     });// flatpickr
                     
                 }
-                
-    </script>
-    <script>
        
    $(function () {
         $(document).on("click", function (e) {
@@ -231,7 +162,7 @@
     @* Kanban scripts *@
     <script src="~/js/plugins/dragula/dragula.min.js"></script>
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
-     @*   <script>
+        <script>
 
            var menu_bd = document.getElementById("menu_clinic");
             menu_bd.classList.add("active");
@@ -241,7 +172,5 @@
             var usersExample = document.getElementById("manageclinic");
             usersExample.classList.add("show");
 
-        </script>*@
+        </script>
 }
-
-

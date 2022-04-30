@@ -13,7 +13,7 @@ a.disabled {
 }
 
 .navbar-vertical .navbar-nav > .nav-item .nav-link.active .icon {
-    background-image: linear-gradient(310deg,#82d616,#82d616);
+    background-image: linear-gradient(310deg,#17ad37,#98ec2d)
 }
 
 .dataTable-table th a {

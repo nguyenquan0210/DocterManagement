@@ -166,14 +166,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             if (result.IsSuccessed)
             {
                 var Schedule = result.Data;
-
+                ViewBag.Date = Schedule.CheckInDate.ToShortDateString();
                 var updateRequest = new ScheduleUpdateRequest()
                 {
-                    //Title = Schedule.Title,
+                    FromTime = Schedule.FromTime,
                     Id = id,
-                    //SortOrder = Schedule.SortOrder,
-                    Status = Schedule.Status,
-                    //Description = Schedule.Description
+                    ToTime = Schedule.ToTime,
+                    Status = Schedule.Status == Status.Active ? true : false,
+                    Qty = Schedule.Qty
                 };
                 return View(updateRequest);
             }
@@ -194,7 +194,8 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+            TempData["AlertMessage"] = result.Message;
+            TempData["AlertType"] = "alert-error";
             return View(request);
         }
         [HttpGet]
@@ -207,12 +208,13 @@ namespace DoctorManagement.DoctorApp.Controllers
                 ViewBag.Status = ScheduleData.Status == Status.InActive ? "Ngừng hoạt động" : ScheduleData.Status == Status.Active ? "Hoạt động" : "không hoạt động";
                 var Schedule = new ScheduleVm()/*_mapper.Map<ScheduleVm>(Scheduledata);*/
                 {
-                    //Title = ScheduleData.Title,
+                    FromTime = ScheduleData.FromTime,
                     Id = id,
-                    //No = ScheduleData.No,
-                    //Description = ScheduleData.Description,
+                    ToTime = ScheduleData.ToTime,
+                    CheckInDate = ScheduleData.CheckInDate,
                     Status = ScheduleData.Status, //== Status.Active ? true : false
-                    //SortOrder = ScheduleData.SortOrder
+                    Qty = ScheduleData.Qty,
+                    ScheduleDetailts = ScheduleData.ScheduleDetailts
                 };
                 return View(Schedule);
             }
