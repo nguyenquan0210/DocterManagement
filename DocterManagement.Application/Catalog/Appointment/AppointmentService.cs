@@ -97,7 +97,8 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     Date = x.Date,
                     PatientId = x.PatientId,
                     SchedulesDetailId = x.SchedulesDetailId,
-                    Status = x.Status
+                    Status = x.Status,
+                    No = x.No,
 
                 }).ToListAsync();
 
