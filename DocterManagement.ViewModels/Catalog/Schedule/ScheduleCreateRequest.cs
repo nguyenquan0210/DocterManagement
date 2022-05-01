@@ -10,8 +10,10 @@ namespace DoctorManagement.ViewModels.Catalog.Schedule
     {
         public TimeSpan FromTime { get; set; }
         public TimeSpan ToTime { get; set; }
-        public DateTime CheckInDate { get; set; }
         public int Qty { get; set; }
-        public Guid DoctorId { get; set; }
+        public DateTime FromDay { get; set; }
+        public DateTime ToDay { get; set; }
+        public string? Username { get; set; }
+        public string WeekDay { get; set; }
     }
 }

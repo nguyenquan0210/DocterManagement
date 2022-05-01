@@ -154,6 +154,8 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.Img = request.img;
             ViewBag.Gender = SeletectGender(request.Gender.ToString());
             ViewBag.Status = SeletectStatus(request.Status);
+            ViewBag.Clinic = await _userApiClient.GetAllClinic(request.ClinicId);
+            ViewBag.Speciality = await _userApiClient.GetAllSpeciality(request.SpecialityId);
             if (!ModelState.IsValid)
                 return View();
 

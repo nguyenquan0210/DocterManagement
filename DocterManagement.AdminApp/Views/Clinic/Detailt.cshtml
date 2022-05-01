@@ -123,8 +123,7 @@
 							<i class="fas fa-star-half-alt" aria-hidden="true"></i>
 						</div>
 						<br>
-						@*<h6 class="mb-0 mt-3">Price</h6>
-						<h5>$1,419</h5>*@
+						
 						<span class="badge   @(Model.Status == Status.Active ? "badge-success" : Model.Status == Status.InActive ? "badge-danger": "badge-warning ")">
 							@(Model.Status == Status.Active ? "Đang hoạt động" : Model.Status == Status.InActive ? "Tạp dừng hoạt động": "Ngừng hoạt động")
 						</span>
@@ -133,12 +132,7 @@
 						<p class="form-control">
 									@Model.Description
 						</p>
-						@*<ul>
-							<li>The most beautiful curves of this swivel stool adds an elegant touch to any environment</li>
-							<li>Memory swivel seat returns to original seat position</li>
-							<li>Comfortable integrated layered chair seat cushion design</li>
-							<li>Fully assembled! No assembly required</li>
-						</ul>*@
+						
 						<div class="row mt-4">
 							<div class="col-lg-12 mt-lg-0 mt-2">
 								<label>Địa chỉ</label>

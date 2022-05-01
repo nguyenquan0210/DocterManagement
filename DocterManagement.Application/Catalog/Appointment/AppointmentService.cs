@@ -17,7 +17,6 @@ namespace DoctorManagement.Application.Catalog.Appointment
     public class AppointmentService : IAppointmentService
     {
         private readonly DoctorManageDbContext _context;
-        private readonly IMapper _mapper;
 
         public AppointmentService(DoctorManageDbContext context)
         {
@@ -98,7 +97,8 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     Date = x.Date,
                     PatientId = x.PatientId,
                     SchedulesDetailId = x.SchedulesDetailId,
-                    Status = x.Status
+                    Status = x.Status,
+                    No = x.No,
 
                 }).ToListAsync();
 

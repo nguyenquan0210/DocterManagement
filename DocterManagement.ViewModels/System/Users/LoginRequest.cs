@@ -14,6 +14,6 @@ namespace DoctorManagement.ViewModels.System.Users
 
         public bool RememberMe { get; set; }
 
-        public bool Check { get; set; } = true;
+        public string? Check { get; set; } 
     }
 }

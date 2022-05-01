@@ -34,7 +34,7 @@ namespace DoctorManagement.AdminApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(ModelState);
-            request.Check = true;
+            request.Check = "admin";
             var result = await _userApiClient.Authenticate(request);
             if (result.Data == null)
             {

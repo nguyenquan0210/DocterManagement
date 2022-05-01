@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Post;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,15 @@ namespace DoctorManagement.Application.Common
         private const string CLINIC_CONTENT_FOLDER_NAME = "clinic-content";
         private const string CLINICS_CONTENT_FOLDER_NAME = "clinics-content";
 
-        public FileStorageService(IWebHostEnvironment webHostEnvironment)
+        private readonly IConfiguration _configuration;
+
+
+        public FileStorageService(IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, Path.Combine(IMG_CONTENT_FOLDER_NAME , USER_CONTENT_FOLDER_NAME));
             _postContentFolder = Path.Combine(webHostEnvironment.WebRootPath, POSTS_CONTENT_FOLDER_NAME);
             _contentFolder = Path.Combine(webHostEnvironment.WebRootPath, IMG_CONTENT_FOLDER_NAME);
-
+            _configuration = configuration;
         }
 
 
@@ -63,7 +67,7 @@ namespace DoctorManagement.Application.Common
             await mediaBinaryStream.CopyToAsync(output);
             return new ImagesVm()
             {
-                FileUrl = filePath,
+                FileUrl = Path.Combine(_configuration["Application:AppDomain"], Path.Combine(IMG_CONTENT_FOLDER_NAME, USER_CONTENT_FOLDER_NAME)),
                 Container = USER_CONTENT_FOLDER_NAME
             };
         }

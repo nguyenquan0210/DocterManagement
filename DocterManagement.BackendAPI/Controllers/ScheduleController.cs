@@ -65,7 +65,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             var result = await _scheduleService.Update(request);
             if (!result.IsSuccessed)
                 return BadRequest();
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Lấy danh sách phân trang lịch khám 
