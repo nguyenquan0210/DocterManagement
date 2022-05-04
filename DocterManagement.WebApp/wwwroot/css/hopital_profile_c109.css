@@ -1,0 +1,568 @@
+
+        .hospital-profile[_ngcontent-serverApp-c109] .col[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-1[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-2[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-3[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-4[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-5[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-6[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-7[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-8[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-9[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-10[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-11[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-12[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-auto[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-1[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-2[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-3[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-4[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-5[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-6[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-7[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-8[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-9[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-10[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-11[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-12[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-lg-auto[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-1[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-2[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-3[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-4[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-5[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-6[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-7[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-8[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-9[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-10[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-11[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-12[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-md-auto[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-1[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-2[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-3[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-4[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-5[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-6[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-7[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-8[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-9[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-10[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-11[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-12[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-sm-auto[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-1[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-2[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-3[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-4[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-5[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-6[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-7[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-8[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-9[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-10[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-11[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-12[_ngcontent-serverApp-c109],
+        .hospital-profile[_ngcontent-serverApp-c109] .col-xl-auto[_ngcontent-serverApp-c109] {
+            padding-right: 0;
+            padding-left: 0
+        }
+
+        .hospital-profile[_ngcontent-serverApp-c109] .btn[_ngcontent-serverApp-c109] {
+            font-family: unset !important
+        }
+
+        .container.top-content[_ngcontent-serverApp-c109] {
+            flex-wrap: nowrap !important
+        }
+
+        .container.top-content[_ngcontent-serverApp-c109] .navbar-toggler[_ngcontent-serverApp-c109] {
+            display: none;
+            border: none
+        }
+
+        .container.top-content[_ngcontent-serverApp-c109] .navbar-brand[_ngcontent-serverApp-c109] {
+            display: none;
+            justify-content: center
+        }
+
+        .container.top-content[_ngcontent-serverApp-c109] .navbar-brand.logo-mobile[_ngcontent-serverApp-c109] {
+            background: url(logo-2.14801ad5124f6bf3d474.png) no-repeat 50%;
+            background-size: contain;
+            width: 168px;
+            height: 44px;
+            margin: 0 auto
+        }
+
+        @media screen and (max-width:414px) {
+            .container.top-content[_ngcontent-serverApp-c109] .navbar-brand.logo-mobile[_ngcontent-serverApp-c109] {
+                margin-top: 6px
+            }
+        }
+
+        .container.top-content[_ngcontent-serverApp-c109] .top-menu[_ngcontent-serverApp-c109] {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            height: 38px
+        }
+
+        .container.top-content[_ngcontent-serverApp-c109] .top-menu[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109] {
+            font-size: 14px;
+            font-weight: 400;
+            font-stretch: normal;
+            font-style: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #2b2b2b;
+            margin-left: 43px
+        }
+
+        .top-line[_ngcontent-serverApp-c109] {
+            border-bottom: 1px solid #e5e5e5;
+            width: 100%;
+            position: absolute;
+            top: 53px
+        }
+
+        .header[_ngcontent-serverApp-c109] {
+            background-color: #fff;
+            height: 38px
+        }
+
+        .login-panel[_ngcontent-serverApp-c109] {
+            display: flex;
+            margin-right: 15px;
+            align-items: center;
+            align-content: flex-end;
+            margin-left: auto
+        }
+
+        .nav-btn[_ngcontent-serverApp-c109] {
+            width: 109px;
+            height: 34px;
+            border-radius: 20px;
+            box-shadow: 0 3px 6px 0 rgba(0, 0, 0, .16);
+            font-size: 16px;
+            font-weight: 400;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.33;
+            letter-spacing: normal
+        }
+
+        .nav-btn.nav-register[_ngcontent-serverApp-c109] {
+            background-color: #25ae5d;
+            color: #fff;
+            margin-right: 18px
+        }
+
+        .nav-btn.nav-login[_ngcontent-serverApp-c109] {
+            background-color: #fff;
+            color: #00ac54
+        }
+
+        .header[_ngcontent-serverApp-c109] .login-panel[_ngcontent-serverApp-c109] .noti[_ngcontent-serverApp-c109] {
+            background: url(noti.9e33cd861820967d5387.png);
+            background-size: 15px 16px !important;
+            background-repeat: no-repeat !important;
+            background-position: 50% !important;
+            width: 36px;
+            height: 36px;
+            border: 1px solid #e4e4e4;
+            border-radius: 18px;
+            font-size: 16px;
+            margin: 0 15px 0 auto
+        }
+
+        .header[_ngcontent-serverApp-c109] .btn-notification[_ngcontent-serverApp-c109] {
+            color: grey
+        }
+
+        .header[_ngcontent-serverApp-c109] .btn-notification[_ngcontent-serverApp-c109] i[_ngcontent-serverApp-c109] {
+            font-size: 25px
+        }
+
+        .header[_ngcontent-serverApp-c109] .btn-notification[_ngcontent-serverApp-c109] .badge[_ngcontent-serverApp-c109] {
+            position: absolute;
+            top: 2px;
+            margin-left: -8px
+        }
+
+        .header[_ngcontent-serverApp-c109] .btn-notification[_ngcontent-serverApp-c109]:focus,
+        .header[_ngcontent-serverApp-c109] .btn-notification[_ngcontent-serverApp-c109]:hover {
+            color: #18a6df
+        }
+
+        .navbar[_ngcontent-serverApp-c109] {
+            padding: 0 !important;
+            align-items: baseline;
+            border-bottom: 1px solid #e5e5e5
+        }
+
+        .tab-container[_ngcontent-serverApp-c109] {
+            width: 100%;
+            padding: 8px 0;
+            background-color: #fff
+        }
+
+        @media screen and (max-width:414px) {
+            .tab-container[_ngcontent-serverApp-c109] {
+                top: 44px;
+                height: 57px;
+                background-color: #fff;
+                border-bottom: .5px solid #d3d3d3;
+                padding-top: 0;
+                z-index: 50
+            }
+        }
+
+        .tab-container.fixed-top[_ngcontent-serverApp-c109] {
+            background-color: #fff;
+            border-bottom: .5px solid #f6f6f6
+        }
+
+        @media screen and (max-width:768px) {
+            .tab-container.hideNavItem[_ngcontent-serverApp-c109] {
+                display: none
+            }
+        }
+
+        .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] {
+            display: flex;
+            flex-direction: row
+        }
+
+        .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] .navbar-brand.logo-pc[_ngcontent-serverApp-c109] {
+            background: url(logo-2.14801ad5124f6bf3d474.png) no-repeat 50%;
+            background-size: contain;
+            width: 168px;
+            height: 44px
+        }
+
+        .nav-tab[_ngcontent-serverApp-c109] {
+            margin: 0 auto
+        }
+
+        .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] {
+            outline: none;
+            cursor: pointer;
+            margin-right: 35px;
+            padding: 18px 0 16px
+        }
+
+        .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] img[_ngcontent-serverApp-c109] {
+            width: 24px;
+            height: 24px
+        }
+
+        .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109] {
+            display: flex;
+            align-items: center;
+            color: #222;
+            font-size: 14px
+        }
+
+        .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109] span[_ngcontent-serverApp-c109] {
+            padding-left: 10px
+        }
+
+        .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109] span[_ngcontent-serverApp-c109] i[_ngcontent-serverApp-c109] {
+            color: #18a6df;
+            margin-left: 10px
+        }
+
+        .nav-tab[_ngcontent-serverApp-c109] li.active[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109],
+        .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109]:hover a[_ngcontent-serverApp-c109] {
+            color: #18a6df
+        }
+
+        .avatar-mobile[_ngcontent-serverApp-c109],
+        .profile-setting[_ngcontent-serverApp-c109] {
+            display: none
+        }
+
+        .dropdown-custom[_ngcontent-serverApp-c109]:hover>.dropdown-menu[_ngcontent-serverApp-c109] {
+            display: block
+        }
+
+        .scrollable-menu[_ngcontent-serverApp-c109] {
+            height: auto;
+            max-height: 250px;
+            overflow-x: hidden;
+            scrollbar-color: #fff
+        }
+
+        .notify-title[_ngcontent-serverApp-c109] {
+            font-weight: 900;
+            border-bottom: 1px solid #dddfe2
+        }
+
+        .notify-bottom[_ngcontent-serverApp-c109] {
+            border-top: 1px solid #dddfe2
+        }
+
+        #dropdownMenuButton[_ngcontent-serverApp-c109] {
+            color: #212529;
+            text-decoration: none
+        }
+
+        .un-seen[_ngcontent-serverApp-c109] {
+            background-color: #edf2fa
+        }
+
+        .notification-group[_ngcontent-serverApp-c109] {
+            width: 430px
+        }
+
+        .notification-group[_ngcontent-serverApp-c109] .dropdown-item[_ngcontent-serverApp-c109] {
+            white-space: normal;
+            border-bottom: 1px solid #dddfe2
+        }
+
+        .dropdown[_ngcontent-serverApp-c109]>.dropdown-toggle[_ngcontent-serverApp-c109]:active {
+            pointer-events: none
+        }
+
+        .dropdown-menu[_ngcontent-serverApp-c109] {
+            margin: -10px 0 0 -55px;
+            border-radius: 4px;
+            padding: 5px 0;
+            box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
+            transition: visibility .3s, opacity .3s
+        }
+
+        .dropdown-menu[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109] i[_ngcontent-serverApp-c109] {
+            margin-left: 12px;
+            margin-right: 15px !important
+        }
+
+        .dropdown-menu[_ngcontent-serverApp-c109]:before {
+            background: #fff;
+            border-color: rgba(0, 0, 0, .15) transparent transparent rgba(0, 0, 0, .15);
+            border-style: solid;
+            border-width: 3px;
+            content: "";
+            height: 0;
+            right: 20px;
+            position: absolute;
+            top: -3px;
+            width: 0;
+            transform: rotate(45deg)
+        }
+
+        .username[_ngcontent-serverApp-c109] {
+            display: flex;
+            align-items: center;
+            align-content: center
+        }
+
+        .username[_ngcontent-serverApp-c109] img[_ngcontent-serverApp-c109] {
+            margin: 0 15px;
+            width: 36px;
+            height: 36px
+        }
+
+        @media only screen and (max-width:991px) {
+            .header[_ngcontent-serverApp-c109] .login-panel[_ngcontent-serverApp-c109] {
+                display: none !important
+            }
+
+            .header[_ngcontent-serverApp-c109] {
+                height: 55px !important
+            }
+
+            .container[_ngcontent-serverApp-c109] {
+                position: static !important
+            }
+
+            .navbar-collapse[_ngcontent-serverApp-c109] {
+                min-height: 100vh;
+                align-items: left !important;
+                display: none !important;
+                flex-direction: column !important;
+                position: absolute;
+                right: 0;
+                z-index: 9999;
+                width: 100%;
+                height: 100%;
+                overflow-y: scroll;
+                top: 0 !important;
+                background: #f7f7f7
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] {
+                display: flex !important
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .btn-close[_ngcontent-serverApp-c109] {
+                position: absolute;
+                left: 0;
+                font-size: 30px;
+                z-index: 9999
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .avatar-mobile[_ngcontent-serverApp-c109] {
+                display: block !important;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                width: 100%;
+                background: #fff;
+                opacity: .9;
+                text-align: center
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .avatar-mobile[_ngcontent-serverApp-c109] img[_ngcontent-serverApp-c109] {
+                border-radius: 50%;
+                width: 75px;
+                height: 75px;
+                margin: 0 auto
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .profile-setting[_ngcontent-serverApp-c109] {
+                text-align: left;
+                position: relative;
+                width: 100%;
+                background: #fff;
+                flex-direction: column !important;
+                display: flex;
+                margin-top: 20px;
+                -webkit-padding-start: 0;
+                padding-inline-start: 0
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .profile-setting[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109] {
+                border-top: 1px solid #f1f1f1;
+                padding: 15px;
+                list-style: none;
+                color: #000
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .profile-setting[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109] i[_ngcontent-serverApp-c109] {
+                margin-left: 12px;
+                margin-right: 15px !important
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .mr-auto[_ngcontent-serverApp-c109] {
+                flex-direction: column !important;
+                width: 100%;
+                background: #fff;
+                opacity: .9
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .mr-auto[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] {
+                height: 50px;
+                border-top: 1px solid #f1f1f1;
+                padding: 15px;
+                margin-left: 0 !important;
+                margin-right: 0 !important
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .mr-auto[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] a[_ngcontent-serverApp-c109] {
+                height: 50px;
+                color: #222 !important
+            }
+
+            .navbar-collapse.show[_ngcontent-serverApp-c109] .mr-auto[_ngcontent-serverApp-c109] li.mobile[_ngcontent-serverApp-c109] {
+                display: none;
+                height: 0 !important
+            }
+        }
+
+        @media only screen and (max-width:767px) {
+            .dropdown-custom[_ngcontent-serverApp-c109] {
+                display: none
+            }
+
+            .header[_ngcontent-serverApp-c109] .btn-notification[_ngcontent-serverApp-c109] {
+                position: absolute;
+                top: 10px;
+                right: 0
+            }
+
+            .container.top-content[_ngcontent-serverApp-c109] {
+                flex-wrap: nowrap !important;
+                display: flex;
+                justify-content: center
+            }
+
+            .container.top-content[_ngcontent-serverApp-c109] .navbar-toggler[_ngcontent-serverApp-c109] {
+                display: block;
+                position: absolute;
+                top: 10px;
+                left: 0
+            }
+
+            .container.top-content[_ngcontent-serverApp-c109] .navbar-brand[_ngcontent-serverApp-c109] {
+                display: block;
+                justify-content: center
+            }
+
+            .container.top-content[_ngcontent-serverApp-c109] .top-menu[_ngcontent-serverApp-c109],
+            .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] .navbar-brand.logo-pc[_ngcontent-serverApp-c109] {
+                display: none
+            }
+
+            .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] .nav-tab[_ngcontent-serverApp-c109] {
+                width: 100%;
+                display: flex;
+                justify-content: space-around
+            }
+
+            .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] {
+                margin-right: 0 !important;
+                padding: 3px 0 16px
+            }
+        }
+
+        @media only screen and (max-width:767px) and (max-width:414px) {
+            .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] {
+                padding-top: 16px
+            }
+        }
+
+        @media only screen and (max-width:767px) {
+            .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] span[_ngcontent-serverApp-c109] {
+                font-size: 12px
+            }
+
+            .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] .nav-tab[_ngcontent-serverApp-c109] li[_ngcontent-serverApp-c109] span[_ngcontent-serverApp-c109] i[_ngcontent-serverApp-c109] {
+                display: none
+            }
+        }
+
+        @media only screen and (max-width:767px) and (max-width:414px) {
+            .tab-container[_ngcontent-serverApp-c109] .container[_ngcontent-serverApp-c109] .nav-tab[_ngcontent-serverApp-c109] {
+                justify-content: space-between;
+                padding-left: 10px
+            }
+        }
+
+        @media only screen and (max-width:767px) {
+            .nav-btn[_ngcontent-serverApp-c109] {
+                display: none
+            }
+        }
+
+        @media only screen and (max-width:767px) {
+            .nav-tab[_ngcontent-serverApp-c109] a.nav-item[_ngcontent-serverApp-c109] {
+                display: flex;
+                flex-direction: column;
+                align-items: center
+            }
+
+            .nav-tab[_ngcontent-serverApp-c109] a.nav-item[_ngcontent-serverApp-c109] span[_ngcontent-serverApp-c109] {
+                text-align: center;
+                padding-left: 0 !important
+            }
+        }
+
+        .hon[_ngcontent-serverApp-c109] {
+            background-color: #31bd98;
+            height: 50px
+        }

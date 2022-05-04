@@ -1,49 +1,557 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DocterManagement.WebApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/DocterManagement.WebApp.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DocterManagement.WebApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - DocterManagement.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<head>
+    <meta charset="utf-8">
+    <title>YouMed Booking</title>
+    <!-- <base href="/"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="YouMed - Nền tảng y tế giúp người dùng TÌM BÁC SĨ CHÍNH XÁC và ĐẶT LỊCH KHÁM DỄ DÀNG. Tin Y Tế YouMed -CHÍNH THỐNG - 100% biên soạn bởi BÁC SĨ, DƯỢC SĨ">
+    <meta property="og:url" content="https://youmed.vn">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="YouMed - Tìm bác sĩ chính xác - Đặt lịch khám dễ dàng">
+    <meta property="og:image" content="https://youmed.vn/statics/logos/thumbnail.png">
+    <meta property="og:description"
+        content="YouMed - Nền tảng y tế giúp người dùng TÌM BÁC SĨ CHÍNH XÁC và ĐẶT LỊCH KHÁM DỄ DÀNG. Tin Y Tế YouMed -CHÍNH THỐNG - 100% biên soạn bởi BÁC SĨ, DƯỢC SĨ">
+    <link rel="apple-touch-icon" href="assets/icons/icon-512x512.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" href="assets/img/favicon.ico" sizes="any">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet preload prefetch" as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        crossorigin="anonymous">
+    <link rel="stylesheet preload prefetch" as="style" onload="this.onload=null;this.removeAttribute('media');"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        crossorigin="anonymous">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet preload prefetch" as="style" crossorigin="anonymous">
+    </noscript>
+    <script src="https://connect.facebook.net/signals/config/996646364285366?v=2.9.57&amp;r=stable" async=""></script>
+    <script async="" src="https://connect.facebook.net/en_US/fbevents.js"></script>
+    <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-NW5NF56"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/ngsw-worker.js');
+        }
+
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NW5NF56');</script>
+    <!-- End Google Tag Manager -->
+
+
+    <link rel="stylesheet" href="~/css/main.css" media="all" onload="this.media='all'">
+    <link rel="stylesheet" href="~/css/styles.90b16d66e7140c45.css" media="all" onload="this.media='all'">
+    <style></style>
+    @RenderSection("Stylesheet", required: false)
+    
+    
+</head>
+
+<body class="bg-white text-gray-800 antialiased scroll-smooth">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NW5NF56" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <app-root _nghost-serverapp-c57="" ng-version="13.1.3">
+        <router-outlet _ngcontent-serverapp-c57=""></router-outlet>
+        <app-layout-basic _nghost-serverapp-c55="" class="ng-star-inserted">
+            <app-nav _ngcontent-serverapp-c55="" _nghost-serverapp-c50="">
+                <header _ngcontent-serverapp-c50=""
+                    class="bg-white/95 w-full sticky top-0 z-999 flex-none border-b border-slate-900/10 backdrop-blur supports-backdrop-blur:bg-white/60 z-50">
+                    <div _ngcontent-serverapp-c50="" class="max-w-7xl mx-auto">
+                        <div _ngcontent-serverapp-c50="" class="relative px-2 flex items-stretch">
+                            <div _ngcontent-serverapp-c50="" class="mr-auto flex items-center space-x-2"><button
+                                    _ngcontent-serverapp-c50="" type="button" aria-label="Toggle navigation"
+                                    class="primary-menu-toggle border-none bg-transparent md:hidden text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"><span
+                                        _ngcontent-serverapp-c50="" class="sr-only">Navigation</span><svg
+                                        _ngcontent-serverApp-c50="" width="24" height="24">
+                                        <path _ngcontent-serverApp-c50="" d="M5 6h14M5 12h14M5 18h14" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                                    </svg></button><a _ngcontent-serverapp-c50="" class="py-2 block" href="/"><img
+                                        _ngcontent-serverapp-c50="" src="~/img/booking/logo.svg" alt="YouMed"
+                                        class="w-[118px] h-[40px]"></a></div>
+                            <nav _ngcontent-serverapp-c50="" id="primary-menu"
+                                class="absolute md:relative top-0 left-0 transition transform origin-top-right h-screen md:h-auto overflow-scroll md:overflow-visible z-50 bg-white md:bg-transparent md:flex hidden">
+                                <div _ngcontent-serverapp-c50="" class="offcanvas-header md:hidden"><button
+                                        _ngcontent-serverapp-c50="" type="button" aria-label="Toggle navigation"
+                                        id="primary-menu-close"
+                                        class="bg-gray-100 rounded-full border-0 p-1 m-3 cursor-pointer primary-menu-toggle"><span
+                                            _ngcontent-serverapp-c50="" class="sr-only">Close Navigation</span><img
+                                            _ngcontent-serverapp-c50="" src="~/img/booking/svg/x.svg"
+                                            class="w-6 h-6"></button></div>
+                                <div _ngcontent-serverapp-c50="" class="md:flex items-center">
+                                    <ul _ngcontent-serverapp-c50="" id="menu-primary"
+                                        class="px-6 mb-0 md:flex md:pr-0 text-sm font-semibold list-none">
+                                        
+                                            <li _ngcontent-serverapp-c50=""
+                                                class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown group nav-item">
+                                                <div _ngcontent-serverapp-c50=""
+                                            class="border-b border-b-solid -mx-6 px-6 md:border-0 md:px-0 md:-mx-0">
+                                                <a _ngcontent-serverapp-c50="" data-toggle="dropdown"
+                                                    aria-expanded="false" id="menu-item-dropdown-51"
+                                                    class="dropdown-toggle nav-link"><span
+                                                        _ngcontent-serverapp-c50="">Đặt khám</span></a>
+                                                <ul _ngcontent-serverapp-c50="" aria-labelledby="menu-item-dropdown-51"
+                                                    class="dropdown-menu group-hover:block list-none p-0 md:absolute md:hidden md:top-75 md:bg-white md:rounded md:shadow-lg md:ring-1 ring-slate-900/5 overflow-hidden">
+                                                    <li _ngcontent-serverapp-c50=""
+                                                        class="mt-4 menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                                                        <a _ngcontent-serverapp-c50="" asp-controller="Home" asp-action="Doctor"
+                                                            class="dropdown-item flex-col md:items-start md:p-4 md:mx-4 md:rounded-lg">
+                                                            <span _ngcontent-serverapp-c50="">Đặt khám Bác sĩ</span>
+                                                            <p _ngcontent-serverapp-c50=""
+                                                                class="hidden md:block text-sm font-normal text-gray-600">
+                                                                Đặt lịch khám không chờ đợi </p>
+                                                        </a></li>
+                                                    
+                                                    <li _ngcontent-serverapp-c50=""
+                                                        class="menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                                                        <a _ngcontent-serverapp-c50="" asp-controller="Home" asp-action="Clinic"
+                                                            class="dropdown-item flex-col md:items-start md:p-4 md:mx-4 md:rounded-lg">
+                                                            <span _ngcontent-serverapp-c50="">Đặt khám Phòng khám</span>
+                                                            <p _ngcontent-serverapp-c50=""
+                                                                class="hidden md:block text-sm font-normal text-gray-600">
+                                                                Đa dạng chuyên khoa và dịch vụ </p>
+                                                        </a></li>
+                                                    <li _ngcontent-serverapp-c50=""
+                                                        class="menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                                                        <a _ngcontent-serverapp-c50="" asp-controller="Home" asp-action="Hospital"
+                                                            class="dropdown-item flex-col md:items-start md:p-4 md:mx-4 md:rounded-lg">
+                                                            <span _ngcontent-serverapp-c50="">Đặt khám
+                                                                Bệnh viện</span>
+                                                            <p _ngcontent-serverapp-c50=""
+                                                                class="hidden md:block text-sm font-normal text-gray-600">
+                                                                Đặt khám, thanh toán, nhận kết quả </p>
+                                                        </a></li>
+                                                    <li _ngcontent-serverapp-c50=""
+                                                        class="menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                                                        <a _ngcontent-serverapp-c50=""
+                                                            class="dropdown-item flex-col md:items-start md:p-4 md:mx-4 md:rounded-lg"><span
+                                                                _ngcontent-serverapp-c50="">Đặt lịch xét nghiệm</span>
+                                                            <p _ngcontent-serverapp-c50=""
+                                                                class="hidden md:block text-sm font-normal text-gray-600">
+                                                                Lấy mẫu xét nghiệm tại nhà </p>
+                                                        </a></li>
+                                                    <li _ngcontent-serverapp-c50=""
+                                                        class="mt-4 dropdown-footer menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                                                        <a _ngcontent-serverapp-c50="" href="tel:0373951042"
+                                                            class="dropdown-item"><span _ngcontent-serverapp-c50="">Bạn
+                                                                cần hỗ trợ? Gọi cho chúng tôi 0373951942</span></a>
+                                                    </li>
+                                                </ul>
+                                                </div>
+                                            </li>
+                                        
+                                        <li _ngcontent-serverapp-c50=""
+                                            class="menu-item menu-item-type-post_type menu-item-object-page nav-item"><a
+                                                _ngcontent-serverapp-c50="" target="_blank" class="nav-link"
+                                                href="https://youmed.vn/tu-van-truc-tuyen"><span
+                                                    _ngcontent-serverapp-c50=""> Tư vấn trực tuyến</span></a></li>
+                                        <li _ngcontent-serverapp-c50=""
+                                            class="menu-item menu-item-type-custom menu-item-object-custom nav-item"><a
+                                                _ngcontent-serverapp-c50="" target="_blank" class="nav-link"
+                                                href="https://youmed.vn"><span
+                                                    _ngcontent-serverapp-c50="">Store</span></a></li>
+                                       
+                                            <li _ngcontent-serverapp-c50=""
+                                                class="menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                                                 <div _ngcontent-serverapp-c50=""
+                                            class="border-b border-b-solid -mx-6 px-6 md:border-0 md:px-0 md:-mx-0">
+                                                <a _ngcontent-serverapp-c50="" target="_blank" class="nav-link"
+                                                    href="https://youmed.vn/tin-tuc"><span _ngcontent-serverapp-c50="">
+                                                        Tin Y tế</span></a>
+                                                     </div>    
+                                                    </li>
+                                       
+                                    </ul>
+                                </div>
+                                <div _ngcontent-serverapp-c50="" class="md:flex items-center">
+                                    <ul _ngcontent-serverapp-c50="" id="menu-second"
+                                        class="px-6 list-none m-0 md:flex md:pl-0 text-sm font-regular">
+                                        <li _ngcontent-serverapp-c50=""
+                                            class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown group nav-item">
+                                            <a _ngcontent-serverapp-c50="" data-toggle="dropdown" aria-expanded="false"
+                                                id="menu-item-dropdown-60" class="dropdown-toggle nav-link"><span
+                                                    _ngcontent-serverapp-c50="">Dành cho nhân viên Y tế</span></a>
+                                            <ul _ngcontent-serverapp-c50="" aria-labelledby="menu-item-dropdown-60"
+                                                class="dropdown-menu list-none p-0 group-hover:block md:absolute md:hidden md:top-75 md:bg-white md:rounded md:shadow-lg md:ring-1 ring-slate-900/5 overflow-hidden">
+                                                <li _ngcontent-serverapp-c50=""
+                                                    class="menu-item menu-item-type-post_type menu-item-object-page nav-item">
+                                                    <a _ngcontent-serverapp-c50="" target="_blank" class="dropdown-item"
+                                                        href="https://youmed.vn/hcp"><span _ngcontent-serverapp-c50="">
+                                                            YouMed HCP</span></a></li>
+                                                <li _ngcontent-serverapp-c50=""
+                                                    class="menu-item menu-item-type-post_type menu-item-object-page nav-item">
+                                                    <a _ngcontent-serverapp-c50="" target="_blank" class="dropdown-item"
+                                                        href="https://y360.vn"><span
+                                                            _ngcontent-serverapp-c50="">Y360</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div><a _ngcontent-serverapp-c50="" href="https://youmed.page.link/apps"
+                                    target="_blank"
+                                    class="app-download flex md:hidden items-center px-6 py-4 space-x-2 bg-gray-50 mt-4"><img
+                                        _ngcontent-serverapp-c50="" src="~/img/booking/png/app_download.webp"
+                                        alt="download app youmed" class="w-[32px] h-[53px] object-cover">
+                                    <div _ngcontent-serverapp-c50="" class="block">
+                                        <p _ngcontent-serverapp-c50="" class="text-sm font-semibold text-gray-800"> Tải
+                                            ứng dụng YouMed </p>
+                                        <p _ngcontent-serverapp-c50="" class="text-xs font-medium text-gray-500"> Đặt
+                                            lịch khám và lưu trữ hồ sơ sức khỏe </p>
+                                    </div>
+                                </a>
+                            </nav>
+                            <div _ngcontent-serverapp-c50="" class="inline-flex space-x-4 items-center">
+                                @if(User.Identity.Name == null)
+                                {
+                                    <div id="user-info"><a  asp-controller="Login" asp-action="Index" class="btn-outline my-2 py-2 whitespace-nowrap">Đăng nhập</a></div>
+                                }
+                                else
+                                {
+                                   <div _ngcontent-serverapp-c50="" class="relative group ng-star-inserted">
+                                    <div _ngcontent-serverapp-c50=""
+                                        class="cursor-pointer flex gap-1 text-sm truncate w-24 items-center"
+                                        title="Nguyễn Đình Quân"> Nguyễn Đình Quâ... <svg _ngcontent-serverApp-c50=""
+                                            width="6" height="3" aria-hidden="true"
+                                            class="overflow-visible text-slate-400">
+                                            <path _ngcontent-serverApp-c50="" d="M0 0L3 3L6 0" fill="none"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                        </svg></div>
+                                    <ul _ngcontent-serverapp-c50=""
+                                        class="z-50 hidden w-max whitespace-nowrap group-hover:block absolute top-full right-0 2xl:right-auto py-2 rounded-lg bg-white shadow ring-1 ring-slate-900/5 text-sm leading-6">
+                                        <li _ngcontent-serverapp-c50=""><a _ngcontent-serverapp-c50=""
+                                                routerlink="/lich-kham" class="flex px-4 py-2 hover:bg-gray-100"
+                                                href="/lich-kham"> Lịch khám</a></li>
+                                        <li _ngcontent-serverapp-c50=""><a _ngcontent-serverapp-c50=""
+                                                routerlink="/thanh-toan" class="flex px-4 py-2 hover:bg-gray-100"
+                                                href="/thanh-toan"> Lịch sử thanh toán</a></li>
+                                        <li _ngcontent-serverapp-c50=""><a _ngcontent-serverapp-c50=""
+                                                routerlink="/ho-so" class="flex px-4 py-2 hover:bg-gray-100"
+                                                href="/ho-so"> Hồ sơ</a></li>
+                                        <li _ngcontent-serverapp-c50=""><a _ngcontent-serverapp-c50=""
+                                                routerlink="/logout" class="flex px-4 py-2 hover:bg-gray-100"
+                                                href="/logout"> Thoát</a></li>
+                                    </ul>
+                                </div> 
+                                }
+                                
+                                <!---->
+                                <!---->
+                                <div _ngcontent-serverapp-c50="" class="relative hidden lg:flex group py-2"><button
+                                        _ngcontent-serverapp-c50="" id="languages-menu-button" type="button"
+                                        aria-haspopup="true" aria-expanded="false"
+                                        class="text-xs border-0 leading-5 cursor-pointer bg-slate-400/10 rounded-full py-1 pr-2 pl-1 flex items-center space-x-1 hover:bg-slate-400/20"><img
+                                            _ngcontent-serverapp-c50="" width="18" height="18" loading="lazy"
+                                            alt="Tiếng Việt" src="~/img/booking/svg/vietnam.svg"><span
+                                            _ngcontent-serverapp-c50="" class="capitalize tabular-nums">Vi</span><svg
+                                            _ngcontent-serverApp-c50="" width="6" height="3" aria-hidden="true"
+                                            class="ml-2 overflow-visible text-slate-400">
+                                            <path _ngcontent-serverApp-c50="" d="M0 0L3 3L6 0" fill="none"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                        </svg></button>
+                                    <div _ngcontent-serverapp-c50="" id="languages-menu-items"
+                                        aria-labelledby="languages-menu-items" role="menu" tabindex="0"
+                                        class="hidden group-hover:block absolute top-full right-0 2xl:right-auto py-2 w-40 rounded-lg bg-white shadow ring-1 ring-slate-900/5 text-sm leading-6 text-slate-700">
+                                        <div _ngcontent-serverapp-c50=""
+                                            class="cursor-pointer flex items-center px-3 py-1 hover:bg-primary hover:text-white text-primary cursor-not-allowed">
+                                            <img _ngcontent-serverapp-c50="" width="18" height="18" loading="lazy"
+                                                alt="Tiếng Việt" class="mr-2"
+                                                src="~/img/booking/svg/vietnam.svg"> Tiếng Việt <svg
+                                                _ngcontent-serverApp-c50="" width="24" height="24" fill="none"
+                                                aria-hidden="true" class="ml-auto ng-star-inserted">
+                                                <path _ngcontent-serverApp-c50="" d="m7.75 12.75 2.25 2.5 6.25-6.5"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round"></path>
+                                            </svg>
+                                            <!---->
+                                        </div>
+                                        <div _ngcontent-serverapp-c50=""
+                                            class="cursor-pointer flex items-center px-3 py-1 hover:bg-primary hover:text-white">
+                                            <img _ngcontent-serverapp-c50="" width="18" height="18" loading="lazy"
+                                                alt="English" class="mr-2" src="~/img/booking/svg/us.svg">
+                                            English
+                                            <!---->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div _ngcontent-serverapp-c50="" class="offcanvas-backdrop hidden"></div>
+            </app-nav>
+            <router-outlet _ngcontent-serverapp-c55=""></router-outlet>
+            
+            @RenderBody()
+            <!---->
+            <app-footer _ngcontent-serverapp-c55="" _nghost-serverapp-c54="">
+                <footer _ngcontent-serverapp-c54="" id="colophon" role="contentinfo"
+                    class="relative site-footer bg-gray-50 py-3">
+                    <div _ngcontent-serverapp-c54=""
+                        class="max-w-7xl mx-auto text-gray-800 md:grid md:grid-cols-12 md:pt-10">
+                        <div _ngcontent-serverapp-c54="" class="px-4 py-6 text-sm col-span-12 md:col-span-4 space-y-2">
+                            <img _ngcontent-serverapp-c54="" width="177" height="60" loading="lazy"
+                                src="~/img/booking/logo.svg" alt="YouMed">
+                            <p _ngcontent-serverapp-c54="" class="font-medium">CÔNG TY TNHH YOUMED VIỆT NAM</p>
+                            <p _ngcontent-serverapp-c54=""><strong _ngcontent-serverapp-c54="">VPĐD:</strong> 523 Tô
+                                Hiến Thành, P.14, Q.10, TP. HCM</p>
+                            <p _ngcontent-serverapp-c54=""><strong _ngcontent-serverapp-c54="">Hotline:</strong><a
+                                    _ngcontent-serverapp-c54="" href="tel:19002805"
+                                    class="font-medium hover:underline">1900-2805</a> | 8:30 - 20:30 (T2 đến T7) </p>
+                        </div>
+                        <nz-collapse _ngcontent-serverapp-c54="" nzexpandiconposition="right"
+                            class="ant-collapse mx-4 md:mx-0 border-b md:border-0 col-span-12 md:col-span-2 ant-collapse-icon-position-right ant-collapse-borderless">
+                            <nz-collapse-panel _ngcontent-serverapp-c54=""
+                                class="ant-collapse-item cursor-pointer md:cursor-auto py-6 text-sm font-semibold ng-tns-c53-30 ant-collapse-no-arrow ant-collapse-item-active ant-collapse-item-disabled ng-star-inserted">
+                                <div role="button" class="ant-collapse-header ng-tns-c53-30" aria-expanded="true">
+                                    <!---->Về YouMed
+                                    <!---->
+                                    <!---->
+                                    <div class="ant-collapse-extra ng-tns-c53-30 ng-star-inserted"><svg
+                                            _ngcontent-serverApp-c54="" viewBox="0 0 20 20" fill="currentColor"
+                                            class="collapse-control h-5 w-5 text-gray-500 transition md:hidden rotate-180 ng-star-inserted">
+                                            <path _ngcontent-serverApp-c54="" fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <!---->
+                                    </div>
+                                    <!---->
+                                </div>
+                                <div
+                                    class="ant-collapse-content ng-tns-c53-30 ant-collapse-content-active ng-trigger ng-trigger-collapseMotion">
+                                    <div class="ant-collapse-content-box ng-tns-c53-30">
+                                        <ul _ngcontent-serverapp-c54="" id="footer-1"
+                                            class="collapse list-none p-0 md:block text-sm space-y-2 mb-4 text-gray-600 transition-all ng-tns-c53-30">
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn/gioi-thieu-ve-youmed">Giới thiệu về
+                                                    YouMed</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn/tin-tuc/ban-dieu-hanh-youmed">Ban điều
+                                                    hành</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn/nhan-su-tuyen-dung"> Nhân sự &amp; Tuyển
+                                                    dụng</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn/lien-he"> Liên hệ</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                        <!---->
+                        <nz-collapse _ngcontent-serverapp-c54="" nzexpandiconposition="right"
+                            class="ant-collapse mx-4 md:mx-0 border-b md:border-0 col-span-12 md:col-span-3 ant-collapse-icon-position-right ant-collapse-borderless">
+                            <nz-collapse-panel _ngcontent-serverapp-c54=""
+                                class="ant-collapse-item cursor-pointer md:cursor-auto py-6 text-sm font-semibold ng-tns-c53-31 ant-collapse-no-arrow ant-collapse-item-active ant-collapse-item-disabled ng-star-inserted">
+                                <div role="button" class="ant-collapse-header ng-tns-c53-31" aria-expanded="true">
+                                    <!---->Dịch vụ
+                                    <!---->
+                                    <!---->
+                                    <div class="ant-collapse-extra ng-tns-c53-31 ng-star-inserted"><svg
+                                            _ngcontent-serverApp-c54="" viewBox="0 0 20 20" fill="currentColor"
+                                            class="collapse-control h-5 w-5 text-gray-500 transition md:hidden rotate-180 ng-star-inserted">
+                                            <path _ngcontent-serverApp-c54="" fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <!---->
+                                    </div>
+                                    <!---->
+                                </div>
+                                <div
+                                    class="ant-collapse-content ng-tns-c53-31 ant-collapse-content-active ng-trigger ng-trigger-collapseMotion">
+                                    <div class="ant-collapse-content-box ng-tns-c53-31">
+                                        <ul _ngcontent-serverapp-c54=""
+                                            class="list-none text-sm p-0 space-y-2 mb-4 text-gray-600 transition-all ng-tns-c53-31">
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" class="text-sm-w400" href="/bac-si"> Đặt
+                                                    khám Bác sĩ</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" class="text-sm-w400" href="/bac-si"> Đặt
+                                                    khám Bệnh viện</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" class="text-sm-w400" href="/bac-si"> Đặt
+                                                    khám Phòng khám</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn"> YouMed Store</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://y360.vn">Y360</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                        <!---->
+                        <nz-collapse _ngcontent-serverapp-c54="" nzexpandiconposition="right"
+                            class="ant-collapse mx-4 md:mx-0 border-b md:border-0 col-span-12 md:col-span-3 ant-collapse-icon-position-right ant-collapse-borderless">
+                            <nz-collapse-panel _ngcontent-serverapp-c54="" nzheader="Hỗ trợ"
+                                class="ant-collapse-item cursor-pointer md:cursor-auto py-6 text-sm font-semibold ng-tns-c53-32 ant-collapse-no-arrow ant-collapse-item-active ant-collapse-item-disabled ng-star-inserted">
+                                <div role="button" class="ant-collapse-header ng-tns-c53-32" aria-expanded="true">
+                                    <!---->Hỗ trợ
+                                    <!---->
+                                    <!---->
+                                    <div class="ant-collapse-extra ng-tns-c53-32 ng-star-inserted"><svg
+                                            _ngcontent-serverApp-c54="" viewBox="0 0 20 20" fill="currentColor"
+                                            class="collapse-control h-5 w-5 text-gray-500 transition md:hidden rotate-180 ng-star-inserted">
+                                            <path _ngcontent-serverApp-c54="" fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <!---->
+                                    </div>
+                                    <!---->
+                                </div>
+                                <div
+                                    class="ant-collapse-content ng-tns-c53-32 ant-collapse-content-active ng-trigger ng-trigger-collapseMotion">
+                                    <div class="ant-collapse-content-box ng-tns-c53-32">
+                                        <ul _ngcontent-serverapp-c54="" id="footer-3"
+                                            class="text-sm space-y-2 mb-4 text-gray-600 transition-all collapse ng-tns-c53-32">
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn/faqs/faq">Câu hỏi thường gặp</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn/dieu-khoan-su-dung">Điều khoản sử dụng</a>
+                                            </li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn/chinh-sach-bao-mat">Chính sách bảo mật</a>
+                                            </li>
+                                            <li _ngcontent-serverapp-c54="" class="hover:underline"><a
+                                                    _ngcontent-serverapp-c54="" target="_blank" class="text-sm-w400"
+                                                    href="https://youmed.vn/quy-trinh-tiep-nhan-va-giai-quyet-khieu-nai-cua-khach-hang">Chính
+                                                    sách giải quyết khiếu nại</a></li>
+                                            <li _ngcontent-serverapp-c54="" class="text-sm-w400">Hỗ trợ khách hàng: <a
+                                                    _ngcontent-serverapp-c54="" href="mailto:cskh@youmed.vn"
+                                                    class="hover:underline text-sm-w400">cskh@youmed.vn</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                        <!---->
+                        <div _ngcontent-serverapp-c54=""
+                            class="p-6 md:px-4 md:py-0 text-sm col-span-12 md:col-span-4 space-y-2">
+                            <div _ngcontent-serverapp-c54=""
+                                class="flex justify-center md:justify-start items-center text-sm font-semibold"> Kết nối
+                                với chúng tôi </div>
+                            <ul _ngcontent-serverapp-c54=""
+                                class="flex space-x-3 items-center justify-center md:justify-start">
+                                <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
+                                        href="https://www.facebook.com/YouMedVN"><img _ngcontent-serverapp-c54=""
+                                            src="~/img/booking/svg/facebook.svg" width="24" height="24"
+                                            loading="lazy" alt="Facebook"></a></li>
+                                <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
+                                        href="https://www.youtube.com/channel/UCR4EoGCCtS7JA05PtOLSChg"><img
+                                            _ngcontent-serverapp-c54="" src="~/img/booking/svg/youtube.svg"
+                                            width="24" height="24" loading="lazy" alt="YouTube"></a></li>
+                                <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
+                                        href="https://www.linkedin.com/in/youmedvn/"><img _ngcontent-serverapp-c54=""
+                                            src="~/img/booking/svg/linkedin.svg" width="24" height="24"
+                                            loading="lazy" alt="Linkedin"></a></li>
+                                <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
+                                        href="https://zalo.me/2433559446561086041"><img _ngcontent-serverapp-c54=""
+                                            src="~/img/booking/svg/zalo.svg" width="36" height="16"
+                                            loading="lazy" alt="Zalo"></a></li>
+                            </ul>
+                        </div>
+                        <div _ngcontent-serverapp-c54="" class="col-span-12 md:hidden flex items-center">
+                            <div _ngcontent-serverapp-c54=""
+                                class="relative flex items-center ring-1 ring-slate-900/10 bg-white rounded shadow-sm py-2 pl-2 pr-6 mx-auto focus:ring-2 focus:ring-primary focus:border-primary">
+                                <img _ngcontent-serverapp-c54="" width="18" height="18" loading="lazy"
+                                    src="~/img/booking/svg/region.svg" alt="Tiếng Việt"><span
+                                    _ngcontent-serverapp-c54="" class="capitalize tabular-nums ml-2 text-sm"> Tiếng Việt
+                                </span><span _ngcontent-serverapp-c54=""
+                                    class="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"><svg
+                                        _ngcontent-serverApp-c54="" x-description="Heroicon name: solid/selector"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        aria-hidden="true" class="h-4 w-4 text-gray-400">
+                                        <path _ngcontent-serverApp-c54="" fill-rule="evenodd"
+                                            d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg></span><select _ngcontent-serverapp-c54="" name="footer-language"
+                                    id="footer-language"
+                                    class="absolute appearance-none inset-0 w-full h-full opacity-0">
+                                    <option _ngcontent-serverapp-c54="" value="vi" class="ng-star-inserted">Việt Nam
+                                    </option>
+                                    <option _ngcontent-serverapp-c54="" value="en" class="ng-star-inserted">English
+                                    </option>
+                                    <!---->
+                                </select></div>
+                        </div>
+                        <div _ngcontent-serverapp-c54="" class="col-span-12 md:col-span-8 p-6">
+                            <ul _ngcontent-serverapp-c54=""
+                                class="flex space-x-4 items-center justify-center md:justify-end">
+                                <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
+                                        title="Đã đăng ký Bộ Công Thương"
+                                        href="http://online.gov.vn/HomePage/WebsiteDisplay.aspx?DocId=53817"><img
+                                            _ngcontent-serverapp-c54="" src="~/img/booking/svg/dadangky.svg"
+                                            width="79" height="30" loading="lazy" alt="Đã đăng ký Bộ Công Thương"></a>
+                                </li>
+                                <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
+                                        title="DMCA.com Protection Status. Click to verify."
+                                        href="https://www.dmca.com/Protection/Status.aspx?ID=a74b3497-ddcd-4860-89c3-fce83c39f12a&amp;amp;refurl=https://youmed.vn/tin-tuc/"><img
+                                            _ngcontent-serverapp-c54=""
+                                            src="~/img/booking/png/dmca-badge-w100-2x1-04.png" loading="lazy"
+                                            width="60" height="30"
+                                            alt="DMCA.com Protection Status. Click to verify."></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div _ngcontent-serverapp-c54="" class="md:border-t border-gray-200 md:mt-6">
+                        <div _ngcontent-serverapp-c54=""
+                            class="container mx-auto py-6 text-center text-xs text-gray-500"> Copyright © 2022 YouMed.
+                            All rights reserved. </div>
+                    </div>
+                </footer>
+            </app-footer>
+        </app-layout-basic>
+        <!---->
+    </app-root>
+    <noscript>Please enable JavaScript to continue using this application.</noscript>
+    <script src="../assets/js/runtime.e3cdeaf900c2f1f3.js" type="module"></script>
+    <script src="../assets/js/polyfills.1a532d11b72c9c1d.js" type="module"></script>
+    <script src="../assets/js/main.4e5e18785b95e2fb.js" type="module"></script>
+
+     @RenderSection("JavaScript", required: false)
+
+    <script type="text/javascript"
+        id="">!function (b, e, f, g, a, c, d) { b.fbq || (a = b.fbq = function () { a.callMethod ? a.callMethod.apply(a, arguments) : a.queue.push(arguments) }, b._fbq || (b._fbq = a), a.push = a, a.loaded = !0, a.version = "2.0", a.queue = [], c = e.createElement(f), c.async = !0, c.src = g, d = e.getElementsByTagName(f)[0], d.parentNode.insertBefore(c, d)) }(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js"); fbq("init", "996646364285366"); fbq("track", "PageView");</script>
+    <div class="cdk-overlay-container">
+        <div class="cdk-global-overlay-wrapper" dir="ltr">
+            <div id="cdk-overlay-0" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
+                <nz-message-container>
+                    <div class="ant-message" style="top: 24px;">
+                        <!---->
+                    </div>
+                </nz-message-container>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </div>
 </body>
+
 </html>

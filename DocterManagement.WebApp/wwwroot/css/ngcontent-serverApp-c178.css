@@ -1,0 +1,909 @@
+
+.hospital-profile[_ngcontent-serverApp-c178] .col[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-1[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-2[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-3[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-4[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-5[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-6[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-7[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-8[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-9[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-10[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-11[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-12[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-auto[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-1[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-2[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-3[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-4[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-5[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-6[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-7[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-8[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-9[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-10[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-11[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-12[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-lg-auto[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-1[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-2[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-3[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-4[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-5[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-6[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-7[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-8[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-9[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-10[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-11[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-12[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-md-auto[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-1[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-2[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-3[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-4[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-5[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-6[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-7[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-8[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-9[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-10[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-11[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-12[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-sm-auto[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-1[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-2[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-3[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-4[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-5[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-6[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-7[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-8[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-9[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-10[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-11[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-12[_ngcontent-serverApp-c178],
+.hospital-profile[_ngcontent-serverApp-c178] .col-xl-auto[_ngcontent-serverApp-c178] {
+    padding-right: 0;
+    padding-left: 0
+}
+
+.hospital-profile[_ngcontent-serverApp-c178] .btn[_ngcontent-serverApp-c178] {
+    font-family: unset !important
+}
+
+[_ngcontent-serverApp-c178]::-webkit-scrollbar {
+    width: 12px;
+    cursor: pointer
+}
+
+[_ngcontent-serverApp-c178]::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #c2e0f4;
+    width: 8px
+}
+
+[_ngcontent-serverApp-c178]::-webkit-scrollbar-thumb {
+    background: #24ae5d;
+    border-radius: 13px
+}
+
+[_ngcontent-serverApp-c178]::-webkit-scrollbar-thumb:hover {
+    background: #11ae47
+}
+
+[_nghost-serverApp-c178] .non-data[_ngcontent-serverApp-c178] {
+    width: 100%
+}
+
+[_nghost-serverApp-c178] .non-data.gental[_ngcontent-serverApp-c178] {
+    display: flex
+}
+
+[_nghost-serverApp-c178] .img-children[_ngcontent-serverApp-c178] {
+    width: 100%;
+    height: 100px;
+    background: url(youmed-default.fb81b6e410e44c00b2ce.jpg) 15% 15%/cover no-repeat;
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: pointer
+}
+
+[_nghost-serverApp-c178] .img_slider[_ngcontent-serverApp-c178] {
+    padding: 0 4px
+}
+
+[_nghost-serverApp-c178] .innerShow[_ngcontent-serverApp-c178] {
+    display: table;
+    height: 100%;
+    width: 100%
+}
+
+[_nghost-serverApp-c178] #showOtherGallery[_ngcontent-serverApp-c178] {
+    display: none
+}
+
+[_nghost-serverApp-c178] #carousel-other-custom[_ngcontent-serverApp-c178] {
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle
+}
+
+[_nghost-serverApp-c178] #carousel-other-custom[_ngcontent-serverApp-c178] .carousel-indicators[_ngcontent-serverApp-c178] {
+    margin: 0 auto;
+    white-space: nowrap;
+    width: 100%;
+    position: absolute
+}
+
+[_nghost-serverApp-c178] #carousel-other-custom[_ngcontent-serverApp-c178] .carousel-indicators[_ngcontent-serverApp-c178] li[_ngcontent-serverApp-c178] {
+    background-color: transparent;
+    border-radius: 0;
+    display: inline-block;
+    height: auto;
+    margin: 0 !important;
+    width: auto
+}
+
+[_nghost-serverApp-c178] #carousel-other-custom[_ngcontent-serverApp-c178] .carousel-indicators[_ngcontent-serverApp-c178] li[_ngcontent-serverApp-c178] img[_ngcontent-serverApp-c178] {
+    display: block;
+    opacity: .5
+}
+
+[_nghost-serverApp-c178] #carousel-other-custom[_ngcontent-serverApp-c178] .carousel-indicators[_ngcontent-serverApp-c178] li.active[_ngcontent-serverApp-c178] img[_ngcontent-serverApp-c178] {
+    opacity: 1
+}
+
+[_nghost-serverApp-c178] #carousel-other-custom[_ngcontent-serverApp-c178] .carousel-indicators[_ngcontent-serverApp-c178] li[_ngcontent-serverApp-c178]:hover img[_ngcontent-serverApp-c178] {
+    opacity: .75
+}
+
+[_nghost-serverApp-c178] #carousel-other-custom[_ngcontent-serverApp-c178] [class*=top-carousel][_ngcontent-serverApp-c178] {
+    max-height: 400px;
+    margin: 0 auto
+}
+
+[_nghost-serverApp-c178] #carousel-other-custom[_ngcontent-serverApp-c178] [class*=bot-carousel][_ngcontent-serverApp-c178] {
+    width: 100px;
+    height: 100px;
+    padding: 15px
+}
+
+[_nghost-serverApp-c178] .overlays-gallery[_ngcontent-serverApp-c178] {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, .7);
+    transition: opacity .5s;
+    opacity: 1;
+    z-index: 1034
+}
+
+.title[_ngcontent-serverApp-c178] {
+    display: -webkit-inline-box
+}
+
+.title.note[_ngcontent-serverApp-c178] {
+    margin-top: 30px
+}
+
+.title[_ngcontent-serverApp-c178] p[_ngcontent-serverApp-c178] {
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #25ae5d;
+    font-weight: 600;
+    text-transform: uppercase;
+    height: 40px;
+    line-height: 40px
+}
+
+.title[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    width: 40px;
+    height: 40px;
+    background: url(timer.03eab1393d54c226476b.png) no-repeat 50%
+}
+
+.title[_ngcontent-serverApp-c178] img[_ngcontent-serverApp-c178],
+.title[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    margin-right: 10px
+}
+
+.calendar[_ngcontent-serverApp-c178] {
+    background: #18a6df;
+    height: 50px
+}
+
+.calendar[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+    color: #18a6df
+}
+
+.calendar[_ngcontent-serverApp-c178]:hover {
+    background: #18a6df
+}
+
+.calendar[_ngcontent-serverApp-c178]:hover i[_ngcontent-serverApp-c178] {
+    color: #000
+}
+
+[_nghost-serverApp-c178] .calendar[_ngcontent-serverApp-c178] {
+    background: #18a6df;
+    height: 50px
+}
+
+[_nghost-serverApp-c178] .calendar[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+    color: #18a6df
+}
+
+[_nghost-serverApp-c178] .calendar[_ngcontent-serverApp-c178]:hover {
+    background: #18a6df
+}
+
+[_nghost-serverApp-c178] .calendar[_ngcontent-serverApp-c178]:hover i[_ngcontent-serverApp-c178] {
+    color: #000
+}
+
+[_nghost-serverApp-c178] .custom-day[_ngcontent-serverApp-c178] {
+    text-align: center;
+    padding: .185rem .25rem;
+    border-radius: .25rem;
+    display: inline-block;
+    width: 2rem
+}
+
+[_nghost-serverApp-c178] .text-muted[_ngcontent-serverApp-c178] {
+    color: #a9a9a9 !important
+}
+
+[_nghost-serverApp-c178] .custom-day.focused[_ngcontent-serverApp-c178],
+[_nghost-serverApp-c178] .custom-day[_ngcontent-serverApp-c178]:hover {
+    background-color: #e6e6e6
+}
+
+[_nghost-serverApp-c178] .weekend[_ngcontent-serverApp-c178] {
+    background-color: #f0ad4e;
+    border-radius: 1rem;
+    color: #fff
+}
+
+[_nghost-serverApp-c178] .hidden[_ngcontent-serverApp-c178] {
+    display: none
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] {
+    box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .07);
+    padding: 15px
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] {
+    max-height: 300px;
+    overflow-y: auto !important
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] {
+    margin-right: 15px;
+    padding: 10px 20px;
+    border: 1px solid #25ae5d;
+    display: -webkit-box;
+    position: relative;
+    margin-top: 12px
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] .user[_ngcontent-serverApp-c178] {
+    width: 80%
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] .user[_ngcontent-serverApp-c178] .name[_ngcontent-serverApp-c178] {
+    margin-bottom: 0;
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #1e1e1e;
+    font-weight: 600
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] .user[_ngcontent-serverApp-c178] .info[_ngcontent-serverApp-c178] {
+    margin-bottom: 0;
+    font-family: Open Sans, sans-serif;
+    font-size: 15px;
+    color: #1e1e1e;
+    font-weight: 500
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] .user[_ngcontent-serverApp-c178] .info[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    font-family: Open Sans, sans-serif;
+    font-size: 15px;
+    color: #1e1e1e;
+    font-weight: 600
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] button[_ngcontent-serverApp-c178] {
+    border-radius: 50px;
+    background: #3497db !important;
+    border-color: #3497db !important;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%)
+}
+
+[_nghost-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] button[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+    margin-right: 5px
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] {
+    text-align: center
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .btn-add-user[_ngcontent-serverApp-c178] {
+    background: #18a6df !important;
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 50px;
+    margin-bottom: 20px;
+    margin-top: 20px
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .btn-add-user[_ngcontent-serverApp-c178]:hover {
+    opacity: .5
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .btn-add-user[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+    margin-right: 10px;
+    color: #fff;
+    font-size: 30px
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .title-add[_ngcontent-serverApp-c178] {
+    padding-top: 20px;
+    font-family: Open Sans, sans-serif;
+    font-size: 22px;
+    color: #02a7e3;
+    font-weight: 400;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 10px
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .title-add[_ngcontent-serverApp-c178]:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60px;
+    text-align: center;
+    margin: 0 auto;
+    border-bottom: 5px solid #25ae5d
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .d-flex[_ngcontent-serverApp-c178] a[_ngcontent-serverApp-c178] {
+    padding: 9px 5px 8px;
+    display: inline;
+    cursor: pointer;
+    border: 1px solid #18a6df !important;
+    width: 100%;
+    transition: all .3s;
+    background: #fff;
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #18a6df;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin: 20px 5px 30px
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .d-flex[_ngcontent-serverApp-c178] a.active[_ngcontent-serverApp-c178],
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .d-flex[_ngcontent-serverApp-c178] a[_ngcontent-serverApp-c178]:hover {
+    background: #18a6df;
+    color: #fff
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .title-add[_ngcontent-serverApp-c178] {
+    font-family: Open Sans, sans-serif;
+    font-size: 22px;
+    color: #02a7e3;
+    font-weight: 400;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin: 0 auto 20px
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] {
+    height: 50px;
+    border-radius: 50px 0 0 50px;
+    width: 80%;
+    text-align: center;
+    margin: 0 auto 30px
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] input[_ngcontent-serverApp-c178] {
+    padding: 40px;
+    height: 100%;
+    border-radius: 50px 0 0 50px !important;
+    border: 1px solid #6fcae8 !important;
+    opacity: 1
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] input[_ngcontent-serverApp-c178]:focus {
+    box-shadow: 0 0 0 0 #6fcae8 !important
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] input[_ngcontent-serverApp-c178]::-moz-placeholder {
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #000;
+    font-weight: 300 i;
+    opacity: .5
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] input[_ngcontent-serverApp-c178]:-ms-input-placeholder {
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #000;
+    font-weight: 300 i;
+    opacity: .5
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] input[_ngcontent-serverApp-c178]::placeholder {
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #000;
+    font-weight: 300 i;
+    opacity: .5
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178] {
+    width: 110px;
+    background: #02a7e3;
+    border-radius: 0 50px 50px 0 !important
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178]:hover {
+    opacity: .5
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178] button[_ngcontent-serverApp-c178] {
+    border-radius: 0 50px 50px 0 !important;
+    width: 110px;
+    background: url(search.ecbb586fec186a9c7803.png) no-repeat 50%;
+    cursor: pointer;
+    border: 1px solid #02a7e3
+}
+
+[_nghost-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178] button[_ngcontent-serverApp-c178]:focus {
+    box-shadow: none !important;
+    border: none !important;
+    outline: 0 auto -webkit-focus-ring-color !important
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] {
+    margin-top: 15px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] {
+    display: flex;
+    margin-bottom: 4px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    line-height: 30px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+    color: #18a6df;
+    margin-right: 8px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] span[_ngcontent-serverApp-c178] {
+    color: red
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group.info[_ngcontent-serverApp-c178] {
+    height: 30px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group.info[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    line-height: 30px;
+    margin-bottom: 0
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group.info[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+    color: #18a6df;
+    margin-right: 8px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group.info[_ngcontent-serverApp-c178] p[_ngcontent-serverApp-c178] {
+    line-height: 30px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] .radio[_ngcontent-serverApp-c178] {
+    text-align: center;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] .radio[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    width: auto !important;
+    text-align: center
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] .radio[_ngcontent-serverApp-c178] input[_ngcontent-serverApp-c178] {
+    margin-right: 10px;
+    height: auto !important
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] .input-calendar[_ngcontent-serverApp-c178] option[_ngcontent-serverApp-c178] {
+    text-align: center
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] .form-control[readonly][_ngcontent-serverApp-c178] {
+    background-color: #fff !important
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] input[_ngcontent-serverApp-c178] {
+    height: 50px;
+    border-radius: 15px;
+    border: 1px solid #25ae5d
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    width: 200px;
+    line-height: 50px;
+    font-family: Open Sans, sans-serif;
+    font-size: 17px;
+    color: #1e1e1e;
+    font-weight: 600
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] textarea[_ngcontent-serverApp-c178] {
+    border-radius: 15px;
+    border: 1px solid #25ae5d;
+    width: 100%
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .tien-su-benh[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178],
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .tien-su-benh[_ngcontent-serverApp-c178] h2[_ngcontent-serverApp-c178] {
+    margin-left: 80px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] {
+    margin-bottom: 15px !important
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .pc-width[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    visibility: hidden
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .pc-width[_ngcontent-serverApp-c178] input[_ngcontent-serverApp-c178] {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    text-align: center
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .row[_ngcontent-serverApp-c178] .date[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+    visibility: hidden
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .row[_ngcontent-serverApp-c178] .date[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178] .calendar[_ngcontent-serverApp-c178] {
+    border: 1px solid #25ae5d;
+    height: 50px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    background: #25ae5d;
+    color: #fff;
+    text-align: center;
+    -moz-text-align-last: center;
+    text-align-last: center;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .row[_ngcontent-serverApp-c178] .date[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178] .calendar[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+    color: #fff
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .row[_ngcontent-serverApp-c178] .hour[_ngcontent-serverApp-c178] .dropdown[_ngcontent-serverApp-c178] {
+    float: right
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .dropdown[_ngcontent-serverApp-c178] {
+    border: 1px solid #25ae5d;
+    height: 50px;
+    border-radius: 50px;
+    text-align: center;
+    -moz-text-align-last: center;
+    text-align-last: center;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url(arrow.43238c223b7a73990844.png) no-repeat 80% 50% #fff
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .dropdown[_ngcontent-serverApp-c178] option[_ngcontent-serverApp-c178] {
+    text-align: center
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .note[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] textarea[_ngcontent-serverApp-c178]:focus {
+    box-shadow: 0 0 0 0 #6fcae8 !important
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .note[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] textarea[_ngcontent-serverApp-c178]::-moz-placeholder {
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #000;
+    font-weight: 300 i;
+    opacity: .5;
+    font-style: italic
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .note[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] textarea[_ngcontent-serverApp-c178]:-ms-input-placeholder {
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #000;
+    font-weight: 300 i;
+    opacity: .5;
+    font-style: italic
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .time-date[_ngcontent-serverApp-c178] .note[_ngcontent-serverApp-c178] .form-group[_ngcontent-serverApp-c178] textarea[_ngcontent-serverApp-c178]::placeholder {
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #000;
+    font-weight: 300 i;
+    opacity: .5;
+    font-style: italic
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .upload[_ngcontent-serverApp-c178] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .upload[_ngcontent-serverApp-c178] .list-img[_ngcontent-serverApp-c178] {
+    height: 348px;
+    border: 1px solid #25ae5d;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    padding: 30px 50px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .upload[_ngcontent-serverApp-c178] .list-img[_ngcontent-serverApp-c178] #file-name[_ngcontent-serverApp-c178] {
+    height: 280px;
+    border: 1px solid #25ae5d;
+    background-size: cover
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .upload[_ngcontent-serverApp-c178] #fileupload[_ngcontent-serverApp-c178] {
+    background-color: #fff;
+    font-family: Open Sans, sans-serif;
+    font-size: 18px;
+    color: #18a6df;
+    font-weight: 500;
+    position: relative;
+    width: 320px;
+    margin: 0 auto;
+    height: 40px;
+    display: flex;
+    line-height: 40px;
+    padding: 0 !important;
+    border: none !important;
+    cursor: pointer
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .upload[_ngcontent-serverApp-c178] #fileupload[_ngcontent-serverApp-c178] .upload-button-iccon[_ngcontent-serverApp-c178] {
+    background: url(icon-upload.56c1213046d646e34ccb.png) no-repeat 50%;
+    width: 40px !important;
+    height: 40px !important;
+    margin-right: 15px;
+    cursor: pointer
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .upload[_ngcontent-serverApp-c178] #fileupload[_ngcontent-serverApp-c178] input[name=file][_ngcontent-serverApp-c178] {
+    cursor: pointer;
+    height: 40px !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    width: 320px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .alert-danger[_ngcontent-serverApp-c178] {
+    width: 100%;
+    text-align: center;
+    font-family: Open Sans, sans-serif;
+    font-size: 16px;
+    color: red;
+    font-weight: 500;
+    margin-top: 7px;
+    background-color: #fff;
+    border-color: #fff;
+    margin-bottom: 0
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .btn-next[_ngcontent-serverApp-c178] {
+    border-radius: 50px;
+    background: #3497db !important;
+    border-color: #3497db !important;
+    display: flex;
+    margin: 0 auto 30px
+}
+
+[_nghost-serverApp-c178] .info-register[_ngcontent-serverApp-c178] form[_ngcontent-serverApp-c178] .btn-next[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+    margin-right: 5px
+}
+
+@media only screen and (max-width:768px) {
+    .hour[_ngcontent-serverApp-c178] {
+        padding-left: 0 !important
+    }
+
+    input[_ngcontent-serverApp-c178],
+    select[_ngcontent-serverApp-c178] {
+        height: 40px !important
+    }
+
+    .form-group[_ngcontent-serverApp-c178] {
+        margin-left: 0 !important;
+        padding-left: 10px;
+        padding-right: 10px
+    }
+
+    .non-data[_ngcontent-serverApp-c178] {
+        width: 70% !important
+    }
+
+    .time-date[_ngcontent-serverApp-c178] .pc-width[_ngcontent-serverApp-c178] {
+        margin-top: 10px !important
+    }
+
+    .time-date[_ngcontent-serverApp-c178] .pc-width[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+        visibility: unset;
+        display: none
+    }
+
+    .time-date[_ngcontent-serverApp-c178] .pc-width[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178] .calendar[_ngcontent-serverApp-c178] {
+        height: 40px !important
+    }
+
+    .time-date[_ngcontent-serverApp-c178] .hour[_ngcontent-serverApp-c178] {
+        padding-left: 10px !important;
+        padding-right: 10px !important
+    }
+
+    .title[_ngcontent-serverApp-c178] {
+        margin-left: 0 !important;
+        display: -webkit-inline-box
+    }
+
+    .title[_ngcontent-serverApp-c178] p[_ngcontent-serverApp-c178] {
+        font-size: 14px !important
+    }
+
+    .title[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+        margin-right: 17px;
+        background: url(timer.03eab1393d54c226476b.png) no-repeat 50%
+    }
+
+    .title[_ngcontent-serverApp-c178] img[_ngcontent-serverApp-c178] {
+        margin-right: 10px
+    }
+
+    .nav-item[_ngcontent-serverApp-c178] a[_ngcontent-serverApp-c178] {
+        font-size: 14px !important;
+        height: 40px !important
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .header[_ngcontent-serverApp-c178] {
+        background: #a0e1f9;
+        height: 300px !important
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .header[_ngcontent-serverApp-c178] .container[_ngcontent-serverApp-c178] {
+        flex-direction: column;
+        height: 300px !important
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .header[_ngcontent-serverApp-c178] .container[_ngcontent-serverApp-c178] .avatar[_ngcontent-serverApp-c178] {
+        margin-top: 20px;
+        width: 150px;
+        height: 150px;
+        margin-left: 0
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .header[_ngcontent-serverApp-c178] .container[_ngcontent-serverApp-c178] .info[_ngcontent-serverApp-c178] h2[_ngcontent-serverApp-c178] {
+        margin-left: 0;
+        font-size: 16px;
+        margin-top: 10px;
+        text-align: center
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] {
+        box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .07);
+        padding: 15px
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] {
+        max-height: 300px;
+        overflow-y: auto !important
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] {
+        margin-right: 15px;
+        padding: 10px 20px;
+        border: 1px solid #25ae5d;
+        display: flex !important;
+        flex-direction: column;
+        position: relative;
+        margin-top: 12px
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] .user[_ngcontent-serverApp-c178] {
+        width: 80%
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] .user[_ngcontent-serverApp-c178] .name[_ngcontent-serverApp-c178] {
+        margin-bottom: 0;
+        font-family: Open Sans, sans-serif;
+        font-size: 18px;
+        color: #1e1e1e;
+        font-weight: 600
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] .user[_ngcontent-serverApp-c178] .info[_ngcontent-serverApp-c178] {
+        margin-bottom: 0;
+        font-family: Open Sans, sans-serif;
+        font-size: 15px;
+        color: #1e1e1e;
+        font-weight: 500
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] .user[_ngcontent-serverApp-c178] .info[_ngcontent-serverApp-c178] label[_ngcontent-serverApp-c178] {
+        font-family: Open Sans, sans-serif;
+        font-size: 15px;
+        color: #1e1e1e;
+        font-weight: 600
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] button[_ngcontent-serverApp-c178] {
+        border-radius: 50px;
+        background: #3497db !important;
+        border-color: #3497db !important;
+        position: relative !important;
+        width: 50%;
+        margin: 0 auto;
+        transform: none !important;
+        margin-bottom: 20px
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .users[_ngcontent-serverApp-c178] .parent[_ngcontent-serverApp-c178] .item[_ngcontent-serverApp-c178] button[_ngcontent-serverApp-c178] i[_ngcontent-serverApp-c178] {
+        margin-right: 5px
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .title-add[_ngcontent-serverApp-c178] {
+        font-size: 16px !important
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] {
+        height: 40px !important
+    }
+
+    .booking-section[_ngcontent-serverApp-c178] .contain[_ngcontent-serverApp-c178] .tab-content[_ngcontent-serverApp-c178] .right[_ngcontent-serverApp-c178] .add-user[_ngcontent-serverApp-c178] .search-number[_ngcontent-serverApp-c178] .form-custom[_ngcontent-serverApp-c178] .input-group-append[_ngcontent-serverApp-c178] button[_ngcontent-serverApp-c178] {
+        width: 70px !important
+    }
+}

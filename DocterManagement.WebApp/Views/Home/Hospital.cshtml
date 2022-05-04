@@ -1,0 +1,1097 @@
+﻿
+@{
+    ViewData["Title"] = "Hospital";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Stylesheet{
+    <style>
+        .root-layout[_ngcontent-serverApp-c55] {
+            background-color: #f6f6f6
+        }
+    </style>
+    <style>
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @@media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @@media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c54] .ant-collapse-content-box {
+            padding: 0 !important
+        }
+
+        nz-collapse-panel[_ngcontent-serverApp-c54] {
+            padding: 0 !important
+        }
+
+        [_nghost-serverApp-c54] .ant-collapse-header {
+            cursor: pointer !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 600 !important;
+            color: currentColor !important
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c54] .ant-collapse-header {
+                cursor: auto !important
+            }
+
+            nz-collapse-panel[_ngcontent-serverApp-c54] {
+                border-style: none !important
+            }
+        }
+
+        a[_ngcontent-serverApp-c54]:hover {
+            color: currentColor
+        }
+    </style>
+    <style>
+        .wrapper-main[_ngcontent-serverApp-c67] {
+            background: linear-gradient(90deg, #00c6fb 0%, #0758d8 98.74%)
+        }
+
+        @@media only screen and (max-width: 767px) {
+            .banner-navigation[_ngcontent-serverApp-c67] {
+                background: white
+            }
+        }
+
+        .selected[_ngcontent-serverApp-c67] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [nz-carousel-content][_ngcontent-serverApp-c68] {
+            overflow: hidden
+        }
+    </style>
+    <style>
+        .main-search[_ngcontent-serverApp-c64] {
+            margin: 0;
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: .5rem;
+            border-color: transparent;
+            padding: .75rem 2.25rem .75rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+
+        .main-search[_ngcontent-serverApp-c64]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .main-search[_ngcontent-serverApp-c64]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            outline: 2px solid transparent;
+            outline-offset: 2px
+        }
+
+        @@media (min-width: 782px) {
+            .main-search[_ngcontent-serverApp-c64] {
+                padding-right: .75rem;
+                padding-left: 3rem
+            }
+        }
+
+        .main-search[_ngcontent-serverApp-c64]::-webkit-calendar-picker-indicator {
+            display: none !important
+        }
+    </style>
+    <style>
+        .bookmark_hospital[_ngcontent-serverApp-c66]::-webkit-scrollbar {
+            background: transparent;
+            width: 0px
+        }
+    </style>
+}
+
+<app-hospitals _nghost-serverapp-c226="" class="ng-star-inserted">
+               @await Component.InvokeAsync("SearchHome")
+                <app-list-hospital _ngcontent-serverapp-c226="" _nghost-serverapp-c225="">
+                    <div _ngcontent-serverapp-c225="" class="py-10 ng-star-inserted">
+                        <nz-spin _ngcontent-serverapp-c225="" class="ant-spin-nested-loading">
+                            <!---->
+                            <!---->
+                            <div class="ant-spin-container ng-star-inserted">
+                                <div _ngcontent-serverapp-c225=""
+                                    class="max-w-7xl mx-auto px-4 text-center py-4 mb-10 ng-star-inserted">
+                                    <h2 _ngcontent-serverapp-c225="" class="text-2xl md:text-4xl font-bold mb-3">Đặt
+                                        khám trực tuyến với các Bệnh viện</h2>
+                                    <p _ngcontent-serverapp-c225="" class="text-sm font-medium text-gray-500">Chủ động
+                                        chọn lịch hẹn - Đi khám không đợi chờ</p>
+                                </div>
+                                <div _ngcontent-serverapp-c225="" nfinite-scroll="" infinite-scroll=""
+                                    class="max-w-4xl mx-auto divide-y md:ring-1 md:ring-slate-200 rounded shadow ng-star-inserted">
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Lê Văn Thịnh"
+                                                            src="https://youmed.vn/photos/01ef900a-1aa5-4781-acee-2ba6e1c3f9c3.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Lê Văn Thịnh </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">130 Lê
+                                                        Văn Thịnh , P. Bình Trưng Tây, TP. Thủ Đức, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Răng Hàm Mặt TP.HCM"
+                                                            src="https://youmed.vn/photos/5d25ccd4-9ed8-4455-81fa-dca65d1c2604.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Răng Hàm Mặt TP.HCM </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">
+                                                        263-265 Trần Hưng Đạo, P. Cô Giang, Q.1, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Y Học Cổ Truyền TP.HCM"
+                                                            src="https://youmed.vn/photos/fb4179f1-d0e9-4e2a-98a2-26e6efe7add8.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Y Học Cổ Truyền TP.HCM </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">179
+                                                        Nam Kỳ Khởi Nghĩa, P.7, Q.3, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Quận 4"
+                                                            src="https://youmed.vn/photos/f5445ff2-285a-44f4-bd6c-ca6c08ee62d7.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Quận 4 </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">65 Bến
+                                                        Vân Đồn, Phường 12, Quận 4, Thành phố Hồ Chí Minh</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Tai Mũi Họng TPHCM"
+                                                            src="https://youmed.test.davido.vn/photos/4b390dd9-1194-4620-ad46-de517af7244b.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Tai Mũi Họng TPHCM </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">153 -
+                                                        155 - 157 Trần Quốc Thảo, P.9, Q.3, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Bà Rịa Vũng Tàu"
+                                                            src="https://youmed.vn/photos/303dd288-510c-47f3-b163-ac69c9d539ca.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Bà Rịa Vũng Tàu </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">686 Võ
+                                                        Văn Kiệt, P. Long Tâm, TP. Bà Rịa, Tỉnh Bà Rịa - Vũng Tàu</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh Viện Răng Hàm Mặt Trung Ương TP.HCM"
+                                                            src="https://youmed.vn/photos/367a4818-c2bc-4f96-b9a7-a439a551a451.jpeg">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh Viện Răng Hàm Mặt Trung Ương TP.HCM </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">201A
+                                                        Nguyễn Chí Thanh, Phường 12, Quận 5, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Hoàn Hảo"
+                                                            src="https://youmed.vn/photos/6d0e29c8-f993-4f67-83f4-b95f5c2d64c4.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Hoàn Hảo </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">26/14
+                                                        Kp. Bình đường 2 P. An Bình, Thành phố Dĩ An, Tỉnh Bình Dương
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Quân Y 175"
+                                                            src="https://youmed.vn/photos/a79e4614-faf7-45b5-ab04-d98a4b2a2a1f.jpeg">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Quân Y 175 </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">786
+                                                        Nguyễn Kiệm, P.3, Q. Gò Vấp, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Quận 8"
+                                                            src="https://youmed.vn/photos/ee496ff2-8129-4a0e-ac22-941e2a0ab663.jpg">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Quận 8 </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">82 Cao
+                                                        Lỗ, Phường 4, Quận 8, TP.Hồ Chí Minh</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Quận 7"
+                                                            src="https://youmed.vn/photos/80da1a2f-efff-4971-af90-74b04dd58d8c.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Quận 7 </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">101
+                                                        Nguyễn Thị Thập, P.Tân Phú, Q.7, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Từ Dũ"
+                                                            src="https://youmed.vn/photos/278ffdbe-f63a-46c2-90de-21766b53f3de.jpeg">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Từ Dũ </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">284
+                                                        Cống Quỳnh, Q.1, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Quân Dân Y Miền Đông"
+                                                            src="https://youmed.vn/photos/3aa229df-34c2-41d8-8c84-e83493eb4056.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Quân Dân Y Miền Đông </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">50 Lê
+                                                        Văn Việt, P. Hiệp Phú, Q.9, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Truyền Máu Huyết Học TPHCM"
+                                                            src="https://bthh.org.vn/FrontEnd/images/logo-bth.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Truyền Máu Huyết Học TPHCM </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">Số 1
+                                                        Trần Hữu Nghiệp, Xã Tân Kiên, H. Bình Chánh, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Đa Khoa Bình Dương"
+                                                            src="https://youmed.vn/photos/c3bced49-2fee-4c87-bf02-24dbd6ac2bd1.jpg">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Đa Khoa Bình Dương </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">5 Phạm
+                                                        Ngọc Thạch, Hiệp Thành, TP. Thủ Dầu Một, Bình Dương</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Nguyễn Tri Phương"
+                                                            src="https://youmed.vn/photos/29a952fb-79b0-4b74-83c5-1d8eaab25653.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Nguyễn Tri Phương </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">468
+                                                        Nguyễn Trãi, P.8, Q.5, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Đa khoa Trung tâm An Giang"
+                                                            src="https://youmed.vn/photos/80a42029-ae86-4a6a-b727-d402181042c1.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Đa khoa Trung tâm An Giang </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">60 Ung
+                                                        Văn Khiêm, P. Mỹ Phước, TP. Long Xuyên, An Giang</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện ĐA KHOA TÂM TRÍ"
+                                                            src="https://youmed.vn/photos/00e1d977-6b35-430a-8171-d2593c312f0f.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện ĐA KHOA TÂM TRÍ </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">171
+                                                        Đường Trường Chinh, Phường Tân Thới Nhất, Quận 12, TP. Hồ Chí
+                                                        Minh</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Bệnh Nhiệt Đới"
+                                                            src="https://youmed.vn/photos/654280e1-e803-4abe-a57c-32fe5fb96c19.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Bệnh Nhiệt Đới </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">764 Võ
+                                                        Văn Kiệt, Phường 1, Quận 5, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Phục Hồi Chức Năng - Điều Trị Bệnh Nghề Nghiệp"
+                                                            src="https://youmed.vn/photos/fb8aa4ca-120a-4da6-8f6f-57955fde62a1.png">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Phục Hồi Chức Năng - Điều Trị Bệnh Nghề Nghiệp </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">313 Âu
+                                                        Dương Lân, P.2, Q.8, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <app-card-service _ngcontent-serverapp-c225="" class="flex flex-1 ng-star-inserted"
+                                        _nghost-serverapp-c184="">
+                                        <div _ngcontent-serverapp-c184=""
+                                            class="flex flex-1 flex-col md:flex-row p-4 gap-4 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c184="" class="flex flex-1 gap-4 bg-white">
+                                                <div _ngcontent-serverapp-c184="">
+                                                    <div _ngcontent-serverapp-c184=""
+                                                        class="bg-white cursor-pointer ng-star-inserted"><img
+                                                            _ngcontent-serverapp-c184="" width="112" height="112"
+                                                            defaultimage="~/img/placeholder.webp" loading="lazy"
+                                                            class="w-28 h-28 rounded lazyload object-contain  ng-lazyloaded"
+                                                            alt="Bệnh viện Quận Tân Phú"
+                                                            src="https://youmed.vn/photos/6590dd01-ebfa-4115-a2f8-18a83d8d5c64.jpg">
+                                                    </div>
+                                                    <!---->
+                                                    <!---->
+                                                </div>
+                                                <div _ngcontent-serverapp-c184="" class="flex-1 space-y-2">
+                                                    <h3 _ngcontent-serverapp-c184=""
+                                                        class="text-primary text-lg cursor-pointer hover:underline">
+                                                        Bệnh viện Quận Tân Phú </h3>
+                                                    <p _ngcontent-serverapp-c184="" class="text-sm text-gray-600">609 -
+                                                        611 Âu Cơ, P. Phú Trung, Q. Tân Phú, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c184=""
+                                                class="flex flex-col items-stretch md:justify-center"><a
+                                                    _ngcontent-serverapp-c184=""
+                                                    class="button button--primary block">Đặt lịch khám</a></div>
+                                        </div>
+                                        <!---->
+                                    </app-card-service>
+                                    <!---->
+                                    <!---->
+                                    <!---->
+                                </div>
+                                <!---->
+                                <!---->
+                            </div>
+                            <!---->
+                        </nz-spin>
+                    </div>
+                    <!---->
+                </app-list-hospital>
+                <app-carousel-intro _ngcontent-serverapp-c226="" _nghost-serverapp-c68="">
+                    <section _ngcontent-serverapp-c68="" class="pt-10 md:pb-10 md:pt-16 ng-star-inserted">
+                        <div _ngcontent-serverapp-c68="" class="max-w-7xl mx-auto px-4 text-center py-4 mb-10">
+                            <h2 _ngcontent-serverapp-c68="" class="text-2xl md:text-4xl font-bold mb-3">Đi khám không
+                                đợi chờ</h2>
+                            <p _ngcontent-serverapp-c68="" class="text-sm font-medium text-gray-500 mb-0">Đặt lịch mọi
+                                nơi - Đi khám thảnh thơi</p>
+                        </div>
+                        <div _ngcontent-serverapp-c68="" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2">
+                            <div _ngcontent-serverapp-c68="" class="carousel">
+                                <nz-carousel _ngcontent-serverapp-c68="" nzautoplay="" class="ant-carousel">
+                                    <div class="slick-initialized slick-slider">
+                                        <div tabindex="-1" class="slick-list">
+                                            <div class="slick-track" style="width: 1280px;">
+                                                <div _ngcontent-serverapp-c68="" nz-carousel-content=""
+                                                    class="slick-slide ng-star-inserted"
+                                                    style="opacity: 0; position: relative; width: 640px; left: 0px; transition: opacity 500ms ease 0s, visibility 500ms ease 0s;">
+                                                    <img _ngcontent-serverapp-c68="" width="500" height="500" alt=""
+                                                        class="mx-auto  ng-lazyloaded"
+                                                        src="~/img/booking/png/Hospital/Feature1.webp"></div>
+                                                <div _ngcontent-serverapp-c68="" nz-carousel-content=""
+                                                    class="slick-slide ng-star-inserted slick-active"
+                                                    style="opacity: 1; position: relative; width: 640px; left: -640px; transition: opacity 500ms ease 0s, visibility 500ms ease 0s;">
+                                                    <img _ngcontent-serverapp-c68="" width="500" height="500" alt=""
+                                                        class="mx-auto  ng-lazyloaded"
+                                                        src="~/img/booking/png/Hospital/Feature2.webp"></div>
+                                                <!---->
+                                            </div>
+                                        </div>
+                                        <!---->
+                                    </div>
+                                    <!---->
+                                </nz-carousel>
+                            </div>
+                            <div _ngcontent-serverapp-c68="" class="info relative">
+                                <div _ngcontent-serverapp-c68="" class="md:border-l divide-y">
+                                    <div _ngcontent-serverapp-c68=""
+                                        class="carousel-item cursor-pointer border-l-4 border-l-transparent px-4 py-6 md:p-10 group hover:border-l-primary ng-star-inserted">
+                                        <h3 _ngcontent-serverapp-c68=""
+                                            class="text-base lg:text-lg font-semibold group-hover:text-primary">Giảm thủ
+                                            tục hành chính</h3>
+                                        <p _ngcontent-serverapp-c68="" class="text-sm lg:text-base mt-3">Đặt khám và
+                                            thanh toán trực tuyến giúp tối giản quy trình thủ tục tại bệnh viện. Vào
+                                            khám ngay không đợi chờ.</p>
+                                    </div>
+                                    <!---->
+                                    <div _ngcontent-serverapp-c68=""
+                                        class="carousel-item cursor-pointer border-l-4 border-l-transparent px-4 py-6 md:p-10 group hover:border-l-primary ng-star-inserted border-l-primary">
+                                        <h3 _ngcontent-serverapp-c68=""
+                                            class="text-base lg:text-lg font-semibold group-hover:text-primary">Trả kết
+                                            quả, lưu trữ lịch sử khám</h3>
+                                        <p _ngcontent-serverapp-c68="" class="text-sm lg:text-base mt-3">Ứng dụng tự
+                                            động trả kết quả khám, xét nghiệm, toa thuốc...và nhắc lịch tái khám. Toàn
+                                            bộ lịch sử khám được lưu trữ trên ứng dụng YouMed.</p>
+                                    </div>
+                                    <!---->
+                                    <!---->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!---->
+                </app-carousel-intro>
+                <app-download _ngcontent-serverapp-c226="" _nghost-serverapp-c69="">
+                    <section _ngcontent-serverapp-c69="" id="download"
+                        class="bg-gradient-to-t md:bg-gradient-to-r from-[#00C6FB] to-[#0758D8] md:mt-12">
+                        <div _ngcontent-serverapp-c69="" class="max-w-7xl mx-auto md:grid md:grid-cols-12">
+                            <div _ngcontent-serverapp-c69=""
+                                class="px-4 py-6 lg:py-12 text-white space-y-6 md:col-span-5 lg:col-span-4">
+                                <h2 _ngcontent-serverapp-c69="" class="text-2xl md:text-4xl font-bold text-white">Tải
+                                    ứng dụng YouMed</h2>
+                                <ul _ngcontent-serverapp-c69="" class="space-y-4">
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg/iconCheck.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Giảm thủ tục hành
+                                            chính</span></li>
+                                    <!---->
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg/iconCheck.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Đi khám không đợi chờ</span>
+                                    </li>
+                                    <!---->
+                                    <!---->
+                                </ul>
+                                <div _ngcontent-serverapp-c69="" class="flex gap-4 justify-center md:justify-start"><a
+                                        _ngcontent-serverapp-c69="" target="_blank"
+                                        href="https://play.google.com/store/apps/details?id=com.youmed.info"><img
+                                            _ngcontent-serverapp-c69="" width="135" height="40" loading="lazy"
+                                            src="~/img/booking/svg/google-play.svg"
+                                            title="Tải ứng dụng đặt khám trên Google Play"
+                                            alt="Tải ứng dụng đặt khám trên Google Play"></a><a
+                                        _ngcontent-serverapp-c69="" target="_blank"
+                                        href="https://itunes.apple.com/gb/app/youmed/id1466077723?mt=8"><img
+                                            _ngcontent-serverapp-c69="" width="120" height="40" loading="lazy"
+                                            src="~/img/booking/svg/apple-store.svg"
+                                            title="Tải ứng dụng đặt khám trên Apple Store"
+                                            alt="Tải ứng dụng đặt khám trên Apple Store"></a></div>
+                            </div>
+                            <div _ngcontent-serverapp-c69=""
+                                class="md:col-span-7 lg:col-span-8 relative overflow-hidden md:overflow-visible flex items-end justify-center">
+                                <img _ngcontent-serverapp-c69="" width="734" height="734"
+                                    src="~/img/booking/svg/rounded_full.svg" alt="decor"
+                                    class="absolute top-0 lg:-top-1/2">
+                                <div _ngcontent-serverapp-c69=""
+                                    class="invisible md:visible absolute z-10 bottom-0 max-w-[195.8px] md:max-w-full">
+                                    <img _ngcontent-serverapp-c69="" lazyload="~/img/booking/png/ip13.webp"
+                                        class="w-full md:max-h-[350px] object-cover  ng-lazyloaded"
+                                        src="~/img/booking/png/ip13.webp"></div>
+                            </div>
+                        </div>
+                    </section>
+                </app-download>
+                <router-outlet _ngcontent-serverapp-c226=""></router-outlet>
+                <!---->
+</app-hospitals>
+@section JavaScript{
+    <script>
+         var hospital = document.getElementById("hospital");
+            hospital.classList.add("selected");
+    </script>
+}

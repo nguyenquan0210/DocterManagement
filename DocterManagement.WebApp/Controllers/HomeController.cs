@@ -17,7 +17,18 @@ namespace DoctorManagement.WebApp.Controllers
         {
             return View();
         }
-
+        public IActionResult Doctor()
+        {
+            return View();
+        }
+        public IActionResult Clinic()
+        {
+            return View();
+        }
+        public IActionResult Hospital()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
