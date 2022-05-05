@@ -13,7 +13,7 @@ namespace DoctorManagement.Data.Entities
         public string Diagnose { get; set; }
         public string Prescription { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime CreatedAt { get; set; }
         public StatusIllness StatusIllness { get; set; }
 
         public Status Status { get; set; }

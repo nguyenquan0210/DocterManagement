@@ -25,7 +25,7 @@ namespace DoctorManagement.Application.Catalog.Rate
             var rates = new Rates()
             {
                 Title = request.Title,
-                Date = DateTime.Now,
+                CreatedAt = DateTime.Now,
                 Description = request.Description,
                 Rating = request.Rating,
                 AppointmentId = request.AppointmentId
@@ -57,7 +57,7 @@ namespace DoctorManagement.Application.Catalog.Rate
                 Title = x.Title,
                 Description = x.Description,
                 Rating = x.Rating,
-                Date = x.Date,
+                Date = x.CreatedAt,
                 AppointmentId = x.AppointmentId
             }).ToListAsync();
             return new ApiSuccessResult<List<RatesVm>>(rs);
@@ -82,7 +82,7 @@ namespace DoctorManagement.Application.Catalog.Rate
                     Id = x.Id,
                     Rating = x.Rating,
                     AppointmentId = x.AppointmentId,
-                    Date = x.Date
+                    Date = x.CreatedAt
 
                 }).ToListAsync();
 
@@ -105,7 +105,7 @@ namespace DoctorManagement.Application.Catalog.Rate
                 Id = rates.Id,
                 Title = rates.Title,
                 Description = rates.Description,
-                Date = rates.Date,
+                Date = rates.CreatedAt,
                 AppointmentId = rates.AppointmentId,
                 Rating = rates.Rating
             };

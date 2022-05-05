@@ -9,7 +9,7 @@ namespace DoctorManagement.Data.Entities
     public class CommentsPost
     {
         public Guid Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string Description { get; set; }
         public bool CheckLevel { get; set; }
         public string CheckComentId { get; set; }

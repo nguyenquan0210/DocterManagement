@@ -24,7 +24,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
         }
         public async Task<ApiResult<Appointments>> Create(AppointmentCreateRequest request)
         {
-            var sch = _context.SchedulesDetails.FindAsync(request.SchedulesDetailId);
+            var sch = _context.schedulesSlots.FindAsync(request.SchedulesDetailId);
            
             string day = DateTime.Now.ToString("dd") + "-" + sch.Result.ScheduleId.ToString().Remove(2);
             int count = await _context.Doctors.Where(x => x.No.Contains("DK-" + day)).CountAsync();
@@ -34,11 +34,11 @@ namespace DoctorManagement.Application.Catalog.Appointment
             else if (count < 999) str = "DK-" + day + "-" + (count + 1);
             var appointments = new Appointments()
             {
-                Date = DateTime.Now,
+                CreatedAt = DateTime.Now,
                 Status = StatusAppointment.pending,
                 PatientId = request.PatientId,
                 No = str,
-                SchedulesDetailId = request.SchedulesDetailId
+                SchedulesSlotId = request.SchedulesDetailId
             };
             _context.Appointments.Add(appointments);
             await _context.SaveChangesAsync();
@@ -71,8 +71,8 @@ namespace DoctorManagement.Application.Catalog.Appointment
             var rs = await query.Select(x => new AppointmentVm()
             {
                 Id = x.Id,
-                Date = x.Date,
-                SchedulesDetailId = x.SchedulesDetailId,
+                Date = x.CreatedAt,
+                SchedulesDetailId = x.SchedulesSlotId,
                 PatientId = x.PatientId,
                 Status = x.Status
             }).ToListAsync();
@@ -85,7 +85,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.Date.ToShortDateString().Contains(request.Keyword));
+                query = query.Where(x => x.CreatedAt.ToShortDateString().Contains(request.Keyword));
             }
             int totalRow = await query.CountAsync();
 
@@ -94,9 +94,9 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 .Select(x => new AppointmentVm()
                 {
                     Id = x.Id,
-                    Date = x.Date,
+                    Date = x.CreatedAt,
                     PatientId = x.PatientId,
-                    SchedulesDetailId = x.SchedulesDetailId,
+                    SchedulesDetailId = x.SchedulesSlotId,
                     Status = x.Status,
                     No = x.No,
 
@@ -119,9 +119,9 @@ namespace DoctorManagement.Application.Catalog.Appointment
             var rs = new AppointmentVm()
             {
                 Id = Appointments.Id,
-                Date = Appointments.Date,
+                Date = Appointments.CreatedAt,
                 PatientId = Appointments.PatientId,
-                SchedulesDetailId = Appointments.SchedulesDetailId,
+                SchedulesDetailId = Appointments.SchedulesSlotId,
                 Status = Appointments.Status
             };
             return new ApiSuccessResult<AppointmentVm>(rs);

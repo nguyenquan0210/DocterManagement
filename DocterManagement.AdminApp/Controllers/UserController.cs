@@ -126,7 +126,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 ViewBag.Status = SeletectStatus(user.Status);
                 ViewBag.Img = user.DoctorVm.Img;
                 ViewBag.Clinic = await _userApiClient.GetAllClinic(user.DoctorVm.GetClinic.Id);
-                ViewBag.Speciality = await _userApiClient.GetAllSpeciality(user.DoctorVm.GetSpeciality.Id);
+                //ViewBag.Speciality = await _userApiClient.GetAllSpeciality(user.DoctorVm.GetSpecialities.Id);
                 var updateRequest = new UserUpdateRequest()
                 {
                     Dob = user.Dob,
@@ -137,10 +137,10 @@ namespace DoctorManagement.AdminApp.Controllers
                     Id = id,
                     Address = user.DoctorVm.Address,
                     Status = user.Status ,
-                    SpecialityId = user.DoctorVm.GetSpeciality.Id,
+                    //SpecialityId = user.DoctorVm.GetSpeciality.Id,
                     ClinicId = user.DoctorVm.GetClinic.Id,
                     img = user.DoctorVm.Img,
-                    Description = user.DoctorVm.Description
+                    Description = user.DoctorVm.Intro
                 };
                 return View(updateRequest);
             }

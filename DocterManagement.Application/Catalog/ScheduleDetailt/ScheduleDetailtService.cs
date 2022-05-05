@@ -23,14 +23,14 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
         }
         public async Task<ApiResult<bool>> Create(ScheduleDetailtCreateRequest request)
         {
-            var schedulesDetails = new SchedulesDetailts()
+            var schedulesDetails = new SchedulesSlots()
             {
                 FromTime = request.FromTime,
                 ToTime = request.ToTime,
-                Status = Data.Enums.Status.Active,
+                Status = Status.Active,
                 ScheduleId = request.ScheduleId
             };
-            _context.SchedulesDetails.Add(schedulesDetails);
+            _context.schedulesSlots.Add(schedulesDetails);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
             return new ApiSuccessResult<bool>(false);
@@ -38,7 +38,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
 
         public async Task<ApiResult<int>> Delete(Guid Id)
         {
-            var schedulesDetails = await _context.SchedulesDetails.FindAsync(Id);
+            var schedulesDetails = await _context.schedulesSlots.FindAsync(Id);
             int check = 0;
             if (schedulesDetails == null) return new ApiSuccessResult<int>(check);
             if (schedulesDetails.Status == Status.Active)
@@ -48,7 +48,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
             }
             else
             {
-                _context.SchedulesDetails.Remove(schedulesDetails);
+                _context.schedulesSlots.Remove(schedulesDetails);
                 check = 2;
             }
             await _context.SaveChangesAsync();
@@ -57,7 +57,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
 
         public async Task<ApiResult<List<ScheduleDetailtVm>>> GetAll()
         {
-            var query = _context.SchedulesDetails;
+            var query = _context.schedulesSlots;
 
             var rs = await query.Select(x => new ScheduleDetailtVm()
             {
@@ -72,7 +72,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
 
         public async Task<ApiResult<PagedResult<ScheduleDetailtVm>>> GetAllPaging(GetScheduleDetailtPagingRequest request)
         {
-            var query = from c in _context.SchedulesDetails select c;
+            var query = from c in _context.schedulesSlots select c;
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
@@ -104,7 +104,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
 
         public async Task<ApiResult<ScheduleDetailtVm>> GetById(Guid Id)
         {
-            var schedules = await _context.SchedulesDetails.FindAsync(Id);
+            var schedules = await _context.schedulesSlots.FindAsync(Id);
             if (schedules == null) throw new DoctorManageException($"Cannot find a Schedule with id: { Id}");
             var rs = new ScheduleDetailtVm()
             {
@@ -119,7 +119,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
 
         public async Task<ApiResult<bool>> Update(ScheduleDetailtUpdateRequest request)
         {
-            var schedulesDetails = await _context.SchedulesDetails.FindAsync(request.Id);
+            var schedulesDetails = await _context.schedulesSlots.FindAsync(request.Id);
             if (schedulesDetails == null) return new ApiSuccessResult<bool>(false);
             schedulesDetails.FromTime = request.FromTime;
             schedulesDetails.ToTime = request.ToTime;

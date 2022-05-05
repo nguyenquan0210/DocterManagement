@@ -17,13 +17,19 @@ namespace DoctorManagement.Data.Configuration
 
             builder.HasKey(x => x.UserId);
             builder.Property(x => x.Address).IsRequired().HasMaxLength(150);
-            builder.Property(x => x.Description).IsRequired().HasMaxLength(int.MaxValue);
+            builder.Property(x => x.Intro).IsRequired().HasMaxLength(int.MaxValue);
+            builder.Property(x => x.Note).HasMaxLength(int.MaxValue);
             builder.Property(x => x.No).IsRequired().HasMaxLength(10);
             builder.Property(x => x.Img).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.Educations).HasMaxLength(int.MaxValue);
+            builder.Property(x => x.Prizes).HasMaxLength(int.MaxValue);
+            builder.Property(x => x.Slug).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.Prefix).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.Services).HasMaxLength(100);
+            builder.Property(x => x.MapUrl).IsRequired().HasMaxLength(255);
 
             builder.HasOne(x => x.AppUsers).WithOne(x => x.Doctors).HasForeignKey<Doctors>(x => x.UserId);
-            builder.HasOne(x => x.Specialities).WithMany(x => x.Doctors).HasForeignKey(x => x.SpecialityId);
-            builder.HasOne(x => x.Clinics).WithMany(x => x.Doctors).HasForeignKey(x => x.ClinicId);
+            builder.HasOne(x => x.Locations).WithMany(x => x.Doctors).HasForeignKey(x => x.LocationId).OnDelete(DeleteBehavior.ClientCascade);
             builder.HasOne(x => x.Clinics).WithMany(x => x.Doctors).HasForeignKey(x => x.ClinicId);
 
         }

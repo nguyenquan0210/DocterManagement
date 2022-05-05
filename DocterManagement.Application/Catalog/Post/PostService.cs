@@ -63,7 +63,7 @@ namespace DoctorManagement.Application.Catalog.Post
             var posts = new Posts()
             {
                 Title = request.Title,
-                Date = DateTime.Now,
+                CreatedAt = DateTime.Now,
                 Description = request.Description,
                 Status = Data.Enums.Status.Active,
                 DoctorId = request.DoctorId,
@@ -107,7 +107,7 @@ namespace DoctorManagement.Application.Catalog.Post
                 Title = x.Title,
                 Description = x.Description,
                 Status = x.Status,
-                Date = x.Date,
+                Date = x.CreatedAt,
                 DoctorId = x.DoctorId
             }).ToListAsync();
             return new ApiSuccessResult<List<PostVm>>(rs);
@@ -132,7 +132,7 @@ namespace DoctorManagement.Application.Catalog.Post
                     Id = x.Id,
                     Status = x.Status,
                     DoctorId = x.DoctorId,
-                    Date = x.Date
+                    Date = x.CreatedAt
 
                 }).ToListAsync();
 
@@ -155,7 +155,7 @@ namespace DoctorManagement.Application.Catalog.Post
                 Id = post.Id,
                 Title = post.Title,
                 Description = post.Description,
-                Date = post.Date,
+                Date = post.CreatedAt,
                 DoctorId = post.DoctorId,
                 Status = post.Status
             };

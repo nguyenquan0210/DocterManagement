@@ -29,7 +29,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 Note = request.Note,
                 StatusIllness = request.StatusIllness,
                 Prescription = request.Prescription,
-                Date = DateTime.Now,
+                CreatedAt = DateTime.Now,
                 Status = Status.Active,
                 PatientId = request.PatientId,
                 AppointmentId = request.AppointmentId,
@@ -67,7 +67,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             var rs = await query.Select(x => new MedicalRecordVm()
             {
                 Id = x.Id,
-                Date = x.Date,
+                Date = x.CreatedAt,
                 DoctorId= x.DoctorId,
                 PatientId = x.PatientId,
                 AppointmentId = x.AppointmentId,
@@ -86,7 +86,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.Date.ToShortDateString().Contains(request.Keyword));
+                query = query.Where(x => x.CreatedAt.ToShortDateString().Contains(request.Keyword));
             }
             int totalRow = await query.CountAsync();
 
@@ -95,7 +95,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 .Select(x => new MedicalRecordVm()
                 {
                     Id = x.Id,
-                    Date = x.Date,
+                    Date = x.CreatedAt,
                     DoctorId = x.DoctorId,
                     PatientId = x.PatientId,
                     AppointmentId = x.AppointmentId,
@@ -124,7 +124,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             var rs = new MedicalRecordVm()
             {
                 Id = medicalRecords.Id,
-                Date = medicalRecords.Date,
+                Date = medicalRecords.CreatedAt,
                 PatientId = medicalRecords.PatientId,
                 DoctorId = medicalRecords.DoctorId,
                 StatusIllness = medicalRecords.StatusIllness,

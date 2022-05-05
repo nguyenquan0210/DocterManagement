@@ -49,10 +49,6 @@ namespace DoctorManagement.Data.Extensions
                 EmailConfirmed = true,
                 PasswordHash = hasher.HashPassword(null, "quax2h1408$"),
                 SecurityStamp = string.Empty,
-                Name = "Nguyễn Đình Quân",
-                Dob = new DateTime(2000, 10, 02),
-                Gender = Enums.Gender.Male,
-                Date = new DateTime(2021, 12, 17),
                 RoleId = roleId,
                 Status = Enums.Status.Active
             });

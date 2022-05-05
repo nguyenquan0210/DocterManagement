@@ -26,7 +26,9 @@ namespace DoctorManagement.Data.EF
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new ClinidConfiguration());
             modelBuilder.ApplyConfiguration(new CommentsPostConfiguration());
-            //modelBuilder.ApplyConfiguration(new DistricConfiguration());
+            modelBuilder.ApplyConfiguration(new EthnicConfiguration());
+            modelBuilder.ApplyConfiguration(new ServicesSpecialityConfiguration());
+            modelBuilder.ApplyConfiguration(new GalleryConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());
             modelBuilder.ApplyConfiguration(new ImageClinicConfiguration());
             modelBuilder.ApplyConfiguration(new ImagePostConfiguration());
@@ -64,9 +66,12 @@ namespace DoctorManagement.Data.EF
         public DbSet<Posts> Posts { get; set; }
         public DbSet<Rates> Rates { get; set; }
         public DbSet<Schedules> Schedules { get; set; }
-        public DbSet<SchedulesDetailts> SchedulesDetails { get; set; }
+        public DbSet<SchedulesSlots> schedulesSlots { get; set; }
         public DbSet<Specialities> Specialities { get; set; }
         public DbSet<Locations> Locations { get; set; }
+        public DbSet<Ethnics> Ethnics { get; set; }
+        public DbSet<Galleries> Galleries { get; set; }
+        public DbSet<ServicesSpecialities> ServicesSpecialities { get; set; }
     }
 }
 #pragma warning restore CS1591

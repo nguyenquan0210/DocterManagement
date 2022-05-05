@@ -54,16 +54,16 @@ namespace DoctorManagement.Application.Catalog.Schedule
                         Qty = request.Qty,
                         DoctorId = user.Id
                     };
-                    schedules.SchedulesDetails = new List<SchedulesDetailts>();
+                    schedules.schedulesSlots = new List<SchedulesSlots>();
                     for (var j = 1; j <= request.Qty; j++)
                     {
-                        var scheduledetailt = new SchedulesDetailts()
+                        var scheduledetailt = new SchedulesSlots()
                         {
                             FromTime = fromtime,
                             ToTime = fromtime.Add(TimeSpan.FromMinutes(minutes)),
                             Status = Status.Active
                         };
-                        schedules.SchedulesDetails.Add(scheduledetailt);
+                        schedules.schedulesSlots.Add(scheduledetailt);
                         fromtime = fromtime.Add(TimeSpan.FromMinutes(minutes));
                     }
                     _context.Schedules.Add(schedules);
@@ -150,7 +150,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
         public async Task<ApiResult<ScheduleVm>> GetById(Guid Id)
         {
             var schedule = await _context.Schedules.FindAsync(Id);
-            var scheduledetailts = _context.SchedulesDetails.Where(x=>x.ScheduleId == schedule.Id);
+            var scheduledetailts = _context.schedulesSlots.Where(x=>x.ScheduleId == schedule.Id);
             if (schedule == null) throw new DoctorManageException($"Cannot find a Schedule with id: { Id}");
             var rs = new ScheduleVm()
             {
@@ -179,27 +179,27 @@ namespace DoctorManagement.Application.Catalog.Schedule
             if (schedules.FromTime != request.FromTime || schedules.ToTime != request.ToTime
                 || schedules.Qty != request.Qty)
             {
-                var scheduledetailts = _context.SchedulesDetails.Where(x => x.ScheduleId == schedules.Id);
+                var scheduledetailts = _context.schedulesSlots.Where(x => x.ScheduleId == schedules.Id);
                 foreach (var remove in scheduledetailts)
                 {
-                    var removescheduledetailt = await _context.SchedulesDetails.FindAsync(remove.Id);
+                    var removescheduledetailt = await _context.schedulesSlots.FindAsync(remove.Id);
                     if(removescheduledetailt != null)
-                        _context.SchedulesDetails.Remove(removescheduledetailt);
+                        _context.schedulesSlots.Remove(removescheduledetailt);
                     
                 }
                 var manytime = request.ToTime - request.FromTime;
                 var minutes = (manytime.Minutes + (manytime.Hours * 60)) / request.Qty;
                 var fromtime = request.FromTime;
-                schedules.SchedulesDetails = new List<SchedulesDetailts>();
+                schedules.schedulesSlots = new List<SchedulesSlots>();
                 for (var j = 1; j <= request.Qty; j++)
                 {
-                    var scheduledetailt = new SchedulesDetailts()
+                    var scheduledetailt = new SchedulesSlots()
                     {
                         FromTime = fromtime,
                         ToTime = fromtime.Add(TimeSpan.FromMinutes(minutes)),
                         Status = Status.Active
                     };
-                    schedules.SchedulesDetails.Add(scheduledetailt);
+                    schedules.schedulesSlots.Add(scheduledetailt);
                     fromtime = fromtime.Add(TimeSpan.FromMinutes(minutes));
                 }
             }

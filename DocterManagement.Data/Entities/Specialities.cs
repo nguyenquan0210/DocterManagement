@@ -17,6 +17,6 @@ namespace DoctorManagement.Data.Entities
         public Status Status { get; set; }
         public string No { get; set; }
 
-        public List<Doctors> Doctors { get; set; }
+        public List<ServicesSpecialities> ServicesSpecialities { get; set; }
     }
 }

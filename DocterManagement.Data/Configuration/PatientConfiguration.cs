@@ -16,11 +16,17 @@ namespace DoctorManagement.Data.Configuration
             builder.ToTable("Patients");
 
             builder.HasKey(x => x.UserId);
+            builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Address).HasMaxLength(150);
             builder.Property(x => x.Img).HasMaxLength(100);
             builder.Property(x => x.No).IsRequired().HasMaxLength(10);
+            builder.Property(x => x.RelativeName).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.RelativePhone).IsRequired().HasMaxLength(11);
+            builder.Property(x => x.Identitycard).IsRequired().HasMaxLength(50);
 
-            builder.HasOne(x => x.AppUsers).WithOne(x => x.Patients).HasForeignKey<Patients>(x => x.UserId);
+            builder.HasOne(x => x.AppUsers).WithMany(x => x.Patients).HasForeignKey(x => x.UserId);
+            builder.HasOne(x => x.Ethnics).WithMany(x => x.Patients).HasForeignKey(x => x.EthnicId);
+            builder.HasOne(x => x.Locations).WithMany(x => x.Patients).HasForeignKey(x => x.LocationId).OnDelete(DeleteBehavior.ClientCascade); ;
 
         }
     }

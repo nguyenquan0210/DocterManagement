@@ -12,7 +12,7 @@ namespace DoctorManagement.Data.Entities
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime CreatedAt { get; set; }
         public Status Status { get; set; }
         public Doctors Doctors { get; set; }
         public Guid DoctorId { get; set; }

@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.Data.Configuration
 {
-    public class SchedulesDetailConfiguration : IEntityTypeConfiguration<SchedulesSlots>
+    public class EthnicConfiguration : IEntityTypeConfiguration<Ethnics>
     {
-        public void Configure(EntityTypeBuilder<SchedulesSlots> builder)
+        public void Configure(EntityTypeBuilder<Ethnics> builder)
         {
-            builder.ToTable("SchedulesSlots");
+            builder.ToTable("Ethnics");
 
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(x => x.Schedules).WithMany(x => x.schedulesSlots).HasForeignKey(x => x.ScheduleId);
+            builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
 
         }
     }

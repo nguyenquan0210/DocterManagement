@@ -17,6 +17,8 @@ namespace DoctorManagement.Data.Entities
         public int Qty { get; set; }
         public Doctors Doctors { get; set; }
         public Guid DoctorId { get; set; }
-        public List<SchedulesDetailts> SchedulesDetails { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public List<SchedulesSlots> schedulesSlots { get; set; }
     }
 }

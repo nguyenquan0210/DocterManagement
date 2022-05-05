@@ -272,17 +272,17 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     UserId = u.UserId,
                     User = new UserVm()
 					{
-                        Name = u.AppUsers.Name,
+                        //Name = u.AppUsers.Name,
                         Email = u.AppUsers.Email,
                         PhoneNumber = u.AppUsers.PhoneNumber,
-                        Gender = u.AppUsers.Gender,
-                        Dob = u.AppUsers.Dob
+                        //Gender = u.AppUsers.Gender,
+                        //Dob = u.AppUsers.Dob
 					},
-                    GetSpeciality = new GetSpecialityVm()
+                    /*GetSpeciality = new GetSpecialityVm()
 					{
                         Id = u.Specialities.Id,
                         Title = u.Specialities.Title
-					},
+					},*/
                     Rates = u.Rates.Select(r => new RateVm()
 					{
                         Id = r.Id,

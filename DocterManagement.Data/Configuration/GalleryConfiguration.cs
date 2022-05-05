@@ -9,15 +9,17 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.Data.Configuration
 {
-    public class SchedulesDetailConfiguration : IEntityTypeConfiguration<SchedulesSlots>
+    public class GalleryConfiguration : IEntityTypeConfiguration<Galleries>
     {
-        public void Configure(EntityTypeBuilder<SchedulesSlots> builder)
+        public void Configure(EntityTypeBuilder<Galleries> builder)
         {
-            builder.ToTable("SchedulesSlots");
+            builder.ToTable("Galleries");
 
             builder.HasKey(x => x.Id);
+         
+            builder.Property(x => x.Img).IsRequired().HasMaxLength(100);
 
-            builder.HasOne(x => x.Schedules).WithMany(x => x.schedulesSlots).HasForeignKey(x => x.ScheduleId);
+            builder.HasOne(x => x.Doctors).WithMany(x => x.Galleries).HasForeignKey(x => x.DoctorId);
 
         }
     }

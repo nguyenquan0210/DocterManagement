@@ -44,10 +44,10 @@ namespace DoctorManagement.DoctorApp.Controllers
                     Id = id,
                     Address = user.DoctorVm.Address,
                     Status = user.Status,
-                    SpecialityId = user.DoctorVm.GetSpeciality.Id,
+                    //SpecialityId = user.DoctorVm.GetSpeciality.Id,
                     ClinicId = user.DoctorVm.GetClinic.Id,
                     img = user.DoctorVm.Img,
-                    Description = user.DoctorVm.Description
+                    Description = user.DoctorVm.Intro
                 };
                 return View(updateRequest);
             }

@@ -16,5 +16,7 @@ namespace DoctorManagement.Data.Entities
         public string Code { get; set; }  
         public Guid ParentId { get; set; }
         public List<Clinics> Clinics { get; set; }
+        public List<Doctors> Doctors { get; set; }
+        public List<Patients> Patients { get; set; }
     }
 }

@@ -28,8 +28,11 @@ namespace DoctorManagement.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("No")
                         .IsRequired()
@@ -39,7 +42,7 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SchedulesDetailId")
+                    b.Property<Guid>("SchedulesSlotId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -47,9 +50,11 @@ namespace DoctorManagement.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DoctorId");
+
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("SchedulesDetailId")
+                    b.HasIndex("SchedulesSlotId")
                         .IsUnique();
 
                     b.ToTable("Appointments", (string)null);
@@ -85,7 +90,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "c3ae977a-505d-46aa-a135-6d7d678a6f84",
+                            ConcurrencyStamp = "bfb5731e-e84b-46e9-a8ac-c5cdc9a5ad5e",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -93,7 +98,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"),
-                            ConcurrencyStamp = "4f6afdf8-2f90-4875-9561-7dc7e68a42d8",
+                            ConcurrencyStamp = "71f37d8d-a634-4eb0-81d1-915a0fe1f831",
                             Description = "doctor role",
                             Name = "doctor",
                             NormalizedName = "doctor"
@@ -101,7 +106,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("50fe257e-6475-41f0-93f7-f530d622362b"),
-                            ConcurrencyStamp = "63c5a8c8-13ae-41b0-bb59-03e30523a3cf",
+                            ConcurrencyStamp = "25784d7a-8494-461c-888c-5edcd76b57f9",
                             Description = "patient role",
                             Name = "patient",
                             NormalizedName = "patient"
@@ -120,10 +125,7 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Dob")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -132,19 +134,11 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(max)");
@@ -166,9 +160,6 @@ namespace DoctorManagement.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Roles")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SecurityStamp")
@@ -196,21 +187,17 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "288ae82c-838c-40b3-9c24-1f4664303c5a",
-                            Date = new DateTime(2021, 12, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Dob = new DateTime(2000, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "5d99d9f8-f318-4c26-ac5f-5c17e33be080",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nguyenquan52000@gmail.com",
                             EmailConfirmed = true,
-                            Gender = 0,
                             LockoutEnabled = false,
-                            Name = "Nguyễn Đình Quân",
                             NormalizedEmail = "nguyenquan52000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAVtFy7K0Q0VFgPmfG9YiWQGj4TEkrB9LQUOUeTCbZEZY+yToCe4T4LfSSqhlMzkVA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAQxz6PTozGIyRFADRHU/r6rEdwl0vYo+lKT8l4nm5LwM7II7vqAlDvpO4LuK9/ukQ==",
                             PhoneNumber = "0373951042",
                             PhoneNumberConfirmed = false,
                             RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            Roles = new Guid("00000000-0000-0000-0000-000000000000"),
                             SecurityStamp = "",
                             Status = 1,
                             TwoFactorEnabled = false,
@@ -229,11 +216,10 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
@@ -245,6 +231,9 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("MapUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -254,6 +243,10 @@ namespace DoctorManagement.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -278,7 +271,7 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<bool>("CheckLevel")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -328,34 +321,126 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<bool>("Booking")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("ClinicId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Educations")
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Img")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Intro")
+                        .IsRequired()
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("LocationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MapUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("No")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<Guid>("SpecialityId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Note")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Prizes")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Services")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("View")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId");
 
                     b.HasIndex("ClinicId");
 
-                    b.HasIndex("SpecialityId");
+                    b.HasIndex("LocationId");
 
                     b.ToTable("Doctors", (string)null);
+                });
+
+            modelBuilder.Entity("DoctorManagement.Data.Entities.Ethnics", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ethnics", (string)null);
+                });
+
+            modelBuilder.Entity("DoctorManagement.Data.Entities.Galleries", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Img")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("Galleries", (string)null);
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.ImageClinics", b =>
@@ -450,7 +535,7 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<Guid>("AppointmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Diagnose")
@@ -501,7 +586,32 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EthnicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Identitycard")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("Img")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LocationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -510,7 +620,27 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<Guid>("Patient")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RelativeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("RelativePhone")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<Guid>("RelativeRelationshipId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("UserId");
+
+                    b.HasIndex("EthnicId");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("Patients", (string)null);
                 });
@@ -521,7 +651,7 @@ namespace DoctorManagement.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -556,7 +686,7 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<Guid>("AppointmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -571,10 +701,15 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Rates", (string)null);
                 });
@@ -586,6 +721,9 @@ namespace DoctorManagement.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CheckInDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("DoctorId")
@@ -610,7 +748,7 @@ namespace DoctorManagement.Data.Migrations
                     b.ToTable("Schedules", (string)null);
                 });
 
-            modelBuilder.Entity("DoctorManagement.Data.Entities.SchedulesDetailts", b =>
+            modelBuilder.Entity("DoctorManagement.Data.Entities.SchedulesSlots", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -632,7 +770,31 @@ namespace DoctorManagement.Data.Migrations
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("SchedulesDetails", (string)null);
+                    b.ToTable("SchedulesSlots", (string)null);
+                });
+
+            modelBuilder.Entity("DoctorManagement.Data.Entities.ServicesSpecialities", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("SpecialityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("SpecialityId");
+
+                    b.ToTable("ServicesSpecialities", (string)null);
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Specialities", b =>
@@ -642,6 +804,9 @@ namespace DoctorManagement.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("No")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SortOrder")
@@ -774,21 +939,29 @@ namespace DoctorManagement.Data.Migrations
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Appointments", b =>
                 {
-                    b.HasOne("DoctorManagement.Data.Entities.Patients", "Patients")
+                    b.HasOne("DoctorManagement.Data.Entities.Doctors", "Doctors")
                         .WithMany("Appointments")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DoctorManagement.Data.Entities.SchedulesDetailts", "SchedulesDetails")
-                        .WithOne("Appointments")
-                        .HasForeignKey("DoctorManagement.Data.Entities.Appointments", "SchedulesDetailId")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
+                    b.HasOne("DoctorManagement.Data.Entities.Patients", "Patients")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("DoctorManagement.Data.Entities.SchedulesSlots", "SchedulesSlots")
+                        .WithOne("Appointments")
+                        .HasForeignKey("DoctorManagement.Data.Entities.Appointments", "SchedulesSlotId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctors");
+
                     b.Navigation("Patients");
 
-                    b.Navigation("SchedulesDetails");
+                    b.Navigation("SchedulesSlots");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.AppUsers", b =>
@@ -840,10 +1013,10 @@ namespace DoctorManagement.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DoctorManagement.Data.Entities.Specialities", "Specialities")
+                    b.HasOne("DoctorManagement.Data.Entities.Locations", "Locations")
                         .WithMany("Doctors")
-                        .HasForeignKey("SpecialityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("DoctorManagement.Data.Entities.AppUsers", "AppUsers")
@@ -856,7 +1029,18 @@ namespace DoctorManagement.Data.Migrations
 
                     b.Navigation("Clinics");
 
-                    b.Navigation("Specialities");
+                    b.Navigation("Locations");
+                });
+
+            modelBuilder.Entity("DoctorManagement.Data.Entities.Galleries", b =>
+                {
+                    b.HasOne("DoctorManagement.Data.Entities.Doctors", "Doctors")
+                        .WithMany("Galleries")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.ImageClinics", b =>
@@ -910,13 +1094,29 @@ namespace DoctorManagement.Data.Migrations
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Patients", b =>
                 {
+                    b.HasOne("DoctorManagement.Data.Entities.Ethnics", "Ethnics")
+                        .WithMany("Patients")
+                        .HasForeignKey("EthnicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DoctorManagement.Data.Entities.Locations", "Locations")
+                        .WithMany("Patients")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
                     b.HasOne("DoctorManagement.Data.Entities.AppUsers", "AppUsers")
-                        .WithOne("Patients")
-                        .HasForeignKey("DoctorManagement.Data.Entities.Patients", "UserId")
+                        .WithMany("Patients")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUsers");
+
+                    b.Navigation("Ethnics");
+
+                    b.Navigation("Locations");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Posts", b =>
@@ -938,7 +1138,15 @@ namespace DoctorManagement.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DoctorManagement.Data.Entities.Doctors", "Doctors")
+                        .WithMany("Rates")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Appointments");
+
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Schedules", b =>
@@ -952,15 +1160,34 @@ namespace DoctorManagement.Data.Migrations
                     b.Navigation("Doctors");
                 });
 
-            modelBuilder.Entity("DoctorManagement.Data.Entities.SchedulesDetailts", b =>
+            modelBuilder.Entity("DoctorManagement.Data.Entities.SchedulesSlots", b =>
                 {
                     b.HasOne("DoctorManagement.Data.Entities.Schedules", "Schedules")
-                        .WithMany("SchedulesDetails")
+                        .WithMany("schedulesSlots")
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Schedules");
+                });
+
+            modelBuilder.Entity("DoctorManagement.Data.Entities.ServicesSpecialities", b =>
+                {
+                    b.HasOne("DoctorManagement.Data.Entities.Doctors", "Doctors")
+                        .WithMany("ServicesSpecialities")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DoctorManagement.Data.Entities.Specialities", "Specialities")
+                        .WithMany("ServicesSpecialities")
+                        .HasForeignKey("SpecialityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctors");
+
+                    b.Navigation("Specialities");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Appointments", b =>
@@ -993,16 +1220,33 @@ namespace DoctorManagement.Data.Migrations
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Doctors", b =>
                 {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Galleries");
+
                     b.Navigation("MedicalRecords");
 
                     b.Navigation("Posts");
 
+                    b.Navigation("Rates");
+
                     b.Navigation("Schedules");
+
+                    b.Navigation("ServicesSpecialities");
+                });
+
+            modelBuilder.Entity("DoctorManagement.Data.Entities.Ethnics", b =>
+                {
+                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Locations", b =>
                 {
                     b.Navigation("Clinics");
+
+                    b.Navigation("Doctors");
+
+                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Patients", b =>
@@ -1021,17 +1265,17 @@ namespace DoctorManagement.Data.Migrations
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Schedules", b =>
                 {
-                    b.Navigation("SchedulesDetails");
+                    b.Navigation("schedulesSlots");
                 });
 
-            modelBuilder.Entity("DoctorManagement.Data.Entities.SchedulesDetailts", b =>
+            modelBuilder.Entity("DoctorManagement.Data.Entities.SchedulesSlots", b =>
                 {
                     b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Specialities", b =>
                 {
-                    b.Navigation("Doctors");
+                    b.Navigation("ServicesSpecialities");
                 });
 #pragma warning restore 612, 618
         }

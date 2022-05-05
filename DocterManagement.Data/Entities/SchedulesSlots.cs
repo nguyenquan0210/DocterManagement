@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.Data.Entities
 {
-    public class SchedulesDetailts
+    public class SchedulesSlots
     {
         public Guid Id { get; set; }
         public TimeSpan FromTime { get; set; }
