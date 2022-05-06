@@ -29,6 +29,7 @@ namespace DoctorManagement.Application.System.Users
         ApiResult<PagedResult<UserVm>> GetUsersPaging(GetUserPagingRequest request);
 
         Task<ApiResult<PagedResult<UserVm>>> GetUsersAllPaging(GetUserPagingRequest request);
+        Task<ApiResult<PagedResult<UserVm>>> GetDoctorAllPaging(GetUserPagingRequest request);
 
         Task<ApiResult<UserVm>> GetById(Guid id);
 

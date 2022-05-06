@@ -16,6 +16,8 @@ namespace DoctorManagement.Data.Configuration
             builder.ToTable("Doctors");
 
             builder.HasKey(x => x.UserId);
+            builder.Property(x => x.FirstName).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.LastName).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Address).IsRequired().HasMaxLength(150);
             builder.Property(x => x.Intro).IsRequired().HasMaxLength(int.MaxValue);
             builder.Property(x => x.Note).HasMaxLength(int.MaxValue);
@@ -26,7 +28,7 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Slug).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Prefix).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Services).HasMaxLength(100);
-            builder.Property(x => x.MapUrl).IsRequired().HasMaxLength(255);
+            builder.Property(x => x.MapUrl).IsRequired().HasMaxLength(int.MaxValue);
 
             builder.HasOne(x => x.AppUsers).WithOne(x => x.Doctors).HasForeignKey<Doctors>(x => x.UserId);
             builder.HasOne(x => x.Locations).WithMany(x => x.Doctors).HasForeignKey(x => x.LocationId).OnDelete(DeleteBehavior.ClientCascade);

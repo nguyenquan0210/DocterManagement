@@ -1,4 +1,5 @@
-﻿@model DoctorManagement.ViewModels.System.Users.ManageRegisterRequest
+﻿@using DoctorManagement.Data.Enums
+@model DoctorManagement.ViewModels.System.Users.ManageRegisterRequest
 
 @{
     ViewData["Title"] = "Create";
@@ -70,23 +71,114 @@
                     }
                 <div class="card-body pt-0">
                     <div class="row">
-                        <div class="col-6">
-                            <label asp-for="UserName" class="form-label"></label>
-                            <input asp-for="UserName" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        <div class="col-3">
+                            <label asp-for="Prefix" class="form-label mt-4"></label>
+                            <input asp-for="Prefix" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Prefix" class="text-danger"></span>
 
                         </div>
-                        <div class="col-6">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                        <div class="col-3">
+                            <label asp-for="LastName" class="form-label mt-4"></label>
+                            <input asp-for="LastName" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="FisrtName" class="form-label mt-4"></label>
+                            <input asp-for="FisrtName" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="FisrtName" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-3">
+                             <label asp-for="Gender" class="form-label mt-4"></label>
+                            @* <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
+                                    
+                                </select>*@
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-check mb-3">
+                                          <input class="form-check-input" type="radio" asp-for="Gender" value="@Gender.Male" id="customRadio1">
+                                          <label class="custom-control-label" for="customRadio1">Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check mb-3">
+                                          <input class="form-check-input" type="radio" asp-for="Gender" value="@Gender.Female" id="customRadio2">
+                                          <label class="custom-control-label" for="customRadio2">Nữ</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-2">
+
+                            <label asp-for="Dob" class="form-label"></label>
+                            <input asp-for="Dob" class="form-control datetimepicker flatpickr-input" autocomplete="off" />
+                            <span asp-validation-for="Dob" class="text-danger"></span>
+                        </div>
+                        <div class="col-5">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-5">
+                            <label asp-for="PhoneNumber" class="form-label"></label>
+                            <input asp-for="PhoneNumber" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
 
                         </div>
 
                     </div>
-                     <div class="row ">
+                    
+                    <div class="row ">
+                         <div class="col-4">
+                                <label asp-for="ProvinceId" class="control-label mt-4"></label>
+                                <select asp-for="ProvinceId" asp-items="ViewBag.Province" class= "multisteps-form__input form-control" >
+                                    <option>-- Chọn Thành Phố --</option>
+                                </select>
+                                <span asp-validation-for="ProvinceId" class="text-danger"></span>
+                         </div>
+                         <div class="col-4" id="distric">
+                             <label asp-for="DistrictId" class="control-label mt-4"></label>
+                              <div id="dfeature">
+                                  <select asp-for="DistrictId" asp-items="ViewBag.District" class= "multisteps-form__input form-control" >
+                                     <option>-- Chọn Quận Huyện --</option>
+                                 </select>
+                              </div>
+                             
+                             <span asp-validation-for="DistrictId" class="text-danger"></span>
+                         </div>
+                         <div class="col-4"  id="sdistric">
+                             <label asp-for="SubDistrictId" class="control-label mt-4"></label>
+                             <div id="sfeature">
+                                  <select asp-for="SubDistrictId" asp-items="ViewBag.SubDistrict" class= "multisteps-form__input form-control" >
+                                     <option>-- Chọn Phường Xã --</option>
+                                 </select>
+                             </div>
+                             <span asp-validation-for="SubDistrictId" class="text-danger"></span>
+                         </div>
+                         
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <label asp-for="Address" class="form-label mt-4"></label>
+                            <input asp-for="Address" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="col-7">
+                            <label asp-for="MapUrl" class="form-label mt-4"></label>
+                            <input asp-for="MapUrl" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="MapUrl" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row ">
 
-                            <div class="col-6">
+                            <div class="col-4">
                               
                                  <label asp-for="ClinicId" class="control-label mt-4"></label>
                                 <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
@@ -94,49 +186,21 @@
                                 </select>
                                 <span asp-validation-for="ClinicId" class="text-danger"></span>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4">
 
                                  <label asp-for="SpecialityId" class="control-label mt-4"></label>
-                                <select asp-for="SpecialityId" asp-items="ViewBag.Speciality" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn chuyên khoa --</option>
+                                <select asp-for="SpecialityId" asp-items="ViewBag.Speciality" class= "form-control" multiple>
                                 </select>
                                 <span asp-validation-for="SpecialityId" class="text-danger"></span>
 
                             </div>
-                         
-                            
-                        </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label asp-for="Name" class="form-label mt-4"></label>
-                            <input asp-for="Name" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-
-                        </div>
-                        <div class="col-6">
-                             <label asp-for="Gender" class="form-label mt-4"></label>
-                             <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
-                                    
-                                </select>
-                            <span asp-validation-for="Gender" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-4">
-
-                            <label asp-for="Dob" class="form-label mt-4"></label>
-                            <input asp-for="Dob" class="form-control datetimepicker flatpickr-input" autocomplete="off" />
-                            <span asp-validation-for="Dob" class="text-danger"></span>
+                            <label asp-for="Slug" class="form-label mt-4"></label>
+                            <input asp-for="Slug" class="multisteps-form__input form-control"  />
+                            <span asp-validation-for="Slug" class="text-danger"></span>
                         </div>
-                        <div class="col-8">
-                            <label asp-for="Address" class="form-label mt-4"></label>
-                            <input asp-for="Address" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Address" class="text-danger"></span>
-                        </div>
-                       
                     </div>
-                    <div class="row">
+                   @* <div class="row">
 
                         <div class="col-6">
                             <label asp-for="Email" class="form-label mt-4"></label>
@@ -150,16 +214,10 @@
                             <input asp-for="PhoneNumber" class="multisteps-form__input form-control"  />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="row">
-                        <div class="col-6">
-                            <label asp-for="ThumbnailImage" class="form-label mt-4"></label>
-                            <input asp-for="ThumbnailImage" type = "file" class="multisteps-form__input form-control"  />
-                            <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
-                        </div>
-                        <div class="col-2 text-center mt-4 ">
-                                    <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="" alt="">
-                         </div>
+                       
+                        
                     </div>
 
 
@@ -187,17 +245,17 @@
             var speciality = document.getElementById('SpecialityId');
             const example = new Choices(speciality);
         }
-               
-        if (document.getElementById('MaNgay')) {
-            var element = document.getElementById('MaNgay');
-                    const example = new Choices(element, {
-                        searchEnabled: false
-                    });
-
-
-                }
-
-
+        if (document.getElementById('ProvinceId')) {
+            var Province = document.getElementById('ProvinceId');
+            const example = new Choices(Province);
+        }
+        //if (document.getElementById('DistrictId')) {            var DistrictId = document.getElementById('DistrictId');            const example = new Choices(DistrictId);
+        //}
+        if (document.getElementById('SubDistrictId')) {
+            var SubDistrictId = document.getElementById('SubDistrictId');
+            const example = new Choices(SubDistrictId);
+        }       
+       
 
         if (document.querySelector('.datetimepicker')) {
             flatpickr('.datetimepicker', {
@@ -210,22 +268,63 @@
             }); // flatpickr
         }
 
-      
-
+      if (document.getElementById('SpecialityId')) {
+          var Speciality = document.getElementById('SpecialityId');
+          const examples = new Choices(Speciality, {
+          removeItemButton: true
+         });
+      }
 
     </script>
-    <script>
-       
-        $("#ThumbnailImage").change(function (event) {
-                            var files = event.target.files;
-            $("#src_img").attr("src", window.URL.createObjectURL(files[0]));
-                        });
-        $("#ThumbnailImage").change(function () {
-                            var files = $('#ThumbnailImage').val();
-            $("#ThumbnailImage").attr("value", files.slice(12));
-                        });
-       
-
+   <script>
+        var DistrictId = "";
+        var ProvinceId = "";
+        $(document).ready(function () {
+            $("#ProvinceId").change(function () {
+                $('#DistrictId option').remove();
+                ProvinceId = $('#ProvinceId option:selected').val();
+                if (ProvinceId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/User/GetDistrict?ProvinceId= + ' + ProvinceId, 
+                        success: function (result) {
+                            var s = '<option >-- Chọn Quận Huyện --</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#DistrictId').html(s);
+                        }
+                    })
+                }
+            })
+             $("#DistrictId").change(function () {
+                //$('#sdistric div.choices div.choices__list--dropdown div.choices__list div.choices__item').remove();
+                $('#sfeature div.choices').remove();
+                $('#sdistric #sfeature').html('<select  class="multisteps-form__input form-control" data-val="true" data-val-required="The SubDistrictId field is required." id="SubDistrictId" name="SubDistrictId"></select>');
+                DistrictId = $('#DistrictId option:selected').val();
+                if (DistrictId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/User/GetSubDistrict?DistrictId= + ' + DistrictId, 
+                        success: function (result) {
+                            var s = '<option >-- Chọn Phường Xã --</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option  value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#SubDistrictId').html(s);
+                        }
+                    })
+                }
+            })
+           
+        });
+      
+            $("#sdistric").click(function() {
+              if (document.getElementById('SubDistrictId')) {
+                    var SubDistrictId = document.getElementById('SubDistrictId');
+                    const example = new Choices(SubDistrictId);
+                }       
+            });
     </script>
     @* Kanban scripts *@
     <script src="~/js/plugins/dragula/dragula.min.js"></script>

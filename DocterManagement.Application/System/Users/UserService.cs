@@ -252,12 +252,13 @@ namespace DoctorManagement.Application.System.Users
                 district = await _context.Locations.FindAsync(location.ParentId);
                 province = await _context.Locations.FindAsync(district.ParentId);
             }
-            else
+            else if (patient != null)
             {
                 location = await _context.Locations.FindAsync(patient.LocationId);
                 district = await _context.Locations.FindAsync(location.ParentId);
                 province = await _context.Locations.FindAsync(district.ParentId);
             }
+            var fulladdreess =  location != null ? location.Name + ", " + district.Name + ", " + province.Name : null;
             //var roles = await _userManager.GetRolesAsync(user);
             var userVm = new UserVm()
             {
@@ -266,6 +267,8 @@ namespace DoctorManagement.Application.System.Users
                 Id = user.Id,
                 UserName = user.UserName,
                 Status = user.Status,
+                Name = doctor != null ? doctor.LastName+ " "+doctor.FirstName : patient != null ? patient.Name : null,
+                Address = doctor != null ? doctor.Address + ", " + fulladdreess : patient != null ? patient.Address + ", " + fulladdreess : null ,
                 GetRole = new GetRoleVm()
                 {
                     Id = role.Id,
@@ -438,32 +441,32 @@ namespace DoctorManagement.Application.System.Users
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsersAllPaging(GetUserPagingRequest request)
         {
             var query = from u in _context.AppUsers
-                        join d in _context.Doctors on u.Id equals d.UserId into dt
+                        select u;
+            /* join d in _context.Doctors on u.Id equals d.UserId into dt
                         from d in dt.DefaultIfEmpty()
                         join s in _context.ServicesSpecialities on d.UserId equals s.DoctorId into ss
                         from s in ss.DefaultIfEmpty()
                         join sp in _context.Specialities on s.SpecialityId equals sp.Id into spe
-                        from sp in spe.DefaultIfEmpty()
-                            /*join r in _context.Roles on u.RoleId equals r.Id
+                        from sp in spe.DefaultIfEmpty()*/
+            /*join r in _context.Roles on u.RoleId equals r.Id
 
-                            join s in _context.Specialities on d.SpecialityId equals s.Id into spe
-                            from s in spe.DefaultIfEmpty()
-                            join c in _context.Clinics on d.ClinicId equals c.Id into cli
-                            from c in cli.DefaultIfEmpty()
-                            join p in _context.Patients on u.Id equals p.UserId into pt
-                            from p in pt.DefaultIfEmpty()*/
-                        select new {u, sp};
-            
+            join s in _context.Specialities on d.SpecialityId equals s.Id into spe
+            from s in spe.DefaultIfEmpty()
+            join c in _context.Clinics on d.ClinicId equals c.Id into cli
+            from c in cli.DefaultIfEmpty()
+            join p in _context.Patients on u.Id equals p.UserId into pt
+            from p in pt.DefaultIfEmpty()*/
+
             //var patient = _context.Patients;
 
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.u.UserName.Contains(request.Keyword)
-                 || x.u.PhoneNumber.Contains(request.Keyword));
+                query = query.Where(x => x.UserName.Contains(request.Keyword)
+                 || x.PhoneNumber.Contains(request.Keyword));
             }
             if (!string.IsNullOrEmpty(request.RoleName) && request.RoleName.ToUpper() != "ALL")
             {
-                query = query.Where(x => x.u.AppRoles.Name.Contains(request.RoleName));
+                query = query.Where(x => x.AppRoles.Name.Contains(request.RoleName));
             }
 
             //3. Paging
@@ -473,33 +476,33 @@ namespace DoctorManagement.Application.System.Users
                 .Take(request.PageSize)
                 .Select(x => new UserVm()
                 {
-                    Email = x.u.Email,
-                    PhoneNumber = x.u.PhoneNumber,
-                    UserName = x.u.UserName,
-                    Id = x.u.Id,
-                    Status = x.u.Status,
-                    //Img =  x.u.AppRoles.Name.ToUpper() == "DOCTOR" ? x.Doctors.Img : x.AppRoles.Name == "PATIENT" ? x.Patients.Img : "user_default.png",
-                    Date = x.u.CreatedAt,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    UserName = x.UserName,
+                    Id = x.Id,
+                    Status = x.Status,
+                    //Img =  x.AppRoles.Name.ToUpper() == "DOCTOR" ? x.Doctors.Img : x.AppRoles.Name == "PATIENT" ? x.Patients.Img : "user_default.png",
+                    Date = x.CreatedAt,
                     GetRole = new GetRoleVm()
                     {
-                        Id = x.u.AppRoles.Id,
-                        Name =x.u.AppRoles.Name
+                        Id = x.AppRoles.Id,
+                        Name =x.AppRoles.Name
                     },
-                    DoctorVm = x.u.AppRoles.Name == "DOCTOR" ? new DoctorVm() 
+                    DoctorVm = x.AppRoles.Name == "DOCTOR" ? new DoctorVm() 
                     {
-                        UserId = x.u.Doctors.UserId,
-                        Intro = x.u.Doctors.Intro,
-                        Address = x.u.Doctors.Address,
-                        Img = x.u.Doctors.Img,
-                        No = x.u.Doctors.No,
+                        UserId = x.Doctors.UserId,
+                        Intro = x.Doctors.Intro,
+                        Address = x.Doctors.Address,
+                        Img = x.Doctors.Img,
+                        No = x.Doctors.No,
                         //GetSpecialities = x new GetSpecialityVm() { Id = x.Doctors.Specialities.Id , Title = x.Doctors.Specialities.Title },
                         //GetClinic = new GetClinicVm() { Id= x.Doctors.Clinics.Id , Name = x.Doctors.Clinics.Name }
                     }: new DoctorVm(),
-                    PatientVm = x.u.AppRoles.Name == "PATIENT" ? new PatientVm()
+                    PatientVm = x.AppRoles.Name == "PATIENT" ? new PatientVm()
                     {
-                        UserId = x.u.Id,
-                        Address = x.u.Patients.Where(x=>x.IsPrimary == true).First().Address,
-                        Img = x.u.Patients.Where(x => x.IsPrimary == true).First().Img
+                        UserId = x.Id,
+                        Address = x.Patients.Where(x=>x.IsPrimary == true).First().Address,
+                        Img = x.Patients.Where(x => x.IsPrimary == true).First().Img
                     }: new PatientVm()
                 }).ToListAsync();
 
@@ -552,7 +555,7 @@ namespace DoctorManagement.Application.System.Users
 
         public async Task<ApiResult<bool>> ManageRegister(ManageRegisterRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
+            var user = await _userManager.FindByNameAsync(request.Email);
             var role = await _roleManager.FindByNameAsync("doctor");
             if (user != null)
             {
@@ -569,44 +572,60 @@ namespace DoctorManagement.Application.System.Users
             else if(count<99) str = "DT-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
             else if(count<999) str = "DT-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
 
+            var password = "DOCtor" + new Random().Next(100000,999999) +"$";
+
             user = new AppUsers()
             {
-                //Dob = request.Dob,
                 Email = request.Email,
-                //Name = request.Name,
-                UserName = request.UserName,
+                UserName = request.Email,
                 PhoneNumber = request.PhoneNumber,
                 Status = Status.Active,
-                //Date = DateTime.Now,
-                RoleId = role.Id
+                CreatedAt = DateTime.Now,
+                RoleId = role.Id    
             };
-            var result = await _userManager.CreateAsync(user, request.Password);
-            
+            var result = await _userManager.CreateAsync(user, password);
+        
             if (result.Succeeded)
             {
                 if (await _userManager.IsInRoleAsync(user, role.Name) == false)
                 {
                     var rs = await _userManager.AddToRoleAsync(user, role.Name);
-
-                    if (rs.Succeeded)
+                    var doctor = new Doctors()
+                    {   
+                        UserId = user.Id,
+                        Dob = request.Dob,
+                        FirstName = request.FisrtName,
+                        LastName = request.LastName,
+                        Slug = request.Slug+"-"+str,
+                        Booking = false,
+                        IsPrimary = false,
+                        MapUrl = request.MapUrl,
+                        LocationId = request.SubDistrictId,
+                        ServicesSpecialities = new List<ServicesSpecialities>(),
+                        Gender = request.Gender,
+                        Prefix = request.Prefix,
+                        View = 0,
+                        ClinicId = request.ClinicId,
+                        No = str,
+                        Address = request.Address,
+                        Intro = "<p><strong>Bác sĩ “Nguyễn Văn A” </strong>……….</p><p><strong>Quá trình học tập/Bằng cấp chuyên môn:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Quá trình công tác:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Các dịch vụ của phòng khám:</strong></p><ul><li>…</li><li>…</li></ul>",
+                        Img = "user_default.png" //await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME)
+                    };
+                    foreach (var servicesSpeciality in request.SpecialityId)
                     {
-                        var userIdRs = await _userManager.FindByNameAsync(user.UserName);
-                        var doctor = new Doctors()
+                        var servicesSpecialities = new ServicesSpecialities()
                         {
-                            UserId = userIdRs.Id,
-                            //SpecialityId = request.SpecialityId,
-                            ClinicId = request.ClinicId,
-                            No = str,
-                            Address = request.Address,
-                            Intro = "<p><strong>Bác sĩ “Nguyễn Văn A” </strong>……….</p><p><strong>Quá trình học tập/Bằng cấp chuyên môn:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Quá trình công tác:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Các dịch vụ của phòng khám:</strong></p><ul><li>…</li><li>…</li></ul>",
-                            Img = await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME)
+                            IsDelete = false,
+                            SpecialityId = servicesSpeciality,
                         };
-                        await _context.Doctors.AddAsync(doctor);
-                        _context.SaveChanges();
-                        user.PasswordHash = request.Password;
+                        doctor.ServicesSpecialities.Add(servicesSpecialities);
+                    }
+                    await _context.Doctors.AddAsync(doctor);
+                    _context.SaveChanges();
+                    user.PasswordHash = password;
                         await GenerateEmailConfirmationTokenAsync(user);
                         return new ApiSuccessResult<bool>();
-                    }
+                    
                 }
                
 
@@ -719,12 +738,9 @@ namespace DoctorManagement.Application.System.Users
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
 
-            //user.Dob = request.Dob;
             user.Email = request.Email;
-            //user.Name = request.Name;
             user.PhoneNumber = request.PhoneNumber;
             user.Status = request.Status;
-            //user.Gender = request.Gender;
            
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -733,7 +749,7 @@ namespace DoctorManagement.Application.System.Users
                 {
                     if (request.ThumbnailImage != null)
                     {
-                        if (doctor.Img != null)
+                        if (doctor.Img != null && doctor.Img== "user_default.png")
                         {
                             await _storageService.DeleteFileAsyncs(doctor.Img, USER_CONTENT_FOLDER_NAME);
                         }
@@ -741,8 +757,51 @@ namespace DoctorManagement.Application.System.Users
                     }
                     doctor.Address = request.Address;
                     doctor.ClinicId = request.ClinicId;
-                    //doctor.SpecialityId = request.SpecialityId;
-                    //doctor.Description = WebUtility.HtmlDecode(request.Description);
+                    doctor.ServicesSpecialities = new List<ServicesSpecialities>();
+                    var spe_service_isdeletes = from s in _context.ServicesSpecialities select s;
+                    foreach (var spe in request.Specialities)
+                    {
+                        var spe_service = await _context.ServicesSpecialities.FirstAsync(x => x.SpecialityId == spe);
+
+                        if (spe_service != null)
+                        {
+                            if (spe_service.IsDelete == true)
+                            {
+                                var spe_service_active = await _context.ServicesSpecialities.FindAsync(spe_service.Id);
+                                spe_service_active.IsDelete = false;
+                            }
+                            else
+                            {
+                                spe_service_isdeletes = spe_service_isdeletes.Where(x => x.SpecialityId != spe);
+                            }
+                        }
+                        else
+                        {
+                            spe_service = new ServicesSpecialities()
+                            {
+                                IsDelete = false,
+                                SpecialityId = spe_service.SpecialityId,
+                            };
+                        }
+                        doctor.ServicesSpecialities.Add(spe_service);
+                    }
+                    foreach(var isdelete in spe_service_isdeletes)
+                    {
+                        var spe_service_isdelete = await _context.ServicesSpecialities.FindAsync(isdelete.Id);
+                        spe_service_isdelete.IsDelete = true;
+                    }
+                   
+                    doctor.Intro = WebUtility.HtmlDecode(request.Description);
+                    doctor.FirstName = request.FirstName;
+                    doctor.LastName = request.LastName;
+                    doctor.Gender = request.Gender;
+                    doctor.Dob = request.Dob;
+                    doctor.LocationId = request.ClinicId;
+                    doctor.Booking = request.Booking;
+                    doctor.MapUrl = request.MapUrl;
+                    doctor.Slug = request.Slug+"-"+doctor.No;
+                    doctor.IsPrimary = request.IsPrimary;
+                    doctor.Prefix = request.Prefix;
                     _context.SaveChanges();
                 }
                 return new ApiSuccessResult<bool>();
@@ -808,6 +867,11 @@ namespace DoctorManagement.Application.System.Users
                 return new ApiSuccessResult<bool>();
             }
             return new ApiErrorResult<bool>("Cập nhật không thành công");
+        }
+
+        public Task<ApiResult<PagedResult<UserVm>>> GetDoctorAllPaging(GetUserPagingRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -56,8 +56,8 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPost("register-doctor")]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> ManageRegister([FromForm] ManageRegisterRequest request)
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> ManageRegister(ManageRegisterRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

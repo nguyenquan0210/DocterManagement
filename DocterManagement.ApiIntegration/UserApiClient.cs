@@ -123,7 +123,7 @@ namespace DoctorManagement.ApiIntegration
             var requestContent = new MultipartFormDataContent();
 
 
-            if (registerRequest.ThumbnailImage != null)
+            /*if (registerRequest.ThumbnailImage != null)
             {
                 byte[] data;
                 using (var br = new BinaryReader(registerRequest.ThumbnailImage.OpenReadStream()))
@@ -132,13 +132,13 @@ namespace DoctorManagement.ApiIntegration
                 }
                 ByteArrayContent bytes = new ByteArrayContent(data);
                 requestContent.Add(bytes, "thumbnailImage", registerRequest.ThumbnailImage.FileName);
-            }
+            }*/
 
-            requestContent.Add(new StringContent(registerRequest.UserName.ToString()), "userName");
-            requestContent.Add(new StringContent(registerRequest.Password.ToString()), "password");
+            //requestContent.Add(new StringContent(registerRequest.UserName.ToString()), "userName");
+            //requestContent.Add(new StringContent(registerRequest.Password.ToString()), "password");
             requestContent.Add(new StringContent(registerRequest.SpecialityId.ToString()), "specialityId");
             requestContent.Add(new StringContent(registerRequest.ClinicId.ToString()), "clinicId");
-            requestContent.Add(new StringContent(registerRequest.Name.ToString()), "name");
+            //requestContent.Add(new StringContent(registerRequest.Name.ToString()), "name");
             requestContent.Add(new StringContent(registerRequest.Gender.ToString()), "gender");
             requestContent.Add(new StringContent(registerRequest.Dob.ToString()), "dob");
             requestContent.Add(new StringContent(registerRequest.Address.ToString()), "address");
@@ -355,6 +355,25 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.PhoneNumber.ToString()), "phoneNumber");
 
             var response = await client.PutAsync($"/api/users/update-patient/{id}", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<bool>> RegisterDocter(ManageRegisterRequest registerRequest)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(registerRequest);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/users/register-doctor", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);

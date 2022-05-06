@@ -13,9 +13,7 @@ namespace DoctorManagement.ViewModels.System.Users
     public class UserUpdateRequest
     {
         public Guid Id { get; set; }
-
-        [Display(Name = "Họ Tên")]
-        public string Name { get; set; }
+        
         [Display(Name = "Giới thiệu")]
         public string Description { get; set; }
 
@@ -42,8 +40,22 @@ namespace DoctorManagement.ViewModels.System.Users
         public string? img { get; set; }
 
         [Display(Name = "Chuyên Khoa")]
-        public Guid SpecialityId { get; set; }
+        public ICollection<Guid> Specialities { get; set; }
         [Display(Name = "Phòng Khám")]
         public Guid ClinicId { get; set; }
+        [Display(Name = "Cho phép đặt khám")]
+        public bool Booking { get; set; }
+        [Display(Name = "MapUrl")]
+        public string MapUrl { get; set; }
+        [Display(Name = "WordSpress Slug")]
+        public string Slug { get; set; }
+        [Display(Name = "Tên")]
+        public string FirstName { get; set; }
+        [Display(Name = "Họ")]
+        public string LastName { get; set; }
+        [Display(Name = "Quyền quản lý phòng khám")]
+        public bool IsPrimary { get; set; }
+        [Display(Name = "Tiếp đầu ngữ")]
+        public string Prefix { get; set; }
     }
 }

@@ -21,6 +21,7 @@ namespace DoctorManagement.ApiIntegration
         Task<List<UserVm>> GetNewUsers();
 
         Task<ApiResult<bool>> RegisterUser(ManageRegisterRequest registerRequest);
+        Task<ApiResult<bool>> RegisterDocter(ManageRegisterRequest registerRequest);
 
         Task<ApiResult<bool>> PublicRegisterUser(PublicRegisterRequest registerRequest);
 

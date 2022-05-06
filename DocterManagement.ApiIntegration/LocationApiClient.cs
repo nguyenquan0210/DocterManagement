@@ -64,7 +64,17 @@ namespace DoctorManagement.ApiIntegration
             });
             return select.ToList();
         }
-
+        public async Task<List<SelectListItem>> CityGetAllDistrict(Guid? DistrictId, Guid ProvinceId)
+        {
+            var data = await GetListAsync<LocationVm>($"/api/location/{ProvinceId}/get-all-district");
+            var select = data.Data.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = DistrictId.HasValue && DistrictId.Value == x.Id
+            });
+            return select.ToList();
+        }
         public async Task<List<SelectListItem>> GetAllProvince(Guid? ProvinceId)
         {
             var data = await GetListAsync<LocationVm>($"/api/location/get-all-province");
