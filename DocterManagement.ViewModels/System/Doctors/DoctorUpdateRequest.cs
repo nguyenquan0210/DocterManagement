@@ -1,7 +1,4 @@
 ﻿using DoctorManagement.Data.Enums;
-using DoctorManagement.ViewModels.System.Doctors;
-using Microsoft.AspNetCore.Http;
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.ViewModels.System.Users
+namespace DoctorManagement.ViewModels.System.Doctors
 {
-    public class UserUpdateRequest
+    public class DoctorUpdateRequest
     {
         public Guid Id { get; set; }
-        
+
         [Display(Name = "Giới thiệu")]
         public string Description { get; set; }
 
@@ -35,9 +32,6 @@ namespace DoctorManagement.ViewModels.System.Users
 
         [Display(Name = "Trạng thái")]
         public Status Status { get; set; }
-
-        [Display(Name = "Ảnh đại diện")]
-        public IFormFile? ThumbnailImage { get; set; }
 
         [Display(Name = "Chuyên Khoa")]
         public ICollection<Guid> Specialities { get; set; }
@@ -73,8 +67,7 @@ namespace DoctorManagement.ViewModels.System.Users
         public string Note { get; set; }
         [Display(Name = "Giờ làm việc")]
         public string TimeWorking { get; set; }
-        [Display(Name = "Hình ảnh")]
-        public IFormFileCollection? Galleries { get; set; }
-        public List<GalleryVm>? GetGalleries { get; set; }
+
+        
     }
 }

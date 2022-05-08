@@ -84,14 +84,14 @@
 
                         </div>
                         <div class="col-3">
-                            <label asp-for="FisrtName" class="form-label mt-4"></label>
-                            <input asp-for="FisrtName" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="FisrtName" class="text-danger"></span>
+                            <label asp-for="FirstName" class="form-label mt-4"></label>
+                            <input asp-for="FirstName" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
 
                         </div>
                         <div class="col-3">
-                             <label asp-for="Gender" class="form-label mt-4"></label>
-                            @* <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
+                            <label asp-for="Gender" class="form-label mt-4"></label>
+                                @* <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
                                     
                                 </select>*@
                                 <div class="row">
@@ -177,22 +177,18 @@
                         </div>
                     </div>
                     <div class="row ">
-
                             <div class="col-4">
-                              
-                                 <label asp-for="ClinicId" class="control-label mt-4"></label>
+                                <label asp-for="ClinicId" class="control-label mt-4"></label>
                                 <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
                                     <option>-- Chọn phòng khám --</option>
                                 </select>
                                 <span asp-validation-for="ClinicId" class="text-danger"></span>
                             </div>
                             <div class="col-4">
-
-                                 <label asp-for="SpecialityId" class="control-label mt-4"></label>
-                                <select asp-for="SpecialityId" asp-items="ViewBag.Speciality" class= "form-control" multiple>
+                                <label asp-for="SpecialityId" class="control-label mt-4"></label>
+                                <select asp-for="SpecialityId" asp-items="ViewBag.Speciality" class= " multisteps-form__input form-control" >
                                 </select>
                                 <span asp-validation-for="SpecialityId" class="text-danger"></span>
-
                             </div>
                         <div class="col-4">
                             <label asp-for="Slug" class="form-label mt-4"></label>
@@ -241,10 +237,7 @@
             var clinic = document.getElementById('ClinicId');
             const example = new Choices(clinic);
         }
-        if (document.getElementById('SpecialityId')) {
-            var speciality = document.getElementById('SpecialityId');
-            const example = new Choices(speciality);
-        }
+       
         if (document.getElementById('ProvinceId')) {
             var Province = document.getElementById('ProvinceId');
             const example = new Choices(Province);

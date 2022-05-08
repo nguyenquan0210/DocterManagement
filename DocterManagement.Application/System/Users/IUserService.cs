@@ -21,7 +21,7 @@ namespace DoctorManagement.Application.System.Users
 
         Task<ApiResult<bool>> AddRoleUser(RequestRoleUser request);
 
-        Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
+        Task<ApiResult<bool>> UpdateDoctor(Guid id, UserUpdateRequest request);
 
         Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request);
         Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request);
@@ -36,6 +36,7 @@ namespace DoctorManagement.Application.System.Users
         Task<ApiResult<UserVm>> GetByUserName(string username);
 
         Task<ApiResult<int>> Delete(Guid id);
+        Task<ApiResult<int>> DeleteImg(Guid Id);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
 

@@ -14,7 +14,7 @@ namespace DoctorManagement.Data.Entities
         public string Description { get; set; }
         public int SortOrder { get; set; }
 
-        public Status Status { get; set; }
+        public bool IsDeleted { get; set; }
         public string No { get; set; }
 
         public List<ServicesSpecialities> ServicesSpecialities { get; set; }

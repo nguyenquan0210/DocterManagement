@@ -58,7 +58,7 @@ namespace DoctorManagement.Data.Extensions
                 UserId = adminId
             });
             modelBuilder.Entity<Specialities>().HasData(
-               new Specialities() { Id = new Guid("8D04DCE4-969A-435D-BBA4-DF3F325983DC"), Title = "Tiêu hóa",Description = "Điều trị các bệnh về tiêu hoá", SortOrder = 1 }
+               new Specialities() { Id = new Guid("8D04DCE4-969A-435D-BBA4-DF3F325983DC"), Title = "Tiêu hóa",Description = "Điều trị các bệnh về tiêu hoá", SortOrder = 1, No= "SP-22-001", IsDeleted=false }
              
                );
         }

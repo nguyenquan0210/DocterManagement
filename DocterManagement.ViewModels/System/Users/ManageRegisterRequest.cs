@@ -14,7 +14,7 @@ namespace DoctorManagement.ViewModels.System.Users
         [Display(Name = "Họ")]
         public string LastName { get; set; }
         [Display(Name = "Tên")]
-        public string FisrtName { get; set; }
+        public string FirstName { get; set; }
         [Display(Name = "Tiếp đầu ngữ")]
         public string Prefix { get; set; }
         [Display(Name = "Ngày sinh")]
@@ -49,6 +49,7 @@ namespace DoctorManagement.ViewModels.System.Users
         public Guid DistrictId { get; set; }
         [Display(Name = "Phường/xã")]
         public Guid SubDistrictId { get; set; }
+        
 
     }
 }

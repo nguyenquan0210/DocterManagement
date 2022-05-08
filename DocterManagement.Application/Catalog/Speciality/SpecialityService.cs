@@ -34,7 +34,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 Title = request.Title,
                 SortOrder = count + 1,
                 Description = request.Description,
-                Status = Status.Active,
+                IsDeleted = false,
                 No = str
             };
             _context.Specialities.Add(specialities);
@@ -48,9 +48,9 @@ namespace DoctorManagement.Application.Catalog.Speciality
             var speciality = await _context.Specialities.FindAsync(Id);
             int check = 0;
             if (speciality == null) return new ApiSuccessResult<int>(check);
-            if (speciality.Status == Status.Active)
+            if (speciality.IsDeleted = false)
             {
-                speciality.Status = Status.InActive;
+                speciality.IsDeleted = true;
                 check = 1;
             }
             else
@@ -64,14 +64,14 @@ namespace DoctorManagement.Application.Catalog.Speciality
 
         public async Task<ApiResult<List<SpecialityVm>>> GetAll()
         {
-            var query = _context.Specialities.Where(x => x.Status == Status.Active);
+            var query = _context.Specialities.Where(x => x.IsDeleted == false);
 
             var rs = await query.Select(x => new SpecialityVm()
             {
                 Id = x.Id,
                 Title = x.Title,
                 SortOrder = x.SortOrder,
-                Status = x.Status,
+                IsDeleted = x.IsDeleted,
                 No = x.No
             }).ToListAsync();
             return new ApiSuccessResult<List<SpecialityVm>>(rs);
@@ -94,7 +94,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
                     Title = x.Title,
                     SortOrder = x.SortOrder,
                     Id = x.Id,
-                    Status = x.Status,
+                    IsDeleted = x.IsDeleted,
                     No = x.No,
                     Description = x.Description
                 }).ToListAsync();
@@ -118,7 +118,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 Id = speciality.Id,
                 Title = speciality.Title,
                 SortOrder = speciality.SortOrder,
-                Status = speciality.Status,
+                IsDeleted = speciality.IsDeleted,
                 No = speciality.No,
                 Description = speciality.Description
             };
@@ -132,7 +132,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
             speciality.Title = request.Title;
             speciality.SortOrder = request.SortOrder;
             speciality.Description = request.Description;
-            speciality.Status = request.Status;
+            speciality.IsDeleted = request.IsDeleted;
 
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>(true);

@@ -111,10 +111,8 @@ namespace DoctorManagement.Application.Catalog.Clinic
             await _storageService.DeleteFileAsyncs(image.Img,CLINICS_CONTENT_FOLDER_NAME);
             _context.ImageClinics.Remove(image);
             check = 2;
-           
-
             await _context.SaveChangesAsync();
-            return new ApiSuccessResult<int>(check); ;
+            return new ApiSuccessResult<int>(check); 
         }
 
         public async Task<ApiResult<List<ClinicVm>>> GetAll()

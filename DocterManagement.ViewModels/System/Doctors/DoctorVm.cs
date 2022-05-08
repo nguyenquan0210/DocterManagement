@@ -38,12 +38,12 @@ namespace DoctorManagement.ViewModels.System.Doctors
         public string MapUrl { get; set; }
         public bool IsPrimary { get; set; }
         public LocationVm Location { get; set; }
-        
         public UserVm User { get; set; }
-
         public List<GetSpecialityVm> GetSpecialities { get; set; }
         public GetClinicVm GetClinic { get; set; }
 
         public List<RateVm> Rates { get; set; }
+        public List<GalleryVm> Galleries { get; set; }
+        public string TimeWorking { get; set; }
     }
 }

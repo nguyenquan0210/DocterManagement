@@ -80,7 +80,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.Update(id, request);
+            var result = await _userService.UpdateDoctor(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -196,6 +196,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         public async Task<IActionResult> Delete(Guid Id)
         {
             var result = await _userService.Delete(Id);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Xóa ảnh bộ siêu tập
+        /// </summary>
+        /// 
+        [HttpDelete("doctor-delete-gallery/{Id}")]
+        public async Task<IActionResult> DeleteImg(Guid Id)
+        {
+            var result = await _userService.DeleteImg(Id);
             return Ok(result);
         }
         /*[HttpGet("activeusers")]

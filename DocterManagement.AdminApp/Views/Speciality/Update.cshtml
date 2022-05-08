@@ -82,11 +82,11 @@
 
                         </div>
                         <div class="col-3">
-                            <label asp-for="Status" class="form-label mt-4"></label>
-                             <select asp-for="Status" asp-items="ViewBag.Status" class= "multisteps-form__input form-control" >
-                                    
-                                </select>
-                            <span asp-validation-for="Status" class="text-danger"></span>
+                            <label asp-for="IsDeleted" class="form-label mt-4"></label>
+                               <div class="form-check form-switch ps-0">
+                                   <input asp-for="IsDeleted" type="checkbox" class="form-check-input mt-1 ms-auto "  readonly />
+                               </div>
+                            <span asp-validation-for="IsDeleted" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row">

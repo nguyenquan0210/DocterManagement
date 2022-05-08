@@ -38,7 +38,8 @@ namespace DoctorManagement.DoctorApp.Controllers
                 {
                     Dob = user.Dob,
                     Email = user.Email,
-                    Name = user.Name,
+                    FirstName = user.DoctorVm.FirstName,
+                    LastName = user.DoctorVm.LastName,
                     PhoneNumber = user.PhoneNumber,
                     Gender = user.Gender,
                     Id = id,
@@ -46,7 +47,7 @@ namespace DoctorManagement.DoctorApp.Controllers
                     Status = user.Status,
                     //SpecialityId = user.DoctorVm.GetSpeciality.Id,
                     ClinicId = user.DoctorVm.GetClinic.Id,
-                    img = user.DoctorVm.Img,
+                    //img = user.DoctorVm.Img,
                     Description = user.DoctorVm.Intro
                 };
                 return View(updateRequest);
@@ -58,7 +59,7 @@ namespace DoctorManagement.DoctorApp.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] UserUpdateRequest request)
         {
-            ViewBag.Img = request.img;
+            //ViewBag.Img = request.img;
             ViewBag.Gender = SeletectGender(request.Gender.ToString());
             if (!ModelState.IsValid)
                 return View();

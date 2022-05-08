@@ -17,6 +17,7 @@ namespace DoctorManagement.Data.Entities
         public string Intro { get; set; }
         public string No { get; set; }
         public string Note { get; set; }
+        public string TimeWorking { get; set; }
         public string Educations { get; set; }
         public bool Booking { get; set; }
         public string Prizes { get; set; }

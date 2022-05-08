@@ -71,14 +71,14 @@ namespace DoctorManagement.AdminApp.Controllers
             {
                 var speciality = result.Data;
                
-                ViewBag.Status = SeletectStatus(speciality.Status);
+                //ViewBag.IsDeleted = SeletectStatus(speciality.Status);
                 
                 var updateRequest = new SpecialityUpdateRequest()
                 {
                     Title = speciality.Title,
                     Id = id,
                     SortOrder = speciality.SortOrder,
-                    Status = speciality.Status,
+                    IsDeleted = speciality.IsDeleted,
                     Description = speciality.Description
                 };
                 return View(updateRequest);
@@ -90,7 +90,7 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> Update(SpecialityUpdateRequest request)
         {
            
-            ViewBag.Status = SeletectStatus(request.Status);
+            //ViewBag.Status = SeletectStatus(request.Status);
             if (!ModelState.IsValid)
                 return View();
 
@@ -112,14 +112,14 @@ namespace DoctorManagement.AdminApp.Controllers
             if (result.IsSuccessed)
             {
                 var specialityData = result.Data;
-                ViewBag.Status = specialityData.Status == Status.NotActivate ? "Ngừng hoạt động" : specialityData.Status == Status.Active ? "Hoạt động" : "không hoạt động";
+                //ViewBag.Status = specialityData.Status == Status.NotActivate ? "Ngừng hoạt động" : specialityData.Status == Status.Active ? "Hoạt động" : "không hoạt động";
                 var Speciality = new SpecialityVm()/*_mapper.Map<SpecialityVm>(Specialitydata);*/
                 {
                     Title = specialityData.Title,
                     Id = id,
                     No = specialityData.No,
                     Description = specialityData.Description,
-                    Status = specialityData.Status, //== Status.Active ? true : false
+                    IsDeleted = specialityData.IsDeleted, //== Status.Active ? true : false
                     SortOrder = specialityData.SortOrder
                 };
                 return View(Speciality);

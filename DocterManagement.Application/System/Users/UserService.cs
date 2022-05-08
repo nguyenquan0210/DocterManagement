@@ -38,6 +38,7 @@ namespace DoctorManagement.Application.System.Users
         private readonly IStorageService _storageService;
         private readonly IEmailService _emailService;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
+        private const string GALLERY_CONTENT_FOLDER_NAME = "gallery-content"; 
         public UserService(UserManager<AppUsers> userManager,
             SignInManager<AppUsers> signInManager,
             RoleManager<AppRoles> roleManager,
@@ -192,7 +193,18 @@ namespace DoctorManagement.Application.System.Users
             return new ApiSuccessResult<int>(check);
 
         }
+        public async Task<ApiResult<int>> DeleteImg(Guid Id)
+        {
+            var image = await _context.Galleries.FindAsync(Id);
+            int check = 0;
+            if (image == null) return new ApiSuccessResult<int>(check);
 
+            await _storageService.DeleteFileAsyncs(image.Img, GALLERY_CONTENT_FOLDER_NAME);
+            _context.Galleries.Remove(image);
+            check = 2;
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<int>(check); 
+        }
         public async Task<ApiResult<List<RoleVm>>> GetAllRole()
         {
             var result = _context.AppRoles;
@@ -234,16 +246,15 @@ namespace DoctorManagement.Application.System.Users
             
             var specialities = from s in _context.ServicesSpecialities
                              join spe in _context.Specialities on s.SpecialityId equals spe.Id where s.IsDelete ==false
+                             where s.DoctorId == user.Id
                              select new {s,spe};
             var rates = from r in _context.Rates
                         join a in _context.Appointments on r.AppointmentId equals a.Id
+                        where a.DoctorId == user.Id
                         select new {r,a};
 
-            if (doctor != null)
-            {
-                specialities = specialities.Where(x => x.s.DoctorId == doctor.UserId);
-                rates = rates.Where(x => x.a.DoctorId == doctor.UserId);
-            }
+            var galleries = _context.Galleries.Where(x => x.DoctorId == user.Id);
+          
             var patient = await _context.Patients.FindAsync(user.Id);
             var ethnic = await _context.Ethnics.FindAsync(patient != null ? patient.EthnicId : new Guid());
             if(doctor != null)
@@ -295,10 +306,12 @@ namespace DoctorManagement.Application.System.Users
                     Prefix = doctor.Prefix,
                     Prizes = doctor.Prizes,
                     View = doctor.View,
+                    TimeWorking = doctor.TimeWorking,
                     Location = new LocationVm() { Id = location.Id, Name = location.Name, District = new DistrictVm() { Id = district.Id, Name = district.Name, Province = new ProvinceVm() { Id = province.Id, Name = province.Name } } },
                     GetClinic = new GetClinicVm(){ Id = clinic.Id, Name = clinic.Name},
-                    GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.s.Id, Title = x.spe.Title }).ToList(),
+                    GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.spe.Id, Title = x.spe.Title }).ToList(),
                     Rates = rates.Select(x => new RateVm() { Id = x.r.Id, Rating = x.r.Rating }).ToList(),
+                    Galleries = galleries.Select(x => new GalleryVm() { Id = x.Id, Name = GALLERY_CONTENT_FOLDER_NAME + "/" + x.Img }).ToList(),
                 } : new DoctorVm()
                     ,
                 PatientVm = patient != null ? new PatientVm()
@@ -477,11 +490,12 @@ namespace DoctorManagement.Application.System.Users
                 .Select(x => new UserVm()
                 {
                     Email = x.Email,
+                    Name = x.AppRoles.Name.ToUpper() == "DOCTOR" ? x.Doctors.LastName+" " +x.Doctors.FirstName : x.AppRoles.Name == "PATIENT" ? x.Patients.FirstOrDefault(x => x.IsPrimary).Name : "Admin",
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
                     Id = x.Id,
                     Status = x.Status,
-                    //Img =  x.AppRoles.Name.ToUpper() == "DOCTOR" ? x.Doctors.Img : x.AppRoles.Name == "PATIENT" ? x.Patients.Img : "user_default.png",
+                    Img =  x.AppRoles.Name.ToUpper() == "DOCTOR" ? x.Doctors.Img : x.AppRoles.Name == "PATIENT" ? x.Patients.FirstOrDefault(x=>x.IsPrimary).Img : "user_default.png",
                     Date = x.CreatedAt,
                     GetRole = new GetRoleVm()
                     {
@@ -556,6 +570,7 @@ namespace DoctorManagement.Application.System.Users
         public async Task<ApiResult<bool>> ManageRegister(ManageRegisterRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.Email);
+
             var role = await _roleManager.FindByNameAsync("doctor");
             if (user != null)
             {
@@ -573,11 +588,11 @@ namespace DoctorManagement.Application.System.Users
             else if(count<999) str = "DT-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
 
             var password = "DOCtor" + new Random().Next(100000,999999) +"$";
-
+            string[] username = request.Email.Split('@');
             user = new AppUsers()
             {
                 Email = request.Email,
-                UserName = request.Email,
+                UserName = username[0],
                 PhoneNumber = request.PhoneNumber,
                 Status = Status.Active,
                 CreatedAt = DateTime.Now,
@@ -594,7 +609,7 @@ namespace DoctorManagement.Application.System.Users
                     {   
                         UserId = user.Id,
                         Dob = request.Dob,
-                        FirstName = request.FisrtName,
+                        FirstName = request.FirstName,
                         LastName = request.LastName,
                         Slug = request.Slug+"-"+str,
                         Booking = false,
@@ -623,8 +638,8 @@ namespace DoctorManagement.Application.System.Users
                     await _context.Doctors.AddAsync(doctor);
                     _context.SaveChanges();
                     user.PasswordHash = password;
-                        await GenerateEmailConfirmationTokenAsync(user);
-                        return new ApiSuccessResult<bool>();
+                    await GenerateEmailConfirmationTokenAsync(user);
+                    return new ApiSuccessResult<bool>();
                     
                 }
                
@@ -729,19 +744,20 @@ namespace DoctorManagement.Application.System.Users
             return new ApiSuccessResult<bool>();
         }
 
-        public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateDoctor(Guid id, UserUpdateRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            var doctor = await _context.Doctors.FindAsync(user.Id);
+            var doctor = await _context.Doctors.FindAsync(request.Id);
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
-
+            string[] username = request.Email.Split('@');
             user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
             user.Status = request.Status;
-           
+            user.UserName = username[0];
+
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
@@ -749,7 +765,7 @@ namespace DoctorManagement.Application.System.Users
                 {
                     if (request.ThumbnailImage != null)
                     {
-                        if (doctor.Img != null && doctor.Img== "user_default.png")
+                        if (doctor.Img != null && doctor.Img != "user_default.png")
                         {
                             await _storageService.DeleteFileAsyncs(doctor.Img, USER_CONTENT_FOLDER_NAME);
                         }
@@ -758,17 +774,18 @@ namespace DoctorManagement.Application.System.Users
                     doctor.Address = request.Address;
                     doctor.ClinicId = request.ClinicId;
                     doctor.ServicesSpecialities = new List<ServicesSpecialities>();
-                    var spe_service_isdeletes = from s in _context.ServicesSpecialities select s;
+                    var spe_service_isdeletes = from s in _context.ServicesSpecialities where s.DoctorId == doctor.UserId && s.IsDelete == false select s;
+                    var spe_service_isdelete = new ServicesSpecialities();
                     foreach (var spe in request.Specialities)
                     {
-                        var spe_service = await _context.ServicesSpecialities.FirstAsync(x => x.SpecialityId == spe);
+                        var spe_service = _context.ServicesSpecialities.Where(x => x.DoctorId == doctor.UserId).FirstOrDefault(x => x.SpecialityId == spe);
 
                         if (spe_service != null)
                         {
                             if (spe_service.IsDelete == true)
                             {
-                                var spe_service_active = await _context.ServicesSpecialities.FindAsync(spe_service.Id);
-                                spe_service_active.IsDelete = false;
+                                spe_service_isdelete = await _context.ServicesSpecialities.FindAsync(spe_service.Id);
+                                spe_service_isdelete.IsDelete = false;
                             }
                             else
                             {
@@ -777,38 +794,70 @@ namespace DoctorManagement.Application.System.Users
                         }
                         else
                         {
-                            spe_service = new ServicesSpecialities()
+                            var add_spe_service = new ServicesSpecialities()
                             {
+                                DoctorId = doctor.UserId,
                                 IsDelete = false,
-                                SpecialityId = spe_service.SpecialityId,
+                                SpecialityId = spe,
                             };
+                            doctor.ServicesSpecialities.Add(add_spe_service);
                         }
-                        doctor.ServicesSpecialities.Add(spe_service);
                     }
-                    foreach(var isdelete in spe_service_isdeletes)
+                    foreach (var isdelete in spe_service_isdeletes)
                     {
-                        var spe_service_isdelete = await _context.ServicesSpecialities.FindAsync(isdelete.Id);
+                        spe_service_isdelete = await _context.ServicesSpecialities.FindAsync(isdelete.Id);
                         spe_service_isdelete.IsDelete = true;
                     }
-                   
+                    var i = 0;
+                    var remove_gallery = new Galleries();
+                    doctor.Galleries = new List<Galleries>();
+                    if (request.Galleries != null)
+                    {
+                        /*var remove_galleries = _context.Galleries.Where(x => x.DoctorId == doctor.UserId).ToList();
+                        if (remove_galleries.Count() > 0)
+                        {
+                            foreach (var item in remove_galleries)
+                            {
+                                remove_gallery = await _context.Galleries.FindAsync(item.Id);
+                                await _storageService.DeleteFileAsyncs(remove_gallery.Img, GALLERY_CONTENT_FOLDER_NAME);
+                                _context.Galleries.Remove(remove_gallery);
+                            }
+                        }*/
+                        foreach (var file in request.Galleries)
+                        {
+                            var image = new Galleries()
+                            {
+                                DoctorId = doctor.UserId,
+                                Img = await SaveFile(file, GALLERY_CONTENT_FOLDER_NAME),
+                                SortOrder = i,
+                            };
+                            doctor.Galleries.Add(image);
+                            i++;
+                        }
+                    }
                     doctor.Intro = WebUtility.HtmlDecode(request.Description);
+                    doctor.Services = WebUtility.HtmlDecode(request.Services);
+                    doctor.Prizes = WebUtility.HtmlDecode(request.Prizes);
+                    doctor.Note = WebUtility.HtmlDecode(request.Note);
+                    doctor.TimeWorking = WebUtility.HtmlDecode(request.TimeWorking);
+                    doctor.Educations = WebUtility.HtmlDecode(request.Educations);
                     doctor.FirstName = request.FirstName;
                     doctor.LastName = request.LastName;
                     doctor.Gender = request.Gender;
                     doctor.Dob = request.Dob;
-                    doctor.LocationId = request.ClinicId;
+                    doctor.LocationId = request.SubDistrictId;
                     doctor.Booking = request.Booking;
                     doctor.MapUrl = request.MapUrl;
-                    doctor.Slug = request.Slug+"-"+doctor.No;
+                    doctor.Slug = request.Slug;
                     doctor.IsPrimary = request.IsPrimary;
                     doctor.Prefix = request.Prefix;
-                    _context.SaveChanges();
                 }
-                return new ApiSuccessResult<bool>();
+                var rs_dt = await _context.SaveChangesAsync();
+                if (rs_dt != 0) return new ApiSuccessResult<bool>(true);
             }
             return new ApiErrorResult<bool>("Cập nhật không thành công");
         }
-
+        
         public async Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request)
         {
             var user = await _userManager.FindByIdAsync(request.Id.ToString());
@@ -816,7 +865,6 @@ namespace DoctorManagement.Application.System.Users
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
-
             //user.Dob = request.Dob;
             //user.Gender = request.Gender;
             user.Email = request.Email;

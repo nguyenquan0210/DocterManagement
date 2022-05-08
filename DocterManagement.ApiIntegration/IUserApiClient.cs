@@ -38,6 +38,7 @@ namespace DoctorManagement.ApiIntegration
         Task<ApiResult<UserVm>> GetByUserName(string username);
 
         Task<int> Delete(Guid Id);
+        Task<int> DeleteImg(Guid Id);
 
         Task<List<SelectListItem>> GetAllClinic(Guid? clinicId);
         Task<List<SelectListItem>> GetAllSpeciality(Guid? specialityId);
