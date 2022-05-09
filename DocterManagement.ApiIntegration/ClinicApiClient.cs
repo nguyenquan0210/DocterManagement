@@ -88,6 +88,10 @@ namespace DoctorManagement.ApiIntegration
         {
             return await Delete($"/api/clinic/images/" + Id);
         }
+        public async Task<int> DeleteAllImg(Guid Id)
+        {
+            return await Delete($"/api/clinic/{Id}/delete-all-images" );
+        }
         public async Task<ApiResult<ClinicVm>> GetById(Guid Id)
         {
             return await GetAsync<ClinicVm>($"/api/clinic/{Id}");

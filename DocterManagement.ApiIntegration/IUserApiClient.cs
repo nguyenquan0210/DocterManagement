@@ -39,7 +39,7 @@ namespace DoctorManagement.ApiIntegration
 
         Task<int> Delete(Guid Id);
         Task<int> DeleteImg(Guid Id);
-
+        Task<int> DeleteAllImg(Guid Id);
         Task<List<SelectListItem>> GetAllClinic(Guid? clinicId);
         Task<List<SelectListItem>> GetAllSpeciality(Guid? specialityId);
 

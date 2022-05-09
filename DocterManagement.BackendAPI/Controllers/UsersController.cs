@@ -208,6 +208,16 @@ namespace DoctorManagement.BackendAPI.Controllers
             var result = await _userService.DeleteImg(Id);
             return Ok(result);
         }
+        /// <summary>
+        /// Xóa ảnh bộ siêu tập
+        /// </summary>
+        /// 
+        [HttpDelete("{Id}/doctor-delete-all-gallery")]
+        public async Task<IActionResult> DeleteAllImg(Guid Id)
+        {
+            var result = await _userService.DeleteAllImg(Id);
+            return Ok(result);
+        }
         /*[HttpGet("activeusers")]
         public async Task<IActionResult> GetActiveUser()
         {

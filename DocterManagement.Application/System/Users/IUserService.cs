@@ -37,6 +37,7 @@ namespace DoctorManagement.Application.System.Users
 
         Task<ApiResult<int>> Delete(Guid id);
         Task<ApiResult<int>> DeleteImg(Guid Id);
+        Task<ApiResult<int>> DeleteAllImg(Guid Id);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
 

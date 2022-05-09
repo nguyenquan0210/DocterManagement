@@ -76,6 +76,10 @@ namespace DoctorManagement.ApiIntegration
         {
             return await Delete($"/api/users/doctor-delete-gallery/{Id}");
         }
+        public async Task<int> DeleteAllImg(Guid Id)
+        {
+            return await Delete($"/api/users/{Id}/doctor-delete-all-gallery");
+        }
         public async Task<ApiResult<bool>> UpdateStatus(Guid id, UserUpdateStatusRequest request)
         {
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");

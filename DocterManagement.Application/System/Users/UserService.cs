@@ -205,6 +205,24 @@ namespace DoctorManagement.Application.System.Users
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check); 
         }
+        public async Task<ApiResult<int>> DeleteAllImg(Guid Id)
+        {
+            var images = _context.Galleries.Where(x => x.DoctorId == Id).ToList();
+            int check = 0;
+            if (images.Count == 0) return new ApiSuccessResult<int>(check);
+            foreach (var image in images)
+            {
+                var removeImg = await _context.Galleries.FindAsync(image.Id);
+                await _storageService.DeleteFileAsyncs(removeImg.Img, GALLERY_CONTENT_FOLDER_NAME);
+                _context.Galleries.Remove(removeImg);
+            }
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0)
+            {
+                check = 2;
+            }
+            return new ApiSuccessResult<int>(check);
+        }
         public async Task<ApiResult<List<RoleVm>>> GetAllRole()
         {
             var result = _context.AppRoles;

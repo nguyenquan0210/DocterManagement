@@ -70,6 +70,23 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
+        /// Xóa tất cả hình ảnh phòng khám
+        /// </summary>
+        /// 
+        [HttpDelete("{Id}/delete-all-images")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<int>>> DeleteAllImageClinic([FromRoute] Guid Id)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _clinicService.DeleteAllImg(Id);
+
+            return Ok(result);
+        }
+        /// <summary>
         /// Cập nhật phòng khám
         /// </summary>
         /// 

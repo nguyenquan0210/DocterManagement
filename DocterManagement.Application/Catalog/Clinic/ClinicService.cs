@@ -114,6 +114,24 @@ namespace DoctorManagement.Application.Catalog.Clinic
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check); 
         }
+        public async Task<ApiResult<int>> DeleteAllImg(Guid Id)
+        {
+            var images = _context.ImageClinics.Where(x=>x.ClinicId == Id).ToList();
+            int check = 0;
+            if (images.Count == 0) return new ApiSuccessResult<int>(check);
+            foreach (var image in images)
+            {
+                var removeImg = await _context.ImageClinics.FindAsync(image.Id);
+                await _storageService.DeleteFileAsyncs(removeImg.Img, CLINICS_CONTENT_FOLDER_NAME);
+                _context.ImageClinics.Remove(removeImg);
+            }
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0)
+            {
+                check = 2;
+            }
+            return new ApiSuccessResult<int>(check);
+        }
 
         public async Task<ApiResult<List<ClinicVm>>> GetAll()
         {

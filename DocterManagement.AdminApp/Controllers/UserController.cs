@@ -478,7 +478,12 @@ namespace DoctorManagement.AdminApp.Controllers
             var result = await _userApiClient.DeleteImg(imgId);
             return Json(new { response = result });
         }
-
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllImg(Guid doctorId)
+        {
+            var result = await _userApiClient.DeleteAllImg(doctorId);
+            return Json(new { response = result });
+        }
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

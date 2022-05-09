@@ -20,6 +20,9 @@
     .dropzone .dz-preview .dz-error-mark svg {
     display: none;
     }
+    .dropzone .dz-preview .remove-all svg {
+    display: block;
+    }
     .dropzone .dz-preview:hover .dz-error-mark svg {
     display: block;
     }
@@ -97,13 +100,13 @@
                     </div>
                      <div class="row ">
                          <div class="col-6">
-                            <label  class="form-label">Thành phố</label>
+                            <label  class="form-label mt-4">Thành phố</label>
                             <input value="TP Đà Nẵng" class="multisteps-form__input form-control" readonly />
                             <span  class="text-danger"></span>
 
                         </div>
                         <div class="col-6">
-                            <label asp-for="DistrictId" class="control-label "></label>
+                            <label asp-for="DistrictId" class="control-label mt-4"></label>
                                 <select  asp-for="DistrictId"  asp-items="ViewBag.District" class= "multisteps-form__input form-control" >
                                     <option>-- Chọn Quận Huyện --</option>
                                 </select>
@@ -132,13 +135,13 @@
                             
                         </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6 mt-4">
                             <label asp-for="ImgLogo" class="form-label "></label>
                             <input asp-for="ImgLogo" class="multisteps-form__input form-control" />
                             <span asp-validation-for="ImgLogo" class="text-danger"></span>
 
                         </div>
-                         <div class="col-2 text-center mt-4 ">
+                         <div class="col-2 text-center mt-5 ">
                                <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(Configuration["BaseAddress"] + "/img/" + ViewBag.Img)" alt="">
                          </div>
                          <div class="col-4">
@@ -158,37 +161,62 @@
                             <input  asp-for="ImgClinics"  class="multisteps-form__input form-control"   />
                             <span asp-validation-for="ImgClinics" class="text-danger"></span>
                         </div>
-                        <div class="col-8  " >
-                            <div class="row form-control dropzone dz-clickable dz-started mt-5" >
-                                
-                                 @foreach(var img in images)
-                                 {
-                                     <div class="col-3  dz-preview dz-processing dz-image-preview dz-error dz-complete" id ="row_@img.Id">
-                                         <div id = "Img_@i" onclick="ConfirmDelete(@i)" data-id="@img.Id" >
-                                              <div class="dz-image"><img class="col-2 w-100 border-radius-lg shadow-lg mx-auto" data-dz-thumbnail="" alt="" src="@(Configuration["BaseAddress"] + "/img/" + img.Img)"></div>
-                                              <div class="dz-details"><div class="dz-size"></div><div class="dz-filename"></div></div>
-                                              <div style="left: 42%;" class="dz-error-mark"> <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
-                                                  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                  <title>Error</title>
-                                                  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
-                                                      <path
-                                                        d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z">
-                                                      </path>
-                                                    </g>
-                                                  </g>
-                                                </svg> 
-                                              </div>
+                        <div class="col-12 " id="file_img" >
+                        </div>
+                        <div class="col-12  " id = "show-file-img">
+                                @if (images.Count() > 0)
+                                {
+                                    <div class="row form-control dropzone dz-clickable dz-started mt-4" >
+                                        @foreach(var img in images)
+                                         {
+                                             <div class="col-1  dz-preview dz-processing dz-image-preview dz-error dz-complete" id ="row_@img.Id">
+                                                 <div id = "Img_@i" onclick="ConfirmDelete(@i)" data-id="@img.Id" >
+                                                      <div class="dz-image"><img class="col-2 w-100 border-radius-lg shadow-lg mx-auto" data-dz-thumbnail="" alt="" src="@(Configuration["BaseAddress"] + "/img/" + img.Img)"></div>
+                                                      <div class="dz-details"><div class="dz-size"></div><div class="dz-filename"></div></div>
+                                                      <div style="left: 75px;" class="dz-error-mark"> <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
+                                                          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                          <title>Error</title>
+                                                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
+                                                              <path
+                                                                d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z">
+                                                              </path>
+                                                            </g>
+                                                          </g>
+                                                        </svg> 
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                i++;
+                                        }
+                                        <div class="col-1  dz-preview dz-processing dz-image-preview dz-error dz-complete" >
+                                            <div class="dz-image">
+                                                <a id = "Img-delete-all" onclick="ConfirmDeleteAll()" data-id="@Model.Id" class="btn bg-gradient-dark col-2 w-100 h-100 border-radius-lg shadow-lg mx-auto ">Xóa tất cả</a>
+                                                <div style="left: 60px;" class="dz-error-mark remove-all"> <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
+                                                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                      <title>Error</title>
+                                                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
+                                                          <path
+                                                            d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z">
+                                                          </path>
+                                                        </g>
+                                                      </g>x
+                                                    </svg> 
+                                                  </div>
                                             </div>
                                         </div>
-                                        i++;
-                                    }
-                                    <div id="listImg"></div>
-                                </div>
-                         </div>
+                                    </div>
+                                }
+                                
+                         </div> 
                     </div>
                      <input asp-for="Id" type = "hidden"/>
-                   
+                    @for (int img = 0; img < Model.Images.Count(); img++)
+                        {
+                            @Html.TextBoxFor(x=>x.Images[img].Id, new{ type = "hidden"})
+                            @Html.TextBoxFor(x=>x.Images[img].Img, new{ type = "hidden"})
+                        }
                     <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
                 </div>
                 </div>
@@ -246,6 +274,7 @@
         </div>
     </div>
     <input type="hidden" id="hiddenEmployeeId" />
+    <input type="hidden" id="checkDeleteAll" />
 </div>
 
 @section jsFooter{
@@ -253,11 +282,11 @@
     <script src="~/js/plugins/flatpickr.min.js"></script>
    
     <script>
-         if (document.getElementById('DistrictId')) {
+        if (document.getElementById('DistrictId')) {
             var District = document.getElementById('DistrictId');
             const example = new Choices(District);
         }
-       if (document.getElementById('LocationId')) {
+        if (document.getElementById('LocationId')) {
               var Location = document.getElementById('LocationId');
               const example = new Choices(Location);
         }
@@ -272,13 +301,14 @@
             var file = $('#ImgLogo').val();
             $("#ImgLogo").attr("value", file.slice(12));
         });
-       $("#ImgClinics").change(function (event) {
+        $("#ImgClinics").change(function (event) {
             var files = event.target.files;
+            $("#file_img").append('<div class="row form-control dropzone dz-clickable dz-started mt-5" ><div id="listImg"></div></div>')
             $("#listImg").empty();
             for(let i = 0; i < files.length; i++){
                 var mgabyte = files[i].size / 1000000 ;
                 var fileName = files[i].name;
-                var lImg = "<div class='col-3  dz-preview dz-processing dz-image-preview dz-error dz-complete'>"
+                var lImg = "<div class='col-2  dz-preview dz-processing dz-image-preview dz-error dz-complete'>"
                       +"<div class='dz-image'><img id='src_imgs_" + i + "' class='col-2 w-100 border-radius-lg shadow-lg mx-auto' data-dz-thumbnail alt='' src=''></div>"
                       +"<div class='dz-details' style='left: -25px;'><div class='dz-size'><span data-dz-size=''><strong>"
                       +"<font style='vertical-align: inherit;'><font style='vertical-align: inherit;'>" + mgabyte.toFixed(3) + "</font></font></strong>"
@@ -312,34 +342,65 @@
         var ConfirmDelete = function (Id) {
             var idImg = $("#Img_"+Id).attr("data-id");
             $("#hiddenEmployeeId").val(idImg);
+            $("#checkDeleteAll").val(false);
             document.getElementById("myModel").classList.toggle('delete_none');
             document.getElementById("myModel").classList.toggle('delete_block');
             $("#quesion").html("Bạn sẽ không thể hoàn nguyên điều này!");
             $("#okok").html("Có, xóa nó!");
         }
-
+        var ConfirmDeleteAll = function () {
+            var idClinic = $("#Img-delete-all").attr("data-id");
+            $("#hiddenEmployeeId").val(idClinic);
+            $("#checkDeleteAll").val(true);
+            document.getElementById("myModel").classList.toggle('delete_none');
+            document.getElementById("myModel").classList.toggle('delete_block');
+            $("#quesion").html("Bạn sẽ không thể hoàn nguyên điều này!");
+            $("#okok").html("Có, xóa tất cả!");
+        }
         var Delete = function () {
             EnableQuesion();
             var empId = $("#hiddenEmployeeId").val();
+            var check = $("#checkDeleteAll").val();
+            if(check=="true"){
+                $.ajax({
+                    url: "/Clinic/DeleteAllImg",
+                    data: { clinicId: empId},
+                    dataType: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.response == 2) {
+                            $("#show-file-img").empty();
+                              $("#title").html("Xóa Thành Công");
+                            $("#descript").html("Xóa tất cả hình ảnh thành công.");
+                        } else{
+                            $("#title").html("Lỗi sever!");
+                            $("#descript").html("Không thể thực hiện chức năng này.");
+                        }
 
-            $.ajax({
-                url: "/Clinic/DeleteImg",
-                data: { imgId: empId},
-                dataType: "json",
-                type: "POST",
-                success: function (result) {
-                    if (result.response == 2) {
-                        $("#row_" + empId).remove();
-                          $("#title").html("Xóa Thành Công");
-                        $("#descript").html("Xóa người dùng thành công.");
-                    } else{
-                        $("#title").html("Lỗi sever!");
-                        $("#descript").html("Không thể thực hiện chức năng này.");
                     }
+                })
+            }else{
+                $.ajax({
+                    url: "/Clinic/DeleteImg",
+                    data: { imgId: empId},
+                    dataType: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.response == 2) {
+                            $("#row_" + empId).remove();
+                            if(@images.Count == 1){
+                                $("#show-file-img").empty();
+                            }
+                              $("#title").html("Xóa Thành Công");
+                            $("#descript").html("Xóa người dùng thành công.");
+                        } else{
+                            $("#title").html("Lỗi sever!");
+                            $("#descript").html("Không thể thực hiện chức năng này.");
+                        }
 
-                }
-            })
-
+                    }
+                })
+            }
             document.getElementById("loaderDir").classList.toggle('delete_none');
             document.getElementById("loaderDir").classList.toggle('delete_block');
         }
