@@ -8,7 +8,7 @@ namespace DoctorManagement.ViewModels.Common
 {
     public class ApiErrorResult<T> : ApiResult<T>
     {
-        public string[] ValidationErrors { get; set; }
+        //public string[] ValidationErrors { get; set; }
 
         public ApiErrorResult()
         {

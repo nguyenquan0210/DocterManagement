@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.Application.System.Users;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -74,13 +75,47 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPut("update-doctor/{id}")]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UpdateDoctor(Guid id, [FromForm] UserUpdateRequest request)
+        public async Task<IActionResult> UpdateDoctor(Guid id,UserUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var result = await _userService.UpdateDoctor(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        /// <summary>
+        /// Cập nhật tài khoản
+        /// </summary>
+        /// 
+        [HttpPut("doctor/update-doctor-profile")]
+        public async Task<IActionResult> DoctorUpdateProfile(DoctorUpdateProfile request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.DoctorUpdateProfile(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        /// <summary>
+        /// Cập nhật tài khoản
+        /// </summary>
+        /// 
+        [HttpPut("doctor/update-doctor-request/{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> DoctorUpdateRequest(Guid id, [FromForm] DoctorUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.DoctorUpdateRequest(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

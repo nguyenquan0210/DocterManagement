@@ -1,6 +1,7 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.ActiveUsers;
+using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,6 +29,8 @@ namespace DoctorManagement.ApiIntegration
         Task<ApiResult<bool>> AddUserRole(RequestRoleUser request);
 
         Task<ApiResult<bool>> UpdateDoctor(Guid id, UserUpdateRequest request);
+        Task<ApiResult<bool>> DoctorUpdateRequest(Guid id, DoctorUpdateRequest request);
+        Task<ApiResult<bool>> DoctorUpdateProfile(DoctorUpdateProfile request);
         Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request);
         Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request);
 

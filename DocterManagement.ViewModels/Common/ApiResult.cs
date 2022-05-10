@@ -12,6 +12,8 @@ namespace DoctorManagement.ViewModels.Common
 
         public string Message { get; set; }
 
+        public string[] ValidationErrors { get; set; }
+
         public T Data { get; set; }
     }
 }

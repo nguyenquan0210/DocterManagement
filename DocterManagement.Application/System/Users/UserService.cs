@@ -101,7 +101,7 @@ namespace DoctorManagement.Application.System.Users
             {
                 if (roles.Name.ToUpper() != "PATIENT") return new ApiErrorResult<string>("Chỉ nhận tài khoản bệnh nhân.");
             }
-
+          
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,user.Email),
@@ -372,16 +372,15 @@ namespace DoctorManagement.Application.System.Users
             var specialities = from s in _context.ServicesSpecialities
                                join spe in _context.Specialities on s.SpecialityId equals spe.Id
                                where s.IsDelete == false
+                               where s.DoctorId == user.Id
                                select new { s, spe };
             var rates = from r in _context.Rates
                         join a in _context.Appointments on r.AppointmentId equals a.Id
+                        where a.DoctorId == user.Id
                         select new { r, a };
 
-            if (doctor != null)
-            {
-                specialities = specialities.Where(x => x.s.DoctorId == doctor.UserId);
-                rates = rates.Where(x => x.a.DoctorId == doctor.UserId);
-            }
+            var galleries = _context.Galleries.Where(x => x.DoctorId == user.Id);
+
             var patient = await _context.Patients.FindAsync(user.Id);
             var ethnic = await _context.Ethnics.FindAsync(patient != null ? patient.EthnicId : new Guid());
             if (doctor != null)
@@ -390,12 +389,13 @@ namespace DoctorManagement.Application.System.Users
                 district = await _context.Locations.FindAsync(location.ParentId);
                 province = await _context.Locations.FindAsync(district.ParentId);
             }
-            else
+            else if (patient != null)
             {
                 location = await _context.Locations.FindAsync(patient.LocationId);
                 district = await _context.Locations.FindAsync(location.ParentId);
                 province = await _context.Locations.FindAsync(district.ParentId);
             }
+            var fulladdreess = location != null ? location.Name + ", " + district.Name + ", " + province.Name : null;
             //var roles = await _userManager.GetRolesAsync(user);
             var userVm = new UserVm()
             {
@@ -404,6 +404,8 @@ namespace DoctorManagement.Application.System.Users
                 Id = user.Id,
                 UserName = user.UserName,
                 Status = user.Status,
+                Name = doctor != null ? doctor.LastName + " " + doctor.FirstName : patient != null ? patient.Name : null,
+                Address = doctor != null ? doctor.Address + ", " + fulladdreess : patient != null ? patient.Address + ", " + fulladdreess : null,
                 GetRole = new GetRoleVm()
                 {
                     Id = role.Id,
@@ -430,10 +432,12 @@ namespace DoctorManagement.Application.System.Users
                     Prefix = doctor.Prefix,
                     Prizes = doctor.Prizes,
                     View = doctor.View,
+                    TimeWorking = doctor.TimeWorking,
                     Location = new LocationVm() { Id = location.Id, Name = location.Name, District = new DistrictVm() { Id = district.Id, Name = district.Name, Province = new ProvinceVm() { Id = province.Id, Name = province.Name } } },
                     GetClinic = new GetClinicVm() { Id = clinic.Id, Name = clinic.Name },
-                    GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.s.Id, Title = x.spe.Title }).ToList(),
+                    GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.spe.Id, Title = x.spe.Title }).ToList(),
                     Rates = rates.Select(x => new RateVm() { Id = x.r.Id, Rating = x.r.Rating }).ToList(),
+                    Galleries = galleries.Select(x => new GalleryVm() { Id = x.Id, Name = GALLERY_CONTENT_FOLDER_NAME + "/" + x.Img }).ToList(),
                 } : new DoctorVm()
                     ,
                 PatientVm = patient != null ? new PatientVm()
@@ -766,15 +770,15 @@ namespace DoctorManagement.Application.System.Users
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             var doctor = await _context.Doctors.FindAsync(request.Id);
-            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
+            /*if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
-            }
-            string[] username = request.Email.Split('@');
-            user.Email = request.Email;
-            user.PhoneNumber = request.PhoneNumber;
+            }*/
+           // string[] username = request.Email.Split('@');
+            //user.Email = request.Email;
+            //user.PhoneNumber = request.PhoneNumber;
             user.Status = request.Status;
-            user.UserName = username[0];
+            //user.UserName = username[0];
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -875,7 +879,159 @@ namespace DoctorManagement.Application.System.Users
             }
             return new ApiErrorResult<bool>("Cập nhật không thành công");
         }
-        
+
+        public async Task<ApiResult<bool>> DoctorUpdateRequest(Guid id, DoctorUpdateRequest request)
+        {
+            var doctor = await _context.Doctors.FindAsync(request.Id);
+            
+                if (doctor != null)
+                {
+                    if (request.ThumbnailImage != null)
+                    {
+                        if (doctor.Img != null && doctor.Img != "user_default.png")
+                        {
+                            await _storageService.DeleteFileAsyncs(doctor.Img, USER_CONTENT_FOLDER_NAME);
+                        }
+                        doctor.Img = await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME);
+                    }
+                    doctor.Address = request.Address;
+                    doctor.ClinicId = request.ClinicId;
+                    doctor.ServicesSpecialities = new List<ServicesSpecialities>();
+                    var spe_service_isdeletes = from s in _context.ServicesSpecialities where s.DoctorId == doctor.UserId && s.IsDelete == false select s;
+                    var spe_service_isdelete = new ServicesSpecialities();
+                    foreach (var spe in request.Specialities)
+                    {
+                        var spe_service = _context.ServicesSpecialities.Where(x => x.DoctorId == doctor.UserId).FirstOrDefault(x => x.SpecialityId == spe);
+
+                        if (spe_service != null)
+                        {
+                            if (spe_service.IsDelete == true)
+                            {
+                                spe_service_isdelete = await _context.ServicesSpecialities.FindAsync(spe_service.Id);
+                                spe_service_isdelete.IsDelete = false;
+                            }
+                            else
+                            {
+                                spe_service_isdeletes = spe_service_isdeletes.Where(x => x.SpecialityId != spe);
+                            }
+                        }
+                        else
+                        {
+                            var add_spe_service = new ServicesSpecialities()
+                            {
+                                DoctorId = doctor.UserId,
+                                IsDelete = false,
+                                SpecialityId = spe,
+                            };
+                            doctor.ServicesSpecialities.Add(add_spe_service);
+                        }
+                    }
+                    foreach (var isdelete in spe_service_isdeletes)
+                    {
+                        spe_service_isdelete = await _context.ServicesSpecialities.FindAsync(isdelete.Id);
+                        spe_service_isdelete.IsDelete = true;
+                    }
+                    var i = 0;
+                    var remove_gallery = new Galleries();
+                    doctor.Galleries = new List<Galleries>();
+                    if (request.Galleries != null)
+                    {
+                        foreach (var file in request.Galleries)
+                        {
+                            var image = new Galleries()
+                            {
+                                DoctorId = doctor.UserId,
+                                Img = await SaveFile(file, GALLERY_CONTENT_FOLDER_NAME),
+                                SortOrder = i,
+                            };
+                            doctor.Galleries.Add(image);
+                            i++;
+                        }
+                    }
+                    doctor.Intro = WebUtility.HtmlDecode(request.Description);
+                    doctor.Services = WebUtility.HtmlDecode(request.Services);
+                    doctor.Prizes = WebUtility.HtmlDecode(request.Prizes);
+                    doctor.Note = WebUtility.HtmlDecode(request.Note);
+                    doctor.TimeWorking = WebUtility.HtmlDecode(request.TimeWorking);
+                    doctor.Educations = WebUtility.HtmlDecode(request.Educations);
+                    doctor.FirstName = request.FirstName;
+                    doctor.LastName = request.LastName;
+                    doctor.Gender = request.Gender;
+                    doctor.Dob = request.Dob;
+                    doctor.LocationId = request.SubDistrictId;
+                    doctor.Booking = request.Booking;
+                    doctor.MapUrl = request.MapUrl;
+                    doctor.Slug = request.Slug;
+                    doctor.Prefix = request.Prefix;
+                }
+                var rs_dt = await _context.SaveChangesAsync();
+                if (rs_dt != 0) return new ApiSuccessResult<bool>(true);
+           
+            return new ApiErrorResult<bool>("Cập nhật không thành công");
+        }
+
+        public async Task<ApiResult<bool>> DoctorUpdateProfile(DoctorUpdateProfile request)
+        {
+            var doctor = await _context.Doctors.FindAsync(request.Id);
+
+            if (doctor == null) return new ApiErrorResult<bool>(new string[] {"danger", "Tài Khoản không tồn tại!!!" });
+            doctor.Address = request.Address;
+            doctor.ClinicId = request.ClinicId;
+            doctor.ServicesSpecialities = new List<ServicesSpecialities>();
+            var spe_service_isdeletes = from s in _context.ServicesSpecialities where s.DoctorId == doctor.UserId && s.IsDelete == false select s;
+            var spe_service_isdelete = new ServicesSpecialities();
+            foreach (var spe in request.Specialities)
+            {
+                var spe_service = _context.ServicesSpecialities.Where(x => x.DoctorId == doctor.UserId).FirstOrDefault(x => x.SpecialityId == spe);
+
+                if (spe_service != null)
+                {
+                    if (spe_service.IsDelete == true)
+                    {
+                        spe_service_isdelete = await _context.ServicesSpecialities.FindAsync(spe_service.Id);
+                        spe_service_isdelete.IsDelete = false;
+                    }
+                    else
+                    {
+                        spe_service_isdeletes = spe_service_isdeletes.Where(x => x.SpecialityId != spe);
+                    }
+                }
+                else
+                {
+                    var add_spe_service = new ServicesSpecialities()
+                    {
+                        DoctorId = doctor.UserId,
+                        IsDelete = false,
+                        SpecialityId = spe,
+                    };
+                    doctor.ServicesSpecialities.Add(add_spe_service);
+                }
+            }
+            foreach (var isdelete in spe_service_isdeletes)
+            {
+                spe_service_isdelete = await _context.ServicesSpecialities.FindAsync(isdelete.Id);
+                spe_service_isdelete.IsDelete = true;
+            }
+            doctor.Intro = WebUtility.HtmlDecode(request.Description);
+            doctor.Services = WebUtility.HtmlDecode(request.Services);
+            doctor.Prizes = WebUtility.HtmlDecode(request.Prizes);
+            doctor.Note = WebUtility.HtmlDecode(request.Note);
+            doctor.TimeWorking = WebUtility.HtmlDecode(request.TimeWorking);
+            doctor.Educations = WebUtility.HtmlDecode(request.Educations);
+            doctor.FirstName = request.FirstName;
+            doctor.LastName = request.LastName;
+            doctor.Gender = request.Gender;
+            doctor.Dob = request.Dob;
+            doctor.LocationId = request.SubDistrictId;
+            doctor.Booking = request.Booking;
+            doctor.MapUrl = request.MapUrl;
+            doctor.Slug = request.Slug;
+            doctor.Prefix = request.Prefix;
+            var rs_dt = await _context.SaveChangesAsync();
+            if (rs_dt != 0) return new ApiSuccessResult<bool>(true);
+
+            return new ApiErrorResult<bool>(new string[]{ "warning","Cập nhật không thành công!, Dữ liệu không thay đổi."});
+        }
         public async Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request)
         {
             var user = await _userManager.FindByIdAsync(request.Id.ToString());

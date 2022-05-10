@@ -130,7 +130,9 @@
                      <div class="row">
                         <div class="col-12">
                             <label asp-for="DoctorVm.Intro" class="form-label mt-4"></label>
-                            <textarea asp-for="DoctorVm.Intro" class="multisteps-form__input form-control" readonly = "readonly"  >  </textarea>
+                            <div  class="multisteps-form__input form-control"   > 
+                                 @Html.Raw(Model.DoctorVm.Intro)
+                             </div>
                             
                         </div>
                     </div>

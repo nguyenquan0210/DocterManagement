@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.ViewModels.System.Doctors
 {
-    public class DoctorUpdateRequest
+    public class DocterRequestAll
     {
-        public Guid Id { get; set; }
 
         [Display(Name = "Giới thiệu")]
         public string Description { get; set; }
@@ -63,5 +62,19 @@ namespace DoctorManagement.ViewModels.System.Doctors
         [Display(Name = "Hình ảnh")]
         public IFormFileCollection? Galleries { get; set; }
         public List<GalleryVm>? GetGalleries { get; set; }
+
+        [Display(Name = "Mật khẩu mới")]
+        [DataType(DataType.Password)]
+        public string NewPassword { get; set; }
+
+        [Display(Name = "Xác nhận mật khẩu")]
+        [DataType(DataType.Password)]
+        public string ConfirmPassword { get; set; }
+
+        public Guid Id { get; set; }
+
+        [Display(Name = "Mật khẩu hiện tại")]
+        [DataType(DataType.Password)]
+        public string CurrentPassword { get; set; }
     }
 }

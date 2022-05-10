@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.Application.System.Users
 {
-    public interface IUserService
+    public interface IUserService 
     {
         Task<ApiResult<string>> Authencate(LoginRequest request);
 
@@ -22,6 +23,8 @@ namespace DoctorManagement.Application.System.Users
         Task<ApiResult<bool>> AddRoleUser(RequestRoleUser request);
 
         Task<ApiResult<bool>> UpdateDoctor(Guid id, UserUpdateRequest request);
+        Task<ApiResult<bool>> DoctorUpdateRequest(Guid id, DoctorUpdateRequest request);
+        Task<ApiResult<bool>> DoctorUpdateProfile(DoctorUpdateProfile request);
 
         Task<ApiResult<bool>> UpdateAdmin(UserUpdateAdminRequest request);
         Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request);

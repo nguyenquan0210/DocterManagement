@@ -27,12 +27,6 @@ namespace DoctorManagement.ViewModels.System.Users
         [DataType(DataType.Date)]
         public DateTime Dob { get; set; }
 
-        [Display(Name = "Hòm thư")]
-        public string Email { get; set; }
-
-        [Display(Name = "Số điện thoại")]
-        public string PhoneNumber { get; set; }
-
         [Display(Name = "Trạng thái")]
         public Status Status { get; set; }
 

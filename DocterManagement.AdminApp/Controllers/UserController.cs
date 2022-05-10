@@ -161,10 +161,10 @@ namespace DoctorManagement.AdminApp.Controllers
                 var updateRequest = new UserUpdateRequest()
                 {
                     Dob = user.DoctorVm.Dob,
-                    Email = user.Email,
+                    //Email = user.Email,
                     FirstName = user.DoctorVm.FirstName,
                     LastName = user.DoctorVm.LastName,
-                    PhoneNumber = user.PhoneNumber,
+                    //PhoneNumber = user.PhoneNumber,
                     Gender = user.DoctorVm.Gender,
                     Id = id,
                     Address = user.DoctorVm.Address,
