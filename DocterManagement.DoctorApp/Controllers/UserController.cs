@@ -109,9 +109,6 @@ namespace DoctorManagement.DoctorApp.Controllers
             TempData["AlertMessage"] = result.ValidationErrors[1];
             TempData["AlertType"] = "danger";
             TempData["AlertId"] = "dangerToast";
-            
-    
-           
             return View(request);
         }
         [HttpGet]
@@ -297,17 +294,31 @@ namespace DoctorManagement.DoctorApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            request.UserName = User.Identity.Name;
             var result = await _userApiClient.ChangePassword(request);
             if (result.IsSuccessed)
             {
-                TempData["AlertMessage"] = "Đổi mật khẩu thành công";
-                TempData["AlertType"] = "alert-success";
-                return View();
+                TempData["AlertMessage"] = "Thay đổi thông tin thành công";
+                TempData["AlertType"] = "success";
+                TempData["AlertId"] = "successToast";
+                return RedirectToAction("Index");
             }
-            TempData["AlertMessage"] = "Đổi mật khẩu bị lỗi";
-            TempData["AlertType"] = "alert-warning";
+            if (result.ValidationErrors[0] == "warning")
+            {
+                TempData["AlertMessage"] = result.ValidationErrors[1];
+                TempData["AlertType"] = "warning";
+                TempData["AlertId"] = "warningToast";
+                return RedirectToAction("Index");
+            }
+            TempData["AlertMessage"] = result.ValidationErrors[1];
+            TempData["AlertType"] = "danger";
+            TempData["AlertId"] = "dangerToast";
             return View(request);
+        }
+        [HttpPost]
+        public async Task<IActionResult> IsBooking(Guid doctorId)
+        {
+            var result = await _userApiClient.IsBooking(doctorId);
+            return Json(new { response = result });
         }
         [HttpPost]
         public async Task<IActionResult> Logout()

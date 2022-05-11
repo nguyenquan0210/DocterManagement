@@ -41,6 +41,14 @@ namespace DoctorManagement.Application.System.Users
 
             await SendEmail(userEmailOptions);
         }
+        public async Task SendEmailChangePassword(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolders("Hello {{UserName}}, Change your password.", userEmailOptions.PlaceHolders);
+
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("ChangePassword"), userEmailOptions.PlaceHolders);
+
+            await SendEmail(userEmailOptions);
+        }
 
         public EmailService(IOptions<SMTPConfigModel> smtpConfig)
         {

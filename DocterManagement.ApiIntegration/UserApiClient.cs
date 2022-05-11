@@ -68,7 +68,17 @@ namespace DoctorManagement.ApiIntegration
 
             return JsonConvert.DeserializeObject<ApiErrorResult<string>>(await response.Content.ReadAsStringAsync());
         }
+        public async Task<int> IsBooking(Guid Id)
+        {
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
+            var response = await client.GetAsync($"/api/users/doctor-isbooking/{Id}");
+            var result = JsonConvert.DeserializeObject<ApiSuccessResult<int>>(await response.Content.ReadAsStringAsync());
+            return result.Data;
+        }
         public async Task<int> Delete(Guid Id)
         {
             return await Delete($"/api/users/{Id}" );

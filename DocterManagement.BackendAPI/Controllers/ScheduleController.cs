@@ -29,7 +29,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _scheduleService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }
@@ -64,7 +64,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _scheduleService.Update(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>

@@ -37,7 +37,7 @@ namespace DoctorManagement.Application.System.Users
         Task<ApiResult<UserVm>> GetById(Guid id);
 
         Task<ApiResult<UserVm>> GetByUserName(string username);
-
+        Task<ApiResult<int>> IsBooking(Guid Id);
         Task<ApiResult<int>> Delete(Guid id);
         Task<ApiResult<int>> DeleteImg(Guid Id);
         Task<ApiResult<int>> DeleteAllImg(Guid Id);

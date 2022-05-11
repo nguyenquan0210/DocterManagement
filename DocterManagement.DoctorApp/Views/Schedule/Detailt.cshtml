@@ -53,8 +53,8 @@
 							<h4 style="display: flex;" class="mt-lg-0 mt-4">@Model.CheckInDate.DayOfWeek, <span> @Model.CheckInDate.ToShortDateString()</span></h4>
 							
 							<br />
-							<span class="badge   @(Model.Status == Status.Active ? "badge-success" : Model.Status == Status.InActive ? "badge-danger": "badge-warning ")">
-								@(Model.Status == Status.Active ? "Đang hoạt động" : Model.Status == Status.InActive ? "Tạp dừng hoạt động": "Ngừng hoạt động")
+							<span class="badge   @(Model.IsDeleted == false ? "badge-success" : "badge-warning ")">
+								@(Model.IsDeleted == false ? "Đang hoạt động" : "đã khóa")
 							</span>
 						
 						
@@ -95,6 +95,7 @@
 										<th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">Thời gian từ</th>
 										<th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">Đến thời gian</th>
 										<th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">Tổng thời gian</th>
+										<th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">Đặt khám</th>
 										<th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">Tình trang</th>
 										<th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">Xóa</th>
 									</tr>
@@ -124,13 +125,16 @@
 													<p class="text-sm text-secondary mb-0">@(minutes.Minutes + (minutes.Hours * 60)) phút</p>
 												</td>
 												<td>
-													<span class="badge @(item.Status == Status.Active ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.Status == Status.Active ? "Hoạt động" : "đã khóa")</span>
+													<span class="badge @(item.IsBooked ? "badge-success" : "badge-warning") badge-sm" >@(item.IsBooked ? "đã đặt" : "chưa đặt")</span>
+												</td>
+												<td>
+													<span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>
 													
 												</td>
 												<td class="text-sm">
 													
 													<div class="form-check form-switch ps-0">
-														<input type="checkbox"@(Model.Status == Status.Active ? "checked": Model.Status == Status.NotActivate ? "checked" : "") class="form-check-input mt-1 ms-auto " />
+														<input type="checkbox" @(Model.IsDeleted == false ? "checked" : "") class="form-check-input mt-1 ms-auto " />
 													</div>
 												</td>
 											</tr>

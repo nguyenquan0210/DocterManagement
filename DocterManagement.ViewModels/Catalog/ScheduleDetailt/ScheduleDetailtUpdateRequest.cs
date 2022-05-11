@@ -12,6 +12,6 @@ namespace DoctorManagement.ViewModels.Catalog.ScheduleDetailt
         public Guid Id { get; set; }
         public TimeSpan FromTime { get; set; }
         public TimeSpan ToTime { get; set; }
-        public Status Status { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

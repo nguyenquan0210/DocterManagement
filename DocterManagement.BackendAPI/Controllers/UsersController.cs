@@ -224,6 +224,16 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(user);
         }
         /// <summary>
+        /// Cập nhật cho phép đặt khám
+        /// </summary>
+        /// 
+        [HttpGet("doctor-isbooking/{Id}")]
+        public async Task<IActionResult> IsBooking(Guid Id)
+        {
+            var result = await _userService.IsBooking(Id);
+            return Ok(result);
+        }
+        /// <summary>
         /// Xóa tài khoản
         /// </summary>
         /// 

@@ -13,10 +13,13 @@ namespace DoctorManagement.ViewModels.Catalog.Schedule
         public Guid Id { get; set; }
         public TimeSpan FromTime { get; set; }
         public TimeSpan ToTime { get; set; }
-        public Status Status { get; set; }
+        public bool IsDeleted { get; set; }
         public DateTime CheckInDate { get; set; }
         public int Qty { get; set; }
+        public int BookedQty { get; set; }
+        public int AvailableQty { get; set; }
         public Guid DoctorId { get; set; }
         public List<ScheduleDetailtVm> ScheduleDetailts { get; set; }
+
     }
 }

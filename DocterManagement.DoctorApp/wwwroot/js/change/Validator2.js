@@ -225,4 +225,12 @@ Validator.isConfirmed = (selector, input, message=`Giá trị nhập vào không
 		}
 	}
 }
+Validator.isOther = (selector, input, message = `Giá trị nhập vào không khớp`) => {
+	return {
+		selector,
+		test: function (value) {
+			return value !== input() ? undefined : message
+		}
+	}
+}
 

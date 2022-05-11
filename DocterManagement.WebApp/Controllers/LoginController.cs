@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DoctorManagement.ViewModels.System.Users;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DoctorManagement.WebApp.Controllers
 {
     public class LoginController : Controller
     {
         public IActionResult Index()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Index(LoginRequest request)
         {
             return View();
         }

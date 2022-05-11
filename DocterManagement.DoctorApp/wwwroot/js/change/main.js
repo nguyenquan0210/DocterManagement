@@ -2,6 +2,7 @@ const formElement = document.querySelector('#change-pass')
 const passwordInputs = formElement.querySelectorAll('[type=password]')
 const fullNameInput = formElement.querySelector('[name=fullName]')
 const passwordInput = formElement.querySelector('[name=NewPassword]')
+const currentPasswordInput = formElement.querySelector('[name=CurrentPassword]')
 const formCheckList = formElement.querySelector('.form-section__form-checkList')
 const formCheckItems = formCheckList.querySelectorAll('.form-section__form-checkItem')
 const toggleShowPasswordBtn = formElement.querySelectorAll('.form-section__form-group-icon')
@@ -117,6 +118,9 @@ document.addEventListener("DOMContentLoaded", () => {
 			//Validator.isEmail('#email'),
 			Validator.isRequired('#CurrentPassword', 'Vui lòng nhập mật khẩu'),
 			Validator.isRequired('#NewPassword', 'Vui lòng nhập mật khẩu'),
+			Validator.isOther('#NewPassword', () => {
+				return currentPasswordInput.value
+			}, "Mật khẩu mới phải khác mật khẩu cũ."),
 			Validator.minLength('#NewPassword', 8),
 			Validator.minCharAlpha('#NewPassword', 1),
 			Validator.minCharAlphaUpcase('#NewPassword', 1),
@@ -130,10 +134,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			//Validator.isRequired('input[name=favorite]'),
 			//Validator.isRequired('#province'),
 			//Validator.isRequired('#avatar'),
-		],
+		]/*,
 		onSubmit: data => {
 			
-		}
+		}*/
 	})
 
 	/*if(avatarInput) {

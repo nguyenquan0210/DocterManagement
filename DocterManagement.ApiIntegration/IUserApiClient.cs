@@ -40,6 +40,7 @@ namespace DoctorManagement.ApiIntegration
 
         Task<ApiResult<UserVm>> GetByUserName(string username);
 
+        Task<int> IsBooking(Guid Id);
         Task<int> Delete(Guid Id);
         Task<int> DeleteImg(Guid Id);
         Task<int> DeleteAllImg(Guid Id);

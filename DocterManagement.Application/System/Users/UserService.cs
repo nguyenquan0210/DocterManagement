@@ -124,21 +124,53 @@ namespace DoctorManagement.Application.System.Users
 
         public async Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
-            if (user == null) return new ApiErrorResult<bool>("Tài khoản không tồn tại");
-            var checkpass = await _userManager.CheckPasswordAsync(user, request.currentPassword);
+            var user = await _userManager.FindByIdAsync(request.Id.ToString());
+            if (user == null) return new ApiErrorResult<bool>(new string[] { "warning", "Tài khoản không tồn tại" });
+            var checkpass = await _userManager.CheckPasswordAsync(user, request.CurrentPassword);
             if (!checkpass)
             {
-                return new ApiErrorResult<bool>("Mật khẩu không đúng.");
+                return new ApiErrorResult<bool>(new string[] {"warning","Mật khẩu không đúng."});
             }
-            var result = await _userManager.ChangePasswordAsync(user, request.currentPassword, request.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
             if (result.Succeeded)
             {
+                await SendEmailChangePassword(user);
                 return new ApiSuccessResult<bool>();
             }
-            return new ApiErrorResult<bool>("Đổi mật khẩu không thành công!");
+            return new ApiErrorResult<bool>(new string[] { "warning", "Đổi mật khẩu không thành công!" });
         }
+        private async Task SendEmailChangePassword(AppUsers user)
+        {
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string>() { user.Email },
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", user.UserName)
+                }
+            };
+            await _emailService.SendEmailChangePassword(options);
+        }
+        public async Task<ApiResult<int>> IsBooking(Guid Id)
+        {
+            var doctor = await _context.Doctors.FindAsync(Id);
+            int check = 0;
+            //var role = await _roleManager.FindByIdAsync(user.RoleId.ToString());
+            if (doctor == null) return new ApiSuccessResult<int>(check);
+            if (doctor.Booking)
+            {
+                doctor.Booking = false;
+                check = 1;
+            }
+            else
+            {
+                doctor.Booking = true;
+                check = 2;
+            }
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<int>(check);
 
+        }
         public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var user = await _userManager.FindByIdAsync(Id.ToString());

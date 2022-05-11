@@ -27,7 +27,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
             {
                 FromTime = request.FromTime,
                 ToTime = request.ToTime,
-                Status = Status.Active,
+                IsDeleted = false,
                 ScheduleId = request.ScheduleId
             };
             _context.schedulesSlots.Add(schedulesDetails);
@@ -41,16 +41,16 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
             var schedulesDetails = await _context.schedulesSlots.FindAsync(Id);
             int check = 0;
             if (schedulesDetails == null) return new ApiSuccessResult<int>(check);
-            if (schedulesDetails.Status == Status.Active)
+            if (schedulesDetails.IsDeleted == true)
             {
-                schedulesDetails.Status = Status.InActive;
-                check = 1;
+                schedulesDetails.IsDeleted = false;
+                check = 2;
             }
-            else
+            /*else
             {
                 _context.schedulesSlots.Remove(schedulesDetails);
                 check = 2;
-            }
+            }*/
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check);
         }
@@ -65,7 +65,8 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 FromTime = x.FromTime,
                 ToTime = x.ToTime,
                 ScheduleId = x.ScheduleId,
-                Status = x.Status
+                IsDeleted = x.IsDeleted,
+                IsBooked = x.IsBooked,
             }).ToListAsync();
             return new ApiSuccessResult<List<ScheduleDetailtVm>>(rs);
         }
@@ -87,7 +88,8 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                     Id = x.Id,
                     FromTime = x.FromTime,
                     ToTime = x.ToTime,
-                    Status = x.Status,
+                    IsBooked = x.IsBooked,
+                    IsDeleted=x.IsDeleted,
                     ScheduleId = x.ScheduleId
 
                 }).ToListAsync();
@@ -112,7 +114,8 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 FromTime = schedules.FromTime,
                 ToTime = schedules.ToTime,
                 ScheduleId = schedules.ScheduleId,
-                Status = schedules.Status
+                IsDeleted = schedules.IsDeleted,
+                IsBooked= schedules.IsBooked,
             };
             return new ApiSuccessResult<ScheduleDetailtVm>(rs);
         }
@@ -123,7 +126,7 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
             if (schedulesDetails == null) return new ApiSuccessResult<bool>(false);
             schedulesDetails.FromTime = request.FromTime;
             schedulesDetails.ToTime = request.ToTime;
-            schedulesDetails.Status = request.Status;
+            schedulesDetails.IsDeleted = request.IsDeleted;
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
             return new ApiSuccessResult<bool>(false);

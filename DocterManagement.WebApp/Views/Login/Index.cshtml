@@ -1,4 +1,4 @@
-﻿
+﻿@model DoctorManagement.ViewModels.System.Users.LoginRequest
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -463,7 +463,7 @@
                                                 <div nz-tab-body=""
                                                     class="ant-tabs-tabpane ng-star-inserted ant-tabs-tabpane-active"
                                                     tabindex="0" aria-hidden="false" style="">
-                                                    <form _ngcontent-serverapp-c213="" novalidate="" nz-form=""
+                                                    <form _ngcontent-serverapp-c213="" novalidate="" nz-form="" asp-action="Index" method="post"
                                                         class="flex flex-col gap-6 ant-form ng-pristine ng-invalid ant-form-inline ng-star-inserted ng-touched"
                                                         style="">
                                                         <div _ngcontent-serverapp-c213="" class="space-y-4">
@@ -477,18 +477,17 @@
                                                                         <div
                                                                             class="ant-form-item-control-input-content ng-tns-c210-7">
                                                                             <label _ngcontent-serverapp-c213=""
-                                                                                for="address"
+                                                                                asp-for="UserName"
                                                                                 class="form-label ng-tns-c210-7">Số điện
-                                                                                thoại</label><input
+                                                                                thoại</label><input asp-for="UserName"
                                                                                 _ngcontent-serverapp-c213=""
                                                                                 formcontrolname="username" nz-input=""
                                                                                 placeholder="Số điện thoại"
                                                                                 inputmode="numeric" pattern="[0-9]*"
                                                                                 digitonly=""
                                                                                 class="form-control ng-tns-c210-7 ng-pristine ng-invalid ng-touched"
-                                                                                type="text" maxlength="10"></div><span
+                                                                                type="text" maxlength="10"></div><span asp-validation-for="UserName"
                                                                             class="ant-form-item-children-icon ng-tns-c210-7">
-                                                                            <!---->
                                                                         </span>
                                                                     </div>
                                                                     <!---->
@@ -506,11 +505,12 @@
                                                                             class="ant-form-item-control-input-content ng-tns-c210-8">
                                                                             <label _ngcontent-serverapp-c213=""
                                                                                 for="password"
+                                                                                asp-for="Password"
                                                                                 class="form-label ng-tns-c210-8">Mật
                                                                                 khẩu</label>
                                                                             <div _ngcontent-serverapp-c213=""
                                                                                 class="relative flex items-center mt-1 ng-tns-c210-8">
-                                                                                <input _ngcontent-serverapp-c213=""
+                                                                                <input asp-for="Password" _ngcontent-serverapp-c213=""
                                                                                     formcontrolname="password"
                                                                                     nz-input=""
                                                                                     placeholder="Nhập mật khẩu"
@@ -523,9 +523,8 @@
                                                                                     class="absolute bottom-1/2 translate-y-1/2 right-2"
                                                                                     src="~/img/booking/svg/Hide.svg">
                                                                             </div>
-                                                                        </div><span
+                                                                        </div><span asp-validation-for="Password"
                                                                             class="ant-form-item-children-icon ng-tns-c210-8">
-                                                                            <!---->
                                                                         </span>
                                                                     </div>
                                                                     <!---->
@@ -556,7 +555,7 @@
                                                                         <button _ngcontent-serverapp-c213=""
                                                                             nz-button="" appsingleclick=""
                                                                             class="w-full btn-primary ng-tns-c210-9 bg-gray-300 hover:bg-gray-300 hover:cursor-not-allowed"
-                                                                            disabled="">Đăng nhập</button></div><span
+                                                                            >Đăng nhập</button></div><span
                                                                         class="ant-form-item-children-icon ng-tns-c210-9">
                                                                         <!---->
                                                                     </span>

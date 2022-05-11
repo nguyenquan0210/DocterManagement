@@ -166,14 +166,16 @@ namespace DoctorManagement.DoctorApp.Controllers
             if (result.IsSuccessed)
             {
                 var Schedule = result.Data;
-                ViewBag.Date = Schedule.CheckInDate.ToShortDateString();
                 var updateRequest = new ScheduleUpdateRequest()
                 {
                     FromTime = Schedule.FromTime,
                     Id = id,
                     ToTime = Schedule.ToTime,
-                    Status = Schedule.Status == Status.Active ? true : false,
-                    Qty = Schedule.Qty
+                    Status = Schedule.IsDeleted ,
+                    Qty = Schedule.Qty,
+                    AvailableQty = Schedule.AvailableQty,
+                    BookedQty = Schedule.BookedQty,
+                    CheckInDate = Schedule.CheckInDate.ToShortDateString(),
                 };
                 return View(updateRequest);
             }
@@ -205,14 +207,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             if (result.IsSuccessed)
             {
                 var ScheduleData = result.Data;
-                ViewBag.Status = ScheduleData.Status == Status.InActive ? "Ngừng hoạt động" : ScheduleData.Status == Status.Active ? "Hoạt động" : "không hoạt động";
+                //ViewBag.Status = ScheduleData.Status == Status.InActive ? "Ngừng hoạt động" : ScheduleData.Status == Status.Active ? "Hoạt động" : "không hoạt động";
                 var Schedule = new ScheduleVm()/*_mapper.Map<ScheduleVm>(Scheduledata);*/
                 {
                     FromTime = ScheduleData.FromTime,
                     Id = id,
                     ToTime = ScheduleData.ToTime,
                     CheckInDate = ScheduleData.CheckInDate,
-                    Status = ScheduleData.Status, //== Status.Active ? true : false
+                    IsDeleted = ScheduleData.IsDeleted, //== Status.Active ? true : false
                     Qty = ScheduleData.Qty,
                     ScheduleDetailts = ScheduleData.ScheduleDetailts
                 };
