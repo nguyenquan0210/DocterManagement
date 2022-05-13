@@ -1,4 +1,4 @@
-﻿
+﻿@model DoctorManagement.ViewModels.System.Patient.RegisterEnterPhoneRequest
 @{
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -391,8 +391,8 @@
 }
 <app-login _nghost-serverapp-c213="" class="ng-star-inserted">
                 <nz-spin _ngcontent-serverapp-c213="" class="ant-spin-nested-loading">
-                    <!---->
-                    <!---->
+                    
+                    
                     <div class="ant-spin-container ng-star-inserted">
                         <section _ngcontent-serverapp-c213="" class="md:bg-gray-50">
                             <div _ngcontent-serverapp-c213=""
@@ -415,8 +415,8 @@
                                                                 queryparamshandling="merge"
                                                                 class="tab-link ng-star-inserted"
                                                                 asp-action="Index"> Đăng nhập </a>
-                                                            <!---->
-                                                            <!---->
+                                                            
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="ant-tabs-tab ng-star-inserted ant-tabs-tab-active">
@@ -427,12 +427,12 @@
                                                                 queryparamshandling="merge"
                                                                 class="tab-link ng-star-inserted"
                                                                 asp-action="Register"> Đăng ký </a>
-                                                            <!---->
-                                                            <!---->
+                                                            
+                                                            
                                                         </div>
                                                     </div>
-                                                    <!---->
-                                                    <!---->
+                                                    
+                                                    
                                                     <div nz-tabs-ink-bar="" class="ant-tabs-ink-bar"
                                                         style="left: 216px; width: 184px;"></div>
                                                 </div>
@@ -450,25 +450,25 @@
                                                                 d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z">
                                                             </path>
                                                         </svg></i></button>
-                                                <!---->
-                                                <!---->
-                                                <!---->
+                                                
+                                                
+                                                
                                             </nz-tab-nav-operation>
-                                            <!---->
+                                            
                                         </nz-tabs-nav>
-                                        <!---->
+                                        
                                         <div class="ant-tabs-content-holder">
                                             <div class="ant-tabs-content ant-tabs-content-top">
                                                 <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
                                                     tabindex="-1" aria-hidden="true" style="display: none;">
-                                                    <!---->
+                                                    
                                                 </div>
                                                 <div nz-tab-body=""
                                                     class="ant-tabs-tabpane ng-star-inserted ant-tabs-tabpane-active"
                                                     tabindex="0" aria-hidden="false" style="">
                                                     <app-get-opt _ngcontent-serverapp-c213="" _nghost-serverapp-c212=""
                                                         class="ng-star-inserted" style="">
-                                                        <form _ngcontent-serverapp-c212="" novalidate="" nz-form="" asp-action="RegisterEnterOTP" method="post"
+                                                        <form _ngcontent-serverapp-c212="" novalidate="" nz-form="" asp-action="Register" method="post"
                                                             class="flex flex-col gap-8 ant-form ng-invalid ant-form-inline ng-dirty ng-touched">
                                                             <div _ngcontent-serverapp-c212="">
                                                                 <nz-form-item _ngcontent-serverapp-c212=""
@@ -480,35 +480,31 @@
                                                                             class="ant-form-item-control-input ng-tns-c210-10">
                                                                             <div
                                                                                 class="ant-form-item-control-input-content ng-tns-c210-10">
-                                                                                <label _ngcontent-serverapp-c212=""
+                                                                                <label _ngcontent-serverapp-c212="" asp-for="PhoneNumber"
                                                                                     for="phoneNumber"
                                                                                     class="form-label ng-tns-c210-10">Số
                                                                                     điện thoại</label>
                                                                                 <div _ngcontent-serverapp-c212=""
                                                                                     class="flex rounded-md shadow-sm ng-tns-c210-10">
-                                                                                    <span _ngcontent-serverapp-c212=""
+                                                                                    <span _ngcontent-serverapp-c212="" 
                                                                                         class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm font-medium"><img
                                                                                             _ngcontent-serverapp-c212=""
                                                                                             width="18" height="18"
                                                                                             alt="VN"
                                                                                             src="~/img/booking/svg/vietnam.svg">
-                                                                                        +84</span><input
+                                                                                        +84</span><input asp-for="PhoneNumber"  onkeypress="return /[0-9]/i.test(event.key)" maxlength="10" onchange="checkLength()"
                                                                                         _ngcontent-serverapp-c212=""
-                                                                                        formcontrolname="phoneNumber"
-                                                                                        nz-input=""
                                                                                         placeholder="Nhập số điện thoại để tiếp tục"
-                                                                                        inputmode="numeric"
-                                                                                        pattern="[0-9]*" digitonly=""
                                                                                         class="form-control ng-untouched ng-pristine ng-invalid"
                                                                                         type="text" maxlength="10">
                                                                                 </div>
-                                                                            </div><span
+                                                                            </div><span asp-validation-for="PhoneNumber"
                                                                                 class="ant-form-item-children-icon ng-tns-c210-10">
-                                                                                <!---->
+                                                                                
                                                                             </span>
                                                                         </div>
-                                                                        <!---->
-                                                                        <!---->
+                                                                        
+                                                                        
                                                                     </nz-form-control>
                                                                     <p _ngcontent-serverapp-c212=""
                                                                         class="mt-2 text-sm text-gray-500">Mã OTP sẽ
@@ -519,7 +515,7 @@
                                                                 class="text-sm text-gray-700"><label
                                                                     _ngcontent-serverapp-c212="" nz-checkbox=""
                                                                     class="ant-checkbox-wrapper ng-valid ng-star-inserted ng-dirty ant-checkbox-wrapper-checked ng-touched"><span
-                                                                        class="ant-checkbox ant-checkbox-checked"><input
+                                                                        class="ant-checkbox ant-checkbox-checked"><input 
                                                                             type="checkbox"
                                                                             class="ant-checkbox-input ng-valid ng-dirty ng-touched"><span
                                                                             class="ant-checkbox-inner"></span></span><span><span
@@ -528,18 +524,18 @@
                                                                     _ngcontent-serverapp-c212="" href="#"
                                                                     class="ng-star-inserted">các điều khoản và điều kiện
                                                                     sử dụng</a>
-                                                                <!---->
-                                                                <!---->
-                                                                <!---->
+                                                                
+                                                                
+                                                                
                                                             </div>
                                                             <div _ngcontent-serverapp-c212="">@*<button
                                                                     _ngcontent-serverapp-c212="" appsingleclick=""
                                                                     nz-button=""
                                                                     class="w-full btn-primary bg-gray-300 hover:bg-gray-300 hover:cursor-not-allowed"  
                                                                     disabled=""> Gửi OTP </button>*@
-                                                                    <button
+                                                                    <button disabled id="btn-otp" disabled=""
                                                                     _ngcontent-serverapp-c212="" 
-                                                                    class="w-full btn-primary bg-gray-300 "  
+                                                                    class="w-full btn-primary bg-gray-300 hover:bg-gray-300 hover:cursor-not-allowed "  
                                                                     > Gửi OTP </button>
                                                                 </div>
                                                         </form>
@@ -549,11 +545,11 @@
                                                                 class="font-medium cursor-pointer text-primary"> Đăng
                                                                 nhập </a></div>
                                                     </app-get-opt>
-                                                    <!---->
-                                                    <!---->
-                                                    <!---->
+                                                    
+                                                    
+                                                    
                                                 </div>
-                                                <!---->
+                                                
                                             </div>
                                         </div>
                                     </nz-tabset>
@@ -561,9 +557,31 @@
                             </div>
                         </section>
                     </div>
-                    <!---->
+                    
                 </nz-spin>
-            </app-login>
+</app-login>
+@section JavaScript{
+    <script>
+        var $submit = $('#btn-otp');
+        const phoneInput = document.querySelector('#PhoneNumber');
+        function checkLength(){
+            if(phoneInput.value.length == 10 ){
+                $submit.removeClass('bg-gray-300');
+                $submit.removeClass('hover:cursor-not-allowed');
+                $submit.removeClass('hover:bg-gray-300');
+                $submit.removeAttr("disabled");
+            } 
+            else{
+                $submit.addClass('bg-gray-300');
+                $submit.addClass('hover:cursor-not-allowed');
+                $submit.addClass('hover:bg-gray-300');
+                $submit.attr("disabled", true);
+            }
+        }
+        
+    </script>
+}
+
 
 
 

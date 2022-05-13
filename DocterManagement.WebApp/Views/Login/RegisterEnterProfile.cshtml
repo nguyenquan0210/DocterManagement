@@ -1,11 +1,12 @@
-﻿
+﻿@using DoctorManagement.Data.Enums
+@model DoctorManagement.ViewModels.System.Patient.RegisterEnterProfileRequest
 @{
     ViewData["Title"] = "RegisterEnterProfile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section Stylesheet{
-     <style>
+    <style>
         .root-layout[_ngcontent-serverApp-c55] {
             background-color: #f6f6f6
         }
@@ -466,11 +467,509 @@
             transform-origin: 100% 0
         }
     </style>
+    <style>
+        .select {
+          position: relative;
+          font-family: Arial;
+          border-radius: 0.25rem;
+          width:100%;
+          padding: 9px 16px;
+        }
+        .custom-select {
+          position: relative;
+          font-family: Arial;
+        }
+
+        .custom-select select {
+          display: none; /*hide original SELECT element: */
+        }
+
+        .select-selected {
+          background-color: DodgerBlue;
+        }
+
+        /* Style the arrow inside the select element: */
+        .select-selected:after {
+          position: absolute;
+          content: "";
+          top: 20px;
+          right: 20px;
+          width: 0;
+          height: 0;
+          border: 6px solid transparent;
+          border-color: #fff transparent transparent transparent;
+        }
+
+        /* Point the arrow upwards when the select box is open (active): */
+        .select-selected.select-arrow-active:after {
+          border-color: transparent transparent #fff transparent;
+          top: 7px;
+        }
+
+        /* style the items (options), including the selected item: */
+        .select-items div,.select-selected {
+          color: #ffffff;
+          padding: 10px 16px;
+          border: 1px solid transparent;
+          border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+          cursor: pointer;
+          border-radius: 0.25rem;
+        }
+
+        /* Style items (options): */
+        .select-items {
+          position: absolute;
+          background-color: DodgerBlue;
+          top: 100%;
+          left: 0;
+          right: 0;
+          z-index: 99;
+          overflow-y: auto;
+            max-height: 200px;
+        }
+
+        /* Hide the items when the select box is closed: */
+        .select-hide {
+          display: none;
+        }
+
+        .select-items div:hover, .same-as-selected {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <style>
+        /* The container */
+        .container {
+          display: block;
+          position: relative;
+          padding-left: 35px;
+          margin: 12px;
+          cursor: pointer;
+          font-size: 22px;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          width:30%;
+          float:left;
+        }
+
+        /* Hide the browser's default radio button */
+        .container input {
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+        }
+
+        /* Create a custom radio button */
+        .checkmark {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 25px;
+          width: 25px;
+          background-color: #eee;
+          border-radius: 50%;
+        }
+
+        /* On mouse-over, add a grey background color */
+        .container:hover input ~ .checkmark {
+          background-color: #ccc;
+        }
+
+        /* When the radio button is checked, add a blue background */
+        .container input:checked ~ .checkmark {
+          background-color: #2196F3;
+        }
+
+        /* Create the indicator (the dot/circle - hidden when not checked) */
+        .checkmark:after {
+          content: "";
+          position: absolute;
+          display: none;
+        }
+
+        /* Show the indicator (dot/circle) when checked */
+        .container input:checked ~ .checkmark:after {
+          display: block;
+        }
+
+        /* Style the indicator (dot/circle) */
+        .container .checkmark:after {
+ 	        top: 9px;
+	        left: 9px;
+	        width: 8px;
+	        height: 8px;
+	        border-radius: 50%;
+	        background: white;
+        }
+    </style>
+    <style>
+        .flatpickr-calendar {
+            background: transparent;
+            opacity: 0;
+            display: none;
+            text-align: center;
+            visibility: hidden;
+            padding: 0;
+            animation: none;
+            direction: ltr;
+            border: 0;
+            font-size: 14px;
+            line-height: 24px;
+            border-radius: 5px;
+            position: absolute;
+            width: 307.875px;
+            box-sizing: border-box;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            background: #fff;
+            -webkit-box-shadow: 0 8px 26px -4px hsl(0deg 0% 8% / 15%), 0 8px 9px -5px hsl(0deg 0% 8% / 6%);
+        }
+        .flatpickr-calendar.inline, .flatpickr-calendar.open {
+            opacity: 1;
+            max-height: 640px;
+            visibility: visible;
+        }
+        .flatpickr-calendar.open {
+            display: inline-block;
+            z-index: 99999;
+        }
+        .flatpickr-calendar.open {
+            margin-left: -38px;
+            margin-top: 4px;
+        }
+        .flatpickr-calendar.animate.open {
+            animation: k .3s cubic-bezier(.23,1,.32,1);
+        }
+        .flatpickr-calendar:after, .flatpickr-calendar:before {
+            position: absolute;
+            display: block;
+            pointer-events: none;
+            border: solid transparent;
+            content: "";
+            height: 0;
+            width: 0;
+            left: 22px;
+        }
+        .flatpickr-calendar:before {
+            border-width: 5px;
+            margin: 0 -5px;
+        }
+        .flatpickr-calendar:after {
+            border-width: 4px;
+            margin: 0 -4px;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            bottom: 100%;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            border-bottom-color: #fff;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            bottom: 100%;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            border-bottom-color: #fff;
+        }
+        .flatpickr-months {
+            display: -ms-flexbox;
+            display: flex;
+        }
+        .flatpickr-months .flatpickr-next-month, .flatpickr-months .flatpickr-prev-month {
+            text-decoration: none;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            height: 34px;
+            padding: 10px;
+            z-index: 3;
+            color: rgba(0,0,0,.9);
+            fill: rgba(0,0,0,.9);
+        }
+        .flatpickr-months .flatpickr-next-month.flatpickr-prev-month, .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month {
+            left: 0;
+        }
+        .flatpickr-months .flatpickr-next-month svg, .flatpickr-months .flatpickr-prev-month svg {
+            width: 14px;
+            height: 14px;
+        }
+        .flatpickr-months .flatpickr-next-month svg path, .flatpickr-months .flatpickr-prev-month svg path {
+            transition: fill .1s;
+            fill: inherit;
+        }
+        .flatpickr-months .flatpickr-month {
+            background: transparent;
+            color: rgba(0,0,0,.9);
+            fill: rgba(0,0,0,.9);
+            height: 34px;
+            line-height: 1;
+            text-align: center;
+            position: relative;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            overflow: hidden;
+            -ms-flex: 1;
+            flex: 1;
+        }
+        .flatpickr-current-month {
+            font-size: 135%;
+            line-height: inherit;
+            font-weight: 300;
+            color: inherit;
+            position: absolute;
+            width: 75%;
+            left: 12.5%;
+            padding: 7.48px 0 0;
+            line-height: 1;
+            height: 34px;
+            display: inline-block;
+            text-align: center;
+            transform: translateZ(0);
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            appearance: menulist;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-sizing: border-box;
+            color: inherit;
+            cursor: pointer;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: 300;
+            height: auto;
+            line-height: inherit;
+            margin: -1px 0 0;
+            outline: none;
+            padding: 0 0 0 0.5ch;
+            position: relative;
+            vertical-align: initial;
+            -webkit-box-sizing: border-box;
+            -webkit-appearance: menulist;
+            -moz-appearance: menulist;
+            width: auto;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+            background-color: transparent;
+            outline: none;
+            padding: 0;
+        }
+        .numInputWrapper {
+            position: relative;
+            height: auto;
+        }
+        .flatpickr-current-month .numInputWrapper {
+            width: 6ch;
+            width: 7ch\0;
+            display: inline-block;
+        }
+        .numInputWrapper input, .numInputWrapper span {
+            display: inline-block;
+        }
+        .numInputWrapper input {
+            width: 100%;
+        }
+        .flatpickr-current-month input.cur-year {
+            background: transparent;
+            box-sizing: border-box;
+            color: inherit;
+            cursor: text;
+            padding: 0 0 0 0.5ch;
+            margin: 0;
+            display: inline-block;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: 300;
+            line-height: inherit;
+            height: auto;
+            border: 0;
+            border-radius: 0;
+            vertical-align: initial;
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        .numInputWrapper input, .numInputWrapper span {
+            display: inline-block;
+        }
+        .numInputWrapper span {
+            position: absolute;
+            right: 0;
+            width: 14px;
+            padding: 0 4px 0 2px;
+            height: 50%;
+            line-height: 50%;
+            opacity: 0;
+            cursor: pointer;
+            border: 1px solid rgba(57,57,57,.15);
+            box-sizing: border-box;
+        }
+        .numInputWrapper span.arrowUp {
+            top: 0;
+            border-bottom: 0;
+        }
+        .flatpickr-calendar .numInputWrapper span {
+            border: none;
+            border-bottom: 1px solid rgba(57,57,57,.15);
+        }
+        *, :after, :before {
+            box-sizing: border-box;
+        }
+        .numInputWrapper span:after {
+            display: block;
+            content: "";
+            position: absolute;
+        }
+        .numInputWrapper span.arrowUp:after {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 4px solid rgba(57,57,57,.6);
+            top: 26%;
+        }
+        .flatpickr-current-month .numInputWrapper span.arrowUp:after {
+            border-bottom-color: rgba(0,0,0,.9);
+        }
+        .numInputWrapper span.arrowDown {
+            top: 50%;
+        }
+        .numInputWrapper span.arrowDown:after {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid rgba(57,57,57,.6);
+            top: 40%;
+        }
+        .flatpickr-current-month .numInputWrapper span.arrowDown:after {
+            border-top-color: rgba(0,0,0,.9);
+        }
+        .flatpickr-months .flatpickr-next-month.flatpickr-next-month, .flatpickr-months .flatpickr-prev-month.flatpickr-next-month {
+            right: 0;
+        }
+        .flatpickr-innerContainer {
+            display: block;
+            display: -ms-flexbox;
+            display: flex;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .flatpickr-calendar .flatpickr-innerContainer {
+            margin-top: 15px!important;
+        }
+        .flatpickr-rContainer {
+            display: inline-block;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .flatpickr-weekdays {
+            background: transparent;
+            text-align: center;
+            overflow: hidden;
+            width: 100%;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            height: 28px;
+        }
+        .flatpickr-days {
+            position: relative;
+            overflow: hidden;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: start;
+            align-items: flex-start;
+            width: 307.875px;
+        }
+        .flatpickr-weekdays .flatpickr-weekdaycontainer {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex: 1;
+            flex: 1;
+        }
+        span.flatpickr-weekday {
+            cursor: default;
+            font-size: 90%;
+            background: transparent;
+            color: rgba(0,0,0,.54);
+            line-height: 1;
+            margin: 0;
+            text-align: center;
+            display: block;
+            -ms-flex: 1;
+            flex: 1;
+            font-weight: bolder;
+        }
+        .dayContainer {
+            padding: 0;
+            outline: 0;
+            text-align: left;
+            width: 307.875px;
+            min-width: 307.875px;
+            max-width: 307.875px;
+            box-sizing: border-box;
+            display: inline-block;
+            display: -ms-flexbox;
+            display: flex;
+            flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            -ms-flex-pack: justify;
+            justify-content: space-around;
+            transform: translateZ(0);
+            opacity: 1;
+        }
+        .flatpickr-day {
+            background: none;
+            border: 1px solid transparent;
+            border-radius: 150px;
+            box-sizing: border-box;
+            color: #393939;
+            cursor: pointer;
+            font-weight: 400;
+            width: 14.2857143%;
+            -ms-flex-preferred-size: 14.2857143%;
+            flex-basis: 14.2857143%;
+            max-width: 39px;
+            height: 39px;
+            line-height: 39px;
+            margin: 0;
+            display: inline-block;
+            position: relative;
+            -ms-flex-pack: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .flatpickr-day.today {
+            border-color: #959ea9;
+        }
+        .flatpickr-calendar .flatpickr-day.endRange, .flatpickr-calendar .flatpickr-day.selected, .flatpickr-calendar .flatpickr-day.startRange, .flatpickr-calendar .flatpickr-day.today {
+            background: #cb0c9f!important;
+            color: #fff;
+            border: none;
+        }
+        .flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover, .flatpickr-day.nextMonthDay, .flatpickr-day.notAllowed, .flatpickr-day.notAllowed.nextMonthDay, .flatpickr-day.notAllowed.prevMonthDay, .flatpickr-day.prevMonthDay {
+            color: rgba(57,57,57,.3);
+            background: transparent;
+            border-color: transparent;
+            cursor: default;
+        }
+        .flatpickr-day.inRange, .flatpickr-day.nextMonthDay.inRange, .flatpickr-day.nextMonthDay.today.inRange, .flatpickr-day.nextMonthDay:focus, .flatpickr-day.nextMonthDay:hover, .flatpickr-day.prevMonthDay.inRange, .flatpickr-day.prevMonthDay.today.inRange, .flatpickr-day.prevMonthDay:focus, .flatpickr-day.prevMonthDay:hover, .flatpickr-day.today.inRange, .flatpickr-day:focus, .flatpickr-day:hover {
+            cursor: pointer;
+            outline: 0;
+            background: #e6e6e6;
+            border-color: #e6e6e6;
+        }
+        .flatpickr-calendar .flatpickr-day.inRange, .flatpickr-calendar .flatpickr-day:not(.selected):focus, .flatpickr-calendar .flatpickr-day:not(.selected):hover {
+            background: rgba(94,114,228,.28);
+            border: none;
+        }
+    </style>
 }
 <app-register _nghost-serverapp-c149="" class="ng-star-inserted">
                 <nz-spin _ngcontent-serverapp-c149="" class="ant-spin-nested-loading">
-                    <!---->
-                    <!---->
+                    
+                    
                     <div class="ant-spin-container ng-star-inserted">
                         <div _ngcontent-serverapp-c149="" class="w-full">
                             <div _ngcontent-serverapp-c149=""
@@ -487,9 +986,6 @@
                                                             class="ant-tabs-tab-btn" aria-disabled="true"
                                                             aria-selected="false" aria-controls="nz-tabs-2-tab-0">1.Xác
                                                             thực
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
                                                         </div>
                                                     </div>
                                                     <div class="ant-tabs-tab ant-tabs-tab-disabled ng-star-inserted">
@@ -497,9 +993,6 @@
                                                             class="ant-tabs-tab-btn" aria-disabled="true"
                                                             aria-selected="false" aria-controls="nz-tabs-2-tab-1">2.Mật
                                                             khẩu
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
                                                         </div>
                                                     </div>
                                                     <div
@@ -508,13 +1001,8 @@
                                                             class="ant-tabs-tab-btn" aria-disabled="true"
                                                             aria-selected="true" aria-controls="nz-tabs-2-tab-2">3.Tạo
                                                             hồ sơ
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
                                                         </div>
                                                     </div>
-                                                    <!---->
-                                                    <!---->
                                                     <div nz-tabs-ink-bar=""
                                                         class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
                                                         style="left: 522px; width: 228px;"></div>
@@ -533,25 +1021,18 @@
                                                                 d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z">
                                                             </path>
                                                         </svg></i></button>
-                                                <!---->
-                                                <!---->
-                                                <!---->
                                             </nz-tab-nav-operation>
-                                            <!---->
                                         </nz-tabs-nav>
-                                        <!---->
                                         <div class="ant-tabs-content-holder">
                                             <div class="ant-tabs-content ant-tabs-content-top ant-tabs-content-animated"
                                                 style="margin-left: -200%;">
                                                 <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
                                                     tabindex="-1" aria-hidden="true"
                                                     style="visibility: hidden; height: 0px;">
-                                                    <!---->
                                                 </div>
                                                 <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
                                                     tabindex="-1" aria-hidden="true"
                                                     style="visibility: hidden; height: 0px;">
-                                                    <!---->
                                                 </div>
                                                 <div nz-tab-body=""
                                                     class="ant-tabs-tabpane ng-star-inserted ant-tabs-tabpane-active"
@@ -565,502 +1046,167 @@
                                                                     Tạo hồ sơ y tế đầy đủ thông tin sẽ hỗ trợ việc khám
                                                                     chữa bệnh của bạn tốt hơn.</p>
                                                             </div>
-                                                            <form _ngcontent-serverapp-c148="" novalidate="" nz-form=""
-                                                                class="flex flex-col md:flex-row md:gap-6 ant-form ant-form-horizontal ng-touched ng-dirty ng-valid">
-                                                                <div _ngcontent-serverapp-c148=""
-                                                                    class="flex flex-col gap-6 md:w-1/2">
+                                                            <form asp-action="RegisterEnterProfile" method="post"
+                                                                class=" ant-form ant-form-horizontal ng-touched ng-dirty ">
+                                                                <div  class="flex flex-col md:flex-row md:gap-6 ant-form ant-form-horizontal ng-touched ng-dirty ng-valid">
+                            
                                                                     <div _ngcontent-serverapp-c148=""
-                                                                        class="border-bottom font-medium text-base text-gray-800 leading-19 pb-2">
-                                                                        Thông tin hồ sơ</div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
+                                                                        class="flex flex-col gap-6 md:w-1/2">
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Họ và tên
-                                                                            <span _ngcontent-serverapp-c148=""
-                                                                                class="text-red-500">*</span></div>
-                                                                        <input _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="name" nz-input=""
-                                                                            placeholder="Họ và tên"
-                                                                            class="h-11 rounded ant-input ng-touched ng-dirty ng-valid">
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
+                                                                            class="border-bottom font-medium text-base text-gray-800 leading-19 pb-2">
+                                                                            Thông tin hồ sơ</div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Số điện
-                                                                            thoại <span _ngcontent-serverapp-c148=""
-                                                                                class="text-red-500">*</span></div>
-                                                                        <input _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="phone" nz-input=""
-                                                                            placeholder="Số điện thoại" maxlength="10"
-                                                                            class="h-11 rounded ant-input ng-untouched ng-pristine ng-valid">
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Họ và tên
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div>
+                                                                            <input _ngcontent-serverapp-c148="" asp-for="Name"
+                                                                                 nz-input=""
+                                                                                placeholder="Họ và tên"
+                                                                                class="h-11 rounded ant-input ng-touched ng-dirty ng-valid">
+                                                                        </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Ngày sinh
-                                                                            <span _ngcontent-serverapp-c148=""
-                                                                                class="text-red-500">*</span></div>
-                                                                        <nz-date-picker _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="birthDay"
-                                                                            nzplaceholder="Ngày tháng năm sinh"
-                                                                            class="w-full h-11 rounded ng-tns-c88-24 ant-picker ng-star-inserted ng-touched ng-dirty ng-valid">
-                                                                            <div
-                                                                                class="ng-tns-c88-24 ant-picker-input ng-star-inserted">
-                                                                                <input autocomplete="off"
-                                                                                    class="ng-tns-c88-24 ng-valid ng-dirty ng-touched"
-                                                                                    placeholder="Ngày tháng năm sinh"
-                                                                                    size="12">
-                                                                                <div class="ng-tns-c88-24 ant-picker-active-bar ng-star-inserted"
-                                                                                    style="position: absolute; width: 0px; left: 0px;">
-                                                                                </div><span
-                                                                                    class="ng-tns-c88-24 ant-picker-clear ng-star-inserted"><i
-                                                                                        nz-icon="" nztype="close-circle"
-                                                                                        nztheme="fill"
-                                                                                        class="anticon ng-tns-c88-24 anticon-close-circle"><svg
-                                                                                            viewBox="64 64 896 896"
-                                                                                            focusable="false"
-                                                                                            fill="currentColor"
-                                                                                            width="1em" height="1em"
-                                                                                            class="ng-tns-c88-24"
-                                                                                            data-icon="close-circle"
-                                                                                            aria-hidden="true">
-                                                                                            <path
-                                                                                                d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z">
-                                                                                            </path>
-                                                                                        </svg></i></span>
-                                                                                <!----><span
-                                                                                    class="ng-tns-c88-24 ant-picker-suffix ng-star-inserted"><i
-                                                                                        nz-icon=""
-                                                                                        class="anticon ng-tns-c88-24 anticon-calendar ng-star-inserted"><svg
-                                                                                            viewBox="64 64 896 896"
-                                                                                            focusable="false"
-                                                                                            fill="currentColor"
-                                                                                            width="1em" height="1em"
-                                                                                            class="ng-tns-c88-24"
-                                                                                            data-icon="calendar"
-                                                                                            aria-hidden="true">
-                                                                                            <path
-                                                                                                d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z">
-                                                                                            </path>
-                                                                                        </svg></i>
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                </span>
-                                                                                <!---->
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Số điện
+                                                                                thoại <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div>
+                                                                            <input _ngcontent-serverapp-c148=""
+                                                                                asp-for="RelativePhone" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                                placeholder="Số điện thoại" maxlength="10"
+                                                                                class="h-11 rounded ant-input ng-untouched ng-pristine ng-valid">
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Ngày sinh
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div>
+                                                                            <nz-date-picker _ngcontent-serverapp-c148=""
+                                                                                formcontrolname="birthDay"
+                                                                                nzplaceholder="Ngày tháng năm sinh"
+                                                                                class="w-full h-11 rounded ng-tns-c88-24 ant-picker ng-star-inserted ng-touched ng-dirty ng-valid">
+                                                                                <div
+                                                                                    class="ng-tns-c88-24 ant-picker-input ng-star-inserted">
+                                                                                    <input autocomplete="off" asp-for="Dob" type="date"
+                                                                                        class="ng-tns-c88-24 ng-valid ng-dirty ng-touched datetimepicker"
+                                                                                        placeholder="Ngày tháng năm sinh"
+                                                                                        size="12">
+                                                                                   
+                                                                                </div>
+                                                                            </nz-date-picker>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Số CMND
+                                                                            </div><input _ngcontent-serverapp-c148=""
+                                                                                asp-for="IdentityCard"
+                                                                                placeholder="Số CMND"
+                                                                                class="h-11 rounded ant-input ng-valid ng-touched ng-dirty">
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148="" style="display:table-footer-group;"
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Giới tính
                                                                             </div>
-                                                                            <!---->
-                                                                            <!---->
-                                                                            <!---->
-                                                                            <!---->
-                                                                            <!---->
-                                                                            <!---->
-                                                                            <!---->
-                                                                            <!---->
-                                                                        </nz-date-picker>
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Số CMND
-                                                                        </div><input _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="nationalId" nz-input=""
-                                                                            placeholder="Số CMND"
-                                                                            class="h-11 rounded ant-input ng-valid ng-touched ng-dirty">
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Giới tính
+                                                                            <label class="container">Nam
+                                                                              <input type="radio" asp-for="Gender" value="@Gender.Male" />
+                                                                              <span class="checkmark"></span>
+                                                                            </label>
+                                                                            <label class="container">Nữ
+                                                                              <input type="radio" asp-for="Gender" value="@Gender.Female" />
+                                                                              <span class="checkmark"></span>
+                                                                            </label>
                                                                         </div>
-                                                                        <nz-radio-group _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="gender"
-                                                                            class="ant-radio-group h-11 ng-untouched ng-pristine ng-valid">
-                                                                            <label _ngcontent-serverapp-c148=""
-                                                                                nz-radio="" nzvalue="MALE"
-                                                                                class="text-sm-w500 text-gray-700 ant-radio-wrapper ant-radio-wrapper-checked"><span
-                                                                                    class="ant-radio ant-radio-checked"><input
-                                                                                        type="radio"
-                                                                                        class="ant-radio-input"><span
-                                                                                        class="ant-radio-inner"></span></span><span>Nam</span></label><label
-                                                                                _ngcontent-serverapp-c148="" nz-radio=""
-                                                                                nzvalue="FEMALE"
-                                                                                class="text-sm-w500 text-gray-700 ant-radio-wrapper"><span
-                                                                                    class="ant-radio"><input
-                                                                                        type="radio"
-                                                                                        class="ant-radio-input"><span
-                                                                                        class="ant-radio-inner"></span></span><span>Nữ</span></label>
-                                                                        </nz-radio-group>
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Địa chỉ
-                                                                            email của bạn</div><input
-                                                                            _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="email" nz-input=""
-                                                                            placeholder="Địa chỉ email của bạn"
-                                                                            class="h-11 rounded ant-input ng-touched ng-dirty ng-valid">
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Dân tộc
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Địa chỉ
+                                                                                email của bạn</div><input
+                                                                                _ngcontent-serverapp-c148=""
+                                                                                asp-for="Email" 
+                                                                                placeholder="Địa chỉ email của bạn"
+                                                                                class="h-11 rounded ant-input ng-touched ng-dirty ng-valid">
                                                                         </div>
-                                                                        <nz-select _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="ethnicGroupId"
-                                                                            nzshowsearch="" nzallowclear=""
-                                                                            nzplaceholder="Chọn dân tộc"
-                                                                            class="ant-select w-full ng-tns-c123-25 ant-select-show-arrow ant-select-show-search ant-select-allow-clear ant-select-single ng-pristine ng-valid ng-star-inserted ng-touched">
-                                                                            <nz-select-top-control cdkoverlayorigin=""
-                                                                                class="ant-select-selector ng-tns-c123-25">
-                                                                                <nz-select-search
-                                                                                    class="ant-select-selection-search ng-star-inserted">
-                                                                                    <input autocomplete="off"
-                                                                                        class="ant-select-selection-search-input ng-valid ng-touched ng-dirty">
-                                                                                    <!---->
-                                                                                </nz-select-search>
-                                                                                <nz-select-item
-                                                                                    class="ant-select-selection-item ng-star-inserted"
-                                                                                    title="Kinh">Kinh
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                </nz-select-item>
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                            </nz-select-top-control>
-                                                                            <nz-select-arrow
-                                                                                class="ant-select-arrow ng-tns-c123-25 ng-star-inserted">
-                                                                                <i nz-icon="" nztype="down"
-                                                                                    class="anticon anticon-down ng-star-inserted"><svg
-                                                                                        viewBox="64 64 896 896"
-                                                                                        focusable="false"
-                                                                                        fill="currentColor" width="1em"
-                                                                                        height="1em" data-icon="down"
-                                                                                        aria-hidden="true">
-                                                                                        <path
-                                                                                            d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z">
-                                                                                        </path>
-                                                                                    </svg></i>
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                            </nz-select-arrow>
-                                                                            <!---->
-                                                                            <nz-select-clear
-                                                                                class="ant-select-clear ng-tns-c123-25 ng-star-inserted">
-                                                                                <i nz-icon="" nztype="close-circle"
-                                                                                    nztheme="fill"
-                                                                                    class="anticon ant-select-close-icon anticon-close-circle ng-star-inserted"><svg
-                                                                                        viewBox="64 64 896 896"
-                                                                                        focusable="false"
-                                                                                        fill="currentColor" width="1em"
-                                                                                        height="1em"
-                                                                                        data-icon="close-circle"
-                                                                                        aria-hidden="true">
-                                                                                        <path
-                                                                                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z">
-                                                                                        </path>
-                                                                                    </svg></i>
-                                                                                <!---->
-                                                                            </nz-select-clear>
-                                                                            <!---->
-                                                                            <!---->
-                                                                        </nz-select>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 " >
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Dân tộc
+                                                                            </div>
+                                                                            <div class=" custom-select ">
+                                                                                <select 
+                                                                                    asp-for="EthnicGroupId" asp-items="ViewBag.Ethnics" 
+                                                                              
+                                                                                    nzplaceholder="Chọn dân tộc">
+                                                                                   <option>--- Chọn dân tộc ---</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div _ngcontent-serverapp-c148=""
+                                                                        class="flex flex-col gap-6 md:w-1/2">
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="border-bottom font-medium text-base text-gray-800 leading-19 pb-2">
+                                                                            Thông tin bổ sung</div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Tỉnh /
+                                                                                Thành phố</div>
+                                                                            <div @*class=" custom-select "*@>
+                                                                                <select class=" select"
+                                                                                    asp-for="ProvinceId" asp-items="ViewBag.Province"
+                                                                              
+                                                                                    nzplaceholder="Chọn thành phố">
+                                                                                   <option>--- Chọn Thành Phố ---</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Quận /
+                                                                                Huyện</div>
+                                                                            <div@* class=" custom-select "*@>
+                                                                                <select asp-for="DistrictId" asp-items="ViewBag.District" class=" select"
+                                                                                    nzplaceholder="Chọn quận huyện của bạn"
+                                                                                    >
+                                                                                    <option>--- Chọn Quận/Huyện ---</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148="" class="text-sm-w500 text-gray-700">Phường /Xã</div>
+                                                                            <div @*class=" custom-select "*@>
+                                                                                <select asp-for="SubDistrictId" asp-items="ViewBag.SubDistrict" class=" select"
+                                                                                    nzplaceholder="Chọn phường xã của bạn">
+                                                                                   <option>--- Chọn Phường/Xã ---</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Địa chỉ
+                                                                                cụ thể</div><input
+                                                                                _ngcontent-serverapp-c148=""
+                                                                                asp-for="Address" 
+                                                                                placeholder="Số nhà, tên đường"
+                                                                                class="h-11 rounded ant-input ng-valid ng-touched ng-dirty">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <div _ngcontent-serverapp-c148=""
-                                                                    class="flex flex-col gap-6 md:w-1/2">
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="border-bottom font-medium text-base text-gray-800 leading-19 pb-2">
-                                                                        Thông tin bổ sung</div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Mã thẻ
-                                                                            Bảo hiểm y tế</div><input
-                                                                            _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="hiCardCode" nz-input=""
-                                                                            placeholder="Mã số trên thẻ Bảo hiểm y tế"
-                                                                            class="h-11 rounded ant-input ng-pristine ng-valid ng-touched">
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Tỉnh /
-                                                                            Thành phố</div>
-                                                                        <nz-select _ngcontent-serverapp-c148=""
-                                                                            nzshowsearch="" formcontrolname="city"
-                                                                            nzallowclear=""
-                                                                            nzplaceholder="Chọn tỉnh thành phố của bạn"
-                                                                            class="ant-select w-full ng-tns-c123-26 ant-select-show-arrow ant-select-show-search ant-select-allow-clear ant-select-single ng-valid ng-star-inserted ng-touched ng-dirty">
-                                                                            <nz-select-top-control cdkoverlayorigin=""
-                                                                                class="ant-select-selector ng-tns-c123-26">
-                                                                                <nz-select-search
-                                                                                    class="ant-select-selection-search ng-star-inserted">
-                                                                                    <input autocomplete="off"
-                                                                                        class="ant-select-selection-search-input ng-valid ng-touched ng-dirty">
-                                                                                    <!---->
-                                                                                </nz-select-search>
-                                                                                <nz-select-item
-                                                                                    class="ant-select-selection-item ng-star-inserted"
-                                                                                    title="Đà Nẵng">Đà Nẵng
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                </nz-select-item>
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                            </nz-select-top-control>
-                                                                            <nz-select-arrow
-                                                                                class="ant-select-arrow ng-tns-c123-26 ng-star-inserted">
-                                                                                <i nz-icon="" nztype="down"
-                                                                                    class="anticon anticon-down ng-star-inserted"><svg
-                                                                                        viewBox="64 64 896 896"
-                                                                                        focusable="false"
-                                                                                        fill="currentColor" width="1em"
-                                                                                        height="1em" data-icon="down"
-                                                                                        aria-hidden="true">
-                                                                                        <path
-                                                                                            d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z">
-                                                                                        </path>
-                                                                                    </svg></i>
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                            </nz-select-arrow>
-                                                                            <!---->
-                                                                            <nz-select-clear
-                                                                                class="ant-select-clear ng-tns-c123-26 ng-star-inserted">
-                                                                                <i nz-icon="" nztype="close-circle"
-                                                                                    nztheme="fill"
-                                                                                    class="anticon ant-select-close-icon anticon-close-circle ng-star-inserted"><svg
-                                                                                        viewBox="64 64 896 896"
-                                                                                        focusable="false"
-                                                                                        fill="currentColor" width="1em"
-                                                                                        height="1em"
-                                                                                        data-icon="close-circle"
-                                                                                        aria-hidden="true">
-                                                                                        <path
-                                                                                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z">
-                                                                                        </path>
-                                                                                    </svg></i>
-                                                                                <!---->
-                                                                            </nz-select-clear>
-                                                                            <!---->
-                                                                            <!---->
-                                                                        </nz-select>
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Quận /
-                                                                            Huyện</div>
-                                                                        <nz-select _ngcontent-serverapp-c148=""
-                                                                            nzshowsearch="" nzallowclear=""
-                                                                            formcontrolname="district"
-                                                                            nzplaceholder="Chọn quận huyện của bạn"
-                                                                            class="ant-select w-full ng-tns-c123-27 ant-select-show-arrow ant-select-show-search ant-select-allow-clear ant-select-single ng-valid ng-star-inserted ng-touched ng-dirty">
-                                                                            <nz-select-top-control cdkoverlayorigin=""
-                                                                                class="ant-select-selector ng-tns-c123-27">
-                                                                                <nz-select-search
-                                                                                    class="ant-select-selection-search ng-star-inserted">
-                                                                                    <input autocomplete="off"
-                                                                                        class="ant-select-selection-search-input ng-pristine ng-valid ng-touched">
-                                                                                    <!---->
-                                                                                </nz-select-search>
-                                                                                <nz-select-item
-                                                                                    class="ant-select-selection-item ng-star-inserted"
-                                                                                    title="Quận Liên Chiểu">Quận Liên
-                                                                                    Chiểu
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                </nz-select-item>
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                            </nz-select-top-control>
-                                                                            <nz-select-arrow
-                                                                                class="ant-select-arrow ng-tns-c123-27 ng-star-inserted">
-                                                                                <i nz-icon="" nztype="down"
-                                                                                    class="anticon anticon-down ng-star-inserted"><svg
-                                                                                        viewBox="64 64 896 896"
-                                                                                        focusable="false"
-                                                                                        fill="currentColor" width="1em"
-                                                                                        height="1em" data-icon="down"
-                                                                                        aria-hidden="true">
-                                                                                        <path
-                                                                                            d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z">
-                                                                                        </path>
-                                                                                    </svg></i>
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                            </nz-select-arrow>
-                                                                            <!---->
-                                                                            <nz-select-clear
-                                                                                class="ant-select-clear ng-tns-c123-27 ng-star-inserted">
-                                                                                <i nz-icon="" nztype="close-circle"
-                                                                                    nztheme="fill"
-                                                                                    class="anticon ant-select-close-icon anticon-close-circle ng-star-inserted"><svg
-                                                                                        viewBox="64 64 896 896"
-                                                                                        focusable="false"
-                                                                                        fill="currentColor" width="1em"
-                                                                                        height="1em"
-                                                                                        data-icon="close-circle"
-                                                                                        aria-hidden="true">
-                                                                                        <path
-                                                                                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z">
-                                                                                        </path>
-                                                                                    </svg></i>
-                                                                                <!---->
-                                                                            </nz-select-clear>
-                                                                            <!---->
-                                                                            <!---->
-                                                                        </nz-select>
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Phường /
-                                                                            Xã</div>
-                                                                        <nz-select _ngcontent-serverapp-c148=""
-                                                                            nzshowsearch="" formcontrolname="ward"
-                                                                            nzallowclear=""
-                                                                            nzplaceholder="Chọn phường xã của bạn"
-                                                                            class="ant-select w-full ng-tns-c123-28 ant-select-show-arrow ant-select-show-search ant-select-allow-clear ant-select-single ng-valid ng-star-inserted ng-touched ng-dirty">
-                                                                            <nz-select-top-control cdkoverlayorigin=""
-                                                                                class="ant-select-selector ng-tns-c123-28">
-                                                                                <nz-select-search
-                                                                                    class="ant-select-selection-search ng-star-inserted">
-                                                                                    <input autocomplete="off"
-                                                                                        class="ant-select-selection-search-input ng-pristine ng-valid ng-touched">
-                                                                                    <!---->
-                                                                                </nz-select-search>
-                                                                                <nz-select-item
-                                                                                    class="ant-select-selection-item ng-star-inserted"
-                                                                                    title="Phường Hòa Minh">Phường Hòa
-                                                                                    Minh
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                    <!---->
-                                                                                </nz-select-item>
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                            </nz-select-top-control>
-                                                                            <nz-select-arrow
-                                                                                class="ant-select-arrow ng-tns-c123-28 ng-star-inserted">
-                                                                                <i nz-icon="" nztype="down"
-                                                                                    class="anticon anticon-down ng-star-inserted"><svg
-                                                                                        viewBox="64 64 896 896"
-                                                                                        focusable="false"
-                                                                                        fill="currentColor" width="1em"
-                                                                                        height="1em" data-icon="down"
-                                                                                        aria-hidden="true">
-                                                                                        <path
-                                                                                            d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z">
-                                                                                        </path>
-                                                                                    </svg></i>
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                                <!---->
-                                                                            </nz-select-arrow>
-                                                                            <!---->
-                                                                            <nz-select-clear
-                                                                                class="ant-select-clear ng-tns-c123-28 ng-star-inserted">
-                                                                                <i nz-icon="" nztype="close-circle"
-                                                                                    nztheme="fill"
-                                                                                    class="anticon ant-select-close-icon anticon-close-circle ng-star-inserted"><svg
-                                                                                        viewBox="64 64 896 896"
-                                                                                        focusable="false"
-                                                                                        fill="currentColor" width="1em"
-                                                                                        height="1em"
-                                                                                        data-icon="close-circle"
-                                                                                        aria-hidden="true">
-                                                                                        <path
-                                                                                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z">
-                                                                                        </path>
-                                                                                    </svg></i>
-                                                                                <!---->
-                                                                            </nz-select-clear>
-                                                                            <!---->
-                                                                            <!---->
-                                                                        </nz-select>
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Địa chỉ
-                                                                            cụ thể</div><input
-                                                                            _ngcontent-serverapp-c148=""
-                                                                            formcontrolname="address" nz-input=""
-                                                                            placeholder="Số nhà, tên đường"
-                                                                            class="h-11 rounded ant-input ng-valid ng-touched ng-dirty">
-                                                                    </div>
-                                                                    <div _ngcontent-serverapp-c148=""
-                                                                        class="flex flex-col gap-1">
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="text-sm-w500 text-gray-700">Mã giới
-                                                                            thiệu</div><input
-                                                                            _ngcontent-serverapp-c148="" nz-input=""
-                                                                            placeholder="Mã của người giới thiệu"
-                                                                            class="h-11 rounded ant-input">
-                                                                    </div>
-                                                                </div>
+                                                                <input type="hidden" asp-for="Password" />
+                                                                <input type="hidden" asp-for="PhoneNumber" />
+                                                              <div _ngcontent-serverapp-c148="" class="py-6 flex md:justify-end"><button _ngcontent-serverapp-c148="" nz-button="" class="w-full md:w-auto md:px-10 button button--login--form hover:opacity-90" >Hoàn tất</button></div>
                                                             </form>
-                                                            <div _ngcontent-serverapp-c148=""
-                                                                class="py-6 flex md:justify-end"><button
-                                                                    _ngcontent-serverapp-c148="" nz-button=""
-                                                                    class="w-full md:w-auto md:px-10 button button--login--form hover:opacity-90">Hoàn
-                                                                    tất</button></div>
+                                                            
                                                         </div>
                                                     </app-create-patient>
-                                                    <!---->
-                                                    <!---->
-                                                    <!---->
-                                                    <!---->
                                                 </div>
-                                                <!---->
                                             </div>
                                         </div>
                                     </nz-tabset>
@@ -1068,7 +1214,144 @@
                             </div>
                         </div>
                     </div>
-                    <!---->
+                    
                 </nz-spin>
-            </app-register>
+</app-register>
+@section JavaScript{
+    <script src="~/js/plugins/flatpickr.min.js"></script>
+    <script>
+        if (document.querySelector('.datetimepicker')) {
+            flatpickr('.datetimepicker', {
+                allowInput: false,
+                maxDate: new Date(),
+                // sideBySide: true,
+                dateFormat: "d/m/Y",
+            }); // flatpickr
+        }
+    </script>
+    <script>
+        var x, i, j, l, ll, selElmnt, a, b, c;
+        /* Look for any elements with the class "custom-select": */
+        x = document.getElementsByClassName("custom-select");
+        l = x.length;
+        for (i = 0; i < l; i++) {
+          selElmnt = x[i].getElementsByTagName("select")[0];
+          ll = selElmnt.length;
+          /* For each element, create a new DIV that will act as the selected item: */
+          a = document.createElement("DIV");
+          a.setAttribute("class", "select-selected");
+          a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+          x[i].appendChild(a);
+          /* For each element, create a new DIV that will contain the option list: */
+          b = document.createElement("DIV");
+          b.setAttribute("class", "select-items select-hide");
+          for (j = 1; j < ll; j++) {
+            /* For each option in the original select element,
+            create a new DIV that will act as an option item: */
+            c = document.createElement("DIV");
+            c.innerHTML = selElmnt.options[j].innerHTML;
+            c.addEventListener("click", function(e) {
+                /* When an item is clicked, update the original select box,
+                and the selected item: */
+                var y, i, k, s, h, sl, yl;
+                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                sl = s.length;
+                h = this.parentNode.previousSibling;
+                for (i = 0; i < sl; i++) {
+                  if (s.options[i].innerHTML == this.innerHTML) {
+                    s.selectedIndex = i;
+                    h.innerHTML = this.innerHTML;
+                    y = this.parentNode.getElementsByClassName("same-as-selected");
+                    yl = y.length;
+                    for (k = 0; k < yl; k++) {
+                      y[k].removeAttribute("class");
+                    }
+                    this.setAttribute("class", "same-as-selected");
+                    break;
+                  }
+                }
+                h.click();
+            });
+            b.appendChild(c);
+          }
+          x[i].appendChild(b);
+          a.addEventListener("click", function(e) {
+            /* When the select box is clicked, close any other select boxes,
+            and open/close the current select box: */
+            e.stopPropagation();
+            closeAllSelect(this);
+            this.nextSibling.classList.toggle("select-hide");
+            this.classList.toggle("select-arrow-active");
+          });
+        }
+
+        function closeAllSelect(elmnt) {
+          /* A function that will close all select boxes in the document,
+          except the current select box: */
+          var x, y, i, xl, yl, arrNo = [];
+          x = document.getElementsByClassName("select-items");
+          y = document.getElementsByClassName("select-selected");
+          xl = x.length;
+          yl = y.length;
+          for (i = 0; i < yl; i++) {
+            if (elmnt == y[i]) {
+              arrNo.push(i)
+            } else {
+              y[i].classList.remove("select-arrow-active");
+            }
+          }
+          for (i = 0; i < xl; i++) {
+            if (arrNo.indexOf(i)) {
+              x[i].classList.add("select-hide");
+            }
+          }
+        }
+        /* If the user clicks anywhere outside the select box,
+        then close all select boxes: */
+        document.addEventListener("click", closeAllSelect);
+    </script>
+    <script>
+         var DistrictId = "";
+        var ProvinceId = "";
+        $(document).ready(function () {
+            $("#ProvinceId").change(function () {
+                $('#DistrictId option').remove();
+                ProvinceId = $('#ProvinceId option:selected').val();
+                if (ProvinceId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Login/GetDistrict?ProvinceId= + ' + ProvinceId, 
+                        success: function (result) {
+                            var s = '<option >-- Chọn Quận Huyện --</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#DistrictId').html(s);
+                        }
+                    })
+                }
+            })
+             $("#DistrictId").change(function () {
+                //$('#sdistric div.choices div.choices__list--dropdown div.choices__list div.choices__item').remove();
+                $('#sfeature div.choices').remove();
+                $('#sdistric #sfeature').html('<select  class="multisteps-form__input form-control" data-val="true" data-val-required="The SubDistrictId field is required." id="SubDistrictId" name="SubDistrictId"></select>');
+                DistrictId = $('#DistrictId option:selected').val();
+                if (DistrictId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Login/GetSubDistrict?DistrictId= + ' + DistrictId, 
+                        success: function (result) {
+                            var s = '<option >-- Chọn Phường Xã --</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option  value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#SubDistrictId').html(s);
+                        }
+                    })
+                }
+            })
+           
+        });
+    </script>
+}
 

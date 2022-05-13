@@ -1,10 +1,14 @@
 ﻿using DoctorManagement.Application.System.Users;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Patient;
 using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Twilio.Clients;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace DoctorManagement.BackendAPI.Controllers
 {
@@ -15,11 +19,15 @@ namespace DoctorManagement.BackendAPI.Controllers
     {
         private readonly IUserService _userService;
         //private readonly IActiveUserService _activeUserService;
-
-        public UsersController(IUserService userService )//IActiveUserService activeUserService
+        private readonly ITwilioRestClient _client;
+        private readonly IConfiguration _configuration;
+        public UsersController(IUserService userService, ITwilioRestClient client,
+            IConfiguration configuration)//IActiveUserService activeUserService
         {
             _userService = userService;
             //_activeUserService = activeUserService;
+            _client = client;
+            _configuration = configuration;
         }
         /// <summary>
         /// Đăng nhập
@@ -53,6 +61,34 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
+        /// Kiểm tra số điện thoại gữi mã otp
+        /// </summary>
+        /// 
+        [AllowAnonymous]
+        [HttpPost("check-phone")]
+        public async Task<IActionResult> CheckPhone(RegisterEnterPhoneRequest request)
+        {
+            
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.CheckPhone(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+           /* request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1, 9);
+            var messageOtp = result.Data + " la ma xac thuc của quy khach tren ung dung DatKham. Ma co hieu luc trong 2 phut.";
+            
+            var message = MessageResource.Create(
+               to: new PhoneNumber(request.PhoneNumber),
+               from: new PhoneNumber(_configuration["Twilio:PhoneNumber"]),
+               body: messageOtp,
+               client: _client); // pass in the custom client*/
+
+            return Ok(result);
+        }
+        /// <summary>
         /// Đăng ký tài khoản bác sĩ từ người quản trị
         /// </summary>
         /// 
@@ -64,6 +100,24 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest(ModelState);
 
             var result = await _userService.ManageRegister(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        /// <summary>
+        /// Đăng ký tài khoản bệnh nhân trang người dùng
+        /// </summary>
+        /// 
+        [HttpPost("register-patient")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterPatient(RegisterEnterProfileRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.RegisterPatient(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -300,6 +354,17 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var activeUsers = _userService.GetNewUser();
             return Ok(activeUsers);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách tỉnh/thành phố
+        /// </summary>
+        /// 
+        [HttpGet("get-all-ethnicgroup")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiResult<List<EthnicVm>>>> GetAllEthnicGroup()
+        {
+            var result = await _userService.GetAllEthnicGroup();
+            return Ok(result);
         }
     }
 }

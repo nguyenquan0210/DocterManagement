@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using FluentValidation.AspNetCore;
 using DoctorManagement.ViewModels.System.Users;
+using DoctorManagement.ApiIntegration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,13 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+builder.Services.AddTransient<IClinicApiClient, ClinicApiClient>();
+builder.Services.AddTransient<ISpecialityApiClient, SpecialityApiClient>();
+builder.Services.AddTransient<ILocationApiClient, LocationApiClient>();
+builder.Services.AddTransient<IScheduleApiClient, ScheduleApiClient>();
 
 IMvcBuilder builde = builder.Services.AddRazorPages();
 
@@ -45,9 +52,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseAuthentication();
+
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

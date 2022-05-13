@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Patient;
 using DoctorManagement.ViewModels.System.Roles;
 using DoctorManagement.ViewModels.System.Users;
 using System;
@@ -13,12 +14,13 @@ namespace DoctorManagement.Application.System.Users
     public interface IUserService 
     {
         Task<ApiResult<string>> Authencate(LoginRequest request);
-
+        Task<ApiResult<string>> CheckPhone(RegisterEnterPhoneRequest request);
         Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request);
 
         Task<ApiResult<bool>> Register(PublicRegisterRequest request);
 
         Task<ApiResult<bool>> ManageRegister(ManageRegisterRequest request);
+        Task<ApiResult<bool>> RegisterPatient(RegisterEnterProfileRequest request);
 
         Task<ApiResult<bool>> AddRoleUser(RequestRoleUser request);
 
@@ -49,5 +51,7 @@ namespace DoctorManagement.Application.System.Users
         Task<ApiResult<List<RoleVm>>> GetAllRoleData();
 
         List<UserVm> GetNewUser();
+
+        Task<ApiResult<List<EthnicVm>>> GetAllEthnicGroup();
     }
 }

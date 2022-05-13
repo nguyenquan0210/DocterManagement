@@ -209,15 +209,15 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return View();
 
             var result = await _userApiClient.DoctorUpdateRequest(request.Id, request);
-            if (result.IsSuccessed)
-            {
-                TempData["AlertMessage"] = "Thay đổi thông tin thành công";
-                TempData["AlertType"] = "alert-success";
-                return RedirectToAction("DetailtDoctor", new { userName = User.Identity.Name});
-            }
+                if (result.IsSuccessed)
+                {
+                    TempData["AlertMessage"] = "Thay đổi thông tin thành công";
+                    TempData["AlertType"] = "alert-success";
+                    return RedirectToAction("DetailtDoctor", new { userName = User.Identity.Name});
+                }
 
-            ModelState.AddModelError("", result.Message);
-            return View(request);
+                ModelState.AddModelError("", result.Message);
+                return View(request);
         }
         [HttpGet]
         public async Task<IActionResult> GetSubDistrict(Guid DistrictId)

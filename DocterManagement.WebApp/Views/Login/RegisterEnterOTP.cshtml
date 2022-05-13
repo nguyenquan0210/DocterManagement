@@ -1,7 +1,10 @@
-﻿
+﻿@using DoctorManagement.ViewModels.System.Patient
+
+@model DoctorManagement.ViewModels.System.Patient.RegisterEnterOTPRequest
 @{
     ViewData["Title"] = "RegisterOTP";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    RegisterPatientSession patientSession = (RegisterPatientSession) ViewBag.RegisterPatientSession;
 }
 @section Stylesheet{
     <style>
@@ -469,8 +472,8 @@
 }
 <app-register _nghost-serverapp-c218="" class="ng-star-inserted">
      <nz-spin _ngcontent-serverapp-c218="" class="ant-spin-nested-loading">
-                    <!---->
-                    <!---->
+                    
+                    
                     <div class="ant-spin-container ng-star-inserted">
                         <div _ngcontent-serverapp-c218="" class="w-full">
                             <div _ngcontent-serverapp-c218=""
@@ -488,9 +491,9 @@
                                                             class="ant-tabs-tab-btn" aria-disabled="true"
                                                             aria-selected="true" aria-controls="nz-tabs-1-tab-0">1.Xác
                                                             thực
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="ant-tabs-tab ant-tabs-tab-disabled ng-star-inserted">
@@ -498,9 +501,9 @@
                                                             class="ant-tabs-tab-btn" aria-disabled="true"
                                                             aria-selected="false" aria-controls="nz-tabs-1-tab-1">2.Mật
                                                             khẩu
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="ant-tabs-tab ant-tabs-tab-disabled ng-star-inserted">
@@ -508,13 +511,13 @@
                                                             class="ant-tabs-tab-btn" aria-disabled="true"
                                                             aria-selected="false" aria-controls="nz-tabs-1-tab-2">3.Tạo
                                                             hồ sơ
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                     </div>
-                                                    <!---->
-                                                    <!---->
+                                                    
+                                                    
                                                     <div nz-tabs-ink-bar=""
                                                         class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
                                                         style="left: 0px; width: 229px;"></div>
@@ -533,13 +536,13 @@
                                                                 d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z">
                                                             </path>
                                                         </svg></i></button>
-                                                <!---->
-                                                <!---->
-                                                <!---->
+                                                
+                                                
+                                                
                                             </nz-tab-nav-operation>
-                                            <!---->
+                                            
                                         </nz-tabs-nav>
-                                        <!---->
+                                        
                                         <div class="ant-tabs-content-holder">
                                             <div class="ant-tabs-content ant-tabs-content-top ant-tabs-content-animated"
                                                 style="margin-left: 0%;">
@@ -548,81 +551,90 @@
                                                     tabindex="0" aria-hidden="false">
                                                     <app-verify-opt _ngcontent-serverapp-c218=""
                                                         _nghost-serverapp-c215="" class="ng-star-inserted">
-                                                        <form _ngcontent-serverapp-c215="" class="border-bottom" asp-action="RegisterEnterPassword" method="post"> 
+                                                        <form _ngcontent-serverapp-c215="" class="border-bottom" asp-action="RegisterEnterOTP" method="post"> 
                                                             <div _ngcontent-serverapp-c215=""
                                                                 class="wrapper-otp flex flex-col justify-center items-center">
                                                                 <p _ngcontent-serverapp-c215=""
-                                                                    class="text-sm-w500 my-6">Nhập mã OTP vừa được gửi
-                                                                    đến số ... 0373951042</p>
+                                                                    class="text-sm-w500 my-6">Nhập mã OTP @patientSession.NoOTP vừa được gửi
+                                                                    đến số ... @patientSession.PhoneNumber</p>
                                                                 <ng-otp-input _ngcontent-serverapp-c215=""
                                                                     _nghost-serverapp-c214="">
                                                                     <div _ngcontent-serverapp-c214=""
                                                                         class="ng-otp-input-wrapper wrapper ng-star-inserted"
-                                                                        id="c_yooi3bd79a8l2onbgdc"><input
+                                                                        id="c_yooi3bd79a8l2onbgdc">
+                                                                            <input asp-for="Otp_0" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
                                                                             _ngcontent-serverapp-c214=""
                                                                             autocomplete="one-time-code"
                                                                             class="otp-input ng-pristine ng-valid ng-star-inserted ng-touched"
-                                                                            id="otp_0_yooi3bd79a8l2onbgdc" type="tel"
-                                                                            placeholder="" pattern="\d*"><input
-                                                                            _ngcontent-serverapp-c214=""
-                                                                            autocomplete="one-time-code"
-                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
-                                                                            id="otp_1_yooi3bd79a8l2onbgdc" type="tel"
-                                                                            placeholder="" pattern="\d*"><input
-                                                                            _ngcontent-serverapp-c214=""
-                                                                            autocomplete="one-time-code"
-                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
-                                                                            id="otp_2_yooi3bd79a8l2onbgdc" type="tel"
-                                                                            placeholder="" pattern="\d*"><input
-                                                                            _ngcontent-serverapp-c214=""
-                                                                            autocomplete="one-time-code"
-                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
-                                                                            id="otp_3_yooi3bd79a8l2onbgdc" type="tel"
-                                                                            placeholder="" pattern="\d*"><input
-                                                                            _ngcontent-serverapp-c214=""
-                                                                            autocomplete="one-time-code"
-                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
-                                                                            id="otp_4_yooi3bd79a8l2onbgdc" type="tel"
-                                                                            placeholder="" pattern="\d*"><input
-                                                                            _ngcontent-serverapp-c214=""
-                                                                            autocomplete="one-time-code"
-                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
-                                                                            id="otp_5_yooi3bd79a8l2onbgdc" type="tel"
+                                                                            id="otp_0_yooi3bd79a8l2onbgdc" type="text"
                                                                             placeholder="" pattern="\d*">
-                                                                        <!---->
+                                                                            <input asp-for="Otp_1" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_1_yooi3bd79a8l2onbgdc" type="text" 
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_2" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_2_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_3" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_3_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_4" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_4_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_5" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_5_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                        
                                                                     </div>
-                                                                    <!---->
+                                                                    <span 
+                                                                                class="text-danger ant-form-item-children-icon ng-tns-c210-10">
+                                                                                
+                                                                            </span>
                                                                 </ng-otp-input>
                                                             </div>
                                                             <div _ngcontent-serverapp-c215=""
-                                                                class="flex justify-center"><button
+                                                                class="flex justify-center">
+                                                                <input type="hidden" asp-for="PhoneNumber" />
+                                                                <button id="btn-otp" disabled=""
                                                                     _ngcontent-serverapp-c215="" nz-button=""
                                                                     class="w-full md:w-auto md:px-10 button button--login--form hover:opacity-90 mt-10 mb-6"
-                                                                    > Tiếp tục</button></div>@*disabled=""*@
+                                                                    > Tiếp tục</button></div>
                                                         </form>
                                                         <div _ngcontent-serverapp-c215=""
                                                             class="text-sm-w500 mt-6 mb-[60px] text-center"> Không nhận
-                                                            được mã OTP?<span _ngcontent-serverapp-c215=""
-                                                                class="text-primary cursor-pointer">Thử lại (00:45s)
-                                                                <!---->
-                                                                <!---->
+                                                            được mã OTP?<span _ngcontent-serverapp-c215="" onclick="resetOtp()"
+                                                                class="text-primary cursor-pointer" id="time" data-id="" >Thử lại (02:00s)
                                                             </span></div>
                                                     </app-verify-opt>
-                                                    <!---->
-                                                    <!---->
-                                                    <!---->
+                                                    
+                                                    
+                                                    
                                                 </div>
                                                 <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
                                                     tabindex="-1" aria-hidden="true"
                                                     style="visibility: hidden; height: 0px;">
-                                                    <!---->
+                                                    
                                                 </div>
                                                 <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
                                                     tabindex="-1" aria-hidden="true"
                                                     style="visibility: hidden; height: 0px;">
-                                                    <!---->
+                                                    
                                                 </div>
-                                                <!---->
+                                                
                                             </div>
                                         </div>
                                     </nz-tabset>
@@ -630,7 +642,106 @@
                             </div>
                         </div>
                     </div>
-                    <!---->
+                    
                 </nz-spin>
 </app-register>
+@section JavaScript{
+    <script>
+       
+        const otpInput = document.querySelectorAll('.ng-otp-input-wrapper .otp-input');
+   
+        var $submit = $('#btn-otp');
+        var $time = $('#time');
+        var timeHtml =document.getElementById("time");
+        
+        otpInput.forEach((input) => {
+            input.addEventListener('keyup', (e) => {
+                const element = e.target;
+        
+                if (element.value.match(/\d/)) {
+                    //yourInputNumber += element.value;
+                    //alertText('.wrapper-otp .text-danger', '');
+
+                    if (element.nextElementSibling) {
+                        element.nextElementSibling.focus();
+                    }
+                    var checktime = timeHtml.innerHTML;
+                    if(checktime == "Thử lại (00:00s)")
+                    {
+                        $submit.attr("disabled", true);
+                    }else{
+                        $submit.removeAttr("disabled");
+                    }
+                    
+                } else {
+                    $submit.attr("disabled", true);
+                    //alertText(
+                     //   '.wrapper-otp .text-danger',
+                      //  'Nhập một số vào mỗi trường'
+                    //);
+            
+                }
+                var inputOtp = document.querySelectorAll(".ng-otp-input-wrapper .otp-input");
+                inputOtp.forEach(function(item) {
+                        if(item.value == "" ) $submit.attr("disabled", true);
+                })
+            });
+        });
+        function alertText(element, text) {
+            document.querySelector(`${element}`).textContent = text;
+        }
+
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = "Thử lại (" + minutes + ":" + seconds + "s)";
+                
+                if (--timer < 0) {
+                    timer = 0;
+                    $submit.attr("disabled", true);
+                }
+            }, 1000);
+        }
+        function resetOtp() {
+          var fiveMinutes = 60 * 2, elem = document.querySelector('#time');
+          if (elem) {
+              var checktime = timeHtml.innerHTML;
+              if(checktime == "Thử lại (00:00s)")
+              {
+                  var empId = $("#PhoneNumber").val();
+                  $.ajax({
+                    url: "/Login/ResetOtp",
+                    data: { phoneNumber: empId},
+                    dataType: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.response == 1) {
+                              elem.innerHTML = "Không cho phép đặt khám";
+                              startTimer(fiveMinutes, elem);
+                        } else if (result.response == 2) {
+                              elem.innerHTML = "Cho phép đặt khám";
+                        }else{
+                            elem.innerHTML = "Không thực hiện được chức năng này.";
+                        }
+                    }
+                  })
+                  
+              }
+              
+          }
+        }
+
+        window.onload = function () {
+            var fiveMinutes = 60 * 2,
+                display = document.querySelector('#time');
+            startTimer(fiveMinutes, display);
+        };
+    </script>
+}
 

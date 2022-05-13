@@ -2,6 +2,7 @@
 using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
 using DoctorManagement.ViewModels.Catalog.Speciality;
@@ -121,7 +122,17 @@ namespace DoctorManagement.Application.System.Users
 
             return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
         }
-
+        public async Task<ApiResult<string>> CheckPhone(RegisterEnterPhoneRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.PhoneNumber);
+            if (user != null) return new ApiErrorResult<string>("Tài khoản đã tồn tại");
+            var otp = "";
+            for (var i = 0; i < 6; i++)
+            {
+                 otp = otp + new Random().Next(0, 9).ToString();
+            }
+            return new ApiSuccessResult<string>(otp);
+        }
         public async Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request)
         {
             var user = await _userManager.FindByIdAsync(request.Id.ToString());
@@ -701,6 +712,62 @@ namespace DoctorManagement.Application.System.Users
             }
             return new ApiErrorResult<bool>("Đăng ký không thành công");
         }
+        public async Task<ApiResult<bool>> RegisterPatient(RegisterEnterProfileRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.PhoneNumber);
+
+            var role = await _roleManager.FindByNameAsync("patient");
+            if (user != null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
+            }
+            string year = DateTime.Now.ToString("yy");
+            int count = await _context.Doctors.Where(x => x.No.Contains("DT-" + year)).CountAsync();
+            string str = "";
+            if (count < 9) str = "DT-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
+            else if (count < 99) str = "DT-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
+            else if (count < 999) str = "DT-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+            user = new AppUsers()
+            {
+                Email = request.Email,
+                UserName = request.PhoneNumber,
+                PhoneNumber = request.PhoneNumber,
+                Status = Status.Active,
+                CreatedAt = DateTime.Now,
+                RoleId = role.Id
+            };
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+            if (result.Succeeded)
+            {
+                if (await _userManager.IsInRoleAsync(user, role.Name) == false)
+                {
+                    var rs = await _userManager.AddToRoleAsync(user, role.Name);
+                    var patients = new Patients()
+                    {
+                        UserId = user.Id,
+                        Dob = request.Dob,
+                        Name = request.Name,
+                        IsPrimary = false,
+                        LocationId = request.SubDistrictId,
+                        Gender = request.Gender,
+                        No = str,
+                        Address = request.Address,
+                        Img = "user_default.png" ,
+                        RelativeName = "Khác",
+                        EthnicId = request.EthnicGroupId,
+                        RelativePhone = request.RelativePhone,
+                        RelativeRelationshipId = user.Id,
+                        Identitycard = request.IdentityCard,
+                    };
+                    await _context.Patients.AddAsync(patients);
+                    _context.SaveChanges();
+                    return new ApiSuccessResult<bool>();
+
+                }
+            }
+            return new ApiErrorResult<bool>("Đăng ký không thành công");
+        }
         public async Task GenerateEmailConfirmationTokenAsync(AppUsers user)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -1126,6 +1193,17 @@ namespace DoctorManagement.Application.System.Users
         public Task<ApiResult<PagedResult<UserVm>>> GetDoctorAllPaging(GetUserPagingRequest request)
         {
             throw new NotImplementedException();
+        }
+        public async Task<ApiResult<List<EthnicVm>>> GetAllEthnicGroup()
+        {
+            var query = _context.Ethnics;
+
+            var rs = await query.Select(x => new EthnicVm()
+            {
+                Id = x.Id,
+                Name = x.Name
+            }).ToListAsync();
+            return new ApiSuccessResult<List<EthnicVm>>(rs);
         }
     }
 }
