@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.Data.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,5 +19,6 @@ namespace DoctorManagement.ViewModels.Catalog.Speciality
 
         public int SortOrder { get; set; }
         public bool IsDeleted { get; set; }
+        public IFormFile Img { get; set; }
     }
 }

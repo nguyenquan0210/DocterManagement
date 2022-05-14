@@ -191,7 +191,18 @@ namespace DoctorManagement.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterEnterProfile(RegisterEnterProfileRequest request)
         {
-            if (!ModelState.IsValid) { return View(ModelState); }
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            if(request.ProvinceId != new Guid())
+            {
+                ViewBag.District = await _locationApiClient.CityGetAllDistrict(new Guid(), request.ProvinceId);
+                if (request.DistrictId != new Guid())
+                {
+                    ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(new Guid(), request.DistrictId);
+                }
+            }
+            
+            if (!ModelState.IsValid) { return View(request); }
             var result = await _userApiClient.RegisterPatient(request);
             if (result.IsSuccessed)
             {

@@ -474,6 +474,7 @@
           border-radius: 0.25rem;
           width:100%;
           padding: 9px 16px;
+          margin-bottom:2px;
         }
         .custom-select {
           position: relative;
@@ -602,6 +603,14 @@
 	        height: 8px;
 	        border-radius: 50%;
 	        background: white;
+        }
+        .form-section__form-message {
+            display: none;
+            padding-top: 4px;
+            color: #f33a58;
+            font-size: 0.9rem;
+            line-height: 16px;
+            transition: all .3s linear;
         }
     </style>
     <style>
@@ -965,6 +974,265 @@
             border: none;
         }
     </style>
+    <style>
+        .form-section__form-group {
+	        margin-bottom: 16px;
+	        display: flex;
+	        flex-direction: column;
+            position:relative;
+        }
+
+        .form-section__form-label {
+	        font-size: 1.4rem;
+	        font-weight: 700;
+	        line-height: 18px;
+	        color: #333;
+	        padding-bottom: 6px;
+        }
+
+        .form-section__form-input-wrap {
+	        position: relative;
+	        display: flex;
+	        align-items: center;
+        }
+
+        input[name=fullName] {
+	        text-transform: capitalize;
+        }
+
+        input[type=radio],
+        input[type=checkbox] {
+	        margin-right: 5px;
+	        cursor: pointer;
+        }
+
+        input[type=radio] ~ .form-section__form-label,
+        input[type=checkbox] ~ .form-section__form-label {
+	        padding-bottom: 0;
+        }
+
+        .form-section__form-input {
+	        height: 40px;
+	        max-width: 100%;
+	        width: 100%;
+	        padding: 8px 12px;
+	        border: 1px solid #b3b3b3;
+	        border-radius: 3px;
+	        outline: none;
+	        color: #333;
+	        font-family: inherit;
+	        transition: all .3s linear;
+        }
+
+        .form-section__form-input:focus,
+        .form-section__form-input:hover {
+	        border-color: #1dbfaf;
+        }
+
+        .form-section__form-group.error .form-section__form-input:hover {
+	        background-color: #fdebee;
+        }
+        .form-section__form-group.error .form-section__form-input {
+            background-color: #fdebee;
+            border-color: #f33a58;
+        }
+        .form-section__form-input::placeholder {
+	        color: #b7b7b7;
+        }
+
+        .form-section__form-error-icon {
+	        display: none;
+	        position: absolute;
+	        top: 0;
+	        right: 10px;
+	        height: 100%;
+	        align-items: center;
+	        transform-origin: 50% 0;
+	        transition: transform .3s linear 1s;
+        }
+
+        @@keyframes bellAni {
+	        0% {
+		        transform: rotate(-20deg);
+	        }
+
+	        20% {
+		        transform: rotate(20deg);
+	        }
+
+	        40% {
+		        transform: rotate(-20deg);
+	        }
+
+	        60% {
+		        transform: rotate(20deg);
+	        }
+
+	        80% {
+		        transform: rotate(-20deg);
+	        }
+
+	        100% {
+		        transform: rotate(0);
+	        }
+        }
+
+        .form-section__form-group-icon {
+	        cursor: pointer;
+	        position: absolute;
+	        top: 50%;
+	        right: 10px;
+	        font-size: 1.4rem;
+	        color: #009090;
+	        transform: translateY(-50%);
+        }
+
+        .form-section__form-group-icon i:last-child {
+	        display: none;
+        }
+
+        .form-section__form-group-icon.hidden i:first-child {
+	        display: none;
+        }
+
+        .form-section__form-group-icon.hidden i:last-child {
+	        display: inline;
+        }
+
+        
+        .form-section__form-checkList {
+	        margin-top: 16px;
+	        list-style: none;
+        }
+
+        .form-section__form-checkList.hidden {
+	        display: none;
+        }
+
+        .form-section__form-checkItem {
+	        padding: 3px 0;
+	        font-size: 1.4rem;
+	        color: grey;
+        }
+
+        .form-section__form-checkItem.checked {
+	        color: #283033;
+        }
+
+        .form-section__form-checkItem i:last-child {
+	        display: none;
+        }
+
+        .form-section__form-checkItem.checked i:first-child {
+	        display: none;
+        }
+
+        .form-section__form-checkItem.checked i:last-child {
+	        display: inline-block;
+	        color: inherit;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-input {
+	        background-color: #fdebee;
+	        border-color: #f33a58;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-message {
+	        display: block;
+            position: absolute;
+            top: 65px;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-error-icon {
+	        display: flex;
+	        animation: bellAni .8s linear forwards;
+        }
+
+        .form-section__form-submit {
+	        font-size: 1.4rem;
+	        font-weight: 600;
+	        outline: none;
+	        border: none;
+	        border-radius: 5px;
+	        padding: 12px 16px;
+	        color: #fdebee;
+	        background-color: #1dbfaf;
+	        transition: all .3s linear;
+        }
+
+        .form-section__form-submit:hover {
+	        cursor: pointer;
+	        background-color: #009090;
+        }
+
+        /* form section avatar */
+
+        .form-section__form-show-img {
+	        margin-top: 20px;
+	        padding-top: 50%;
+	        width: 50%;
+	        height: 0;
+	        background-position: center;
+	        background-size: cover;
+	        background-repeat: no-repeat;
+	        transition: .5s ease;
+        }
+
+        .form-section__form-show-img.hidden {
+	        padding-top: 0;
+        }
+
+        .form-section__form-img {
+	        width: 100%;
+	        height: auto;
+        }
+
+        /*form section footer*/
+
+        .form-section__footer {
+	        font-size: 1.4rem;
+	        color: #333;
+	        font-weight: 400;
+	        text-align: center;
+        }
+
+        .form-section__footer-link {
+	        color: #1dbfaf;
+	        text-decoration: none;
+	        font-weight: 600;
+        }
+
+        .form-section__footer-link:hover {
+	        text-decoration: underline;
+        }
+
+        /*footer*/
+
+        .copyright {
+	        width: 100%;
+	        margin-top: 10px;
+	        color: #333;
+	        text-align: center;
+	        font-size: 1.4rem;
+        }
+
+        .copyright-icon {
+	        color: #ff0000;
+        }
+
+        .copyright-icon--coding,
+        .copyright-author {
+	        color: #09e609;
+        }
+
+        .copyright-author {
+	        font-weight: 600;
+        }
+    </style>
+
 }
 <app-register _nghost-serverapp-c149="" class="ng-star-inserted">
                 <nz-spin _ngcontent-serverapp-c149="" class="ant-spin-nested-loading">
@@ -1046,9 +1314,9 @@
                                                                     Tạo hồ sơ y tế đầy đủ thông tin sẽ hỗ trợ việc khám
                                                                     chữa bệnh của bạn tốt hơn.</p>
                                                             </div>
-                                                            <form asp-action="RegisterEnterProfile" method="post"
+                                                            <form asp-action="RegisterEnterProfile" method="post" id="form-register"
                                                                 class=" ant-form ant-form-horizontal ng-touched ng-dirty ">
-                                                                <div  class="flex flex-col md:flex-row md:gap-6 ant-form ant-form-horizontal ng-touched ng-dirty ng-valid">
+                                                                <div  class="flex flex-col md:flex-row md:gap-6 ant-form ant-form-horizontal ng-touched ng-dirty ng-valid ">
                             
                                                                     <div _ngcontent-serverapp-c148=""
                                                                         class="flex flex-col gap-6 md:w-1/2">
@@ -1056,7 +1324,7 @@
                                                                             class="border-bottom font-medium text-base text-gray-800 leading-19 pb-2">
                                                                             Thông tin hồ sơ</div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1 form-section__form-group">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Họ và tên
                                                                                 <span _ngcontent-serverapp-c148=""
@@ -1064,10 +1332,11 @@
                                                                             <input _ngcontent-serverapp-c148="" asp-for="Name"
                                                                                  nz-input=""
                                                                                 placeholder="Họ và tên"
-                                                                                class="h-11 rounded ant-input ng-touched ng-dirty ng-valid">
+                                                                                class="h-11 rounded ant-input ng-touched ng-dirty ng-valid form-section__form-input">
+                                                                                <span asp-validation-for="Name" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1 form-section__form-group">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Số điện
                                                                                 thoại <span _ngcontent-serverapp-c148=""
@@ -1075,10 +1344,11 @@
                                                                             <input _ngcontent-serverapp-c148=""
                                                                                 asp-for="RelativePhone" onkeypress="return /[0-9]/i.test(event.key)"
                                                                                 placeholder="Số điện thoại" maxlength="10"
-                                                                                class="h-11 rounded ant-input ng-untouched ng-pristine ng-valid">
+                                                                                class="h-11 rounded ant-input ng-untouched ng-pristine ng-valid form-section__form-input">
+                                                                                <span asp-validation-for="RelativePhone" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1 form-section__form-group">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Ngày sinh
                                                                                 <span _ngcontent-serverapp-c148=""
@@ -1090,26 +1360,32 @@
                                                                                 <div
                                                                                     class="ng-tns-c88-24 ant-picker-input ng-star-inserted">
                                                                                     <input autocomplete="off" asp-for="Dob" type="date"
-                                                                                        class="ng-tns-c88-24 ng-valid ng-dirty ng-touched datetimepicker"
+                                                                                        class="ng-tns-c88-24 ng-valid ng-dirty ng-touched datetimepicker form-section__form-input"
                                                                                         placeholder="Ngày tháng năm sinh"
                                                                                         size="12">
                                                                                    
                                                                                 </div>
                                                                             </nz-date-picker>
+                                                                            <span asp-validation-for="Dob" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1 form-section__form-group">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Số CMND
-                                                                            </div><input _ngcontent-serverapp-c148=""
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div><input _ngcontent-serverapp-c148="" onkeypress="return /[0-9]/i.test(event.key)"
                                                                                 asp-for="IdentityCard"
                                                                                 placeholder="Số CMND"
-                                                                                class="h-11 rounded ant-input ng-valid ng-touched ng-dirty">
+                                                                                class="h-11 rounded ant-input ng-valid ng-touched ng-dirty form-section__form-input">
+                                                                                <span asp-validation-for="IdentityCard" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148="" style="display:table-footer-group;"
                                                                             class="flex flex-col gap-1">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Giới tính
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
                                                                             </div>
                                                                             <label class="container">Nam
                                                                               <input type="radio" asp-for="Gender" value="@Gender.Male" />
@@ -1121,28 +1397,35 @@
                                                                             </label>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1 form-section__form-group">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Địa chỉ
-                                                                                email của bạn</div><input
+                                                                                email của bạn
+                                                                            <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div><input
                                                                                 _ngcontent-serverapp-c148=""
                                                                                 asp-for="Email" 
                                                                                 placeholder="Địa chỉ email của bạn"
-                                                                                class="h-11 rounded ant-input ng-touched ng-dirty ng-valid">
+                                                                                class="h-11 rounded ant-input ng-touched ng-dirty ng-valid form-section__form-input">
+                                                                                <span asp-validation-for="Email" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1 " >
+                                                                            class="flex flex-col gap-1 form-section__form-group" >
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Dân tộc
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
                                                                             </div>
-                                                                            <div class=" custom-select ">
-                                                                                <select 
+                                                                            <div class=" custom-select  ">
+                                                                                <select class="form-section__form-input"
                                                                                     asp-for="EthnicGroupId" asp-items="ViewBag.Ethnics" 
                                                                               
                                                                                     nzplaceholder="Chọn dân tộc">
-                                                                                   <option>--- Chọn dân tộc ---</option>
+                                                                                   @*<option>--- Chọn dân tộc ---</option>*@
                                                                                 </select>
+                                                                                
                                                                             </div>
+                                                                            <span asp-validation-for="EthnicGroupId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                     </div>
                                                                     <div _ngcontent-serverapp-c148=""
@@ -1151,51 +1434,67 @@
                                                                             class="border-bottom font-medium text-base text-gray-800 leading-19 pb-2">
                                                                             Thông tin bổ sung</div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1 form-section__form-group">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Tỉnh /
-                                                                                Thành phố</div>
-                                                                            <div @*class=" custom-select "*@>
-                                                                                <select class=" select"
+                                                                                Thành phố
+                                                                            <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div>
+                                                                            
+                                                                                <select class=" select form-section__form-input"
                                                                                     asp-for="ProvinceId" asp-items="ViewBag.Province"
                                                                               
                                                                                     nzplaceholder="Chọn thành phố">
-                                                                                   <option>--- Chọn Thành Phố ---</option>
+                                                                                   <option value="">--- Chọn Thành Phố ---</option>
                                                                                 </select>
-                                                                            </div>
+                                                                                
+                                                                           
+                                                                            <span asp-validation-for="ProvinceId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1 form-section__form-group">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Quận /
-                                                                                Huyện</div>
-                                                                            <div@* class=" custom-select "*@>
-                                                                                <select asp-for="DistrictId" asp-items="ViewBag.District" class=" select"
+                                                                                Huyện
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div>
+                                                                           
+                                                                                <select asp-for="DistrictId" asp-items="ViewBag.District" class=" select form-section__form-input"
                                                                                     nzplaceholder="Chọn quận huyện của bạn"
                                                                                     >
-                                                                                    <option>--- Chọn Quận/Huyện ---</option>
+                                                                                    <option value="">--- Chọn Quận/Huyện ---</option>
                                                                                 </select>
-                                                                            </div>
+                                                                                
+                                                                            <span asp-validation-for="DistrictId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
-                                                                            <div _ngcontent-serverapp-c148="" class="text-sm-w500 text-gray-700">Phường /Xã</div>
-                                                                            <div @*class=" custom-select "*@>
-                                                                                <select asp-for="SubDistrictId" asp-items="ViewBag.SubDistrict" class=" select"
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148="" class="text-sm-w500 text-gray-700">Phường /Xã
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div>
+                                                                            
+                                                                                <select asp-for="SubDistrictId" asp-items="ViewBag.SubDistrict" class=" select form-section__form-input"
                                                                                     nzplaceholder="Chọn phường xã của bạn">
-                                                                                   <option>--- Chọn Phường/Xã ---</option>
+                                                                                   <option value="">--- Chọn Phường/Xã ---</option>
                                                                                 </select>
-                                                                            </div>
+                                                                                <span asp-validation-for="SubDistrictId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                            
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1">
+                                                                            class="flex flex-col gap-1 form-section__form-group">
                                                                             <div _ngcontent-serverapp-c148=""
                                                                                 class="text-sm-w500 text-gray-700">Địa chỉ
-                                                                                cụ thể</div><input
+                                                                                cụ thể
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div><input
                                                                                 _ngcontent-serverapp-c148=""
                                                                                 asp-for="Address" 
                                                                                 placeholder="Số nhà, tên đường"
-                                                                                class="h-11 rounded ant-input ng-valid ng-touched ng-dirty">
+                                                                                class="h-11 rounded ant-input ng-valid ng-touched ng-dirty form-section__form-input">
+                                                                                <span asp-validation-for="Address" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1219,6 +1518,7 @@
 </app-register>
 @section JavaScript{
     <script src="~/js/plugins/flatpickr.min.js"></script>
+    
     <script>
         if (document.querySelector('.datetimepicker')) {
             flatpickr('.datetimepicker', {
@@ -1311,7 +1611,7 @@
         document.addEventListener("click", closeAllSelect);
     </script>
     <script>
-         var DistrictId = "";
+        var DistrictId = "";
         var ProvinceId = "";
         $(document).ready(function () {
             $("#ProvinceId").change(function () {
@@ -1352,6 +1652,27 @@
             })
            
         });
+    </script>
+    <script src="~/js/Validator2.js"></script>
+    <script>
+        Validator({
+	        form: "#form-register",
+	        formGroup: ".form-section__form-group",
+	        errorMessage: ".form-section__form-message",
+	        rules: [
+                Validator.isRequired('#Name', 'Vui lòng nhập họ tên.'),
+                Validator.isRequired('#RelativePhone', 'Vui lòng nhập số điện thoại thuộc hồ sơ này.'),
+                Validator.isRequired('#Dob', 'Vui lòng nhập ngày sinh.'),
+                Validator.isRequired('#IdentityCard', 'Vui lòng nhập căn cước công dân.'),
+                Validator.isRequired('#EthnicGroupId', 'Vui lòng chọn dân tộc.'),
+		        Validator.isRequired('#ProvinceId', 'Vui lòng chọn thành phố.'),
+		        Validator.isRequired('#DistrictId', 'Vui lòng chọn quận huyện.'),
+		        Validator.isRequired('#SubDistrictId', 'Vui lòng chọn phường xã.'),
+		        Validator.isRequired('#Address', 'Vui lòng nhập địa chỉ cụ thể'),
+		        Validator.isRequired('#Email', 'Vui lòng nhập địa chỉ e-mail.'),
+                Validator.isEmail('#Email'),
+	        ]
+        })
     </script>
 }
 

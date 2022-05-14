@@ -28,6 +28,7 @@ builder.Services.AddTransient<IClinicApiClient, ClinicApiClient>();
 builder.Services.AddTransient<ISpecialityApiClient, SpecialityApiClient>();
 builder.Services.AddTransient<ILocationApiClient, LocationApiClient>();
 builder.Services.AddTransient<IScheduleApiClient, ScheduleApiClient>();
+builder.Services.AddTransient<IDoctorApiClient, DoctorApiClient>();
 
 IMvcBuilder builde = builder.Services.AddRazorPages();
 

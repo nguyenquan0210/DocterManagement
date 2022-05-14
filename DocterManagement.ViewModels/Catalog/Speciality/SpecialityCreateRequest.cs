@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace DoctorManagement.ViewModels.Catalog.Speciality
         public string Title { get; set; }
 
         public string? Description { get; set; }
+
+        [Required]
+        public IFormFile Img { get; set; }
 
     }
 }

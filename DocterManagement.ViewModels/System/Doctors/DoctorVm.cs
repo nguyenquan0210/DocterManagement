@@ -19,6 +19,7 @@ namespace DoctorManagement.ViewModels.System.Doctors
         public string LastName { get; set; }
         [Display(Name = "Địa chỉ")]
         public string Address { get; set; }
+        public string FullAddress { get; set; }
         [Display(Name = "Hình ảnh")]
         public string Img { get; set; }
         [Display(Name = "Mô tả/Giới thiêu")]
@@ -26,6 +27,7 @@ namespace DoctorManagement.ViewModels.System.Doctors
         [Display(Name = "Mã bác sĩ")]
         public string No { get; set; }
         public string Note { get; set; }
+        public string Experiences { get; set; }
         public string Educations { get; set; }
         public bool Booking { get; set; }
         public string Prizes { get; set; }

@@ -1,9 +1,15 @@
-﻿
+﻿@using DoctorManagement.ViewModels.Catalog.Speciality
+@using DoctorManagement.ViewModels.System.Doctors
+
 @{
     ViewData["Title"] = "Docter";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+    List<DoctorVm> doctors = (List<DoctorVm>)ViewBag.DoctorTops;
 
+    List<SpecialityVm> specialities = (List<SpecialityVm>)ViewBag.GetAllSpeciality;
+
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @section Stylesheet{
     <style>
         .root-layout[_ngcontent-serverApp-c55] {
@@ -285,44 +291,46 @@
                         <div _ngcontent-serverapp-c190="" class="text-lg font-semibold pb-4"> Bác sĩ tiêu biểu </div>
                         <div _ngcontent-serverapp-c190="" class="flex overflow-x-auto pb-4">
                             <div _ngcontent-serverapp-c190="" class="flex flex-nowrap">
-                                <app-typical-doctor-card _ngcontent-serverapp-c190="" class="flex ng-star-inserted"
-                                    _nghost-serverapp-c189="">
-                                    <div _ngcontent-serverapp-c189="" class="flex p-2">
-                                        <div _ngcontent-serverapp-c189=""
-                                            class="overflow-hidden flex flex-col justify-between min-w-[300px] rounded-lg shadow bg-white p-4 ring-1 ring-slate-100">
-                                            <div _ngcontent-serverapp-c189="" class="flex gap-4"><img
-                                                    _ngcontent-serverapp-c189="" width="64" height="64" loading="lazy"
-                                                    class="rounded-full w-16 h-16 object-cover ring-1 ring-slate-100"
-                                                    src="https://youmed.vn/photos/2c88e098-bb96-4a29-bf49-16813ef3b1dd.jpg"
-                                                    alt="BS.CK1 <br>Huỳnh Thanh Hải">
-                                                <div _ngcontent-serverapp-c189="" class="flex flex-col overflow-hidden">
+                                @foreach(var item in doctors)
+                                {
+                                    <app-typical-doctor-card _ngcontent-serverapp-c190="" class="flex ng-star-inserted"
+                                                _nghost-serverapp-c189="">
+                                                <div _ngcontent-serverapp-c189="" class="flex p-2">
                                                     <div _ngcontent-serverapp-c189=""
-                                                        class="text-xs font-medium line-clamp-2">BS.CK1</div><a
-                                                        _ngcontent-serverapp-c189=""
-                                                        class="text-primary text-base leading-5"
-                                                        href="/bac-si/bac-si-chuyen-khoa-i-huynh-thanh-hai"
-                                                        style="pointer-events: auto;">Huỳnh Thanh
-                                                        Hải</a>
-                                                    <p _ngcontent-serverapp-c189="" class="text-sm mt-2 line-clamp-2">
-                                                        <span _ngcontent-serverapp-c189="" class="text-gray-600">Tim
-                                                            mạch</span><span _ngcontent-serverapp-c189=""
-                                                            class="px-1 ng-star-inserted">·</span>
-                                                        <!----><span _ngcontent-serverapp-c189=""
-                                                            class="text-gray-800 font-medium">Bệnh viện Đa khoa Tân Hưng
-                                                        </span>
-                                                    </p>
+                                                        class="overflow-hidden flex flex-col justify-between min-w-[300px] rounded-lg shadow bg-white p-4 ring-1 ring-slate-100">
+                                                        <div _ngcontent-serverapp-c189="" class="flex gap-4"><img
+                                                                _ngcontent-serverapp-c189="" width="64" height="64" loading="lazy"
+                                                                class="rounded-full w-16 h-16 object-cover ring-1 ring-slate-100"
+                                                                src="@(Configuration["BaseAddress"] + "/img/user-content/" + item.Img)"
+                                                                alt="@(item.LastName + " " + item.FirstName)">
+                                                            <div _ngcontent-serverapp-c189="" class="flex flex-col overflow-hidden">
+                                                                <div _ngcontent-serverapp-c189=""
+                                                                    class="text-xs font-medium line-clamp-2">@item.Prefix</div><a
+                                                                    _ngcontent-serverapp-c189=""
+                                                                    class="text-primary text-base leading-5"
+                                                                    asp-action="Index" asp-controller="Doctor" asp-route-id="@item.UserId"
+                                                                    style="pointer-events: auto;">@(item.LastName + " " + item.FirstName)</a>
+                                                                <p _ngcontent-serverapp-c189="" class="text-sm mt-2 line-clamp-2">
+                                                                    <span _ngcontent-serverapp-c189="" class="text-gray-600">@item.GetSpecialities.FirstOrDefault().Title</span><span _ngcontent-serverapp-c189=""
+                                                                        class="px-1 ng-star-inserted">·</span>
+                                                                    <span _ngcontent-serverapp-c189=""
+                                                                        class="text-gray-800 font-medium">@item.GetClinic.Name
+                                                                    </span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div _ngcontent-serverapp-c189="" class="pt-4"><a
+                                                                _ngcontent-serverapp-c189=""
+                                                                class="bg-primary/5 font-semibold text-primary px-4 py-3 inline-block rounded"
+                                                                asp-action="" asp-controller=""
+                                                                style="pointer-events: auto;"> Đặt lịch </a></div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div _ngcontent-serverapp-c189="" class="pt-4"><a
-                                                    _ngcontent-serverapp-c189=""
-                                                    class="bg-primary/5 font-semibold text-primary px-4 py-3 inline-block rounded"
-                                                    href="/bac-si/bac-si-chuyen-khoa-i-huynh-thanh-hai/dat-kham"
-                                                    style="pointer-events: auto;"> Đặt lịch </a></div>
-                                        </div>
-                                    </div>
-                                </app-typical-doctor-card>
-                                <!---->
-                                <app-typical-doctor-card _ngcontent-serverapp-c190="" class="flex ng-star-inserted"
+                                    </app-typical-doctor-card>
+                                }
+                                
+                                
+                               @* <app-typical-doctor-card _ngcontent-serverapp-c190="" class="flex ng-star-inserted"
                                     _nghost-serverapp-c189="">
                                     <div _ngcontent-serverapp-c189="" class="flex p-2">
                                         <div _ngcontent-serverapp-c189=""
@@ -343,7 +351,7 @@
                                                         <span _ngcontent-serverapp-c189="" class="text-gray-600">Nam
                                                             khoa</span><span _ngcontent-serverapp-c189=""
                                                             class="px-1 ng-star-inserted">·</span>
-                                                        <!----><span _ngcontent-serverapp-c189=""
+                                                        <span _ngcontent-serverapp-c189=""
                                                             class="text-gray-800 font-medium">Bệnh viện PHÁP VIỆT
                                                         </span>
                                                     </p>
@@ -357,7 +365,7 @@
                                         </div>
                                     </div>
                                 </app-typical-doctor-card>
-                                <!---->
+                                
                                 <app-typical-doctor-card _ngcontent-serverapp-c190="" class="flex ng-star-inserted"
                                     _nghost-serverapp-c189="">
                                     <div _ngcontent-serverapp-c189="" class="flex p-2">
@@ -379,7 +387,7 @@
                                                         <span _ngcontent-serverapp-c189="" class="text-gray-600">Nội
                                                             tiết</span><span _ngcontent-serverapp-c189=""
                                                             class="px-1 ng-star-inserted">·</span>
-                                                        <!----><span _ngcontent-serverapp-c189=""
+                                                        <span _ngcontent-serverapp-c189=""
                                                             class="text-gray-800 font-medium">-</span>
                                                     </p>
                                                 </div>
@@ -392,7 +400,7 @@
                                         </div>
                                     </div>
                                 </app-typical-doctor-card>
-                                <!---->
+                                
                                 <app-typical-doctor-card _ngcontent-serverapp-c190="" class="flex ng-star-inserted"
                                     _nghost-serverapp-c189="">
                                     <div _ngcontent-serverapp-c189="" class="flex p-2">
@@ -415,7 +423,7 @@
                                                         <span _ngcontent-serverapp-c189="" class="text-gray-600">Nhãn
                                                             khoa</span><span _ngcontent-serverapp-c189=""
                                                             class="px-1 ng-star-inserted">·</span>
-                                                        <!----><span _ngcontent-serverapp-c189=""
+                                                        <span _ngcontent-serverapp-c189=""
                                                             class="text-gray-800 font-medium">Bệnh Viện Mắt Quốc Tế Việt
                                                             Nga</span>
                                                     </p>
@@ -428,13 +436,13 @@
                                                     style="pointer-events: auto;"> Đặt lịch </a></div>
                                         </div>
                                     </div>
-                                </app-typical-doctor-card>
-                                <!---->
-                                <!---->
+                                </app-typical-doctor-card>*@
+                                
+                                
                             </div>
                         </div>
                     </div>
-                    <!---->
+                    
                 </app-typical-doctor>
                 <app-specialties _ngcontent-serverapp-c194="" _nghost-serverapp-c192="">
                     <section _ngcontent-serverapp-c192="" class="pt-10 md:pb-10 md:pt-16">
@@ -448,17 +456,21 @@
                             class="max-w-7xl mx-auto text-center relative overflow-hidden mt-8 lg:mt-12 ng-star-inserted">
                             <div _ngcontent-serverapp-c192=""
                                 class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-8 transition-all">
-                                <app-special-block _ngcontent-serverapp-c192="" _nghost-serverapp-c191=""
-                                    class="ng-star-inserted">
-                                    <div _ngcontent-serverapp-c191="" class="flex flex-col items-center"><a
-                                            _ngcontent-serverapp-c191="" class="rounded-full mb-2 bg-primary/10"><img
-                                                _ngcontent-serverapp-c191="" alt="icon-special" height="60" width="60"
-                                                src="~/img/home2/icon/027-stomach.svg" class=" ng-lazyloading"></a><a
-                                            _ngcontent-serverapp-c191=""
-                                            class="text-sm-w400 text-center hover:text-[#1890ff] xl:text-base"> Tiêu hóa
-                                        </a></div>
-                                </app-special-block>
-                                <app-special-block _ngcontent-serverapp-c192="" _nghost-serverapp-c191=""
+                                @foreach(var item in specialities)
+                                {
+                                    <app-special-block _ngcontent-serverapp-c192="" _nghost-serverapp-c191=""
+                                                class="ng-star-inserted">
+                                        <div _ngcontent-serverapp-c191="" class="flex flex-col items-center"><a
+                                                _ngcontent-serverapp-c191="" class="rounded-full mb-2 bg-primary/10"><img
+                                                    _ngcontent-serverapp-c191="" alt="icon-special" height="60" width="60"
+                                                    src="@(Configuration["BaseAddress"] + "/img/" + item.Img)" class=" ng-lazyloading"></a><a
+                                                _ngcontent-serverapp-c191=""
+                                                class="text-sm-w400 text-center hover:text-[#1890ff] xl:text-base"> @item.Title
+                                            </a></div>
+                                    </app-special-block>
+                                }
+                                
+                                @*<app-special-block _ngcontent-serverapp-c192="" _nghost-serverapp-c191=""
                                     class="ng-star-inserted">
                                     <div _ngcontent-serverapp-c191="" class="flex flex-col items-center"><a
                                             _ngcontent-serverapp-c191="" class="rounded-full mb-2 bg-primary/10"><img
@@ -687,11 +699,11 @@
                                             _ngcontent-serverapp-c191=""
                                             class="text-sm-w400 text-center hover:text-[#1890ff] xl:text-base"> Y học cổ
                                             truyền </a></div>
-                                </app-special-block>
-                                <!---->
+                                </app-special-block>*@
+                                
                             </div>
                         </div>
-                        <!---->
+                        
                         <div _ngcontent-serverapp-c192=""
                             class="relative flex pt-6 pb-4 justify-center items-center mx-auto text-primary cursor-pointer bg-white transition-all">
                             <svg _ngcontent-serverApp-c192="" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -703,9 +715,9 @@
                     </section>
                 </app-specialties>
                 <app-list-doctor _ngcontent-serverapp-c194="" _nghost-serverapp-c193="">
-                    <!---->
-                    <!---->
-                    <!---->
+                    
+                    
+                    
                 </app-list-doctor>
                 <app-carousel-intro _ngcontent-serverapp-c194="" _nghost-serverapp-c68="">
                     <section _ngcontent-serverapp-c68="" class="pt-10 md:pb-10 md:pt-16 ng-star-inserted">
@@ -732,12 +744,12 @@
                                                     <img _ngcontent-serverapp-c68="" width="500" height="500" alt=""
                                                         class="mx-auto  ng-lazyloaded"
                                                         src="~/img/booking/png/Doctor/Feature2.webp"></div>
-                                                <!---->
+                                                
                                             </div>
                                         </div>
-                                        <!---->
+                                        
                                     </div>
-                                    <!---->
+                                    
                                 </nz-carousel>
                             </div>
                             <div _ngcontent-serverapp-c68="" class="info relative">
@@ -749,7 +761,7 @@
                                         <p _ngcontent-serverapp-c68="" class="text-sm lg:text-base mt-3">Đặt lịch khám nhanh chóng với
                                             bác sĩ giỏi, luôn tận tâm chăm sóc sức khỏe của bạn và gia đình</p>
                                     </div>
-                                    <!---->
+                                    
                                     <div _ngcontent-serverapp-c68=""
                                         class="carousel-item cursor-pointer border-l-4 border-l-transparent px-4 py-6 md:p-10 group hover:border-l-primary ng-star-inserted">
                                         <h3 _ngcontent-serverapp-c68=""
@@ -758,13 +770,13 @@
                                         <p _ngcontent-serverapp-c68="" class="text-sm lg:text-base mt-3">Chủ động đặt lịch hẹn, trả kết
                                             quả khám, đơn thuốc. Nhắc lịch tái khám, lịch uống thuốc trên ứng dụng</p>
                                     </div>
-                                    <!---->
-                                    <!---->
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
                     </section>
-                    <!---->
+                    
                 </app-carousel-intro>
                 <app-download _ngcontent-serverapp-c194="" _nghost-serverapp-c69="">
                     <section _ngcontent-serverapp-c69="" id="download"
@@ -779,13 +791,13 @@
                                                 width="24" height="24" alt="icon" class="mr-1  ng-lazyloaded"
                                                 src="~/img/booking/svg/iconCheck.svg"><span _ngcontent-serverapp-c69="" class="text-white">Đặt khám
                                                 Bác sĩ - Phòng khám - Bệnh viện</span></li>
-                                        <!---->
+                                        
                                         <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img _ngcontent-serverapp-c69=""
                                                 width="24" height="24" alt="icon" class="mr-1  ng-lazyloaded"
                                                 src="~/img/booking/svg/iconCheck.svg"><span _ngcontent-serverapp-c69="" class="text-white">Trả kết
                                                 quả khám, lưu trữ hồ sơ</span></li>
-                                        <!---->
-                                        <!---->
+                                        
+                                        
                                     </ul>
                                 <div _ngcontent-serverapp-c69="" class="flex gap-4 justify-center md:justify-start"><a
                                         _ngcontent-serverapp-c69="" target="_blank"
@@ -815,7 +827,7 @@
                     </section>
                 </app-download>
                 <router-outlet _ngcontent-serverapp-c194=""></router-outlet>
-                <!---->
+                
 </app-doctors>
 @section JavaScript{
     <script>

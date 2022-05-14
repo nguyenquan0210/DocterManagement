@@ -101,7 +101,12 @@
                                 {
                                     <tr id="row_@item.Id">
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Title</h6></td>
+                                        <td class="text-xs font-weight-bold">
+                                            <div class="d-flex align-items-center">
+                                                <img src="@(Configuration["BaseAddress"] + "/img/" + @item.Img)" class="avatar avatar-xs me-2" alt="user image">
+                                                <span>@item.Title</span>
+                                            </div>
+                                        </td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.SortOrder</h6></td>
                                         

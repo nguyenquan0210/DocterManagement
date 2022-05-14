@@ -1,13 +1,16 @@
-﻿using DoctorManagement.Data.EF;
+﻿using DoctorManagement.Application.Common;
+using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +19,12 @@ namespace DoctorManagement.Application.Catalog.Speciality
     public class SpecialityService : ISpecialityService
     {
         private readonly DoctorManageDbContext _context;
-
-        public SpecialityService(DoctorManageDbContext context)
+        private readonly IStorageService _storageService;
+        private const string SPECIALITY_CONTENT_FOLDER_NAME = "speciality-content";
+        public SpecialityService(DoctorManageDbContext context, IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
         }
         public async Task<ApiResult<bool>> Create(SpecialityCreateRequest request)
         {
@@ -35,14 +40,23 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 SortOrder = count + 1,
                 Description = request.Description,
                 IsDeleted = false,
-                No = str
+                No = str,
+                Img = await SaveFile(request.Img, SPECIALITY_CONTENT_FOLDER_NAME),
             };
             _context.Specialities.Add(specialities);
             var rs = await _context.SaveChangesAsync();
             if(rs != 0) return new ApiSuccessResult<bool>(true);
             return new ApiSuccessResult<bool>(false);
         }
-
+        private async Task<string> SaveFile(IFormFile? file, string folderName)
+        {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsyncs(file.OpenReadStream(), fileName, folderName);
+            return fileName;
+        }
         public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var speciality = await _context.Specialities.FindAsync(Id);
@@ -62,7 +76,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
             return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<ApiResult<List<SpecialityVm>>> GetAll()
+        public async Task<ApiResult<List<SpecialityVm>>> GetAllSpeciality()
         {
             var query = _context.Specialities.Where(x => x.IsDeleted == false);
 
@@ -72,7 +86,9 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 Title = x.Title,
                 SortOrder = x.SortOrder,
                 IsDeleted = x.IsDeleted,
-                No = x.No
+                No = x.No,
+                Description = x.Description,
+                Img = SPECIALITY_CONTENT_FOLDER_NAME + "/" + x.Img,
             }).ToListAsync();
             return new ApiSuccessResult<List<SpecialityVm>>(rs);
         }
@@ -133,6 +149,11 @@ namespace DoctorManagement.Application.Catalog.Speciality
             speciality.SortOrder = request.SortOrder;
             speciality.Description = request.Description;
             speciality.IsDeleted = request.IsDeleted;
+            if (request.Img != null)
+            {
+                //if (speciality.Img != null) await _storageService.DeleteFileAsyncs(speciality.Img, SPECIALITY_CONTENT_FOLDER_NAME);
+                speciality.Img = await SaveFile(request.Img, SPECIALITY_CONTENT_FOLDER_NAME);
+            }
 
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>(true);

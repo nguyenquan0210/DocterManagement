@@ -44,7 +44,8 @@ namespace DoctorManagement.AdminApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create( SpecialityCreateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] SpecialityCreateRequest request)
         {
             ViewBag.Location = await _locationApiClient.GetAllProvince(new Guid());
             if (!ModelState.IsValid)
@@ -87,10 +88,9 @@ namespace DoctorManagement.AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(SpecialityUpdateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] SpecialityUpdateRequest request)
         {
-           
-            //ViewBag.Status = SeletectStatus(request.Status);
             if (!ModelState.IsValid)
                 return View();
 

@@ -31,7 +31,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _clinicService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }
@@ -101,7 +101,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _clinicService.Update(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
             return Ok(result);
         }
 

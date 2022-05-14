@@ -340,7 +340,6 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Prizes.ToString()), "prizes");
             requestContent.Add(new StringContent(request.TimeWorking.ToString()), "timeWorking");
 
-
             var response = await client.PutAsync($"/api/users/doctor/update-doctor-request/{id}", requestContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

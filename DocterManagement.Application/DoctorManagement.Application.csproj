@@ -18,8 +18,4 @@
     <ProjectReference Include="..\DocterManagement.ViewModels\DoctorManagement.ViewModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="System\Doctor\" />
-  </ItemGroup>
-
 </Project>
