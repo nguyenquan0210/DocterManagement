@@ -22,7 +22,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] AppointmentCreateRequest request)
         {
             if (!ModelState.IsValid)

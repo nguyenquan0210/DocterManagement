@@ -22,11 +22,28 @@ namespace DoctorManagement.Application.Catalog.Appointment
         {
             _context = context;
         }
-        public async Task<ApiResult<Appointments>> Create(AppointmentCreateRequest request)
+        public async Task<ApiResult<bool>> Create(AppointmentCreateRequest request)
         {
-            var sch = _context.schedulesSlots.FindAsync(request.SchedulesDetailId);
-           
-            string day = DateTime.Now.ToString("dd") + "-" + sch.Result.ScheduleId.ToString().Remove(2);
+            var slots = from slot in _context.schedulesSlots
+                             join sche in _context.Schedules on slot.ScheduleId equals sche.Id
+                             where slot.Id == request.SchedulesSlotId 
+                             select sche;
+            var datecheck = new DateTime();
+            if (slots != null)
+            {
+                datecheck = DateTime.Parse(slots.FirstOrDefault().CheckInDate.ToString("dd/MM/yyyy") + " 00:00:00.0000000");
+                var checkAppoi = from app in _context.Appointments
+                                 join slot in _context.schedulesSlots on app.SchedulesSlotId equals slot.Id
+                                 join sche in _context.Schedules on slot.ScheduleId equals sche.Id
+                                 where app.PatientId == request.PatientId && sche.CheckInDate >= datecheck && sche.CheckInDate < datecheck.AddDays(1)
+                                 select sche;
+                if (checkAppoi.ToList().Count > 0)
+                {
+                    return new ApiErrorResult<bool>("Bạn không thể đătj lịch cùng ngày quá 2 lần!");
+                }
+            }
+
+            string day = DateTime.Now.ToString("dd") + "-" + slots.FirstOrDefault().Id.ToString().Remove(2);
             int count = await _context.Doctors.Where(x => x.No.Contains("DK-" + day)).CountAsync();
             string str = "";
             if (count < 9) str = "DK-" + day + "-00" + (count + 1);
@@ -38,11 +55,22 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 Status = StatusAppointment.pending,
                 PatientId = request.PatientId,
                 No = str,
-                SchedulesSlotId = request.SchedulesDetailId
+                SchedulesSlotId = request.SchedulesSlotId,
+                DoctorId = request.DoctorId
             };
             _context.Appointments.Add(appointments);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<Appointments>(appointments);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0)
+            {
+                var slotsche = await _context.schedulesSlots.FindAsync(request.SchedulesSlotId);
+                slotsche.IsBooked = true;
+                var schedule = await _context.Schedules.FindAsync(slots.FirstOrDefault().Id);
+                schedule.AvailableQty = schedule.AvailableQty -1;
+                schedule.BookedQty = schedule.BookedQty +1;
+                _context.SaveChanges();
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Đặt khám không thành công!");
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)

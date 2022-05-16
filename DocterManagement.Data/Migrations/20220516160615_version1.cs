@@ -144,7 +144,8 @@ namespace DoctorManagement.Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SortOrder = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     No = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -217,8 +218,7 @@ namespace DoctorManagement.Data.Migrations
                 name: "Patients",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Patient = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Img = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -231,11 +231,12 @@ namespace DoctorManagement.Data.Migrations
                     RelativePhone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Identitycard = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EthnicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Patients", x => x.UserId);
+                    table.PrimaryKey("PK_Patients", x => x.PatientId);
                     table.ForeignKey(
                         name: "FK_Patients_AppUsers_UserId",
                         column: x => x.UserId,
@@ -260,13 +261,15 @@ namespace DoctorManagement.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Img = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Intro = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false),
                     No = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
+                    TimeWorking = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
+                    Experiences = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
                     Educations = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
                     Booking = table.Column<bool>(type: "bit", nullable: false),
                     Prizes = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
@@ -276,7 +279,7 @@ namespace DoctorManagement.Data.Migrations
                     Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Prefix = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Services = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    MapUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    MapUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false),
                     IsPrimary = table.Column<bool>(type: "bit", nullable: false),
                     LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClinicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -372,11 +375,13 @@ namespace DoctorManagement.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FromTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     ToTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CheckInDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Qty = table.Column<int>(type: "int", nullable: false),
                     DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BookedQty = table.Column<int>(type: "int", nullable: false),
+                    AvailableQty = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -470,7 +475,8 @@ namespace DoctorManagement.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FromTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     ToTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsBooked = table.Column<bool>(type: "bit", nullable: false),
                     ScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -508,7 +514,7 @@ namespace DoctorManagement.Data.Migrations
                         name: "FK_Appointments_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
-                        principalColumn: "UserId");
+                        principalColumn: "PatientId");
                     table.ForeignKey(
                         name: "FK_Appointments_SchedulesSlots_SchedulesSlotId",
                         column: x => x.SchedulesSlotId,
@@ -549,7 +555,7 @@ namespace DoctorManagement.Data.Migrations
                         name: "FK_MedicalRecords_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
-                        principalColumn: "UserId");
+                        principalColumn: "PatientId");
                 });
 
             migrationBuilder.CreateTable(
@@ -586,9 +592,9 @@ namespace DoctorManagement.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"), "71f37d8d-a634-4eb0-81d1-915a0fe1f831", "doctor role", "doctor", "doctor" },
-                    { new Guid("50fe257e-6475-41f0-93f7-f530d622362b"), "25784d7a-8494-461c-888c-5edcd76b57f9", "patient role", "patient", "patient" },
-                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "bfb5731e-e84b-46e9-a8ac-c5cdc9a5ad5e", "Administrator role", "admin", "admin" }
+                    { new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"), "a931f7cf-79f9-4f0a-816e-905dad7bea2e", "doctor role", "doctor", "doctor" },
+                    { new Guid("50fe257e-6475-41f0-93f7-f530d622362b"), "79d7d023-7237-49df-be70-d3792f9eac84", "patient role", "patient", "patient" },
+                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "5b51a496-f889-4b1e-816c-c5c6b1568fd0", "Administrator role", "admin", "admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -598,13 +604,13 @@ namespace DoctorManagement.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Specialities",
-                columns: new[] { "Id", "Description", "No", "SortOrder", "Status", "Title" },
-                values: new object[] { new Guid("8d04dce4-969a-435d-bba4-df3f325983dc"), "Điều trị các bệnh về tiêu hoá", null, 1, 0, "Tiêu hóa" });
+                columns: new[] { "Id", "Description", "Img", "IsDeleted", "No", "SortOrder", "Title" },
+                values: new object[] { new Guid("8d04dce4-969a-435d-bba4-df3f325983dc"), "Điều trị các bệnh về tiêu hoá", null, false, "SP-22-001", 1, "Tiêu hóa" });
 
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RoleId", "SecurityStamp", "Status", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, "5d99d9f8-f318-4c26-ac5f-5c17e33be080", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "nguyenquan52000@gmail.com", true, false, null, "nguyenquan52000@gmail.com", "admin", "AQAAAAEAACcQAAAAEAQxz6PTozGIyRFADRHU/r6rEdwl0vYo+lKT8l4nm5LwM7II7vqAlDvpO4LuK9/ukQ==", "0373951042", false, new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "", 1, false, "admin" });
+                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, "760245f7-5511-443b-843c-e7dcf1748994", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "nguyenquan52000@gmail.com", true, false, null, "nguyenquan52000@gmail.com", "admin", "AQAAAAEAACcQAAAAEMiPZINowLixsD0QkuczJPscTqde3qhNdHeGuwpE21zH5sraYDFcr9iD0EaIyhGWtw==", "0373951042", false, new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "", 1, false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_DoctorId",
@@ -692,6 +698,11 @@ namespace DoctorManagement.Data.Migrations
                 name: "IX_Patients_LocationId",
                 table: "Patients",
                 column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_UserId",
+                table: "Patients",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_DoctorId",

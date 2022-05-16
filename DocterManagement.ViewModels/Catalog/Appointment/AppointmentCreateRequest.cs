@@ -9,7 +9,8 @@ namespace DoctorManagement.ViewModels.Catalog.Appointment
 {
     public class AppointmentCreateRequest
     {
-        public Guid SchedulesDetailId { get; set; }
+        public Guid SchedulesSlotId { get; set; }
         public Guid PatientId { get; set; }
+        public Guid DoctorId { get; set; }
     }
 }

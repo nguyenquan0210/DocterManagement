@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Patient;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -36,6 +37,10 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<DoctorVm>> GetById(Guid Id)
         {
             return await GetAsync<DoctorVm>($"/api/client/get-doctors-detailt/{Id}");
+        }
+        public async Task<ApiResult<List<PatientVm>>> GetPatientProfile(string username)
+        {
+           return  await GetListAsync<PatientVm>($"/api/client/get-patient-profile/{username}");
         }
     }
 }

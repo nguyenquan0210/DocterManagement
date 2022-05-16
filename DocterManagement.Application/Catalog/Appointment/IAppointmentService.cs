@@ -11,7 +11,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
 {
     public interface IAppointmentService
     {
-        Task<ApiResult<Appointments>> Create(AppointmentCreateRequest request);
+        Task<ApiResult<bool>> Create(AppointmentCreateRequest request);
 
         Task<ApiResult<Appointments>> Update(AppointmentUpdateRequest request);
 

@@ -12,6 +12,7 @@ namespace DoctorManagement.ViewModels.System.Patient
 {
     public class PatientVm
     {
+        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -29,5 +30,6 @@ namespace DoctorManagement.ViewModels.System.Patient
 
         public List<AppointmentVm> Appointments { get; set; }
         public List<MedicalRecordVm> MedicalRecords { get; set; }
+        public Guid EthnicId { get; set; }
     }
 }

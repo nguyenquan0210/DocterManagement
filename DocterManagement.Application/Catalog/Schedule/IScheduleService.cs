@@ -20,6 +20,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
         Task<ApiResult<PagedResult<ScheduleVm>>> GetAllPaging(GetSchedulePagingRequest request);
 
         Task<ApiResult<List<ScheduleVm>>> GetAll();
+        Task<ApiResult<List<DoctorScheduleClientsVm>>> GetScheduleDoctor(Guid DoctorId);
 
         Task<ApiResult<ScheduleVm>> GetById(Guid Id);
     }

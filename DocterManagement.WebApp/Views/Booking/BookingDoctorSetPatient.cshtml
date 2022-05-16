@@ -1,9 +1,19 @@
-﻿
+﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.Catalog.Schedule
+@using DoctorManagement.ViewModels.System.Doctors
+@using DoctorManagement.ViewModels.System.Patient
+@model DoctorManagement.ViewModels.Catalog.Appointment.AppointmentCreateRequest
 @{
     ViewData["Title"] = "AppointmentDoctorSetPatient";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
+    DoctorVm doctor = (DoctorVm)ViewBag.Doctor;
+    List<PatientVm> patient = (List<PatientVm>)ViewBag.Patient;
+    List<DoctorScheduleClientsVm> schedules = (List<DoctorScheduleClientsVm>)ViewBag.GetScheduleDoctor;
+    var i = 0;
+    var schedulesSlotId = Model.SchedulesSlotId;
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @section Stylesheet{
     <style>
         .root-layout[_ngcontent-serverApp-c55] {
@@ -474,6 +484,12 @@
             transform: translate(-50%, -50%)
         }
     </style>
+    <style>
+        .hiden{
+            visibility: hidden; height: 0px;width:0px; 
+        }
+        .hiden-btn{display:none;}
+    </style>
 }
 <app-step-booking-doctor _nghost-serverapp-c261="" class="ng-star-inserted">
                 <app-static-steps _ngcontent-serverapp-c261="" _nghost-serverapp-c260="">
@@ -483,35 +499,29 @@
                                 _nghost-serverapp-c131="">
                                 <div _ngcontent-serverapp-c131=""
                                     class="px-10 py-6 flex flex-row gap-4 ng-star-inserted">
-                                    <div _ngcontent-serverapp-c131=""
-                                        class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted"><img
+                                    <div _ngcontent-serverapp-c131="" id="showcheckday"
+                                        class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted">
+                                        <img
                                             _ngcontent-serverapp-c131=""
                                             src="~/img/booking/svg/checked-bg-blue.svg" alt=""
-                                            class="w-6 h-6 ng-star-inserted">
-                                        <!---->
-                                        <!---->
+                                            class="w-6 h-6 ng-star-inserted checkday @(schedulesSlotId != new Guid()? "": "hiden")">
+                                        <div _ngcontent-serverapp-c173="" class="w-6 h-6 bg-green-500 text-white text-center rounded ng-star-inserted checknumber @(schedulesSlotId != new Guid()? "hiden": "")">1 </div>
                                         <div _ngcontent-serverapp-c131=""
                                             class="font-normal text-sm text-gray-800 leading-17">Thời gian khám </div>
                                         <img _ngcontent-serverapp-c131="" src="~/img/booking/svg/border.svg"
-                                            class="w-6 h-6 ng-star-inserted">
-                                        <!---->
+                                            class="w-6 h-6 ng-star-inserted checkday @(schedulesSlotId != new Guid()? "": "hiden")">
                                     </div>
-                                    <!---->
-                                    <div _ngcontent-serverapp-c131=""
+                                    
+                                    <div _ngcontent-serverapp-c131="" id="showcheckprofile" @(schedulesSlotId != new Guid()? "hiden": "")
                                         class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted">
-                                        <!---->
+                                        
                                         <div _ngcontent-serverapp-c131=""
                                             class="w-6 h-6 bg-green-500 text-white text-center rounded ng-star-inserted">
                                             2 </div>
-                                        <!---->
                                         <div _ngcontent-serverapp-c131=""
                                             class="font-normal text-sm text-gray-800 leading-17">Bệnh nhân </div>
-                                        <!---->
                                     </div>
-                                    <!---->
-                                    <!---->
                                 </div>
-                                <!---->
                             </app-booking-step-bar>
                             <div _ngcontent-serverapp-c260="" class="grid grid-cols-12 gap-4">
                                 <div _ngcontent-serverapp-c260=""
@@ -520,26 +530,19 @@
                                             _ngcontent-serverapp-c260="" width="16" height="16"
                                             src="~/img/booking/svg/boldWarning2.svg"
                                             class="w-4 h-4 leading-5 object-cover mr-1">
-                                        <!---->
                                     </div>
                                     <nz-steps _ngcontent-serverapp-c260="" nzsize="small" nzdirection="vertical">
                                         <div class="ant-steps ant-steps-vertical ant-steps-small">
                                             <nz-step _ngcontent-serverapp-c260=""
                                                 class="ant-steps-item ant-steps-item-process ng-star-inserted">
-                                                <div class="ant-steps-item-container" tabindex="0" role="button">
+                                                <div class="ant-steps-item-container" tabindex="0" role="button" id="chose-slot">
                                                     <div class="ant-steps-item-tail ng-star-inserted"></div>
-                                                    <!---->
+                                                    
                                                     <div class="ant-steps-item-icon">
-                                                        <!---->
-                                                        <!---->
-                                                        <!----><span class="ant-steps-icon ng-star-inserted"> 1 </span>
-                                                        <!---->
-                                                        <!---->
-                                                        <!---->
-                                                        <!---->
+                                                        <span class="ant-steps-icon ng-star-inserted"> 1 </span>
                                                     </div>
                                                     <div class="ant-steps-item-content">
-                                                        <div class="ant-steps-item-title"><a asp-controller="Booking" asp-action="BookingDoctorSetDate"
+                                                        <div class="ant-steps-item-title"><a onclick="showSlot()"
                                                                 _ngcontent-serverapp-c260=""
                                                                 class="step-button ng-star-inserted">
                                                                 <p _ngcontent-serverapp-c260=""
@@ -549,33 +552,203 @@
                                                                     src="~/img/booking/svg/arrow-down.svg"
                                                                     alt="arrow-down" title="Xem thêm thông tin">
                                                             </a>
-                                                            <!---->
-                                                            <!---->
                                                         </div>
-                                                        <div class="ant-steps-item-description">
-                                                            <!---->
-                                                            <!---->
+                                                        <div class="ant-steps-item-description @(schedulesSlotId != new Guid()? "hiden": "")" >
+                                                            <app-booking-doctor-working-date-and-slots
+                                                                _ngcontent-serverapp-c187="" _nghost-serverapp-c171=""
+                                                                class="ng-star-inserted">
+                                                                <div _ngcontent-serverapp-c171=""
+                                                                    class="px-4 overflow-hidden ng-star-inserted">
+                                                                    <nz-tabset _ngcontent-serverapp-c171=""
+                                                                        nzcentered=""
+                                                                        class="ant-tabs ant-tabs-centered ant-tabs-top ant-tabs-default ng-star-inserted">
+                                                                        <nz-tabs-nav role="tablist"
+                                                                            class="ant-tabs-nav ng-star-inserted">
+                                                                            <div
+                                                                                class="ant-tabs-nav-wrap ant-tabs-nav-wrap-ping-right">
+                                                                                <div nztabscrolllist=""
+                                                                                    class="ant-tabs-nav-list"
+                                                                                    style="transform: translate(0px, 0px);">
+                                                                                     @foreach(var item_sche in schedules){
+                                                                                        <div
+                                                                                            class="ant-tabs-tab @(i==1?"ant-tabs-tab-active":"") ng-star-inserted">
+                                                                                            <div role="tab" nztabnavitem=""
+                                                                                                cdkmonitorelementfocus=""
+                                                                                                class="ant-tabs-tab-btn"
+                                                                                                tabindex="@(i==1?"0":"-1")"
+                                                                                                aria-disabled="false"
+                                                                                                aria-selected="true"
+                                                                                                aria-controls="nz-tabs-0-tab-@i">
+                                                                                                <div _ngcontent-serverapp-c171=""
+                                                                                                    class="text-center ng-star-inserted">
+                                                                                                    <p _ngcontent-serverapp-c171=""
+                                                                                                        class="font-medium text-sm">
+                                                                                                        @(item_sche.DateTime.ToString("dddd")=="Monday"?"Thứ 2":
+                                                                                                        item_sche.DateTime.ToString("dddd")=="Tuesday"?"Thứ 3":
+                                                                                                        item_sche.DateTime.ToString("dddd")=="Wednesday"?"Thứ 4":
+                                                                                                        item_sche.DateTime.ToString("dddd")=="Thursday"?"Thứ 5":
+                                                                                                        item_sche.DateTime.ToString("dddd")=="Friday"?"Thứ 6":
+                                                                                                        item_sche.DateTime.ToString("dddd")=="Saturday"?"Thứ 7":"Chủ nhật"),
+                                                                                                        @(" "+item_sche.DateTime.ToString("dd/MM"))
+                                                                                                    </p>
+                                                                                                    <span
+                                                                                                        _ngcontent-serverapp-c171=""
+                                                                                                        class="text-green-500 text-xs">
+                                                                                                        @item_sche.AvailableQty khung giờ </span>
+                                                                                                </div>
+                                                                                            
+                                                                                            
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        i++;
+                                                                                     }
+                                                                                    
+                                                                                    
+                                                                                    <div nz-tabs-ink-bar=""
+                                                                                        class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
+                                                                                        style="left: 0px; width: 90px;">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <nz-tab-nav-operation
+                                                                                class="ant-tabs-nav-operations"><button
+                                                                                    nz-dropdown="" type="button"
+                                                                                    tabindex="-1" aria-hidden="true"
+                                                                                    nzoverlayclassname="nz-tabs-dropdown"
+                                                                                    class="ant-dropdown-trigger ant-tabs-nav-more"><i
+                                                                                        nz-icon="" nztype="ellipsis"
+                                                                                        class="anticon anticon-ellipsis"><svg
+                                                                                            viewBox="64 64 896 896"
+                                                                                            focusable="false"
+                                                                                            fill="currentColor"
+                                                                                            width="1em" height="1em"
+                                                                                            data-icon="ellipsis"
+                                                                                            aria-hidden="true">
+                                                                                            <path
+                                                                                                d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z">
+                                                                                            </path>
+                                                                                        </svg></i></button>
+                                                                                
+                                                                                
+                                                                                
+                                                                            </nz-tab-nav-operation>
+                                                                            <div
+                                                                                class="ant-tabs-extra-content ng-star-inserted">
+                                                                                <button _ngcontent-serverapp-c171=""
+                                                                                    class="bg-white shadow-md rounded-full p-2 text-gray-500 ring-1 ring-stone-100 mr-1 ng-star-inserted"><svg
+                                                                                        _ngcontent-serverApp-c171=""
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        width="20" height="20"
+                                                                                        viewBox="0 0 512 512"
+                                                                                        class="ionicon">
+                                                                                        <path
+                                                                                            _ngcontent-serverApp-c171=""
+                                                                                            fill="none"
+                                                                                            stroke="currentColor"
+                                                                                            stroke-linecap="round"
+                                                                                            stroke-linejoin="round"
+                                                                                            stroke-width="48"
+                                                                                            d="M184 112l144 144-144 144">
+                                                                                        </path>
+                                                                                    </svg></button>
+                                                                                
+                                                                            </div>
+                                                                            
+                                                                        </nz-tabs-nav>
+                                                                        
+                                                                        <div class="ant-tabs-content-holder">
+                                                                            <div class="ant-tabs-content ant-tabs-content-top ant-tabs-content-animated"
+                                                                                style="margin-left: 0%;">
+                                                                                @{
+                                                                                    i = 1;
+                                                                                    var text = "";
+                                                                                    var img = "";
+                                                                                    var fromtime = 0;
+                                                                                    var totime = 0;
+                                                                                    var j = 0;
+                                                                                }
+                                                                                @foreach(var item_sche in schedules){
+                                                                                    <div nz-tab-body="" class="ant-tabs-tabpane @(i==1?"ant-tabs-tabpane-active ":"hiden")  ng-star-inserted" tabindex=" @(i==1?"0":"-1")" aria-hidden="@(i==1?"false":"true")">
+                                                                                    
+                                                                                        <div _ngcontent-serverapp-c171=""
+                                                                                            class="ng-star-inserted">
+                                                                                            @for(var d = 1; d <= item_sche.CountTimeSpan;d++){
+                                                                                                totime = item_sche.ScheduleSlots.FirstOrDefault(x => x.Type == d).ToTime.Hours;
+                                                                                                if( totime  < 12) {
+                                                                                                    text ="Buổi sáng";
+                                                                                                    img = "sun.svg";
+                                                                                                }
+                                                                                                else if( totime  < 18)
+                                                                                                {
+                                                                                                    text ="Buổi chiều";
+                                                                                                    img = "sun-fog.svg";
+                                                                                                }else if( totime  <= 23)
+                                                                                                {
+                                                                                                    text ="Buổi tối";
+                                                                                                    img = "sun-fog.svg";
+                                                                                                }else 
+                                                                                                {
+                                                                                                    text ="Cả ngày";
+                                                                                                    img = "sun.svg";
+                                                                                                }
+                                                                                                <div _ngcontent-serverapp-c171=""
+                                                                                                    class="ng-star-inserted" >
+                                                                                                    <div _ngcontent-serverapp-c171=""
+                                                                                                        class="mb-2 ng-star-inserted">
+                                                                                                        <div _ngcontent-serverapp-c171=""
+                                                                                                            class="flex">
+                                                                                                            <img
+                                                                                                                _ngcontent-serverapp-c171=""
+                                                                                                                width="20"
+                                                                                                                height="20"
+                                                                                                                loading="lazy"
+                                                                                                                src="~/img/booking/svg/@img"
+                                                                                                                alt="Buổi sáng">
+                                                                                                            <p _ngcontent-serverapp-c171=""
+                                                                                                                class="ml-1 text-sm font-medium text-gray-600">
+                                                                                                                @text</p>
+                                                                                                        </div>
+                                                                                                        <div _ngcontent-serverapp-c171=""
+                                                                                                            class="flex flex-wrap gap-2 py-3 max-h-52 ">
+                                                                                                            
+                                                                                                            @foreach(var slot in item_sche.ScheduleSlots){
+                                                                                                                if(slot.Type == d){
+                                                                                                                    <a _ngcontent-serverapp-c171=""
+                                                                                                                        onclick="choseSlot(@j)" id="slot_@j" data-id="@slot.Id" data-value-day="@item_sche.DateTime.ToShortDateString()" data-value-time="@(slot.FromTime.ToString().Substring(0,5)+"-"+@slot.ToTime.ToString().Substring(0,5))"
+                                                                                                                        class="text-center font-medium border rounded-md px-2 py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">
+                                                                                                                         @(slot.FromTime.ToString().Substring(0,5)+"-"+@slot.ToTime.ToString().Substring(0,5))
+                                                                                                                    </a>
+                                                                                                                    j++;
+                                                                                                                }
+                                                                                                            }
+                                                                                                           
+                                                                                                            
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            }
+                                                                                            
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    i++;
+                                                                                }
+                                                                               
+                                                                            </div>
+                                                                        </div>
+                                                                    </nz-tabset>
+                                                                </div>
+                                                                
+                                                            </app-booking-doctor-working-date-and-slots>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
                                             </nz-step>
-                                            <!---->
-                                            <!---->
-                                            <!---->
-                                            <!---->
-                                            <!---->
                                             <nz-step _ngcontent-serverapp-c260=""
                                                 class="ant-steps-item ant-steps-item-wait ant-steps-item-active ng-star-inserted">
-                                                <div class="ant-steps-item-container" tabindex="0" role="button">
-                                                    <!---->
+                                                <div class="ant-steps-item-container @(schedulesSlotId != new Guid()? "": "hiden")" tabindex="0" role="button" id="chose-profile">
                                                     <div class="ant-steps-item-icon">
-                                                        <!---->
-                                                        <!---->
-                                                        <!----><span class="ant-steps-icon ng-star-inserted"> 2 </span>
-                                                        <!---->
-                                                        <!---->
-                                                        <!---->
-                                                        <!---->
+                                                        <span class="ant-steps-icon ng-star-inserted"> 2 </span>
                                                     </div>
                                                     <div class="ant-steps-item-content">
                                                         <div class="ant-steps-item-title"><button
@@ -588,8 +761,6 @@
                                                                     src="~/img/booking/svg/arrow-down.svg"
                                                                     alt="arrow-down" title="Xem thêm thông tin">
                                                             </button>
-                                                            <!---->
-                                                            <!---->
                                                         </div>
                                                         <div class="ant-steps-item-description">
                                                             <div _ngcontent-serverapp-c260=""
@@ -602,7 +773,7 @@
                                                                             _nghost-serverapp-c173="">
                                                                             <div _ngcontent-serverapp-c173=""
                                                                                 class="border-t border-t-gray-100 mt-3 py-4 space-y-4 ng-star-inserted">
-                                                                                <!---->
+                                                                                
                                                                                 <div _ngcontent-serverapp-c173=""
                                                                                     hidden="">
                                                                                     <form _ngcontent-serverapp-c173=""
@@ -624,8 +795,8 @@
                                                                                     sơ bạn muốn đặt khám</div>
                                                                                 <nz-spin _ngcontent-serverapp-c173=""
                                                                                     class="ant-spin-nested-loading">
-                                                                                    <!---->
-                                                                                    <!---->
+                                                                                    
+                                                                                    
                                                                                     <div
                                                                                         class="ant-spin-container ng-star-inserted">
                                                                                         <div _ngcontent-serverapp-c173=""
@@ -637,167 +808,166 @@
                                                                                                 _ngcontent-serverapp-c173=""
                                                                                                 _nghost-serverapp-c172=""
                                                                                                 class="ng-star-inserted">
-                                                                                                <div _ngcontent-serverapp-c172=""
-                                                                                                    class="cursor-pointer border-gray-300 rounded-lg flex flex-col ng-star-inserted">
-                                                                                                    <div _ngcontent-serverapp-c172=""
-                                                                                                        class="item flex flex-row justify-between items-center p-2">
+                                                                                                @{i=0;}
+                                                                                                @foreach(var profile in patient){
+
+                                                                                                    <div _ngcontent-serverapp-c172="" onclick="choserprofile(@i)" id="patient_@i" data-id="@profile.Id" data-value-patient="@profile.Name"
+                                                                                                        class="cursor-pointer border-gray-300 rounded-lg flex flex-col ng-star-inserted">
                                                                                                         <div _ngcontent-serverapp-c172=""
-                                                                                                            class="flex row gap-1">
+                                                                                                            class="item flex flex-row justify-between items-center p-2">
                                                                                                             <div _ngcontent-serverapp-c172=""
-                                                                                                                class="relative p-1">
-                                                                                                                <img _ngcontent-serverapp-c172=""
-                                                                                                                    src="~/img/booking/svg/Family-Block.svg"
-                                                                                                                    alt="Folder avatar"
-                                                                                                                    class="w-[60px] h-[60px] ng-star-inserted">
-                                                                                                                <!---->
-                                                                                                                <!---->
+                                                                                                                class="flex row gap-1">
                                                                                                                 <div _ngcontent-serverapp-c172=""
-                                                                                                                    class="absolute top-0 right-0 font-normal rounded-lg text-[11px] text-white leading-15 bg-gray-400 px-1">
-                                                                                                                    Tôi
+                                                                                                                    class="relative p-1">
+                                                                                                                    <img _ngcontent-serverapp-c172=""
+                                                                                                                        src="~/img/booking/svg/Family-Block.svg"
+                                                                                                                        alt="Folder avatar"
+                                                                                                                        class="w-[60px] h-[60px] ng-star-inserted">
+                                                                                                                
+                                                                                                                
+                                                                                                                    <div _ngcontent-serverapp-c172=""
+                                                                                                                        class="absolute top-0 right-0 font-normal rounded-lg text-[11px] text-white leading-15 bg-gray-400 px-1">
+                                                                                                                        Tôi
+                                                                                                                    </div>
+                                                                                                                    <img _ngcontent-serverapp-c172=""
+                                                                                                                        src="~/img/booking/avatar_patient_bg.svg"
+                                                                                                                        alt="Background"
+                                                                                                                        class="item-name-bg w-[37px] h-[37px]"><span
+                                                                                                                        _ngcontent-serverapp-c172=""
+                                                                                                                        class="item-name text-base text-white ng-star-inserted">
+                                                                                                                        QU
+                                                                                                                    </span>
+                                                                                                                
                                                                                                                 </div>
-                                                                                                                <img _ngcontent-serverapp-c172=""
-                                                                                                                    src="~/img/booking/avatar_patient_bg.svg"
-                                                                                                                    alt="Background"
-                                                                                                                    class="item-name-bg w-[37px] h-[37px]"><span
-                                                                                                                    _ngcontent-serverapp-c172=""
-                                                                                                                    class="item-name text-base text-white ng-star-inserted">
-                                                                                                                    QU
-                                                                                                                </span>
-                                                                                                                <!---->
-                                                                                                            </div>
-                                                                                                            <div _ngcontent-serverapp-c172=""
-                                                                                                                class="flex flex-col justify-center items-start">
-                                                                                                                <span
-                                                                                                                    _ngcontent-serverapp-c172=""
-                                                                                                                    class="font-medium text-base text-gray-800">
-                                                                                                                    Nguyễn
-                                                                                                                    Đình
-                                                                                                                    Quân
-                                                                                                                </span><span
-                                                                                                                    _ngcontent-serverapp-c172=""
-                                                                                                                    class="font-normal text-sm text-gray-600">
-                                                                                                                    02/10/2000
-                                                                                                                </span>
-                                                                                                            </div>
-                                                                                                        </div><button
-                                                                                                            _ngcontent-serverapp-c172=""
-                                                                                                            class="p-2"><img
+                                                                                                                <div _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex flex-col justify-center items-start">
+                                                                                                                    <span
+                                                                                                                        _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium text-base text-gray-800">
+                                                                                                                        Nguyễn
+                                                                                                                        Đình
+                                                                                                                        Quân
+                                                                                                                    </span><span
+                                                                                                                        _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-normal text-sm text-gray-600">
+                                                                                                                        02/10/2000
+                                                                                                                    </span>
+                                                                                                                </div>
+                                                                                                            </div><button 
                                                                                                                 _ngcontent-serverapp-c172=""
-                                                                                                                src="~/img/booking/svg/arrow-down.svg"
-                                                                                                                title="Xem thêm thông tin"
-                                                                                                                class="cursor-pointer w-4 h-4"></button>
-                                                                                                    </div>
-                                                                                                    <div _ngcontent-serverapp-c172=""
-                                                                                                        class="flex flex-col gap-4 p-4 hidden">
-                                                                                                        <ul _ngcontent-serverapp-c172=""
-                                                                                                            class="divide-y divide-gray-100">
-                                                                                                            <li _ngcontent-serverapp-c172=""
-                                                                                                                class="flex justify-between flex-wrap text-gray-800 py-1 ng-star-inserted">
-                                                                                                                <p
-                                                                                                                    _ngcontent-serverapp-c172="">
-                                                                                                                    Mã
-                                                                                                                    bệnh
-                                                                                                                    nhân
-                                                                                                                </p>
-                                                                                                                <p _ngcontent-serverapp-c172=""
-                                                                                                                    class="font-medium">
-                                                                                                                    YMP22046601
-                                                                                                                </p>
-                                                                                                            </li>
-                                                                                                            <!---->
-                                                                                                            <!---->
-                                                                                                            <li _ngcontent-serverapp-c172=""
-                                                                                                                class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
-                                                                                                                <p
-                                                                                                                    _ngcontent-serverapp-c172="">
-                                                                                                                    Họ
-                                                                                                                    và
-                                                                                                                    tên
-                                                                                                                </p>
-                                                                                                                <p _ngcontent-serverapp-c172=""
-                                                                                                                    class="font-medium">
-                                                                                                                    Nguyễn
-                                                                                                                    Đình
-                                                                                                                    Quân
-                                                                                                                </p>
-                                                                                                            </li>
-                                                                                                            <!---->
-                                                                                                            <li _ngcontent-serverapp-c172=""
-                                                                                                                class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
-                                                                                                                <p
-                                                                                                                    _ngcontent-serverapp-c172="">
-                                                                                                                    Giới
-                                                                                                                    tính
-                                                                                                                </p>
-                                                                                                                <p _ngcontent-serverapp-c172=""
-                                                                                                                    class="font-medium">
-                                                                                                                    Nam
-                                                                                                                </p>
-                                                                                                            </li>
-                                                                                                            <!---->
-                                                                                                            <li _ngcontent-serverapp-c172=""
-                                                                                                                class="flex justify-between flex-wrap text-gray-800 py-2">
-                                                                                                                <p
-                                                                                                                    _ngcontent-serverapp-c172="">
-                                                                                                                    Ngày
-                                                                                                                    sinh
-                                                                                                                </p>
-                                                                                                                <p _ngcontent-serverapp-c172=""
-                                                                                                                    class="font-medium">
-                                                                                                                    02/10/2000
-                                                                                                                </p>
-                                                                                                            </li>
-                                                                                                            <li _ngcontent-serverapp-c172=""
-                                                                                                                class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
-                                                                                                                <p
-                                                                                                                    _ngcontent-serverapp-c172="">
-                                                                                                                    Số
-                                                                                                                    điện
-                                                                                                                    thoại
-                                                                                                                </p>
-                                                                                                                <p _ngcontent-serverapp-c172=""
-                                                                                                                    class="font-medium">
-                                                                                                                    0373951042
-                                                                                                                </p>
-                                                                                                            </li>
-                                                                                                            <!---->
-                                                                                                            <li _ngcontent-serverapp-c172=""
-                                                                                                                class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
-                                                                                                                <p
-                                                                                                                    _ngcontent-serverapp-c172="">
-                                                                                                                    Địa
-                                                                                                                    chỉ
-                                                                                                                </p>
-                                                                                                                <p _ngcontent-serverapp-c172=""
-                                                                                                                    class="font-medium">
-                                                                                                                    30
-                                                                                                                    Tú
-                                                                                                                    Quỳ
-                                                                                                                </p>
-                                                                                                            </li>
-                                                                                                            <!---->
-                                                                                                        </ul>
-                                                                                                        <div _ngcontent-serverapp-c172=""
-                                                                                                            class="flex flex-row gap-4 items-start">
-                                                                                                            <a _ngcontent-serverapp-c172=""
-                                                                                                                class="font-semibold text-sm text-primary leading-17 bg-blue-50 border-inherit shadow-sm rounded px-4 py-3">Điều
-                                                                                                                chỉnh</a>
+                                                                                                                class="p-2"><img onclick="showprofile()"
+                                                                                                                    _ngcontent-serverapp-c172=""
+                                                                                                                    src="~/img/booking/svg/arrow-down.svg"
+                                                                                                                    title="Xem thêm thông tin"
+                                                                                                                    class="cursor-pointer w-4 h-4"></button>
+                                                                                                        </div>
+                                                                                                        <div _ngcontent-serverapp-c172="" id="profile"
+                                                                                                            class="flex flex-col gap-4 p-4 hidden">
+                                                                                                            <ul _ngcontent-serverapp-c172=""
+                                                                                                                class="divide-y divide-gray-100">
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-1 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Mã
+                                                                                                                        bệnh
+                                                                                                                        nhân
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @profile.No
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Họ
+                                                                                                                        và
+                                                                                                                        tên
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @profile.Name
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                            
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Giới
+                                                                                                                        tính
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @(profile.Gender == Gender.Male?"Nam":"Nữ")
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                            
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Ngày
+                                                                                                                        sinh
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @profile.Dob.ToShortDateString()
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Số
+                                                                                                                        điện
+                                                                                                                        thoại
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @profile.RelativePhone
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                            
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Địa
+                                                                                                                        chỉ
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                       @profile.Address
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                            
+                                                                                                            </ul>
+                                                                                                            <div _ngcontent-serverapp-c172=""
+                                                                                                                class="flex flex-row gap-4 items-start">
+                                                                                                                <a _ngcontent-serverapp-c172=""
+                                                                                                                    class="font-semibold text-sm text-primary leading-17 bg-blue-50 border-inherit shadow-sm rounded px-4 py-3">Điều
+                                                                                                                    chỉnh</a>
+                                                                                                            </div>
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                </div>
-                                                                                                <!---->
+                                                                                                    i++;
+                                                                                                }
+                                                                                                
                                                                                             </app-patient-preview>
-                                                                                            <!---->
-                                                                                            <!---->
-                                                                                            <!---->
+                                                                                            
+                                                                                            
+                                                                                            
                                                                                         </div>
-                                                                                        <!---->
-                                                                                        <!---->
+                                                                                        
+                                                                                        
                                                                                     </div>
-                                                                                    <!---->
+                                                                                    
                                                                                 </nz-spin>
                                                                             </div>
-                                                                            <!---->
+                                                                            
                                                                         </app-step-profile>
                                                                         <app-additional-information
                                                                             _ngcontent-serverapp-c254=""
@@ -814,7 +984,7 @@
                                                                                         for="note"
                                                                                         class="font-medium text-sm">Ghi
                                                                                         chú</label>
-                                                                                    <form _ngcontent-serverapp-c253=""
+                                                                                    <form _ngcontent-serverapp-c253="" id="form-booking" asp-action="BookingDoctorSetPatient" method="post"
                                                                                         novalidate=""
                                                                                         class="ng-untouched ng-pristine ng-valid">
                                                                                         <textarea
@@ -824,7 +994,11 @@
                                                                                             nz-input=""
                                                                                             class="rounded mt-1 ant-input ng-untouched ng-pristine ng-valid"
                                                                                             placeholder="Triệu chứng, thuốc đang dùng, tiền sử, ..."
-                                                                                            style="max-height: 120px; min-height: 76px; height: 76px;"></textarea>
+                                                                                            style="max-height: 120px; min-height: 76px; height: 76px;">
+                                                                                        </textarea>
+                                                                                        <input type="hidden" asp-for="SchedulesSlotId" />  
+                                                                                        <input type="hidden" asp-for="PatientId" />  
+                                                                                        <input type="hidden" asp-for="DoctorId" />  
                                                                                     </form>
                                                                                 </div>
                                                                                 <div _ngcontent-serverapp-c253=""
@@ -837,9 +1011,9 @@
                                                                                         nztype="drag"
                                                                                         nzfiletype="image/png,image/jpeg,image/gif,image/bmp"
                                                                                         class="rounded mt-1">
-                                                                                        <!---->
-                                                                                        <!---->
-                                                                                        <!---->
+                                                                                        
+                                                                                        
+                                                                                        
                                                                                         <div
                                                                                             class="ant-upload ant-upload-drag ng-star-inserted">
                                                                                             <div nz-upload-btn=""
@@ -868,22 +1042,15 @@
                                                                                                             tối đa 3MB
                                                                                                         </p>
                                                                                                     </div>
-                                                                                                    <!---->
+                                                                                                    
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                         <nz-upload-list
                                                                                             class="ant-upload-list ng-tns-c119-36 ant-upload-list-text ng-star-inserted"
                                                                                             dir="ltr">
-                                                                                            <!---->
+                                                                                            
                                                                                         </nz-upload-list>
-                                                                                        <!---->
-                                                                                        <!---->
-                                                                                        <!---->
-                                                                                        <!---->
-                                                                                        <!---->
-                                                                                        <!---->
-                                                                                        <!---->
                                                                                     </nz-upload>
                                                                                 </div>
                                                                                 <div _ngcontent-serverapp-c253=""
@@ -894,32 +1061,23 @@
                                                                                         nzpopovertrigger="click"
                                                                                         class="text-sm bg-transparent border border-solid text-primary rounded py-3 px-4">
                                                                                         Thêm hồ sơ mới </a>
-                                                                                    <!----><a
+                                                                                    <a
                                                                                         _ngcontent-serverapp-c253=""
                                                                                         class="text-sm bg-transparent border border-primary text-white bg-primary rounded py-3 px-4 hover:bg-primary/80 hover:text-white"
                                                                                         hidden="">Xác nhận</a>
                                                                                 </div>
                                                                             </div>
-                                                                            <!---->
-                                                                            <!---->
                                                                         </app-additional-information>
-                                                                        <!---->
-                                                                        <!---->
+                                                                        
+                                                                        
                                                                     </div>
-                                                                    <!---->
+                                                                    
                                                                 </app-booking-doctor-patient>
                                                             </div>
-                                                            <!---->
-                                                            <!---->
                                                         </div>
                                                     </div>
                                                 </div>
                                             </nz-step>
-                                            <!---->
-                                            <!---->
-                                            <!---->
-                                            <!---->
-                                            <!---->
                                         </div>
                                     </nz-steps>
                                 </div>
@@ -950,17 +1108,17 @@
                                                                     _ngcontent-serverapp-c257=""
                                                                     defaultimage="~/img/placeholder.webp"
                                                                     class="w-[60px] h-[60px] object-scale-down rounded-full lazyload  ng-lazyloaded"
-                                                                    alt="ThS.BS Lê Anh Tuấn"
-                                                                    src="https://youmed.vn/photos/11a9cb3d-5838-476d-872e-d9a87ea2e257.png">
+                                                                    alt="@(doctor.Prefix+doctor.LastName+" "+doctor.FirstName)"
+                                                                    src="@(Configuration["BaseAddress"] + "/img/" + doctor.Img)">
                                                             </div>
-                                                            <!---->
+                                                            
                                                             <div _ngcontent-serverapp-c257="">
                                                                 <p _ngcontent-serverapp-c257=""
-                                                                    class="font-medium text-base"> ThS.BS Lê Anh Tuấn
+                                                                    class="font-medium text-base"> @(doctor.Prefix+doctor.LastName+" "+doctor.FirstName)
                                                                 </p>
                                                                 <p _ngcontent-serverapp-c257=""
                                                                     class="font-normal text-xs text-gray-500 line-clamp-2">
-                                                                    23 Nguyễn Văn Đậu, P.5, Q. Phú Nhuận, TP.HCM </p>
+                                                                    @doctor.FullAddress </p>
                                                             </div>
                                                         </div>
                                                         <div _ngcontent-serverapp-c257="" class="p-4 lg:px-6 bg-white">
@@ -968,53 +1126,36 @@
                                                                 <div _ngcontent-serverapp-c257=""
                                                                     class="flex flex-row justify-between py-2 text-gray-800 ng-star-inserted">
                                                                     <div _ngcontent-serverapp-c257="">Ngày khám</div>
-                                                                    <div _ngcontent-serverapp-c257=""
-                                                                        class="font-medium"> 20/05/2022 </div>
+                                                                    <div _ngcontent-serverapp-c257="" id="showday"
+                                                                        class="font-medium"> @(ViewBag.Date != null ? ViewBag.Date.ToString("dd/MM/yyyy"):"") </div>
                                                                 </div>
-                                                                <!---->
+                                                                
                                                                 <div _ngcontent-serverapp-c257=""
                                                                     class="flex flex-row justify-between py-2 text-gray-800 ng-star-inserted">
                                                                     <div _ngcontent-serverapp-c257="">Khung giờ</div>
-                                                                    <div _ngcontent-serverapp-c257=""
-                                                                        class="font-medium"> 17:00-17:10 </div>
+                                                                    <div _ngcontent-serverapp-c257="" id="showtime"
+                                                                        class="font-medium"> @ViewBag.TimeSpan </div>
                                                                 </div>
-                                                                <!---->
+                                                                <div _ngcontent-serverapp-c257=""
+                                                                    class="flex flex-row justify-between py-2 text-gray-800 ng-star-inserted">
+                                                                    <div _ngcontent-serverapp-c257="">Bệnh nhân</div>
+                                                                    <div _ngcontent-serverapp-c257="" id="showpatient"
+                                                                        class="font-medium"> </div>
+                                                                </div>
                                                             </div>
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
-                                                            <!---->
                                                         </div>
                                                     </div>
                                                     <nz-spin _ngcontent-serverapp-c257=""
                                                         class="ant-spin-nested-loading">
-                                                        <!---->
-                                                        <!---->
                                                         <div class="ant-spin-container ng-star-inserted">
-                                                            <div _ngcontent-serverapp-c257=""
-                                                                class="md:p-4 bg-white ng-star-inserted"><button
-                                                                    _ngcontent-serverapp-c257=""
-                                                                    class="bg-gray-300 text-white font-semibold w-full text-center px-3 py-3 rounded cursor-not-allowed ng-star-inserted">
-                                                                    Xác nhận đặt khám</button>
-                                                                <!---->
-                                                                <!---->
+                                                            <div _ngcontent-serverapp-c257="" class="md:p-4 bg-white ng-star-inserted" id="btn-submit">
+                                                                <button  _ngcontent-serverapp-c257="" class="bg-gray-300 text-white font-semibold w-full text-center px-4 py-4 rounded cursor-not-allowed ng-star-inserted"> Xác nhận đặt khám</button>
+                                                                <button _ngcontent-serverapp-c188="" onclick="submitForm()" class="w-full button font-semibold text-sm text-white px-4 py-4 bg-primary ng-star-inserted hiden-btn"> Đặt lịch</button>
                                                             </div>
-                                                            <!---->
-                                                        </div>
-                                                        <!---->
                                                     </nz-spin>
                                                 </app-booking-flow-info>
-                                                <!---->
-                                                <!---->
-                                                <!---->
-                                                <!---->
                                             </app-side-bar-booking>
                                         </div>
-                                        <!---->
                                         <div _ngcontent-serverapp-c260="" class="mt-2">
                                             <p _ngcontent-serverapp-c260="" class="font-normal text-xs text-gray-600">
                                                 Bằng cách nhấn nút xác nhận, bạn đã đồng ý với <a
@@ -1069,3 +1210,57 @@
                     </section>
                 </app-static-steps>
 </app-step-booking-doctor>
+@section JavaScript{
+    <script>
+        var $showSlot = $('#chose-slot .ant-steps-item-description');
+        var $chosesprofile = $('#chose-profile .ant-steps-item-description');
+        function showSlot(){
+            $showSlot.removeClass('hiden');
+            $('#chose-profile').addClass('hiden');
+            $('#showcheckday .checkday').addClass('hiden');
+            $('#showcheckday .checknumber').removeClass('hiden');
+            $('#showcheckprofile').addClass('hiden');
+            $('#btn-submit .button').addClass('hiden-btn');
+            $('#btn-submit .rounded').removeClass('hiden-btn');
+           
+        }
+        function choseSlot(id){
+            $('#chose-profile').removeClass('hiden');
+            var slotId = $("#slot_"+id).attr("data-id");
+            $("#SchedulesSlotId").val(slotId);
+            var showday = $("#slot_"+id).attr("data-value-day");
+            $("#showday").html(showday);
+            var showtime = $("#slot_"+id).attr("data-value-time");
+            $("#showtime").html(showtime);
+            $showSlot.addClass('hiden');
+            $('#showcheckday .checkday').removeClass('hiden');
+            $('#showcheckday .checknumber').addClass('hiden');
+            $('#showcheckprofile').removeClass('hiden');
+            var checkbtn = $('#PatientId').val();
+            if(checkbtn!="00000000-0000-0000-0000-000000000000") {
+                $('#btn-submit .button').removeClass('hiden-btn');
+                $('#btn-submit .rounded').addClass('hiden-btn');
+            }
+        }
+        function showprofile(){
+            $('#profile').toggleClass('hidden');
+            //$showSlot.addClass('hiden');
+        }
+        function choserprofile(id){
+            var patientId = $("#patient_"+id).attr("data-id");
+            $("#PatientId").val(patientId);
+            $('#patient_'+id).addClass('active')
+            var showpatient = $("#patient_"+id).attr("data-value-patient");
+            $("#showpatient").html(showpatient);
+            $('#btn-submit .button').removeClass('hiden-btn');
+            $('#btn-submit .rounded').addClass('hiden-btn');
+        }
+        function ConfirmDelete(){
+             
+            $("#hiddenEmployeeId").val(SpecialityId);
+        }
+        function submitForm(){
+            document.getElementById('form-booking').submit();
+        }
+    </script>
+}

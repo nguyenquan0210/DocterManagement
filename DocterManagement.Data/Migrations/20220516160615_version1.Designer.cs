@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoctorManagement.Data.Migrations
 {
     [DbContext(typeof(DoctorManageDbContext))]
-    [Migration("20220505083415_version1")]
+    [Migration("20220516160615_version1")]
     partial class version1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,7 +92,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "bfb5731e-e84b-46e9-a8ac-c5cdc9a5ad5e",
+                            ConcurrencyStamp = "5b51a496-f889-4b1e-816c-c5c6b1568fd0",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -100,7 +100,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"),
-                            ConcurrencyStamp = "71f37d8d-a634-4eb0-81d1-915a0fe1f831",
+                            ConcurrencyStamp = "a931f7cf-79f9-4f0a-816e-905dad7bea2e",
                             Description = "doctor role",
                             Name = "doctor",
                             NormalizedName = "doctor"
@@ -108,7 +108,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("50fe257e-6475-41f0-93f7-f530d622362b"),
-                            ConcurrencyStamp = "25784d7a-8494-461c-888c-5edcd76b57f9",
+                            ConcurrencyStamp = "79d7d023-7237-49df-be70-d3792f9eac84",
                             Description = "patient role",
                             Name = "patient",
                             NormalizedName = "patient"
@@ -189,14 +189,14 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5d99d9f8-f318-4c26-ac5f-5c17e33be080",
+                            ConcurrencyStamp = "760245f7-5511-443b-843c-e7dcf1748994",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nguyenquan52000@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyenquan52000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAQxz6PTozGIyRFADRHU/r6rEdwl0vYo+lKT8l4nm5LwM7II7vqAlDvpO4LuK9/ukQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMiPZINowLixsD0QkuczJPscTqde3qhNdHeGuwpE21zH5sraYDFcr9iD0EaIyhGWtw==",
                             PhoneNumber = "0373951042",
                             PhoneNumberConfirmed = false,
                             RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
@@ -336,8 +336,14 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Experiences")
+                        .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
@@ -356,15 +362,17 @@ namespace DoctorManagement.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MapUrl")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("No")
                         .IsRequired()
@@ -392,6 +400,10 @@ namespace DoctorManagement.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TimeWorking")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("View")
                         .HasColumnType("int");
@@ -581,7 +593,8 @@ namespace DoctorManagement.Data.Migrations
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Patients", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("PatientId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
@@ -622,9 +635,6 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<Guid>("Patient")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("RelativeName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -638,11 +648,16 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<Guid>("RelativeRelationshipId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PatientId");
 
                     b.HasIndex("EthnicId");
 
                     b.HasIndex("LocationId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Patients", (string)null);
                 });
@@ -722,6 +737,12 @@ namespace DoctorManagement.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AvailableQty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BookedQty")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("datetime2");
 
@@ -734,10 +755,10 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<TimeSpan>("FromTime")
                         .HasColumnType("time");
 
-                    b.Property<int>("Qty")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("Qty")
                         .HasColumnType("int");
 
                     b.Property<TimeSpan>("ToTime")
@@ -759,11 +780,14 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<TimeSpan>("FromTime")
                         .HasColumnType("time");
 
+                    b.Property<bool>("IsBooked")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("ScheduleId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<TimeSpan>("ToTime")
                         .HasColumnType("time");
@@ -808,13 +832,16 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Img")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("No")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -829,8 +856,9 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("8d04dce4-969a-435d-bba4-df3f325983dc"),
                             Description = "Điều trị các bệnh về tiêu hoá",
+                            IsDeleted = false,
+                            No = "SP-22-001",
                             SortOrder = 1,
-                            Status = 0,
                             Title = "Tiêu hóa"
                         });
                 });

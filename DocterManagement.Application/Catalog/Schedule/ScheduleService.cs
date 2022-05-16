@@ -3,7 +3,7 @@ using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Schedule;
-using DoctorManagement.ViewModels.Catalog.ScheduleDetailt;
+using DoctorManagement.ViewModels.Catalog.SlotSchedule;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -128,6 +128,54 @@ namespace DoctorManagement.Application.Catalog.Schedule
             }).ToListAsync();
             return new ApiSuccessResult<List<ScheduleVm>>(rs);
         }
+        public async Task<ApiResult<List<DoctorScheduleClientsVm>>> GetScheduleDoctor(Guid DoctorId)
+        {
+            var query = await _context.Schedules.Where(x=>x.DoctorId == DoctorId && x.CheckInDate >= DateTime.Now && x.IsDeleted == false).ToListAsync();
+            var schedules = from sche in _context.Schedules
+                            where sche.DoctorId == DoctorId && sche.CheckInDate >= DateTime.Now && sche.IsDeleted == false
+                            select sche;
+
+            var scheduleClients = new List<DoctorScheduleClientsVm>();
+            string d = "";
+            var i = 1;
+            
+            foreach (var item in query)
+            {
+                var s = new DoctorScheduleClientsVm();
+                s.ScheduleSlots = new List<ScheduleSlotsVm>();
+                i = 1;
+                foreach (var schedule in schedules.ToList())
+                {
+                    if (schedule.CheckInDate.ToShortDateString() == item.CheckInDate.ToShortDateString())
+                    {
+                        var slot = _context.schedulesSlots.Where(x => x.ScheduleId == schedule.Id && x.IsBooked==false && x.IsDeleted==false).ToList();
+                        var slotadd = slot.Select(x => new ScheduleSlotsVm()
+                        {
+                            Id = x.Id,
+                            FromTime = x.FromTime,
+                            ToTime = x.ToTime,
+                            Type = i,
+                        }).ToList();
+                        s.ScheduleSlots.AddRange(slotadd);
+                        i++;
+                    }
+                }
+                s.CountTimeSpan = i - 1;
+                if (!d.Contains(item.CheckInDate.ToShortDateString()))
+                {
+
+                    s.DoctorId = item.DoctorId;
+                    s.AvailableQty = s.ScheduleSlots.Count;
+                    s.DateTime = item.CheckInDate;
+                    s.Id = item.Id;
+                    scheduleClients.Add(s);
+                }
+                
+                d = d + ", " + item.CheckInDate.ToShortDateString();
+                
+            }
+            return new ApiSuccessResult<List<DoctorScheduleClientsVm>>(scheduleClients);
+        }
 
         public async Task<ApiResult<PagedResult<ScheduleVm>>> GetAllPaging(GetSchedulePagingRequest request)
         {
@@ -152,7 +200,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
                     DoctorId = x.DoctorId,
                     AvailableQty = x.AvailableQty,
                     BookedQty = x.BookedQty,
-                    ScheduleDetailts = x.schedulesSlots.Select(s => new ScheduleDetailtVm()
+                    ScheduleDetailts = x.schedulesSlots.Select(s => new SlotScheduleVm()
                     {
                         Id = s.Id,
                         FromTime = s.FromTime,
@@ -189,7 +237,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
                 IsDeleted = schedule.IsDeleted,
                 BookedQty= schedule.BookedQty,
                 AvailableQty= schedule.AvailableQty,
-                ScheduleDetailts = scheduledetailts.Select(x=> new ScheduleDetailtVm()
+                ScheduleDetailts = scheduledetailts.Select(x=> new SlotScheduleVm()
                 {
                     Id = x.Id,
                     FromTime = x.FromTime,

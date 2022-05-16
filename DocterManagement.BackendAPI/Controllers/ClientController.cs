@@ -40,5 +40,15 @@ namespace DoctorManagement.BackendAPI.Controllers
             var user = await _doctorService.GetById(Id);
             return Ok(user);
         }
+        /// <summary>
+        /// Lấy danh sách phân trang tài khoản
+        /// </summary>
+        /// 
+        [HttpGet("get-patient-profile/{userName}")]
+        public async Task<ActionResult<ApiResult<List<DoctorVm>>>> GetPatientProfile(string userName)
+        {
+            var user = await _doctorService.GetPatientProfile(userName);
+            return Ok(user);
+        }
     }
 }

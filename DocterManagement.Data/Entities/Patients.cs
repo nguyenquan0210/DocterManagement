@@ -9,7 +9,7 @@ namespace DoctorManagement.Data.Entities
 {
     public class Patients
     {
-        public Guid Patient { get; set; }
+        public Guid PatientId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string Img { get; set; }

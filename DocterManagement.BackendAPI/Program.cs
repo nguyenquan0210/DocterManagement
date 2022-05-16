@@ -19,7 +19,6 @@ using DoctorManagement.Application.Catalog.MedicalRecords;
 using DoctorManagement.Application.Catalog.Post;
 using DoctorManagement.Application.Catalog.Rate;
 using DoctorManagement.Application.Catalog.Schedule;
-using DoctorManagement.Application.Catalog.ScheduleDetailt;
 using DoctorManagement.Application.Catalog.Ward;
 using DoctorManagement.Application.Common;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -29,6 +28,7 @@ using DoctorManagement.ViewModels.System.Models;
 using Users.TwilioClient;
 using Twilio.Clients;
 using DoctorManagement.Application.System.Doctor;
+using DoctorManagement.Application.Catalog.SlotSchedule;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +55,7 @@ builder.Services.AddTransient<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IRateService, RateService>();
 builder.Services.AddTransient<IScheduleService, ScheduleService>();
-builder.Services.AddTransient<ScheduleDetailtService, ScheduleDetailtService>();
+builder.Services.AddTransient<ISlotScheduleService, SlotScheduleService>();
 builder.Services.AddTransient<ILocationService, LocationService>();
 builder.Services.AddTransient<ISpecialityService, SpecialityService>();
 builder.Services.AddTransient<IUserService, UserService>();

@@ -15,7 +15,7 @@ namespace DoctorManagement.Data.Configuration
         {
             builder.ToTable("Patients");
 
-            builder.HasKey(x => x.UserId);
+            builder.HasKey(x => x.PatientId);
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Address).HasMaxLength(150);
             builder.Property(x => x.Img).HasMaxLength(100);

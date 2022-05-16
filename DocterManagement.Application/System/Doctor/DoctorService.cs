@@ -5,6 +5,8 @@ using DoctorManagement.ViewModels.Catalog.Location;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Patient;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -17,17 +19,18 @@ namespace DoctorManagement.Application.System.Doctor
 {
     public class DoctorService : IDoctorService
     {
-        
+        private readonly UserManager<AppUsers> _userManager;
         private readonly DoctorManageDbContext _context;
         private readonly IConfiguration _config;
         private const string GALLERY_CONTENT_FOLDER_NAME = "gallery-content";
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
-        public DoctorService(
+        public DoctorService(UserManager<AppUsers> userManager,
             IConfiguration config,
             DoctorManageDbContext context)
         {
             _config = config;
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<ApiResult<List<DoctorVm>>> GetTopFavouriteDoctors()
@@ -113,6 +116,26 @@ namespace DoctorManagement.Application.System.Doctor
                 Galleries = galleries.Select(x => new GalleryVm() { Id = x.Id, Name = GALLERY_CONTENT_FOLDER_NAME + "/" + x.Img }).ToList(),
             };
             return new ApiSuccessResult<DoctorVm>(doctorVm);
+        }
+
+        public async Task<ApiResult<List<PatientVm>>> GetPatientProfile(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            var query = _context.Patients.Where(x=>x.UserId== user.Id);
+            var patients = await query.Select(x => new PatientVm()
+            {
+                No= x.No,
+                Id = x.PatientId,
+                UserId = x.UserId,
+                Img = x.Img,
+                Name = x.Name,
+                Address = x.Address,
+                RelativePhone = x.RelativePhone,
+                Dob = x.Dob,
+                Gender = x.Gender,
+                EthnicId = x.EthnicId,
+            }).ToListAsync();
+            return new ApiSuccessResult<List<PatientVm>>(patients);
         }
     }
 }

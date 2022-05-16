@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.ViewModels.Catalog.ScheduleDetailt
+namespace DoctorManagement.ViewModels.Catalog.SlotSchedule
 {
-    public class ScheduleDetailtCreateRequest
+    public class SlotScheduleCreateRequest
     {
         public TimeSpan FromTime { get; set; }
         public TimeSpan ToTime { get; set; }

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.ViewModels.Catalog.ScheduleDetailt
+namespace DoctorManagement.ViewModels.Catalog.SlotSchedule
 {
-    public class GetScheduleDetailtPagingRequest : PagingResultBase
+    public class GetSlotSchedulePagingRequest : PagingResultBase
     {
         public string? Keyword { get; set; }
     }

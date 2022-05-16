@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.Catalog.SlotSchedule;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ namespace DoctorManagement.ApiIntegration
         Task<int> Delete(Guid Id);
 
         Task<ApiResult<List<ScheduleVm>>> GetAllSchedule();
+        Task<ApiResult<List<DoctorScheduleClientsVm>>> GetScheduleDoctor(Guid DoctorId);
 
         Task<ApiResult<ScheduleVm>> GetById(Guid Id);
+        Task<ApiResult<SlotScheduleVm>> GetByScheduleSlotId(Guid Id);
     }
 }

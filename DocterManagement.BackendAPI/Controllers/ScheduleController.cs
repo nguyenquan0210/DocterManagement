@@ -8,6 +8,7 @@ namespace DoctorManagement.BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class ScheduleController : ControllerBase
     {
         private readonly IScheduleService _scheduleService;
@@ -97,6 +98,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         public async Task<ActionResult<ApiResult<List<ScheduleVm>>>> GetAll()
         {
             var result = await _scheduleService.GetAll();
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy danh sách lịch khám thuộc bác sĩ
+        /// </summary>
+        /// 
+        [HttpGet("GetScheduleDoctor/{Id}")]
+        public async Task<ActionResult<ApiResult<List<DoctorScheduleClientsVm>>>> GetAll(Guid Id)
+        {
+            var result = await _scheduleService.GetScheduleDoctor(Id);
             return Ok(result);
         }
     }

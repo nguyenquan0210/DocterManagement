@@ -2,7 +2,8 @@
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
-using DoctorManagement.ViewModels.Catalog.ScheduleDetailt;
+using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.Catalog.SlotSchedule;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,17 +12,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.Application.Catalog.ScheduleDetailt
+namespace DoctorManagement.Application.Catalog.SlotSchedule
 {
-    public class ScheduleDetailtService : IScheduleDetailtService
+    public class SlotScheduleService : ISlotScheduleService
     {
         private readonly DoctorManageDbContext _context;
 
-        public ScheduleDetailtService(DoctorManageDbContext context)
+        public SlotScheduleService(DoctorManageDbContext context)
         {
             _context = context;
         }
-        public async Task<ApiResult<bool>> Create(ScheduleDetailtCreateRequest request)
+        public async Task<ApiResult<bool>> Create(SlotScheduleCreateRequest request)
         {
             var schedulesDetails = new SchedulesSlots()
             {
@@ -55,11 +56,11 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
             return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<ApiResult<List<ScheduleDetailtVm>>> GetAll()
+        public async Task<ApiResult<List<SlotScheduleVm>>> GetAll()
         {
             var query = _context.schedulesSlots;
 
-            var rs = await query.Select(x => new ScheduleDetailtVm()
+            var rs = await query.Select(x => new SlotScheduleVm()
             {
                 Id = x.Id,
                 FromTime = x.FromTime,
@@ -68,10 +69,10 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
                 IsDeleted = x.IsDeleted,
                 IsBooked = x.IsBooked,
             }).ToListAsync();
-            return new ApiSuccessResult<List<ScheduleDetailtVm>>(rs);
+            return new ApiSuccessResult<List<SlotScheduleVm>>(rs);
         }
 
-        public async Task<ApiResult<PagedResult<ScheduleDetailtVm>>> GetAllPaging(GetScheduleDetailtPagingRequest request)
+        public async Task<ApiResult<PagedResult<SlotScheduleVm>>> GetAllPaging(GetSlotSchedulePagingRequest request)
         {
             var query = from c in _context.schedulesSlots select c;
             //2. filter
@@ -83,44 +84,51 @@ namespace DoctorManagement.Application.Catalog.ScheduleDetailt
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new ScheduleDetailtVm()
+                .Select(x => new SlotScheduleVm()
                 {
                     Id = x.Id,
                     FromTime = x.FromTime,
                     ToTime = x.ToTime,
                     IsBooked = x.IsBooked,
-                    IsDeleted=x.IsDeleted,
+                    IsDeleted = x.IsDeleted,
                     ScheduleId = x.ScheduleId
 
                 }).ToListAsync();
 
-            var pagedResult = new PagedResult<ScheduleDetailtVm>()
+            var pagedResult = new PagedResult<SlotScheduleVm>()
             {
                 TotalRecords = totalRow,
                 PageSize = request.PageSize,
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return new ApiSuccessResult<PagedResult<ScheduleDetailtVm>>(pagedResult);
+            return new ApiSuccessResult<PagedResult<SlotScheduleVm>>(pagedResult);
         }
 
-        public async Task<ApiResult<ScheduleDetailtVm>> GetById(Guid Id)
+        public async Task<ApiResult<SlotScheduleVm>> GetById(Guid Id)
         {
-            var schedules = await _context.schedulesSlots.FindAsync(Id);
-            if (schedules == null) throw new DoctorManageException($"Cannot find a Schedule with id: { Id}");
-            var rs = new ScheduleDetailtVm()
+            var schedulesSlot = await _context.schedulesSlots.FindAsync(Id);
+            if (schedulesSlot == null) return new ApiErrorResult<SlotScheduleVm>("lịch khám không tồn tại");
+            var schedules = await _context.Schedules.FindAsync(schedulesSlot.ScheduleId);
+
+            var rs = new SlotScheduleVm()
             {
-                Id = schedules.Id,
-                FromTime = schedules.FromTime,
-                ToTime = schedules.ToTime,
-                ScheduleId = schedules.ScheduleId,
-                IsDeleted = schedules.IsDeleted,
-                IsBooked= schedules.IsBooked,
+                Id = schedulesSlot.Id,
+                FromTime = schedulesSlot.FromTime,
+                ToTime = schedulesSlot.ToTime,
+                ScheduleId = schedulesSlot.ScheduleId,
+                IsDeleted = schedulesSlot.IsDeleted,
+                IsBooked = schedulesSlot.IsBooked,
+                Schedule = new ScheduleVm()
+                {
+                    Id = schedules.Id,
+                    CheckInDate = schedules.CheckInDate
+                }
             };
-            return new ApiSuccessResult<ScheduleDetailtVm>(rs);
+            return new ApiSuccessResult<SlotScheduleVm>(rs);
         }
 
-        public async Task<ApiResult<bool>> Update(ScheduleDetailtUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(SlotScheduleUpdateRequest request)
         {
             var schedulesDetails = await _context.schedulesSlots.FindAsync(request.Id);
             if (schedulesDetails == null) return new ApiSuccessResult<bool>(false);
