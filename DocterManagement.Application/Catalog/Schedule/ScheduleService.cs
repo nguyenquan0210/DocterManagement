@@ -130,9 +130,10 @@ namespace DoctorManagement.Application.Catalog.Schedule
         }
         public async Task<ApiResult<List<DoctorScheduleClientsVm>>> GetScheduleDoctor(Guid DoctorId)
         {
-            var query = await _context.Schedules.Where(x=>x.DoctorId == DoctorId && x.CheckInDate >= DateTime.Now && x.IsDeleted == false).ToListAsync();
+            var query = await _context.Schedules.Where(x=>x.DoctorId == DoctorId && x.CheckInDate >= DateTime.Now && x.CheckInDate <= DateTime.Now.AddDays(14) && x.IsDeleted == false).OrderBy(x=>x.CheckInDate).ToListAsync();
             var schedules = from sche in _context.Schedules
-                            where sche.DoctorId == DoctorId && sche.CheckInDate >= DateTime.Now && sche.IsDeleted == false
+                            where sche.DoctorId == DoctorId && sche.CheckInDate >= DateTime.Now && sche.CheckInDate <= DateTime.Now.AddDays(14) && sche.IsDeleted == false
+                            orderby sche.CheckInDate
                             select sche;
 
             var scheduleClients = new List<DoctorScheduleClientsVm>();

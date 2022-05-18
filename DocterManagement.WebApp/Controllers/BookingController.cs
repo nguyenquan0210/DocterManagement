@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.ViewModels.Catalog.Appointment;
+using DoctorManagement.ViewModels.Catalog.Schedule;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,8 +15,10 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly ISpecialityApiClient _specialityApiClient;
         private readonly IScheduleApiClient _scheduleApiClient;
         private readonly IAppointmentApiClient _appointmentApiClient;
+        private readonly IClinicApiClient _clinicalApiClient;
         public BookingController(ILogger<HomeController> logger, IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
-            ISpecialityApiClient specialityApiClient, IScheduleApiClient scheduleApiClient, IAppointmentApiClient appointmentApiClient)
+            ISpecialityApiClient specialityApiClient, IScheduleApiClient scheduleApiClient, IAppointmentApiClient appointmentApiClient,
+            IClinicApiClient clinicApiClient)
         {
             _logger = logger;
             _userApiClient = userApiClient;
@@ -23,6 +26,7 @@ namespace DoctorManagement.WebApp.Controllers
             _specialityApiClient = specialityApiClient;
             _scheduleApiClient = scheduleApiClient;
             _appointmentApiClient = appointmentApiClient;
+            _clinicalApiClient = clinicApiClient;
         }
         public IActionResult Index()
         {
@@ -75,9 +79,113 @@ namespace DoctorManagement.WebApp.Controllers
 
             return View(request);
         }
-        public IActionResult BookingClinicSetDoctor()
+        public async Task<IActionResult> BookingClinicSetDoctor(Guid clinicId)
         {
-            return View();
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            var clinic = await _clinicalApiClient.GetById(clinicId);
+            if (!clinic.IsSuccessed)
+            {
+                return RedirectToAction("Clinic", "Home");
+            }
+            return View(clinic.Data);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetDoctorScheduleDate(Guid DoctorId, int intMonth)
+        {
+            if (!string.IsNullOrWhiteSpace(DoctorId.ToString()))
+            {
+                var schedules = (await _scheduleApiClient.GetScheduleDoctor(DoctorId)).Data.ToList();
+                var schedule = new DoctorScheduleClientsVm();
+                var dates = new List<ScheduleDoctorDateVm>();
+                var dateNow = DateTime.Now.AddMonths(intMonth);
+                var day1 = DateTime.Parse("01/" + dateNow.ToString("MM/yyyy"));
+                var dateFrom = day1.AddDays(-(day1.ToString("dddd")=="Moday"?0:
+                    day1.ToString("dddd") == "Tuesday" ? 1 : 
+                    day1.ToString("dddd") == "Wednesday" ? 2 :
+                    day1.ToString("dddd") == "Thursday" ? 3 : 
+                    day1.ToString("dddd") == "Friday" ? 4 : 
+                    day1.ToString("dddd") == "Saturday" ? 5 :6));
+                var dateTo = dateFrom;
+                for(var i = 0; i < 42; i++)
+                {
+                    schedule = schedules.FirstOrDefault(x => x.DateTime == dateTo);
+                    if(schedule != null)
+                    {
+                        schedules = schedules.Where(x => x.Id != schedule.Id).ToList();
+                    }
+                    var date = new ScheduleDoctorDateVm()
+                    {
+                        DateTime = dateTo.ToShortDateString(),
+                        day = dateTo.Day,
+                        DateNow = dateTo.ToShortDateString() == dateNow.ToShortDateString() ? true : false,
+                        IsActive = schedule == null ? false : true
+                    };
+                    dateTo = dateTo.AddDays(1);
+                    dates.Add(date);
+                }
+           
+                return Json(dates);
+            }
+            return null;
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetDoctorScheduleTimeSpan(Guid DoctorId, string date)
+        {
+            if (!string.IsNullOrWhiteSpace(DoctorId.ToString())&&!string.IsNullOrWhiteSpace(date))
+            {
+                var datetime = DateTime.Parse(date);
+                var schedule = (await _scheduleApiClient.GetScheduleDoctor(DoctorId)).Data.FirstOrDefault(x=>x.DateTime== datetime);
+                var sections = new List<SectionScheduleDoctorDateVm>();
+                var text = "";
+                var img = "";
+                for (int i = 1; i <= schedule.CountTimeSpan; i++)
+                {
+                    var totime = schedule.ScheduleSlots.FirstOrDefault(x => x.Type == i).ToTime.Hours;
+                    if (totime < 12)
+                    {
+                        text = "Buổi sáng";
+                        img = "sun.svg";
+                    }
+                    else if (totime < 18)
+                    {
+                        text = "Buổi chiều";
+                        img = "sun-fog.svg";
+                    }
+                    else if (totime <= 23)
+                    {
+                        text = "Buổi tối";
+                        img = "sun-fog.svg";
+                    }
+                    else
+                    {
+                        text = "Cả ngày";
+                        img = "sun.svg";
+                    }
+                    var section = new SectionScheduleDoctorDateVm()
+                    {
+                        img = img,
+                        text = text,
+                        type = i
+                    };
+                    section.slot = new List<SlotScheduleDoctorDateVm>();
+                    foreach (var item in schedule.ScheduleSlots)
+                    {
+                        if (item.Type == i)
+                        {
+                            var slot = new SlotScheduleDoctorDateVm()
+                            {
+                                slotId = item.Id,
+                                timeSpan = item.FromTime.ToString().Substring(0, 5) + "-" + item.ToTime.ToString().Substring(0, 5),
+                                type = item.Type,
+                            };
+                            section.slot.Add(slot);
+                        }
+                    }
+                    sections.Add(section);
+                }
+                return Json(sections);
+            }
+            return null;
         }
         public IActionResult BookingClinicSetDate()
         {
@@ -87,9 +195,15 @@ namespace DoctorManagement.WebApp.Controllers
         {
             return View();
         }
-        public IActionResult BookingClinicSetPatient()
+        public async Task<IActionResult> BookingClinicSetPatient(Guid clinicId)
         {
-            return View();
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            var clinic = await _clinicalApiClient.GetById(clinicId);
+            if (!clinic.IsSuccessed)
+            {
+                return RedirectToAction("Clinic", "Home");
+            }
+            return View(clinic.Data);
         }
     }
 }

@@ -12,6 +12,7 @@
     List<DoctorScheduleClientsVm> schedules = (List<DoctorScheduleClientsVm>)ViewBag.GetScheduleDoctor;
     var i = 0;
     var schedulesSlotId = Model.SchedulesSlotId;
+    DateTime checkrequestdate = ViewBag.Date!=null? (DateTime)ViewBag.Date: new DateTime();
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @section Stylesheet{
@@ -489,6 +490,17 @@
             visibility: hidden; height: 0px;width:0px; 
         }
         .hiden-btn{display:none;}
+        .container {
+            overflow-x: hidden;
+            display: flex;
+          }
+          .section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+  
+         
     </style>
 }
 <app-step-booking-doctor _nghost-serverapp-c261="" class="ng-star-inserted">
@@ -502,7 +514,7 @@
                                     <div _ngcontent-serverapp-c131="" id="showcheckday"
                                         class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted">
                                         <img
-                                            _ngcontent-serverapp-c131=""
+                                            _ngcontent-serverapp-c131="" onclick="showSlot()"
                                             src="~/img/booking/svg/checked-bg-blue.svg" alt=""
                                             class="w-6 h-6 ng-star-inserted checkday @(schedulesSlotId != new Guid()? "": "hiden")">
                                         <div _ngcontent-serverapp-c173="" class="w-6 h-6 bg-green-500 text-white text-center rounded ng-star-inserted checknumber @(schedulesSlotId != new Guid()? "hiden": "")">1 </div>
@@ -512,8 +524,8 @@
                                             class="w-6 h-6 ng-star-inserted checkday @(schedulesSlotId != new Guid()? "": "hiden")">
                                     </div>
                                     
-                                    <div _ngcontent-serverapp-c131="" id="showcheckprofile" @(schedulesSlotId != new Guid()? "hiden": "")
-                                        class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted">
+                                    <div _ngcontent-serverapp-c131="" id="showcheckprofile" 
+                                        class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted @(schedulesSlotId == new Guid()? "hiden": "")">
                                         
                                         <div _ngcontent-serverapp-c131=""
                                             class="w-6 h-6 bg-green-500 text-white text-center rounded ng-star-inserted">
@@ -562,17 +574,19 @@
                                                                     <nz-tabset _ngcontent-serverapp-c171=""
                                                                         nzcentered=""
                                                                         class="ant-tabs ant-tabs-centered ant-tabs-top ant-tabs-default ng-star-inserted">
-                                                                        <nz-tabs-nav role="tablist"
-                                                                            class="ant-tabs-nav ng-star-inserted">
+                                                                        <nz-tabs-nav role="tablist" 
+                                                                            class="ant-tabs-nav ng-star-inserted ">
+                                                                       
                                                                             <div
                                                                                 class="ant-tabs-nav-wrap ant-tabs-nav-wrap-ping-right">
                                                                                 <div nztabscrolllist=""
-                                                                                    class="ant-tabs-nav-list"
+                                                                                    class="ant-tabs-nav-list container"
                                                                                     style="transform: translate(0px, 0px);">
+                                                                                    @{i=1; var dd = 1;}
                                                                                      @foreach(var item_sche in schedules){
-                                                                                        <div
-                                                                                            class="ant-tabs-tab @(i==1?"ant-tabs-tab-active":"") ng-star-inserted">
-                                                                                            <div role="tab" nztabnavitem=""
+                                                                                        <div id = "tabday_@i" onclick="tabchoseday(@i)" data-value-date="@item_sche.DateTime.ToShortDateString()"
+                                                                                            class="section ant-tabs-tab @(checkrequestdate == new DateTime() ? (i==1?"ant-tabs-tab-active":""):(item_sche.DateTime.ToShortDateString()==checkrequestdate.ToShortDateString()?"ant-tabs-tab-active":"")) ng-star-inserted check-tabs">
+                                                                                            <div role="tab" nztabnavitem="" 
                                                                                                 cdkmonitorelementfocus=""
                                                                                                 class="ant-tabs-tab-btn"
                                                                                                 tabindex="@(i==1?"0":"-1")"
@@ -588,7 +602,7 @@
                                                                                                         item_sche.DateTime.ToString("dddd")=="Wednesday"?"Thứ 4":
                                                                                                         item_sche.DateTime.ToString("dddd")=="Thursday"?"Thứ 5":
                                                                                                         item_sche.DateTime.ToString("dddd")=="Friday"?"Thứ 6":
-                                                                                                        item_sche.DateTime.ToString("dddd")=="Saturday"?"Thứ 7":"Chủ nhật"),
+                                                                                                        item_sche.DateTime.ToString("dddd")=="Saturday"?"Thứ 7":"CN"),
                                                                                                         @(" "+item_sche.DateTime.ToString("dd/MM"))
                                                                                                     </p>
                                                                                                     <span
@@ -600,14 +614,20 @@
                                                                                             
                                                                                             </div>
                                                                                         </div>
+                                                                                        if(i==1 && checkrequestdate!= new DateTime()){
+                                                                                            dd=1;
+                                                                                        }else if(item_sche.DateTime.ToShortDateString()==checkrequestdate.ToShortDateString()){
+                                                                                             dd=i;
+                                                                                        }
+                                                                                        
                                                                                         i++;
                                                                                      }
+                                                                                     <div nz-tabs-ink-bar=""
+                                                                                           class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
+                                                                                           style="left: @((dd-1)*122)px; width: 90px;">
+                                                                                     </div>
                                                                                     
                                                                                     
-                                                                                    <div nz-tabs-ink-bar=""
-                                                                                        class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
-                                                                                        style="left: 0px; width: 90px;">
-                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                             <nz-tab-nav-operation
@@ -668,7 +688,8 @@
                                                                                     var j = 0;
                                                                                 }
                                                                                 @foreach(var item_sche in schedules){
-                                                                                    <div nz-tab-body="" class="ant-tabs-tabpane @(i==1?"ant-tabs-tabpane-active ":"hiden")  ng-star-inserted" tabindex=" @(i==1?"0":"-1")" aria-hidden="@(i==1?"false":"true")">
+                                                                                    <div nz-tab-body="" id = "choseslotday_@i" 
+                                                                                    class="ant-tabs-tabpane @(checkrequestdate == new DateTime() ? (i==1?"ant-tabs-tabpane-active ":"hiden"):(item_sche.DateTime.ToShortDateString()==checkrequestdate.ToShortDateString()?"ant-tabs-tabpane-active ":"hiden"))  ng-star-inserted check-tab" tabindex=" @(i==1?"0":"-1")" aria-hidden="@(i==1?"false":"true")">
                                                                                     
                                                                                         <div _ngcontent-serverapp-c171=""
                                                                                             class="ng-star-inserted">
@@ -1011,9 +1032,6 @@
                                                                                         nztype="drag"
                                                                                         nzfiletype="image/png,image/jpeg,image/gif,image/bmp"
                                                                                         class="rounded mt-1">
-                                                                                        
-                                                                                        
-                                                                                        
                                                                                         <div
                                                                                             class="ant-upload ant-upload-drag ng-star-inserted">
                                                                                             <div nz-upload-btn=""
@@ -1262,5 +1280,24 @@
         function submitForm(){
             document.getElementById('form-booking').submit();
         }
+        function tabchoseday(i){
+            $('.check-tab').removeClass('ant-tabs-tabpane-active');
+            $('.check-tabs').removeClass('ant-tabs-tab-active');
+            $('.check-tab').addClass('hiden');
+            $('#tabday_'+i).addClass('ant-tabs-tab-active');
+            var left = (i-1)*122;
+            $('#choseslotday_'+i).addClass('ant-tabs-tabpane-active');
+            $('#choseslotday_'+i).removeClass('hiden');
+            $('.ant-tabs-ink-bar').css("left", left+"px")
+        }
+    </script>
+    <script id="rendered-js">
+        const scrollContainer = document.querySelector("div.container");
+
+        scrollContainer.addEventListener("wheel", evt => {
+            evt.preventDefault();
+            scrollContainer.scrollLeft += evt.deltaY;
+        });
+              //# sourceURL=pen.js
     </script>
 }

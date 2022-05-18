@@ -49,6 +49,14 @@ namespace DoctorManagement.Application.System.Users
 
             await SendEmail(userEmailOptions);
         }
+        public async Task SendEmailAppoitment(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolders("Xin chào {{UserName}}, có bệnh nhân đặt lịnh khám của bạn.", userEmailOptions.PlaceHolders);
+
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("Appointment"), userEmailOptions.PlaceHolders);
+
+            await SendEmail(userEmailOptions);
+        }
 
         public EmailService(IOptions<SMTPConfigModel> smtpConfig)
         {

@@ -533,6 +533,21 @@
             color: rgb(26 118 227 / var(--tw-text-opacity))
         }
     </style>
+    <style>
+        .hiden{
+            visibility: hidden; height: 0px;width:0px; 
+        }
+        .hiden-btn{display:none;}
+        .container {
+            overflow-x: hidden;
+            display: flex;
+          }
+          .section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+    </style>
 }
 <ng-component _nghost-serverapp-c200="" class="ng-star-inserted">
                 <section _ngcontent-serverapp-c200="" class="bg-gray-100 lg:pb-10">
@@ -650,14 +665,14 @@
                                                         class="ant-tabs ant-tabs-centered ant-tabs-top ant-tabs-default ng-star-inserted">
                                                         <nz-tabs-nav role="tablist" class="ant-tabs-nav ng-star-inserted" style="">
                                                             <div class="ant-tabs-nav-wrap ant-tabs-nav-wrap-ping-right">
-                                                                <div nztabscrolllist="" class="ant-tabs-nav-list"
+                                                                <div nztabscrolllist="" class="ant-tabs-nav-list container"
                                                                     style="transform: translate(0px, 0px);">
                                                                     @{
                                                                         i = 1;
                                                                     }
                                                                     @foreach(var item_sche in schedules){
                                                                         
-                                                                            <div class="ant-tabs-tab @(i==1?"ant-tabs-tab-active":"") ng-star-inserted">
+                                                                            <div class="section ant-tabs-tab @(i==1?"ant-tabs-tab-active":"") ng-star-inserted check-tabs" id = "tabday_@i" onclick="tabchoseday(@i)">
                                                                                 <div role="tab" nztabnavitem="" cdkmonitorelementfocus=""
                                                                                     class="ant-tabs-tab-btn" tabindex="@(i==1?"0":"-1")" aria-disabled="false"
                                                                                     aria-selected="true" aria-controls="nz-tabs-27-tab-@i">
@@ -708,30 +723,13 @@
                                                                         var totime = 0;
                                                                  }
                                                                 @foreach(var item_sche in schedules){
-                                                                    if(i==1){
-                                                                        <div nz-tab-body="" class="ant-tabs-tabpane ant-tabs-tabpane-active ng-star-inserted" tabindex="0" aria-hidden="false" style="">
+                                                                  
+                                                                        <div nz-tab-body="" id ="choseslotday_@i"  class="ant-tabs-tabpane @(i==1?"ant-tabs-tabpane-active":"hiden")  ng-star-inserted check-tab" tabindex="0" aria-hidden="false" style="">
                                                                             <div _ngcontent-serverapp-c200="" class="ng-star-inserted">
                                                                                 @for(var d = 1; d <= item_sche.CountTimeSpan;d++){
-                                                                                    
                                                                                                 totime = item_sche.ScheduleSlots.FirstOrDefault(x => x.Type == d).ToTime.Hours;
-                                                                                                if( totime  < 12) {
-                                                                                                    text ="Buổi sáng";
-                                                                                                    img = "sun.svg";
-                                                                                                }
-                                                                                                else if( totime  < 18)
-                                                                                                {
-                                                                                                    text ="Buổi chiều";
-                                                                                                    img = "sun-fog.svg";
-                                                                                                }else if( totime  <= 23)
-                                                                                                {
-                                                                                                    text ="Buổi tối";
-                                                                                                    img = "sun-fog.svg";
-                                                                                                }else 
-                                                                                                {
-                                                                                                    text ="Cả ngày";
-                                                                                                    img = "sun.svg";
-                                                                                                }
-
+                                                                                                if( totime  < 12) {text ="Buổi sáng";img = "sun.svg";}else if( totime  < 18){text ="Buổi chiều";img = "sun-fog.svg";}else if( totime  <= 23)
+                                                                                                {text ="Buổi tối";img = "sun-fog.svg";}else {text ="Cả ngày";img = "sun.svg";}
                                                                                     <div _ngcontent-serverapp-c200="" class="ng-star-inserted">
                                                                                         <div _ngcontent-serverapp-c200="" class="mb-2 ng-star-inserted">
                                                                                             <div _ngcontent-serverapp-c200="" class="flex"><img
@@ -754,144 +752,19 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     }
-                                                                                
-                                                                        
-                                                                        
-                                                                                @*<div _ngcontent-serverapp-c200="" class="ng-star-inserted">
-                                                                            
-                                                                                    <div _ngcontent-serverapp-c200="" class="mb-2 ng-star-inserted">
-                                                                                        <div _ngcontent-serverapp-c200="" class="flex"><img
-                                                                                                _ngcontent-serverapp-c200="" width="20" height="20"
-                                                                                                loading="lazy" src="~/img/booking/svg/sun-fog.svg"
-                                                                                                alt="Buổi chiều">
-                                                                                            <p _ngcontent-serverapp-c200=""
-                                                                                                class="ml-1 text-sm font-medium text-gray-600">Buổi chiều
-                                                                                            </p>
-                                                                                        </div>
-                                                                                        <div _ngcontent-serverapp-c200=""
-                                                                                            class="grid grid-cols-3 gap-2 py-3 max-h-52 overflow-x-auto"><a
-                                                                                                _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">15:00-15:15
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">15:15-15:30
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">15:30-15:45
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">15:45-16:00
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">16:00-16:15
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">16:15-16:30
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">16:30-16:45
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">16:45-17:00
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">17:00-17:15
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">17:15-17:30
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">17:30-17:45
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">17:45-18:00
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">18:00-18:15
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">18:15-18:30
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">18:30-18:45
-                                                                                            </a>
-                                                                                            <a _ngcontent-serverapp-c200="" appsingleclick=""
-                                                                                                class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">18:45-19:00
-                                                                                            </a>
-                                                                                    
-                                                                                    
-                                                                                        </div>
-                                                                                    </div>
-                                                                            
-                                                                                </div>*@
                                                                             </div>
-                                                                        </div>
-                                                                    }else{
-                                                                        <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted" tabindex="-1" aria-hidden="true" style="visibility: hidden; height: 0px;">
-                                                                            <div _ngcontent-serverapp-c200="" class="ng-star-inserted">
-                                                                                        @for(var d = 0; d < item_sche.CountTimeSpan;d++){
-                                                                                    
-                                                                                                fromtime = item_sche.ScheduleSlots.FirstOrDefault(x => x.Type == d).FromTime.Hours;
-                                                                                                
-                                                                                                if( totime  < 12) {
-                                                                                                    text ="Buổi sáng";
-                                                                                                    img = "sun.svg";
-                                                                                                }
-                                                                                                else if( totime  < 18)
-                                                                                                {
-                                                                                                    text ="Buổi chiều";
-                                                                                                    img = "sun-fog.svg";
-                                                                                                }else if( totime  <= 23)
-                                                                                                {
-                                                                                                    text ="Buổi tối";
-                                                                                                    img = "sun-fog.svg";
-                                                                                                }else 
-                                                                                                {
-                                                                                                    text ="Cả ngày";
-                                                                                                    img = "sun.svg";
-                                                                                                }
-
-                                                                                    <div _ngcontent-serverapp-c200="" class="ng-star-inserted">
-                                                                                        <div _ngcontent-serverapp-c200="" class="mb-2 ng-star-inserted">
-                                                                                            <div _ngcontent-serverapp-c200="" class="flex"><img
-                                                                                                    _ngcontent-serverapp-c200="" width="20" height="20"
-                                                                                                    loading="lazy" src="~/img/booking/svg/@img"
-                                                                                                    alt="Buổi sáng">
-                                                                                                <p _ngcontent-serverapp-c200="" class="ml-1 text-sm font-medium text-gray-600">@text</p>
-                                                                                                </div>
-                                                                                                <div _ngcontent-serverapp-c200=""
-                                                                                                    class="grid grid-cols-3 gap-2 py-3 max-h-52 overflow-x-auto">
-                                                                                                    @foreach(var slot in item_sche.ScheduleSlots){
-                                                                                                         <a _ngcontent-serverapp-c200="" appsingleclick="" asp-controller="Booking" asp-action="BookingDoctorSetPatient" asp-route-id="@slot.Id"
-                                                                                                            class="text-center font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">@(slot.FromTime.ToString("HH:mm")+"-"+@slot.ToTime.ToString("HH:mm"))
-                                                                                                        </a>
-                                                                                                    }
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    }
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                }
+                                                        </div>
+                                                        i++;
+                                                    }
                                                             </div>
                                                         </div>
                                                     </nz-tabset>
-                                                    
-                                                    
-                                                    
                                                 </div>
-                                                
-                                                
-                                                
-                                                
                                             </div>
                                         </div>
                                     </nz-collapse-panel>
                                 </nz-collapse>
                             </div>
-                            
-                            
                             <div _ngcontent-serverapp-c200="" class="md:col-span-7 lg:col-span-8">
                                 <div _ngcontent-serverapp-c200="" class="profile-card">
                                     <nz-tabset _ngcontent-serverapp-c200="" nztype="card"
@@ -932,7 +805,6 @@
                                                             </path>
                                                         </svg></i></button>
                                             </nz-tab-nav-operation>
-                                            
                                         </nz-tabs-nav>
                                         <div class="ant-tabs-content-holder">
                                             <div class="ant-tabs-content ant-tabs-content-top">
@@ -1120,4 +992,27 @@
                     </div>
                 </section>
 </ng-component>
+@section JavaScript{
+    <script>
+        function tabchoseday(i){
+            $('.check-tab').removeClass('ant-tabs-tabpane-active');
+            $('.check-tabs').removeClass('ant-tabs-tab-active');
+            $('.check-tab').addClass('hiden');
+            $('#tabday_'+i).addClass('ant-tabs-tab-active');
+            var left = (i-1)*122;
+            $('#choseslotday_'+i).addClass('ant-tabs-tabpane-active');
+            $('#choseslotday_'+i).removeClass('hiden');
+            $('.ant-tabs-ink-bar').css("left", left+"px")
+        }
+    </script>
+     <script id="rendered-js">
+        const scrollContainer = document.querySelector("div.container");
+
+        scrollContainer.addEventListener("wheel", evt => {
+            evt.preventDefault();
+            scrollContainer.scrollLeft += evt.deltaY;
+        });
+              //# sourceURL=pen.js
+    </script>
+}
 

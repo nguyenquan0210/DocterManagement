@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using DoctorManagement.Application.System.Users;
 using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,10 +19,12 @@ namespace DoctorManagement.Application.Catalog.Appointment
     public class AppointmentService : IAppointmentService
     {
         private readonly DoctorManageDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public AppointmentService(DoctorManageDbContext context)
+        public AppointmentService(DoctorManageDbContext context,IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
         public async Task<ApiResult<bool>> Create(AppointmentCreateRequest request)
         {
@@ -29,20 +33,23 @@ namespace DoctorManagement.Application.Catalog.Appointment
                              where slot.Id == request.SchedulesSlotId 
                              select sche;
             var datecheck = new DateTime();
+            var fromtime = new TimeSpan();
+            var totime = new TimeSpan();
             if (slots != null)
             {
                 datecheck = DateTime.Parse(slots.FirstOrDefault().CheckInDate.ToString("dd/MM/yyyy") + " 00:00:00.0000000");
+                fromtime = slots.FirstOrDefault().FromTime;
+                totime = slots.FirstOrDefault().ToTime;
                 var checkAppoi = from app in _context.Appointments
                                  join slot in _context.schedulesSlots on app.SchedulesSlotId equals slot.Id
                                  join sche in _context.Schedules on slot.ScheduleId equals sche.Id
-                                 where app.PatientId == request.PatientId && sche.CheckInDate >= datecheck && sche.CheckInDate < datecheck.AddDays(1)
+                                 where app.PatientId == request.PatientId && sche.CheckInDate >= datecheck && sche.CheckInDate < datecheck.AddDays(1) && sche.FromTime>= fromtime && sche.ToTime<= totime
                                  select sche;
                 if (checkAppoi.ToList().Count > 0)
                 {
-                    return new ApiErrorResult<bool>("Bạn không thể đătj lịch cùng ngày quá 2 lần!");
+                    return new ApiErrorResult<bool>("Bạn không thể đặt lịch cùng ngày trên 1 khung giờ quá 2 lần!");
                 }
             }
-
             string day = DateTime.Now.ToString("dd") + "-" + slots.FirstOrDefault().Id.ToString().Remove(2);
             int count = await _context.Doctors.Where(x => x.No.Contains("DK-" + day)).CountAsync();
             string str = "";
@@ -68,11 +75,30 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 schedule.AvailableQty = schedule.AvailableQty -1;
                 schedule.BookedQty = schedule.BookedQty +1;
                 _context.SaveChanges();
+                var user = await _context.Users.FindAsync(request.DoctorId);
+                var patient = await _context.Patients.FindAsync(request.PatientId);
+                if(user != null&& patient!= null) await SendEmailAppoitment(user, patient, schedule, slotsche, appointments);
                 return new ApiSuccessResult<bool>();
             }
             return new ApiErrorResult<bool>("Đặt khám không thành công!");
         }
-
+        private async Task SendEmailAppoitment(AppUsers user,Patients patients, Schedules schedules, SchedulesSlots schedulesSlots, Appointments appointment)
+        {
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string>() { user.Email },
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", user.UserName),
+                    new KeyValuePair<string, string>("{{No1}}", patients.No),
+                    new KeyValuePair<string, string>("{{Name}}", patients.Name),
+                    new KeyValuePair<string, string>("{{No}}", appointment.No),
+                    new KeyValuePair<string, string>("{{CheckDate}}", schedules.CheckInDate.ToShortDateString()),
+                    new KeyValuePair<string, string>("{{TimeSpan}}", schedulesSlots.FromTime+"-"+schedulesSlots.ToTime),
+                }
+            };
+            await _emailService.SendEmailAppoitment(options);
+        }
         public async Task<ApiResult<int>> Delete(Guid Id)
         {
             var rs = await _context.Appointments.FindAsync(Id);

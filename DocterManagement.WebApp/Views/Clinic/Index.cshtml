@@ -1,8 +1,11 @@
-﻿
+﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.Common;
+@model PagedResult<DoctorManagement.ViewModels.Catalog.Clinic.ClinicVm>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @section Stylesheet{
     <style>
@@ -352,15 +355,11 @@
                                                 <font style="vertical-align: inherit;">Trang chủ</font>
                                             </font>
                                         </a></span></span>
-                                <!---->
-                                <!----><span class="ant-breadcrumb-separator ng-star-inserted">
+                                <span class="ant-breadcrumb-separator ng-star-inserted">
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;"> /</font>
                                     </font>
-                                    <!---->
-                                    <!---->
                                 </span>
-                                <!---->
                             </nz-breadcrumb-item>
                             <nz-breadcrumb-item _ngcontent-serverapp-c243=""><span
                                     class="ant-breadcrumb-link ng-star-inserted"><span _ngcontent-serverapp-c243=""
@@ -370,15 +369,15 @@
                                                 <font style="vertical-align: inherit;">Phòng khám</font>
                                             </font>
                                         </a></span></span>
-                                <!---->
-                                <!----><span class="ant-breadcrumb-separator ng-star-inserted">
+                                
+                                <span class="ant-breadcrumb-separator ng-star-inserted">
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;"> /</font>
                                     </font>
-                                    <!---->
-                                    <!---->
+                                    
+                                    
                                 </span>
-                                <!---->
+                                
                             </nz-breadcrumb-item>
                             <nz-breadcrumb-item _ngcontent-serverapp-c243=""><span
                                     class="ant-breadcrumb-link ng-star-inserted"><span _ngcontent-serverapp-c243=""
@@ -388,17 +387,17 @@
                                                 <font style="vertical-align: inherit;">PKĐK ĐẠI PHƯỚC</font>
                                             </font>
                                         </a></span></span>
-                                <!---->
-                                <!----><span class="ant-breadcrumb-separator ng-star-inserted">
+                                
+                                <span class="ant-breadcrumb-separator ng-star-inserted">
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">/</font>
                                     </font>
-                                    <!---->
-                                    <!---->
+                                    
+                                    
                                 </span>
-                                <!---->
+                                
                             </nz-breadcrumb-item>
-                            <!---->
+                            
                         </nz-breadcrumb>
                     </div>
                     <div _ngcontent-serverapp-c243=""
@@ -431,7 +430,7 @@
                                                         class="mx-auto w-[500px] h-[300px] object-cover  ng-lazyloaded"
                                                         src="https://youmed.vn/photos/99c84542-edc9-48f3-994d-4580a90286f2.png">
                                                 </div>
-                                                <!---->
+                                                
                                             </div>
                                         </div>
                                         <ul class="slick-dots slick-dots-bottom ng-star-inserted">
@@ -440,30 +439,30 @@
                                                         <font style="vertical-align: inherit;">1</font>
                                                     </font>
                                                 </button>
-                                                <!---->
+                                                
                                             </li>
                                             <li class="ng-star-inserted"><button class="ng-star-inserted">
                                                     <font style="vertical-align: inherit;">
                                                         <font style="vertical-align: inherit;">2</font>
                                                     </font>
                                                 </button>
-                                                <!---->
+                                                
                                             </li>
                                             <li class="ng-star-inserted"><button class="ng-star-inserted">
                                                     <font style="vertical-align: inherit;">
                                                         <font style="vertical-align: inherit;">3</font>
                                                     </font>
                                                 </button>
-                                                <!---->
+                                                
                                             </li>
-                                            <!---->
+                                            
                                         </ul>
-                                        <!---->
+                                        
                                     </div>
-                                    <!---->
+                                    
                                 </nz-carousel>
-                                <!---->
-                                <!---->
+                                
+                                
                             </div>
                         </div>
                         <div _ngcontent-serverapp-c243="" class="md:col-span-7 mb-10">
@@ -492,7 +491,7 @@
                                                             Toàn</font>
                                                     </font>
                                                 </p>
-                                                <!---->
+                                                
                                             </div>
                                             <div _ngcontent-serverapp-c234="" class="flex justify-between items-center">
                                                 <a _ngcontent-serverapp-c234="" target="_blank"
@@ -566,7 +565,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <!---->
+                                
                             </app-info-clinic>
                             <app-services-banner _ngcontent-serverapp-c243="" _nghost-serverapp-c235="">
                                 <div _ngcontent-serverapp-c235=""
@@ -696,13 +695,13 @@
                                                 </font>
                                             </h2>
                                             <ul _ngcontent-serverapp-c236="" class="mt-4 grid lg:grid-cols-2">
-                                                <!---->
-                                                <!---->
+                                                
+                                                
                                             </ul>
                                         </div>
-                                        <!---->
+                                        
                                     </app-working-time>
-                                    <!---->
+                                    
                                     <app-intro-clinic _ngcontent-serverapp-c238="" _nghost-serverapp-c237="" class="ng-star-inserted">
                                         <div _ngcontent-serverapp-c237="" class="px-4 lg:px-6 pt-4 lg:pt-6">
                                             <h2 _ngcontent-serverapp-c237="" class="text-lg font-medium">
@@ -873,14 +872,14 @@
                                                         <font style="vertical-align: inherit;">Xem thêm</font>
                                                     </font>
                                                 </span>
-                                                <!---->
+                                                
                                             </div>
-                                            <!---->
+                                            
                                         </div>
                                     </app-intro-clinic>
-                                    <!---->
+                                    
                                 </div>
-                                <!---->
+                                
                             </app-about-clinic>
                             <app-services-clinic _ngcontent-serverapp-c243="" _nghost-serverapp-c240="" class="ng-star-inserted">
                                 <div _ngcontent-serverapp-c240="" id="services"
@@ -910,7 +909,7 @@
                                                 </p>
                                             </div>
                                         </app-service-item>
-                                        <!---->
+                                        
                                         <app-service-item _ngcontent-serverapp-c240="" _nghost-serverapp-c239="" class="ng-star-inserted">
                                             <div _ngcontent-serverapp-c239="" class="flex"><svg _ngcontent-serverApp-c239="" width="20" height="20"
                                                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -930,7 +929,7 @@
                                                 </p>
                                             </div>
                                         </app-service-item>
-                                        <!---->
+                                        
                                         <app-service-item _ngcontent-serverapp-c240="" _nghost-serverapp-c239="" class="ng-star-inserted">
                                             <div _ngcontent-serverapp-c239="" class="flex"><svg _ngcontent-serverApp-c239="" width="20" height="20"
                                                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -950,7 +949,7 @@
                                                 </p>
                                             </div>
                                         </app-service-item>
-                                        <!---->
+                                        
                                         <app-service-item _ngcontent-serverapp-c240="" _nghost-serverapp-c239="" class="ng-star-inserted">
                                             <div _ngcontent-serverapp-c239="" class="flex"><svg _ngcontent-serverApp-c239="" width="20" height="20"
                                                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -970,7 +969,7 @@
                                                 </p>
                                             </div>
                                         </app-service-item>
-                                        <!---->
+                                        
                                         <app-service-item _ngcontent-serverapp-c240="" _nghost-serverapp-c239="" class="ng-star-inserted">
                                             <div _ngcontent-serverapp-c239="" class="flex"><svg _ngcontent-serverApp-c239="" width="20" height="20"
                                                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -990,7 +989,7 @@
                                                 </p>
                                             </div>
                                         </app-service-item>
-                                        <!---->
+                                        
                                         <app-service-item _ngcontent-serverapp-c240="" _nghost-serverapp-c239="" class="ng-star-inserted">
                                             <div _ngcontent-serverapp-c239="" class="flex"><svg _ngcontent-serverApp-c239="" width="20" height="20"
                                                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -1010,14 +1009,14 @@
                                                 </p>
                                             </div>
                                         </app-service-item>
-                                        <!---->
-                                        <!---->
+                                        
+                                        
                                     </div>
-                                    <!---->
-                                    <!---->
+                                    
+                                    
                                 </div>
                             </app-services-clinic>
-                            <!---->
+                            
                             <app-gallery-clinic _ngcontent-serverapp-c243="" _nghost-serverapp-c241="" class="ng-star-inserted">
                                 <div _ngcontent-serverapp-c241="" id="pictures"
                                     class="bg-white p-4 mt-px lg:p-6 lg:mt-6 lg:rounded-md overflow-hidden">
@@ -1030,16 +1029,16 @@
                                         <div _ngcontent-serverapp-c241="" class="cursor-pointer ng-star-inserted"><img _ngcontent-serverapp-c241=""
                                                 loading="lazy" alt="Library image" class="rounded w-[80px] h-[80px] object-cover  ng-lazyloaded"
                                                 src="https://youmed.vn/photos/2ca7b20e-f483-46d9-8b60-89806ade3fe1.jpg"></div>
-                                        <!---->
+                                        
                                         <div _ngcontent-serverapp-c241="" class="cursor-pointer ng-star-inserted"><img _ngcontent-serverapp-c241=""
                                                 loading="lazy" alt="Library image" class="rounded w-[80px] h-[80px] object-cover  ng-lazyloaded"
                                                 src="https://youmed.vn/photos/62312ed1-0a4b-416b-a6d1-0dc9dae7c442.jpg"></div>
-                                        <!---->
+                                        
                                         <div _ngcontent-serverapp-c241="" class="cursor-pointer ng-star-inserted"><img _ngcontent-serverapp-c241=""
                                                 loading="lazy" alt="Library image" class="rounded w-[80px] h-[80px] object-cover  ng-lazyloaded"
                                                 src="https://youmed.vn/photos/203cd32c-c058-4292-aa72-a4a2d0bfe99f.jpg"></div>
-                                        <!---->
-                                        <!---->
+                                        
+                                        
                                         <div _ngcontent-serverapp-c241=""
                                             class="cursor-pointer flex items-center justify-center text-base rounded bg-slate-200 w-20 h-20 ng-star-inserted">
                                             <span _ngcontent-serverapp-c241="">
@@ -1047,11 +1046,11 @@
                                                     <font style="vertical-align: inherit;">1+</font>
                                                 </font>
                                             </span></div>
-                                        <!---->
+                                        
                                     </div>
                                 </div>
                             </app-gallery-clinic>
-                            <!---->
+                            
                             <app-support-clinic _ngcontent-serverapp-c243="" _nghost-serverapp-c242=""
                                 class="ng-star-inserted">
                                 <div _ngcontent-serverapp-c242="" id="support"
@@ -1082,10 +1081,10 @@
                                                         02839557999</font>
                                                 </font>
                                             </a>
-                                            <!---->
-                                            <!---->
+                                            
+                                            
                                         </div>
-                                        <!---->
+                                        
                                         <div _ngcontent-serverapp-c242="" class="flex ng-star-inserted"><svg
                                                 _ngcontent-serverApp-c242="" width="20" height="20" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -1099,21 +1098,21 @@
                                                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                                 </path>
                                             </svg>
-                                            <!----><a _ngcontent-serverapp-c242=""
+                                            <a _ngcontent-serverapp-c242=""
                                                 class="hover:text-gray-800 text-base text-gray-800 leading-5 ng-star-inserted"
                                                 href="https://zalo.me/2433559446561086041">
                                                 <font style="vertical-align: inherit;">
                                                     <font style="vertical-align: inherit;">Set up tư vấn</font>
                                                 </font>
                                             </a>
-                                            <!---->
+                                            
                                         </div>
-                                        <!---->
-                                        <!---->
+                                        
+                                        
                                     </div>
                                 </div>
                             </app-support-clinic>
-                            <!---->
+                            
                         </div>
                     </div>
                 </section>

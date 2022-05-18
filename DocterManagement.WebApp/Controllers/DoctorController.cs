@@ -23,7 +23,6 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> Index(Guid Id)
         {
-
             var doctor = await _doctorApiClient.GetById(Id);
             ViewBag.GetScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(Id)).Data.ToList();
             if (!doctor.IsSuccessed)

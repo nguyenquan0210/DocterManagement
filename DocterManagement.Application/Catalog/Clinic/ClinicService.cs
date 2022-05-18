@@ -175,6 +175,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     Status = x.c.Status,
                     Address =  x.c.Address,
                     No = x.c.No,
+                    FullAddress = x.c.Address + ", " + x.sd.Name + ", " + x.d.Name + ", " + x.p.Name,
                     LocationVm = new LocationVm()
                     {
                         Id = x.sd.Id,
@@ -245,6 +246,10 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 Status = clinics.Status,
                 No = clinics.No,
                 ImgLogo = CLINIC_CONTENT_FOLDER_NAME + "/" + clinics.ImgLogo,
+                Note = clinics.Note,
+                CreatedAt = clinics.CreatedAt,
+                FullAddress = clinics.Address +", " + sd.Name + ", " + d.Name + ", " + p.Name,
+                MapUrl = clinics.MapUrl,
                 LocationVm = new LocationVm()
                 {
                     Id = sd.Id,
@@ -286,19 +291,23 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     Img = USER_CONTENT_FOLDER_NAME + "/" + u.Img,
                     No = u.No,
                     UserId = u.UserId,
+                    Booking = u.Booking,
+                    Services = u.Services,
+                    Slug = u.Slug,
+                    Address = u.Address,
+                    Dob = u.Dob,
+                    Educations = u.Educations,
+                    FirstName = u.FirstName,
+                    Gender = u.Gender,
+                    LastName = u.LastName,
+                    MapUrl = u.MapUrl,
+                    Prefix = u.Prefix,
+                    Note = u.Note,
                     User = new UserVm()
 					{
-                        //Name = u.AppUsers.Name,
                         Email = u.AppUsers.Email,
                         PhoneNumber = u.AppUsers.PhoneNumber,
-                        //Gender = u.AppUsers.Gender,
-                        //Dob = u.AppUsers.Dob
 					},
-                    /*GetSpeciality = new GetSpecialityVm()
-					{
-                        Id = u.Specialities.Id,
-                        Title = u.Specialities.Title
-					},*/
                     Rates = u.Rates.Select(r => new RateVm()
 					{
                         Id = r.Id,
