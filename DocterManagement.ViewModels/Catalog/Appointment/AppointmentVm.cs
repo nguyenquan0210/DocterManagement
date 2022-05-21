@@ -1,4 +1,8 @@
 ﻿using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.Catalog.SlotSchedule;
+using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Patient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +14,15 @@ namespace DoctorManagement.ViewModels.Catalog.Appointment
     public class AppointmentVm
     {
         public Guid Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int Stt { get; set; }
         public string No { get; set; }
+        public string Note { get; set; }
+        public bool IsDoctor { get; set; }
         public StatusAppointment Status { get; set; }
-        public Guid SchedulesDetailId { get; set; }
-        public Guid PatientId { get; set; }
+        public ScheduleVm Schedule { get; set; }
+        public SlotScheduleVm SlotSchedule { get; set; }
+        public PatientVm Patient { get; set; }
+        public DoctorVm Doctor { get; set; }
     }
 }

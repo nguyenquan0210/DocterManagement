@@ -31,5 +31,6 @@ namespace DoctorManagement.ViewModels.System.Patient
         public List<AppointmentVm> Appointments { get; set; }
         public List<MedicalRecordVm> MedicalRecords { get; set; }
         public Guid EthnicId { get; set; }
+        public string FullAddress { get; set; }
     }
 }

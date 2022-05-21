@@ -731,7 +731,6 @@
                                                                                                         </div>
                                                                                                         <div _ngcontent-serverapp-c171=""
                                                                                                             class="flex flex-wrap gap-2 py-3 max-h-52 ">
-                                                                                                            
                                                                                                             @foreach(var slot in item_sche.ScheduleSlots){
                                                                                                                 if(slot.Type == d){
                                                                                                                     <a _ngcontent-serverapp-c171=""
@@ -740,6 +739,7 @@
                                                                                                                          @(slot.FromTime.ToString().Substring(0,5)+"-"+@slot.ToTime.ToString().Substring(0,5))
                                                                                                                     </a>
                                                                                                                     j++;
+                                                                                                                   
                                                                                                                 }
                                                                                                             }
                                                                                                            
@@ -1008,88 +1008,78 @@
                                                                                     <form _ngcontent-serverapp-c253="" id="form-booking" asp-action="BookingDoctorSetPatient" method="post"
                                                                                         novalidate=""
                                                                                         class="ng-untouched ng-pristine ng-valid">
-                                                                                        <textarea
-                                                                                            _ngcontent-serverapp-c253=""
-                                                                                            rows="1"
-                                                                                            formcontrolname="note"
-                                                                                            nz-input=""
-                                                                                            class="rounded mt-1 ant-input ng-untouched ng-pristine ng-valid"
-                                                                                            placeholder="Triệu chứng, thuốc đang dùng, tiền sử, ..."
-                                                                                            style="max-height: 120px; min-height: 76px; height: 76px;">
-                                                                                        </textarea>
+                                                                                        <textarea asp-for="Note" _ngcontent-serverapp-c180="" rows="1" formcontrolname="note" nz-input="" class="rounded mt-1 ant-input ng-pristine ng-valid ng-touched" placeholder="Triệu chứng, thuốc đang dùng, tiền sử, ..." style="max-height: 120px; min-height: 76px; height: 76px;"></textarea>
                                                                                         <input type="hidden" asp-for="SchedulesSlotId" />  
                                                                                         <input type="hidden" asp-for="PatientId" />  
                                                                                         <input type="hidden" asp-for="DoctorId" />  
-                                                                                    </form>
-                                                                                </div>
-                                                                                <div _ngcontent-serverapp-c253=""
-                                                                                    class="flex flex-col"><label
-                                                                                        _ngcontent-serverapp-c253=""
-                                                                                        class="font-medium text-sm">Tập
-                                                                                        tin đính kèm (0/5)</label>
-                                                                                    <nz-upload
-                                                                                        _ngcontent-serverapp-c253=""
-                                                                                        nztype="drag"
-                                                                                        nzfiletype="image/png,image/jpeg,image/gif,image/bmp"
-                                                                                        class="rounded mt-1">
-                                                                                        <div
-                                                                                            class="ant-upload ant-upload-drag ng-star-inserted">
-                                                                                            <div nz-upload-btn=""
-                                                                                                class="ant-upload ant-upload-btn"
-                                                                                                tabindex="0"
-                                                                                                role="button"><input
-                                                                                                    type="file"
-                                                                                                    style="display: none;"
-                                                                                                    multiple="">
+                                                                                        <input type="hidden" asp-for="IsDoctor" />  
+                                                                                        <div _ngcontent-serverapp-c253=""
+                                                                                            class="flex flex-col"><label 
+                                                                                                _ngcontent-serverapp-c253=""
+                                                                                                class="font-medium text-sm">Tập
+                                                                                                tin đính kèm (0/5)</label>
+                                                                                            <nz-upload
+                                                                                                _ngcontent-serverapp-c253=""
+                                                                                                nztype="drag"
+                                                                                                nzfiletype="image/png,image/jpeg,image/gif,image/bmp"
+                                                                                                class="rounded mt-1">
                                                                                                 <div
-                                                                                                    class="ant-upload-drag-container">
-                                                                                                    <div _ngcontent-serverapp-c253=""
-                                                                                                        class="flex flex-col gap-2 ng-star-inserted">
-                                                                                                        <p _ngcontent-serverapp-c253=""
-                                                                                                            class="font-normal text-sm">
-                                                                                                            <span
-                                                                                                                _ngcontent-serverapp-c253=""
-                                                                                                                class="text-primary">Chọn
-                                                                                                                tập
-                                                                                                                tin</span>
-                                                                                                            hoặc kéo thả
-                                                                                                            vào đây </p>
-                                                                                                        <p _ngcontent-serverapp-c253=""
-                                                                                                            class="font-normal text-xs text-gray-400">
-                                                                                                            .PNG, .JPG
-                                                                                                            tối đa 3MB
-                                                                                                        </p>
-                                                                                                    </div>
+                                                                                                    class="ant-upload ant-upload-drag ng-star-inserted">
+                                                                                                    <div nz-upload-btn=""
+                                                                                                        class="ant-upload ant-upload-btn"
+                                                                                                        tabindex="0"
+                                                                                                        role="button"><input
+                                                                                                            type="file"
+                                                                                                            style="display: none;"
+                                                                                                            multiple="">
+                                                                                                        <div
+                                                                                                            class="ant-upload-drag-container">
+                                                                                                            <div _ngcontent-serverapp-c253=""
+                                                                                                                class="flex flex-col gap-2 ng-star-inserted">
+                                                                                                                <p _ngcontent-serverapp-c253=""
+                                                                                                                    class="font-normal text-sm">
+                                                                                                                    <span
+                                                                                                                        _ngcontent-serverapp-c253=""
+                                                                                                                        class="text-primary">Chọn
+                                                                                                                        tập
+                                                                                                                        tin</span>
+                                                                                                                    hoặc kéo thả
+                                                                                                                    vào đây </p>
+                                                                                                                <p _ngcontent-serverapp-c253=""
+                                                                                                                    class="font-normal text-xs text-gray-400">
+                                                                                                                    .PNG, .JPG
+                                                                                                                    tối đa 3MB
+                                                                                                                </p>
+                                                                                                            </div>
                                                                                                     
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <nz-upload-list
-                                                                                            class="ant-upload-list ng-tns-c119-36 ant-upload-list-text ng-star-inserted"
-                                                                                            dir="ltr">
+                                                                                                <nz-upload-list
+                                                                                                    class="ant-upload-list ng-tns-c119-36 ant-upload-list-text ng-star-inserted"
+                                                                                                    dir="ltr">
                                                                                             
-                                                                                        </nz-upload-list>
-                                                                                    </nz-upload>
-                                                                                </div>
-                                                                                <div _ngcontent-serverapp-c253=""
-                                                                                    class="flex flex-row justify-between font-semibold">
-                                                                                    <a _ngcontent-serverapp-c253=""
-                                                                                        nz-popover=""
-                                                                                        nzpopoverplacement="right"
-                                                                                        nzpopovertrigger="click"
-                                                                                        class="text-sm bg-transparent border border-solid text-primary rounded py-3 px-4">
-                                                                                        Thêm hồ sơ mới </a>
-                                                                                    <a
-                                                                                        _ngcontent-serverapp-c253=""
-                                                                                        class="text-sm bg-transparent border border-primary text-white bg-primary rounded py-3 px-4 hover:bg-primary/80 hover:text-white"
-                                                                                        hidden="">Xác nhận</a>
+                                                                                                </nz-upload-list>
+                                                                                            </nz-upload>
+                                                                                        </div>
+                                                                                        <div _ngcontent-serverapp-c253=""
+                                                                                            class="flex flex-row justify-between font-semibold">
+                                                                                            <a _ngcontent-serverapp-c253=""
+                                                                                                nz-popover=""
+                                                                                                nzpopoverplacement="right"
+                                                                                                nzpopovertrigger="click"
+                                                                                                class="text-sm bg-transparent border border-solid text-primary rounded py-3 px-4">
+                                                                                                Thêm hồ sơ mới </a>
+                                                                                            <a
+                                                                                                _ngcontent-serverapp-c253=""
+                                                                                                class="text-sm bg-transparent border border-primary text-white bg-primary rounded py-3 px-4 hover:bg-primary/80 hover:text-white"
+                                                                                                hidden="">Xác nhận</a>
+                                                                                        </div>
+                                                                                    </form>
                                                                                 </div>
                                                                             </div>
                                                                         </app-additional-information>
-                                                                        
-                                                                        
                                                                     </div>
-                                                                    
                                                                 </app-booking-doctor-patient>
                                                             </div>
                                                         </div>
@@ -1170,6 +1160,7 @@
                                                                 <button  _ngcontent-serverapp-c257="" class="bg-gray-300 text-white font-semibold w-full text-center px-4 py-4 rounded cursor-not-allowed ng-star-inserted"> Xác nhận đặt khám</button>
                                                                 <button _ngcontent-serverapp-c188="" onclick="submitForm()" class="w-full button font-semibold text-sm text-white px-4 py-4 bg-primary ng-star-inserted hiden-btn"> Đặt lịch</button>
                                                             </div>
+                                                        </div>
                                                     </nz-spin>
                                                 </app-booking-flow-info>
                                             </app-side-bar-booking>

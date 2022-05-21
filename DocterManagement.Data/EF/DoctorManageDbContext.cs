@@ -28,6 +28,7 @@ namespace DoctorManagement.Data.EF
             modelBuilder.ApplyConfiguration(new CommentsPostConfiguration());
             modelBuilder.ApplyConfiguration(new EthnicConfiguration());
             modelBuilder.ApplyConfiguration(new ServicesSpecialityConfiguration());
+            modelBuilder.ApplyConfiguration(new AttachedfileConfiguration());
             modelBuilder.ApplyConfiguration(new GalleryConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());
             modelBuilder.ApplyConfiguration(new ImageClinicConfiguration());
@@ -71,6 +72,7 @@ namespace DoctorManagement.Data.EF
         public DbSet<Locations> Locations { get; set; }
         public DbSet<Ethnics> Ethnics { get; set; }
         public DbSet<Galleries> Galleries { get; set; }
+        public DbSet<Attachedfiles> Attachedfiles { get; set; }
         public DbSet<ServicesSpecialities> ServicesSpecialities { get; set; }
     }
 }

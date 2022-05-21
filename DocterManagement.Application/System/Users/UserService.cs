@@ -641,16 +641,19 @@ namespace DoctorManagement.Application.System.Users
             {
                 return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
             }
-            if (await _userManager.FindByEmailAsync(request.Email) != null)
+            if (await _context.AppUsers.Where(x=>x.Email == request.Email && x.RoleId == role.Id).FirstOrDefaultAsync() != null)
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
             string year = DateTime.Now.ToString("yy");
-            int count = await _context.Doctors.Where(x => x.No.Contains("DT-" + year)).CountAsync();
+            string month = DateTime.Now.ToString("MM");
+            int count = await _context.Doctors.Where(x => x.No.Contains("DTD" + year + month)).CountAsync();
             string str = "";
-            if(count<9) str = "DT-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
-            else if(count<99) str = "DT-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
-            else if(count<999) str = "DT-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+            if (count < 9) str = "DTD" + year + month + "0000" + (count + 1);
+            else if (count < 99) str = "DTD" + year + month + "000" + (count + 1);
+            else if (count < 999) str = "DTD" + year + month + "00" + (count + 1);
+            else if (count < 9999) str = "DTD" + year + month + "0" + (count + 1);
+            else if (count < 99999) str = "DTD" + year + month + (count + 1);
 
             var password = "DOCtor" + new Random().Next(100000,999999) +"$";
             string[] username = request.Email.Split('@');
@@ -721,12 +724,19 @@ namespace DoctorManagement.Application.System.Users
             {
                 return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
             }
+            if (await _context.AppUsers.Where(x => x.Email == request.Email && x.RoleId == role.Id).FirstOrDefaultAsync() != null)
+            {
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
+            }
             string year = DateTime.Now.ToString("yy");
-            int count = await _context.Doctors.Where(x => x.No.Contains("DT-" + year)).CountAsync();
+            string month = DateTime.Now.ToString("MM");
+            int count = await _context.Patients.Where(x => x.No.Contains("DMP" + year+month)).CountAsync();
             string str = "";
-            if (count < 9) str = "DT-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
-            else if (count < 99) str = "DT-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
-            else if (count < 999) str = "DT-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+            if (count < 9) str = "DMP" + year + month+ "0000" + (count + 1);
+            else if (count < 99) str = "DMP" + year + month + "000" + (count + 1);
+            else if (count < 999) str = "DMP" + year + month + "00" + (count + 1);
+            else if (count < 9999) str = "DMP" + year + month + "0" + (count + 1);
+            else if (count < 99999) str = "DMP" + year + month  + (count + 1);
             user = new AppUsers()
             {
                 Email = request.Email,
@@ -748,13 +758,13 @@ namespace DoctorManagement.Application.System.Users
                         UserId = user.Id,
                         Dob = request.Dob,
                         Name = request.Name,
-                        IsPrimary = false,
+                        IsPrimary = true,
                         LocationId = request.SubDistrictId,
                         Gender = request.Gender,
                         No = str,
                         Address = request.Address,
                         Img = "user_default.png" ,
-                        RelativeName = "Khác",
+                        RelativeName = "Tôi",
                         EthnicId = request.EthnicGroupId,
                         RelativePhone = request.RelativePhone,
                         RelativeRelationshipId = user.Id,

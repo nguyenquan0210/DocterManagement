@@ -13,7 +13,9 @@ namespace DoctorManagement.ApiIntegration
     {
         Task<ApiResult<List<DoctorVm>>> GetTopFavouriteDoctors();
         Task<ApiResult<DoctorVm>> GetById(Guid Id);
-
+        Task<ApiResult<PatientVm>> GetByPatientId(Guid Id);
         Task<ApiResult<List<PatientVm>>> GetPatientProfile(string username);
+        Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request);
+        Task<ApiResult<bool>> AddInfo(AddPatientInfoRequest request);
     }
 }

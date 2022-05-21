@@ -23,7 +23,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         //[Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] AppointmentCreateRequest request)
+        public async Task<ActionResult<ApiResult<Guid>>> Create([FromBody] AppointmentCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -31,7 +31,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _appointmentService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }

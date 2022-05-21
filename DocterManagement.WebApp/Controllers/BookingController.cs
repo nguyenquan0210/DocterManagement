@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DoctorManagement.WebApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class BookingController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -38,7 +38,7 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> BookingDoctorSetPatient(Guid doctorid, Guid scheduleid)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Doctor = (await _doctorApiClient.GetById(doctorid)).Data;
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(doctorid)).Data.ToList();
             ViewBag.GetScheduleDoctor = getScheduleDoctor;
@@ -52,7 +52,8 @@ namespace DoctorManagement.WebApp.Controllers
             var appointmentCreate = new AppointmentCreateRequest()
             {
                 DoctorId = doctorid,
-                SchedulesSlotId = scheduleid 
+                SchedulesSlotId = scheduleid ,
+                IsDoctor = true,
             };
             return View(appointmentCreate);
         }
@@ -60,7 +61,7 @@ namespace DoctorManagement.WebApp.Controllers
         public async Task<IActionResult> BookingDoctorSetPatient(AppointmentCreateRequest request)
         {
             
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Doctor = (await _doctorApiClient.GetById(request.DoctorId)).Data;
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(request.DoctorId)).Data.ToList();
             ViewBag.GetScheduleDoctor = getScheduleDoctor;
@@ -70,24 +71,41 @@ namespace DoctorManagement.WebApp.Controllers
                 ViewBag.Date = slot.Data.Schedule.CheckInDate;
                 ViewBag.TimeSpan = slot.Data.FromTime.ToString().Substring(0, 5) + "-" + slot.Data.ToTime.ToString().Substring(0, 5);
             }
-            if (!ModelState.IsValid) View(request);
+            if (!ModelState.IsValid) return View(request);
             var result = await _appointmentApiClient.Create(request);
             if (result.IsSuccessed)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("BookingSuccess", new { Id = result.Data });
             }
-
             return View(request);
         }
         public async Task<IActionResult> BookingClinicSetDoctor(Guid clinicId)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
-            var clinic = await _clinicalApiClient.GetById(clinicId);
-            if (!clinic.IsSuccessed)
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
+            ViewBag.Clinic = (await _clinicalApiClient.GetById(clinicId)).Data;
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> BookingClinicSetDoctor(AppointmentCreateRequest request)
+        {
+            request.IsDoctor = false;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
+            ViewBag.Clinic = (await _clinicalApiClient.GetById(request.ClinicId.Value)).Data;
+            
+            if (!ModelState.IsValid) return View(request);
+            var result = await _appointmentApiClient.Create(request);
+            if (result.IsSuccessed)
             {
-                return RedirectToAction("Clinic", "Home");
+                return RedirectToAction("BookingSuccess", new { Id = result.Data });
             }
-            return View(clinic.Data);
+            return View(request);
+        }
+        [HttpGet]
+        public async Task<IActionResult> BookingSuccess(Guid Id)
+        {
+            var appointment = await _appointmentApiClient.GetById(Id);
+            return View(appointment.Data);
         }
         [HttpGet]
         public async Task<IActionResult> GetDoctorScheduleDate(Guid DoctorId, int intMonth)
@@ -197,7 +215,7 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> BookingClinicSetPatient(Guid clinicId)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             var clinic = await _clinicalApiClient.GetById(clinicId);
             if (!clinic.IsSuccessed)
             {

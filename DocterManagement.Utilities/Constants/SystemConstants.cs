@@ -12,6 +12,7 @@ namespace DoctorManagement.Utilities.Constants
         public const string CartSession = "CartSession";
         public const string CheckDoctorId = "CheckDoctorId";
         public const string OtpSession = "";
+        public const string Patient = "";
         public class AppSettings
         {
             public const string Token = "Token";

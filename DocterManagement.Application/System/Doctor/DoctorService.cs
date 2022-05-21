@@ -118,24 +118,131 @@ namespace DoctorManagement.Application.System.Doctor
             return new ApiSuccessResult<DoctorVm>(doctorVm);
         }
 
+        public async Task<ApiResult<PatientVm>> GetByPatientId(Guid id)
+        {
+            var patient = await _context.Patients.FindAsync(id);
+
+            if (patient == null)
+            {
+                return new ApiErrorResult<PatientVm>("User không tồn tại");
+            }
+            var location = await _context.Locations.FindAsync(patient.LocationId);
+            var district = await _context.Locations.FindAsync(location.ParentId);
+            var province = await _context.Locations.FindAsync(district.ParentId);
+            var ethnics = await _context.Ethnics.FindAsync(patient.EthnicId);
+            var fulladdreess = patient.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
+            //var roles = await _userManager.GetRolesAsync(user);
+            var patientvm = new PatientVm()
+            {
+                UserId = patient.UserId,
+                Name = patient.Name,
+                Address = patient.Address,
+                FullAddress = fulladdreess,
+                Img = USER_CONTENT_FOLDER_NAME + "/" + patient.Img,
+                No = patient.No,
+                Dob = patient.Dob,
+                Gender = patient.Gender,
+                IsPrimary = patient.IsPrimary,
+                RelativePhone = patient.RelativePhone,
+                RelativeName = patient.RelativeName,
+                Id = patient.PatientId,
+                Identitycard = patient.Identitycard,
+                Ethnics = new EthnicVm()
+                {
+                    Id=ethnics.Id,
+                    Name=ethnics.Name,
+                },
+                Location = new LocationVm() { Id = location.Id, Name = location.Name, District = new DistrictVm() { Id = district.Id, Name = district.Name, Province = new ProvinceVm() { Id = province.Id, Name = province.Name } } },
+               
+            };
+            return new ApiSuccessResult<PatientVm>(patientvm);
+        }
         public async Task<ApiResult<List<PatientVm>>> GetPatientProfile(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
-            var query = _context.Patients.Where(x=>x.UserId== user.Id);
+            var query = from p in _context.Patients
+                        join e in _context.Ethnics on p.EthnicId equals e.Id
+                        join sd in _context.Locations on p.LocationId equals sd.Id
+                        join d in _context.Locations on sd.ParentId equals d.Id
+                        join pro in _context.Locations on d.ParentId equals pro.Id
+                        where p.UserId == user.Id
+                        select new {p, e, sd, d,pro};
             var patients = await query.Select(x => new PatientVm()
             {
-                No= x.No,
-                Id = x.PatientId,
-                UserId = x.UserId,
-                Img = x.Img,
-                Name = x.Name,
-                Address = x.Address,
-                RelativePhone = x.RelativePhone,
-                Dob = x.Dob,
-                Gender = x.Gender,
-                EthnicId = x.EthnicId,
+                No= x.p.No,
+                Id = x.p.PatientId,
+                UserId = x.p.UserId,
+                Img = x.p.Img,
+                Name = x.p.Name,
+                Address = x.p.Address,
+                FullAddress = x.p.Address + ", " + x.sd.Name+", " + x.d.Name + ", " + x.pro.Name ,
+                RelativePhone = x.p.RelativePhone,
+                Dob = x.p.Dob,
+                Gender = x.p.Gender,
+                Identitycard = x.p.Identitycard,
+                Ethnics = new EthnicVm()
+                {
+                    Id = x.e.Id,
+                    Name = x.e.Name
+                },
+                IsPrimary = x.p.IsPrimary,
             }).ToListAsync();
             return new ApiSuccessResult<List<PatientVm>>(patients);
+        }
+
+        public async Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request)
+        {
+            var patient = await _context.Patients.FindAsync(request.Id);
+            if (patient == null) return new ApiErrorResult<bool>("");
+
+            patient.LocationId = request.LocationId;
+            patient.Name = request.Name;
+            patient.Address = request.Address;
+            patient.Identitycard = request.Identitycard;
+            patient.Dob = request.Dob;
+            patient.Gender = request.Gender;
+            patient.EthnicId = request.EthnicId;
+            patient.RelativeName = request.RelativeName;
+            patient.RelativePhone = request.RelativePhone;
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("");
+        }
+
+        public async Task<ApiResult<bool>> AddInfo(AddPatientInfoRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.UserName);
+            var patiens = _context.Patients.Where(x => x.IsPrimary && x.UserId == user.Id);
+            if (user == null) return new ApiErrorResult<bool>("Tài khoản tạo hồ sơ không được phép!");
+            string year = DateTime.Now.ToString("yy");
+            string month = DateTime.Now.ToString("MM");
+            int count = await _context.Patients.Where(x => x.No.Contains("DMP" + year + month)).CountAsync();
+            string str = "";
+            if (count < 9) str = "DMP" + year + month + "0000" + (count + 1);
+            else if (count < 99) str = "DMP" + year + month + "000" + (count + 1);
+            else if (count < 999) str = "DMP" + year + month + "00" + (count + 1);
+            else if (count < 9999) str = "DMP" + year + month + "0" + (count + 1);
+            else if (count < 99999) str = "DMP" + year + month + (count + 1);
+            var patient = new Patients()
+            {
+                Address = request.Address,
+                Identitycard = request.Identitycard,
+                Dob = request.Dob,
+                Gender = request.Gender,
+                Name = request.Name,
+                LocationId = request.LocationId,
+                EthnicId = request.EthnicId,
+                RelativeName = request.RelativeName,
+                RelativePhone = request.RelativePhone,
+                UserId = user.Id,
+                No = str,
+                IsPrimary = false,
+                RelativeRelationshipId = patiens.FirstOrDefault().PatientId
+            };
+            await _context.Patients.AddAsync(patient);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Thêm hồ sơ bệnh không thành công!");
         }
     }
 }

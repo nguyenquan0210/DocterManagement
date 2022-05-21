@@ -1,7 +1,10 @@
 ﻿using DoctorManagement.ApiIntegration;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.System.Patient;
 using DoctorManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace DoctorManagement.WebApp.Controllers
@@ -23,10 +26,12 @@ namespace DoctorManagement.WebApp.Controllers
             _specialityApiClient = specialityApiClient;
             _clinicApiClient = clinicApiClient;
         }
-
+        
         public IActionResult Index()
         {
+            HttpContext.Session.SetString(SystemConstants.Patient, JsonConvert.SerializeObject(new PatientVm()));
             return View();
+
         }
         public async Task<IActionResult> Doctor()
         {

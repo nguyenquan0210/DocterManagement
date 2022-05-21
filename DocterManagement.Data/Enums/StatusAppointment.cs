@@ -8,6 +8,6 @@ namespace DoctorManagement.Data.Enums
 {
     public enum StatusAppointment
     {
-        pending, approved, complete
+        pending, approved, complete,cancel
     }
 }

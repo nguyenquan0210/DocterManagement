@@ -1,6 +1,6 @@
-﻿@using DoctorManagement.Data.Enums
-@using DoctorManagement.ViewModels.Common;
-@model PagedResult<DoctorManagement.ViewModels.Catalog.Schedule.ScheduleVm>
+﻿@using DoctorManagement.ViewModels.Common
+@using DoctorManagement.Data.Enums
+@model PagedResult<DoctorManagement.ViewModels.Catalog.Appointment.AppointmentVm>
 
 @{
     ViewData["Title"] = "Index";
@@ -85,13 +85,13 @@
                         <table class="table table-flush" id="list">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>Thứ</th>
+                                    <th>Mã phiếu khám</th>
+                                    <th>STT phiếu khám</th>
                                     <th>Ngày khám</th>
-                                    <th>Từ thời gian</th>
-                                    <th>Đến thời gian</th>
-                                    <th>Số lượng</th>
-                                    <th>Số lượng sẵn có</th>
-                                    <th>Số lượng đã đặt</th>
+                                    <th>Tên Bệnh nhân</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Ngày sinh</th>
+                                    <th>Giới tính</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -103,16 +103,16 @@
                                 @foreach (var item in Model.Items)
                                 {
                                     <tr id="row_@item.Id">
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.CheckInDate.DayOfWeek</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.CheckInDate.ToShortDateString()</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
+                                      @*  <td class="text-sm"><h6 class="ms-3 my-auto">@item.CheckInDate.ToShortDateString()</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.FromTime</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.ToTime</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Qty</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.AvailableQty</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.BookedQty</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.BookedQty</h6></td>*@
                                         
                                         <td>
-                                            <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>
+                                           @* <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>*@
                                         </td>
                                         <td class="text-sm">
                                             <a  asp-action = "Detailt" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
@@ -121,9 +121,9 @@
                                             <a  asp-action = "Update" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
                                                 <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
-                                            <a id = "Speciality_@i" onclick="@(item.IsDeleted == false ? "ConfirmDelete("+@i+")": "ConfirmStatus("+@i+")")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
+                                           @* <a id = "Speciality_@i" onclick="@(item.IsDeleted == false ? "ConfirmDelete("+@i+")": "ConfirmStatus("+@i+")")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
                                                 <i class="fas fa-trash text-secondary"></i>
-                                            </a>
+                                            </a>*@
                                         </td>
                                     </tr>
                                     i++;

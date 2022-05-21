@@ -15,6 +15,9 @@ namespace DoctorManagement.Data.Entities
         public StatusAppointment Status { get; set; }
         public Guid SchedulesSlotId { get; set; }
         public string No { get; set; }
+        public string Note { get; set; }
+        public bool IsDoctor { get; set; }
+        public int Stt { get; set; }
         public Guid PatientId { get; set; }
         public Guid DoctorId { get; set; }
 
@@ -24,5 +27,6 @@ namespace DoctorManagement.Data.Entities
 
         public Rates Rates { get; set; }
         public Doctors Doctors { get; set; }
+        public List<Attachedfiles> Attachedfiles { get; set; }
     }
 }

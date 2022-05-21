@@ -1,11 +1,13 @@
 ﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.Catalog.Clinic
 @using DoctorManagement.ViewModels.System.Patient
-@model DoctorManagement.ViewModels.Catalog.Clinic.ClinicVm
+@model DoctorManagement.ViewModels.Catalog.Appointment.AppointmentCreateRequest
 @{
     ViewData["Title"] = "BookingClinicSetDoctor";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var i = 0;
     List<PatientVm> patient = (List<PatientVm>)ViewBag.Patient;
+    ClinicVm clinic = (ClinicVm)ViewBag.Clinic;
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @section Stylesheet{
@@ -1785,7 +1787,7 @@
                             _nghost-serverapp-c173="">
                             <div _ngcontent-serverapp-c173="" class="px-10 py-6 flex flex-row gap-4 ng-star-inserted">
                                 <div id="stepbardoctor" _ngcontent-serverapp-c173="" class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted">
-                                    <img _ngcontent-serverapp-c173="" src="~/img/booking/svg/checked-bg-blue.svg"
+                                    <img _ngcontent-serverapp-c173="" src="~/img/booking/svg/checked-bg-blue.svg" onclick="showDoctor()"
                                     alt="" class="w-6 h-6 ng-star-inserted hiden">
                                     
                                     <div _ngcontent-serverapp-c173=""
@@ -1798,7 +1800,7 @@
                                         class="w-6 h-6 ng-star-inserted hiden">
                                 </div>
                                 <div id="stepbardate" _ngcontent-serverapp-c173="" class="hiden cursor-pointer flex flex-row items-center gap-2 ng-star-inserted"><img
-                                    _ngcontent-serverapp-c173="" src="~/img/booking/svg/checked-bg-blue.svg"
+                                    _ngcontent-serverapp-c173="" src="~/img/booking/svg/checked-bg-blue.svg" onclick="showDate()"
                                     alt="" class="w-6 h-6 ng-star-inserted hiden">
                                     <div _ngcontent-serverapp-c173=""
                                         class="w-6 h-6 bg-green-500 text-white text-center rounded ng-star-inserted checknumber">2
@@ -1809,7 +1811,7 @@
                                         class="w-6 h-6 ng-star-inserted hiden">
                                 </div>
                                 <div id="stepbartimespan" _ngcontent-serverapp-c173="" class="hiden cursor-pointer flex flex-row items-center gap-2 ng-star-inserted"><img
-                                    _ngcontent-serverapp-c173="" src="~/img/booking/svg/checked-bg-blue.svg"
+                                    _ngcontent-serverapp-c173="" src="~/img/booking/svg/checked-bg-blue.svg" onclick="showTimeSpan()"
                                     alt="" class="w-6 h-6 ng-star-inserted hiden">
                                     <div _ngcontent-serverapp-c173=""
                                         class="w-6 h-6 bg-green-500 text-white text-center rounded ng-star-inserted checknumber">3
@@ -1835,18 +1837,18 @@
                                         src="~/img/booking/svg/boldWarning2.svg"
                                         class="w-4 h-4 leading-5 object-cover mr-1">
                                     <p _ngcontent-serverapp-c189="" class="font-normal text-sm ng-star-inserted"> -
-                                         @Model.Note </p>
+                                         @clinic.Note </p>
                                 </div>
                                 <nz-steps _ngcontent-serverapp-c189="" nzdirection="vertical" nzsize="small">
                                     <div class="ant-steps ant-steps-vertical ant-steps-small">
                                         <nz-step _ngcontent-serverapp-c189="" id="showstepdoctor" class="ant-steps-item ant-steps-item-process ant-steps-item-active ng-star-inserted">
-                                            <div class="ant-steps-item-container" tabindex="0" role="button">
+                                            <div class="ant-steps-item-container" tabindex="0" role="button" >
                                                 
                                                 <div class="ant-steps-item-icon">
                                                     <span class="ant-steps-icon ng-star-inserted"> 1 </span>
                                                 </div>
                                                 <div class="ant-steps-item-content">
-                                                    <div class="ant-steps-item-title">
+                                                    <div class="ant-steps-item-title" onclick="showDoctor()">
                                                         <div _ngcontent-serverapp-c189=""
                                                             class="flex flex-row flex-1 pt-4 pl-12 justify-between ng-star-inserted">
                                                             <div _ngcontent-serverapp-c189=""
@@ -1881,9 +1883,9 @@
                                                                         </form>
                                                                     </div>
                                                                     <div _ngcontent-serverapp-c216="" class="space-y-4">
-                                                                    @if(Model.DoctorVms.ToList().Count > 0){
+                                                                    @if(clinic.DoctorVms.ToList().Count > 0){
                                                                         i=1;
-                                                                        foreach(var doctor in Model.DoctorVms.ToList()){
+                                                                        foreach(var doctor in clinic.DoctorVms.ToList()){
                                                                             
                                                                             <div _ngcontent-serverapp-c216="" id="chosedoctor_@i" onclick="chosedoctor(@i)" data-id="@doctor.UserId" data-value-doctor="@(doctor.Prefix+doctor.LastName+" "+doctor.FirstName)"
                                                                                 class="@(doctor.Booking ?"":"hiden-btn") rounded-md border border-gray-200 bg-white p-4 cursor-pointer hover:border-primary hover:ring-1 hover:ring-primary ng-star-inserted">
@@ -1919,7 +1921,7 @@
                                                     <span class="ant-steps-icon ng-star-inserted"> 2 </span>
                                                 </div>
                                                 <div class="ant-steps-item-content">
-                                                    <div class="ant-steps-item-title">
+                                                    <div class="ant-steps-item-title" onclick="showDate()">
                                                         <div _ngcontent-serverapp-c189=""
                                                             class="flex flex-row flex-1 pt-4 pl-12 justify-between ng-star-inserted">
                                                             <div _ngcontent-serverapp-c189=""
@@ -2151,7 +2153,7 @@
                                                     <span class="ant-steps-icon ng-star-inserted"> 3 </span>
                                                 </div>
                                                 <div class="ant-steps-item-content">
-                                                    <div class="ant-steps-item-title">
+                                                    <div class="ant-steps-item-title" onclick="showTimeSpan()">
                                                         <div _ngcontent-serverapp-c189=""
                                                             class="flex flex-row flex-1 pt-4 pl-12 justify-between ng-star-inserted">
                                                             <div _ngcontent-serverapp-c189=""
@@ -2445,21 +2447,78 @@
                                                                                 _ngcontent-serverapp-c258="" for="note"
                                                                                 class="font-medium text-sm">Ghi
                                                                                 chú</label>
-                                                                            <form _ngcontent-serverapp-c258=""
+                                                                            <form _ngcontent-serverapp-c258="" id="form-booking" asp-action="BookingClinicSetDoctor" method="post"
                                                                                 novalidate=""
                                                                                 class="ng-untouched ng-pristine ng-valid">
-                                                                                <textarea _ngcontent-serverapp-c258=""
-                                                                                    rows="1" formcontrolname="note"
-                                                                                    nz-input=""
-                                                                                    class="rounded mt-1 ant-input ng-untouched ng-pristine ng-valid"
-                                                                                    placeholder="Triệu chứng, thuốc đang dùng, tiền sử, ..."
-                                                                                    style="max-height: 120px; min-height: 76px; height: 76px;">
-                                                                                </textarea>
-                                                                                <input type="hidden" id="DateString" />
-                                                                                <input type="hidden" id="DoctorId" />
-                                                                                <input type="hidden" id="SlotId" />
-                                                                                <input type="hidden" id="PatientId" />
-                                                                                    
+                                                                                        <input type="hidden" id="DateString" />
+                                                                                        <textarea asp-for="Note" _ngcontent-serverapp-c180="" rows="1" formcontrolname="note" nz-input="" class="rounded mt-1 ant-input ng-pristine ng-valid ng-touched" placeholder="Triệu chứng, thuốc đang dùng, tiền sử, ..." style="max-height: 120px; min-height: 76px; height: 76px;"></textarea>
+                                                                                        <input type="hidden" asp-for="SchedulesSlotId" />  
+                                                                                        <input type="hidden" asp-for="PatientId" />  
+                                                                                        <input type="hidden" asp-for="DoctorId" />  
+                                                                                        <input type="hidden" asp-for="ClinicId" value="@clinic.Id" />  
+                                                                                        <input type="hidden" asp-for="IsDoctor" value="false" /> 
+                                                                                        <div _ngcontent-serverapp-c253=""
+                                                                                            class="flex flex-col"><label 
+                                                                                                _ngcontent-serverapp-c253=""
+                                                                                                class="font-medium text-sm">Tập
+                                                                                                tin đính kèm (0/5)</label>
+                                                                                            <nz-upload
+                                                                                                _ngcontent-serverapp-c253=""
+                                                                                                nztype="drag"
+                                                                                                nzfiletype="image/png,image/jpeg,image/gif,image/bmp"
+                                                                                                class="rounded mt-1">
+                                                                                                <div
+                                                                                                    class="ant-upload ant-upload-drag ng-star-inserted">
+                                                                                                    <div nz-upload-btn=""
+                                                                                                        class="ant-upload ant-upload-btn"
+                                                                                                        tabindex="0"
+                                                                                                        role="button"><input
+                                                                                                            type="file"
+                                                                                                            style="display: none;"
+                                                                                                            multiple="">
+                                                                                                        <div
+                                                                                                            class="ant-upload-drag-container">
+                                                                                                            <div _ngcontent-serverapp-c253=""
+                                                                                                                class="flex flex-col gap-2 ng-star-inserted">
+                                                                                                                <p _ngcontent-serverapp-c253=""
+                                                                                                                    class="font-normal text-sm">
+                                                                                                                    <span
+                                                                                                                        _ngcontent-serverapp-c253=""
+                                                                                                                        class="text-primary">Chọn
+                                                                                                                        tập
+                                                                                                                        tin</span>
+                                                                                                                    hoặc kéo thả
+                                                                                                                    vào đây </p>
+                                                                                                                <p _ngcontent-serverapp-c253=""
+                                                                                                                    class="font-normal text-xs text-gray-400">
+                                                                                                                    .PNG, .JPG
+                                                                                                                    tối đa 3MB
+                                                                                                                </p>
+                                                                                                            </div>
+                                                                                                    
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <nz-upload-list
+                                                                                                    class="ant-upload-list ng-tns-c119-36 ant-upload-list-text ng-star-inserted"
+                                                                                                    dir="ltr">
+                                                                                            
+                                                                                                </nz-upload-list>
+                                                                                            </nz-upload>
+                                                                                        </div>
+                                                                                        <div _ngcontent-serverapp-c253=""
+                                                                                            class="flex flex-row justify-between font-semibold">
+                                                                                            <a _ngcontent-serverapp-c253=""
+                                                                                                nz-popover=""
+                                                                                                nzpopoverplacement="right"
+                                                                                                nzpopovertrigger="click"
+                                                                                                class="text-sm bg-transparent border border-solid text-primary rounded py-3 px-4">
+                                                                                                Thêm hồ sơ mới </a>
+                                                                                            <a
+                                                                                                _ngcontent-serverapp-c253=""
+                                                                                                class="text-sm bg-transparent border border-primary text-white bg-primary rounded py-3 px-4 hover:bg-primary/80 hover:text-white"
+                                                                                                hidden="">Xác nhận</a>
+                                                                                        </div>
                                                                             </form>
                                                                         </div>
                                                                         <div _ngcontent-serverapp-c258=""
@@ -2554,16 +2613,16 @@
                                                                 _ngcontent-serverapp-c231=""
                                                                 defaultimage="~/img/placeholder.webp"
                                                                 class="w-[60px] h-[60px] object-scale-down rounded-full lazyload  ng-lazyloaded"
-                                                                alt="@Model.Name"
-                                                                src="@(Configuration["BaseAddress"] + "/img/" + Model.ImgLogo)">
+                                                                alt="@clinic.Name"
+                                                                src="@(Configuration["BaseAddress"] + "/img/" + clinic.ImgLogo)">
                                                         </div>
                                                         
                                                         <div _ngcontent-serverapp-c231="">
                                                             <p _ngcontent-serverapp-c231=""
-                                                                class="font-medium text-base"> @Model.Name </p>
+                                                                class="font-medium text-base"> @clinic.Name </p>
                                                             <p _ngcontent-serverapp-c231=""
                                                                 class="font-normal text-xs text-gray-500 line-clamp-2">
-                                                                @Model.FullAddress </p>
+                                                                @clinic.FullAddress </p>
                                                         </div>
                                                     </div>
                                                     <div _ngcontent-serverapp-c185="" class="p-4 lg:px-6 bg-white">
@@ -2587,12 +2646,10 @@
                                                 </div>
                                                 <nz-spin _ngcontent-serverapp-c231="" class="ant-spin-nested-loading">
                                                     <div class="ant-spin-container ng-star-inserted">
-                                                        <div _ngcontent-serverapp-c231=""
-                                                            class="md:p-4 bg-white ng-star-inserted"><button
-                                                                _ngcontent-serverapp-c231=""
-                                                                class="bg-gray-300 text-white font-semibold w-full text-center px-3 py-3 rounded cursor-not-allowed ng-star-inserted">
-                                                                Xác nhận đặt khám</button>
-                                                        </div>
+                                                        <div _ngcontent-serverapp-c257="" class="md:p-4 bg-white ng-star-inserted" id="btn-submit">
+                                                                <button  _ngcontent-serverapp-c257="" class="bg-gray-300 text-white font-semibold w-full text-center px-4 py-4 rounded cursor-not-allowed ng-star-inserted"> Xác nhận đặt khám</button>
+                                                                <button _ngcontent-serverapp-c188="" onclick="submitForm()" class="w-full button font-semibold text-sm text-white px-4 py-4 bg-primary ng-star-inserted hiden-btn"> Đặt lịch</button>
+                                                            </div>
                                                     </div>
                                                     
                                                 </nz-spin>
@@ -2651,6 +2708,62 @@
 </app-step-booking>
 @section JavaScript{
     <script>
+        function showDoctor(){
+            $('#stepbardoctor .checknumber').removeClass('hiden');
+            $('#stepbardoctor img').addClass('hiden');
+            $('#stepbardate').addClass('hiden');
+            $('#stepbartimespan').addClass('hiden');
+            $('#stepbarprofile').addClass('hiden');
+            $('#showstepdoctor').addClass('ant-steps-item-active');
+            $('#showstepdoctor .ant-steps-item-description').removeClass('hiden');
+            $('#showstepdate').removeClass('ant-steps-item-active');
+            $('#showstepdate').addClass('hiden');
+            $('#showsteptimespan').removeClass('ant-steps-item-active');
+            $('#showsteptimespan').addClass('hiden');
+            $('#showstepprofile').removeClass('ant-steps-item-active');
+            $('#showstepprofile').addClass('hiden');
+            $('#btn-submit .button').addClass('hiden-btn');
+            $('#btn-submit .rounded').removeClass('hiden-btn');
+        }
+        function showDate(){
+            $('#stepbardate .checknumber').removeClass('hiden');
+            $('#stepbardate img').addClass('hiden');
+            $('#stepbardoctor.checknumber').addClass('hiden');
+            $('#stepbardoctor img').removeClass('hiden');
+            $('#stepbartimespan').addClass('hiden');
+            $('#stepbarprofile').addClass('hiden');
+            $('#showstepdoctor').removeClass('ant-steps-item-active');
+            $('#showstepdoctor .ant-steps-item-description').addClass('hiden');
+            $('#showstepdate').addClass('ant-steps-item-active');
+            $('#showstepdate').removeClass('hiden');
+            $('#showstepdate .ant-steps-item-description').removeClass('hiden');
+            $('#showsteptimespan').removeClass('ant-steps-item-active');
+            $('#showsteptimespan').addClass('hiden');
+            $('#showstepprofile').removeClass('ant-steps-item-active');
+            $('#showstepprofile').addClass('hiden');
+            $('#btn-submit .button').addClass('hiden-btn');
+            $('#btn-submit .rounded').removeClass('hiden-btn');
+        }
+        function showTimeSpan(){
+            $('#stepbartimespan .checknumber').removeClass('hiden');
+            $('#stepbartimespan img').addClass('hiden');
+            $('#stepbardoctor.checknumber').addClass('hiden');
+            $('#stepbardoctor img').removeClass('hiden');
+            $('#stepbardate.checknumber').addClass('hiden');
+            $('#stepbardate img').removeClass('hiden');
+            $('#stepbarprofile').addClass('hiden');
+            $('#showstepdoctor').removeClass('ant-steps-item-active');
+            $('#showstepdoctor .ant-steps-item-description').addClass('hiden');
+            $('#showsteptimespan').addClass('ant-steps-item-active');
+            $('#showsteptimespan').removeClass('hiden');
+            $('#showsteptimespan .ant-steps-item-description').removeClass('hiden');
+            $('#showstepdate').removeClass('ant-steps-item-active');
+            $('#showstepdate .ant-steps-item-description').addClass('hiden');
+            $('#showstepprofile').removeClass('ant-steps-item-active');
+            $('#showstepprofile').addClass('hiden');
+            $('#btn-submit .button').addClass('hiden-btn');
+            $('#btn-submit .rounded').removeClass('hiden-btn');
+        }
         function chosedoctor(i){
             var doctorId = $("#chosedoctor_"+i).attr("data-id");
             $("#DoctorId").val(doctorId);
@@ -2660,8 +2773,11 @@
             $('#showstepdoctor').removeClass('ant-steps-item-active');
             $('#showstepdate ').addClass('ant-steps-item-active');
             $('#showstepdate ').removeClass('hiden');
+            $('#showstepdate .ant-steps-item-description').removeClass('hiden');
             $('#stepbardoctor .checknumber').addClass('hiden');
             $('#stepbardoctor img').removeClass('hiden');
+            $('#stepbardate .checknumber').removeClass('hiden');
+            $('#stepbardate img').addClass('hiden');
             $('#stepbardate').removeClass('hiden');
             var showdoctorvalue = $("#chosedoctor_"+i).attr("data-value-doctor");
             $("#showdoctorvalue").html(showdoctorvalue);
@@ -2675,26 +2791,37 @@
             $('#showstepdate').removeClass('ant-steps-item-active');
             $('#showsteptimespan ').addClass('ant-steps-item-active');
             $('#showsteptimespan ').removeClass('hiden');
+            $('#showsteptimespan .ant-steps-item-description').removeClass('hiden');
             $('#stepbardate .checknumber').addClass('hiden');
             $('#stepbardate img').removeClass('hiden');
+            $('#stepbartimespan .checknumber').removeClass('hiden');
+            $('#stepbartimespan img').addClass('hiden');
             $('#stepbartimespan').removeClass('hiden');
             var showdatevalue = $("#chosedate_"+i).attr("data-value-date");
             $("#showdatevalue").html(showdatevalue);
         }
         function chosetimespan(i){
             var slotId = $("#chosetimespan_"+i).attr("data-timespan");
-            $("#SlotId").val(slotId);
+            $("#SchedulesSlotId").val(slotId);
             //GetDoctorScheduleTimeSpan();
             $('#showsteptimespan .ant-steps-item-content').css('overflow','hidden');
             $('#showsteptimespan .ant-steps-item-description').addClass('hiden');
             $('#showsteptimespan').removeClass('ant-steps-item-active');
             $('#showstepprofile ').addClass('ant-steps-item-active');
             $('#showstepprofile ').removeClass('hiden');
+            $('#showstepprofile .ant-steps-item-description').removeClass('hiden');
             $('#stepbartimespan .checknumber').addClass('hiden');
             $('#stepbartimespan img').removeClass('hiden');
+            $('#stepbarprofile .checknumber').removeClass('hiden');
+            $('#stepbarprofile img').addClass('hiden');
             $('#stepbarprofile').removeClass('hiden');
             var showtimespanvalue = $("#chosetimespan_"+i).attr("data-value-timespan");
             $("#showtimespanvalue").html(showtimespanvalue);
+            var checkbtn = $('#PatientId').val();
+            if(checkbtn!="") {
+                $('#btn-submit .button').removeClass('hiden-btn');
+                $('#btn-submit .rounded').addClass('hiden-btn');
+            }
         }
         function choserprofile(id){
             var patientId = $("#patient_"+id).attr("data-id");
@@ -2751,6 +2878,7 @@
                       var s ='';
                        for (var i = 0; i < result.length; i++) {
                            s += '<div _ngcontent-serverapp-c142="" class="mb-2 ng-star-inserted"><div _ngcontent-serverapp-c142="" class="flex"><img _ngcontent-serverapp-c142="" width="20" height="20" loading="lazy" src="/img/booking/svg/'+result[i].img+'" alt="'+result[i].text+'"><p _ngcontent-serverapp-c142="" class="ml-1 text-sm font-medium text-gray-600">'+result[i].text+'</p></div><div _ngcontent-serverapp-c142="" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 py-3 max-h-52 overflow-x-auto">';
+                           stt=1;
                            for(var j = 0; j < result[i].slot.length; j++) {
                                var demo = result[i].slot[j].slotId;
                                s+='<a id="chosetimespan_'+1+i+ j+'" onclick="chosetimespan('+1+i+j+')" data-timespan="'+result[i].slot[j].slotId+'" data-value-timespan="'+result[i].slot[j].timeSpan+'" _ngcontent-serverapp-c142=""  class="text-center whitespace-nowrap text-xs sm:text-sm font-medium border rounded-md py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary transform-none ng-star-inserted" title="Chọn slot này">'+result[i].slot[j].timeSpan+' </a>';
@@ -2760,6 +2888,9 @@
                        $('#showlisttimespan').html(s);
                   }
             })
+        }
+        function submitForm(){
+            document.getElementById('form-booking').submit();
         }
     </script>
 }

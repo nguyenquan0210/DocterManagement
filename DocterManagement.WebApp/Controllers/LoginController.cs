@@ -20,13 +20,14 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
         private readonly ILocationApiClient _locationApiClient;
-
-        public LoginController(IUserApiClient userApiClient,
+        private readonly IDoctorApiClient _doctorApiClient;
+        public LoginController(IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
             IConfiguration configuration, ILocationApiClient locationApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
             _locationApiClient = locationApiClient;
+            _doctorApiClient = doctorApiClient;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -52,6 +53,10 @@ namespace DoctorManagement.WebApp.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
+           /* var patients = (await _doctorApiClient.GetPatientProfile(request.UserName)).Data;
+            var patient = patients.FirstOrDefault(x => x.IsPrimary == true);
+            HttpContext.Session.SetString(SystemConstants.Patient, JsonConvert.SerializeObject(patient));*/
+
 
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.Data);
             await HttpContext.SignInAsync(
@@ -227,6 +232,9 @@ namespace DoctorManagement.WebApp.Controllers
                     IsPersistent = false
                 };
 
+                var patient = (await _doctorApiClient.GetPatientProfile(request.PhoneNumber)).Data;
+                HttpContext.Session.SetString(SystemConstants.Patient, JsonConvert.SerializeObject(patient.FirstOrDefault(x=>x.IsPrimary==true)));
+
                 HttpContext.Session.SetString(SystemConstants.AppSettings.Token, rs.Data);
                 await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
@@ -274,6 +282,13 @@ namespace DoctorManagement.WebApp.Controllers
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
 
             return principal;
+        }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("Token");
+            return RedirectToAction("Index", "Login");
         }
     }
 }
