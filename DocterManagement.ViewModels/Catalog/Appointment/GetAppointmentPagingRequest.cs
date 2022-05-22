@@ -10,5 +10,7 @@ namespace DoctorManagement.ViewModels.Catalog.Appointment
     public class GetAppointmentPagingRequest : PagingResultBase
     {
         public string? Keyword { get; set; }
+        public string? UserName { get; set; }
+        public string? UserNameDoctor { get; set; }
     }
 }

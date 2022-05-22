@@ -21,5 +21,6 @@ namespace DoctorManagement.ViewModels.System.Patient
         public Guid DistrictId { get; set; }
         public Guid ProvinceId { get; set; }
         public Guid EthnicId { get; set; }
+        public string RelativeEmail { get; set; }
     }
 }

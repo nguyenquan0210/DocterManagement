@@ -16,7 +16,7 @@ namespace DoctorManagement.Data.Configuration
             builder.ToTable("Appointments");
 
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.No).IsRequired().HasMaxLength(15);
+            builder.Property(x => x.No).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Note).HasMaxLength(int.MaxValue);
 
             builder.HasOne(x => x.SchedulesSlots).WithOne(x => x.Appointments).HasForeignKey<Appointments>(x => x.SchedulesSlotId).OnDelete(DeleteBehavior.ClientCascade);

@@ -13,6 +13,7 @@ namespace DoctorManagement.Utilities.Constants
         public const string CheckDoctorId = "CheckDoctorId";
         public const string OtpSession = "";
         public const string Patient = "";
+        public const string Doctor = "";
         public class AppSettings
         {
             public const string Token = "Token";

@@ -25,7 +25,8 @@ namespace DoctorManagement.DoctorApp.Controllers
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
-                PageSize = pageSize
+                PageSize = pageSize,
+                UserNameDoctor = User.Identity.Name
             };
             var data = await _appointmentApiClient.GetAppointmentPagings(request);
             ViewBag.Keyword = keyword;

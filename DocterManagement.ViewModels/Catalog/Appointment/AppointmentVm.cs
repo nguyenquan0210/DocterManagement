@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Catalog.MedicalRecords;
 using DoctorManagement.ViewModels.Catalog.Schedule;
 using DoctorManagement.ViewModels.Catalog.SlotSchedule;
 using DoctorManagement.ViewModels.System.Doctors;
@@ -24,5 +25,6 @@ namespace DoctorManagement.ViewModels.Catalog.Appointment
         public SlotScheduleVm SlotSchedule { get; set; }
         public PatientVm Patient { get; set; }
         public DoctorVm Doctor { get; set; }
+        public MedicalRecordVm MedicalRecord { get; set; }
     }
 }

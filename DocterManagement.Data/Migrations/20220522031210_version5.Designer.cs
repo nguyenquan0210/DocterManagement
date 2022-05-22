@@ -4,6 +4,7 @@ using DoctorManagement.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoctorManagement.Data.Migrations
 {
     [DbContext(typeof(DoctorManageDbContext))]
-    partial class DoctorManageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220522031210_version5")]
+    partial class version5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,7 +102,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "ac67c5c1-65e1-4d33-95dd-6614172cfee0",
+                            ConcurrencyStamp = "db14e35d-33ad-44ce-9f01-924d92224964",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -108,7 +110,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"),
-                            ConcurrencyStamp = "e6ae8d47-4d1a-4d0c-be52-4073256584ad",
+                            ConcurrencyStamp = "24f1d53a-23d1-403a-904e-14890c59fc5b",
                             Description = "doctor role",
                             Name = "doctor",
                             NormalizedName = "doctor"
@@ -116,7 +118,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("50fe257e-6475-41f0-93f7-f530d622362b"),
-                            ConcurrencyStamp = "c056f50a-edc1-48ae-b634-0886463d85c6",
+                            ConcurrencyStamp = "b2def530-e357-43d1-a5d7-8dcec56cc8c7",
                             Description = "patient role",
                             Name = "patient",
                             NormalizedName = "patient"
@@ -197,14 +199,14 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "115c57f0-ba5a-4f91-bbe6-71b991d3c5d6",
+                            ConcurrencyStamp = "a83dbd8e-fabc-41b6-a6c8-73dc17678adb",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nguyenquan52000@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyenquan52000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKwUb2vuKCvnG0rMrytyqmbHDWb/B+68zzRNos6C/6VdZbs5gj/DUNaQsmfDGA4bDg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJnb6XWLjqT7tzQfkpmSr3uZso+GeKyXiwykMjjL6sIF2QjHLHVgB4lwWEiwb0Ux+A==",
                             PhoneNumber = "0373951042",
                             PhoneNumberConfirmed = false,
                             RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
@@ -328,35 +330,6 @@ namespace DoctorManagement.Data.Migrations
                     b.ToTable("CommentsPost", (string)null);
                 });
 
-            modelBuilder.Entity("DoctorManagement.Data.Entities.Contacts", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("YourMessage")
-                        .IsRequired()
-                        .HasMaxLength(2147483647)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contacts", (string)null);
-                });
-
             modelBuilder.Entity("DoctorManagement.Data.Entities.Districs", b =>
                 {
                     b.Property<Guid>("Id")
@@ -383,9 +356,6 @@ namespace DoctorManagement.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
-
-                    b.Property<int>("BeforeBookingDay")
-                        .HasColumnType("int");
 
                     b.Property<bool>("Booking")
                         .HasColumnType("bit");
@@ -572,50 +542,6 @@ namespace DoctorManagement.Data.Migrations
                     b.ToTable("ImagePost", (string)null);
                 });
 
-            modelBuilder.Entity("DoctorManagement.Data.Entities.Informations", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Company")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FullAddress")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Hotline")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("TimeWorking")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Informations", (string)null);
-                });
-
             modelBuilder.Entity("DoctorManagement.Data.Entities.Locations", b =>
                 {
                     b.Property<Guid>("Id")
@@ -649,51 +575,6 @@ namespace DoctorManagement.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations", (string)null);
-                });
-
-            modelBuilder.Entity("DoctorManagement.Data.Entities.MainMenus", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Controller")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<Guid>("ParentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MainMenus", (string)null);
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.MedicalRecord", b =>

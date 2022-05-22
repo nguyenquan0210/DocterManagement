@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-     List<GalleryVm> images = ViewBag.Imgs;
+    List<GalleryVm> images = (List<GalleryVm>)ViewBag.Imgs;
     var i = 0;
 }
 <style>
@@ -311,17 +311,28 @@
                                 <input asp-for="Dob" class="form-control datetimepicker flatpickr-input" autocomplete="off" />
                                 <span asp-validation-for="Dob" class="text-danger"></span>
                             </div>
-                            <div class="col-6">
+                            <div class="col-5">
                                 <label asp-for="Slug" class="form-label"></label>
                                 <input asp-for="Slug" class="multisteps-form__input form-control"  />
                                 <span asp-validation-for="Slug" class="text-danger"></span>
                             </div>
-                            <div class="col-3">
+                            <div class="col-2">
                                 <label asp-for="Booking" class="form-label"></label>
                                 <div class="form-check form-switch ps-0">
                                     <input asp-for="Booking" type="checkbox" class="form-check-input mt-1 ms-auto "  />
                                 </div>
                                 <span asp-validation-for="Booking" class="text-danger"></span>
+                            </div>
+                            <div class="col-2">
+                                <label asp-for="BeforeBookingDay" class="form-label"></label>
+                                
+                                <div class="input-group">
+                                  <input type="text" asp-for="BeforeBookingDay" class="form-control" >
+                                  <span class="input-group-text">ngày</span>
+                                </div>
+                                
+                               
+                                <span asp-validation-for="BeforeBookingDay" class="text-danger"></span>
                             </div>
                          </div>
                     
@@ -387,12 +398,12 @@
                          <div class="row">
                             <div class="col-6">
                                 <label asp-for="TimeWorking" class="form-label mt-4"></label>
-                                <textarea asp-for="TimeWorking" class="classic-editor form-control datetimepicker"  >  </textarea>
+                                <input asp-for="TimeWorking" placeholder="Thứ 2 17:00 - 19:00 .."  class="multisteps-form__input form-control" />
                                 <span asp-validation-for="TimeWorking" class="text-danger"></span>
                             </div>
                             <div class="col-6">
                                 <label asp-for="Services" class="form-label mt-4"></label>
-                                <textarea asp-for="Services" class="classic-editor multisteps-form__input form-control" >  </textarea>
+                                <input asp-for="Services" placeholder="Siêu âm .."  class="multisteps-form__input form-control" />
                                 <span asp-validation-for="Services" class="text-danger"></span>
                             </div>
                        
@@ -428,9 +439,10 @@
                          <div class="row">
                              <div class="col-12  "  id="show-file-img">
                                  <label asp-for="Galleries" class="form-label mt-4"></label>
-                                 @if (images.Count() > 0)
+                                 @if (images.Count > 0)
                                     {
-                                        <div class="row form-control dropzone dz-clickable dz-started mt-4" >
+                                    
+                                    <div class="row form-control dropzone dz-clickable dz-started mt-4" >
                                             @foreach(var img in images)
                                              {
                                                  <div class="col-1  dz-preview dz-processing dz-image-preview dz-error dz-complete" id ="row_@img.Id">
@@ -471,6 +483,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        for (int g = 0; g < Model.GetGalleries.Count(); g++)
+                                        {
+                                            @Html.TextBoxFor(x=>x.GetGalleries[g].Id, new{ type = "hidden"})
+                                            @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
+                                        }
                                     }
                              </div>
                          </div>
@@ -478,30 +495,10 @@
                     
                           @* @Html.TextBoxFor(x=>x.GetGalleries, new{ type = "hidden"})*@
                             
-                           @* <input asp-for="Galleries" type = "hidden"/>*@
+                            <input asp-for="Img" type = "hidden"/>
                        
-                           @for (int g = 0; g < Model.GetGalleries.Count(); g++)
-                            {
-                                @Html.TextBoxFor(x=>x.GetGalleries[g].Id, new{ type = "hidden"})
-                                @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
-                            }
-                    
+                                                
                           <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
-                
-                          @*<div class="row">
-                            <div class="col-lg-3 col-sm-6 col-12">
-                              <button class="btn bg-gradient-success w-100 mb-0 toast-btn" type="button" data-target="successToast">Success Notification</button>
-                            </div>
-                            <div class="col-lg-3 col-sm-6 col-12 mt-sm-0 mt-2">
-                              <button class="btn bg-gradient-info w-100 mb-0 toast-btn" type="button" data-target="infoToast">Info Notification</button>
-                            </div>
-                            <div class="col-lg-3 col-sm-6 col-12 mt-lg-0 mt-2">
-                              <button class="btn bg-gradient-warning w-100 mb-0 toast-btn" type="button" data-target="warningToast">Warning Notification</button>
-                            </div>
-                            <div class="col-lg-3 col-sm-6 col-12 mt-lg-0 mt-2">
-                              <button class="btn bg-gradient-danger w-100 mb-0 toast-btn" type="button" data-target="dangerToast">Danger Notification</button>
-                            </div>
-                          </div>*@
                 </div>
             </form>
           </div>
@@ -980,6 +977,27 @@
     <script src="~/js/plugins/flatpickr.min.js"></script>
     <script src="~/js/plugins/dropzone.min.js"></script>
     <script>
+        if (document.getElementById('TimeWorking')) {
+          var TimeWorking = document.getElementById('TimeWorking');
+          const example = new Choices(TimeWorking, {
+            delimiter: '+',
+            editItems: true,
+            maxItemCount: 7,
+            removeItemButton: true,
+            addItems: true
+          });
+        }
+        if (document.getElementById('Services')) {
+          var Services = document.getElementById('Services');
+          const example = new Choices(Services, {
+            delimiter: '+',
+            editItems: true,
+            maxItemCount: 50,
+            removeItemButton: true,
+            addItems: true
+          });
+        }
+        
         if (document.getElementById('ClinicId')) {
             var clinic = document.getElementById('ClinicId');
             const example = new Choices(clinic);
@@ -1107,9 +1125,10 @@
                     success: function (result) {
                         if (result.response == 2) {
                             $("#row_" + empId).remove();
-                            if(@images.Count == 1){
-                                $("#show-file-img").empty();
-                            }
+                           
+                                if(@images.Count() == 1){
+                                    $("#show-file-img").empty();
+                                }
                               $("#title").html("Xóa Thành Công");
                             $("#descript").html("Xóa người dùng thành công.");
                         } else{

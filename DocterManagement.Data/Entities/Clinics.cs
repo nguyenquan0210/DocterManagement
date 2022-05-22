@@ -14,6 +14,7 @@ namespace DoctorManagement.Data.Entities
         public string ImgLogo { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
+        public string FullAddress { get; set; }
         public DateTime CreatedAt { get; set; }
         public string MapUrl { get; set; }
         public string Note { get; set; }

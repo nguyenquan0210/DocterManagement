@@ -357,6 +357,7 @@ namespace DoctorManagement.Application.System.Users
                     Services = doctor.Services,
                     Slug = doctor.Slug,
                     Booking = doctor.Booking,
+                    BeforeBookingDay = doctor.BeforeBookingDay,
                     Dob = doctor.Dob,
                     Educations = doctor.Educations,
                     Gender = doctor.Gender,
@@ -465,6 +466,7 @@ namespace DoctorManagement.Application.System.Users
                     Services = doctor.Services,
                     Slug = doctor.Slug,
                     Booking = doctor.Booking,
+                    BeforeBookingDay = doctor.BeforeBookingDay,
                     Dob = doctor.Dob,
                     Educations = doctor.Educations,
                     Gender = doctor.Gender,
@@ -673,6 +675,10 @@ namespace DoctorManagement.Application.System.Users
                 if (await _userManager.IsInRoleAsync(user, role.Name) == false)
                 {
                     var rs = await _userManager.AddToRoleAsync(user, role.Name);
+                    var location = await _context.Locations.FindAsync(request.SubDistrictId);
+                    var district = await _context.Locations.FindAsync(location.ParentId);
+                    var province = await _context.Locations.FindAsync(district.ParentId);
+                    var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
                     var doctor = new Doctors()
                     {   
                         UserId = user.Id,
@@ -691,6 +697,7 @@ namespace DoctorManagement.Application.System.Users
                         ClinicId = request.ClinicId,
                         No = str,
                         Address = request.Address,
+                        FullAddress = fullAddress,
                         Intro = "<p><strong>Bác sĩ “Nguyễn Văn A” </strong>……….</p><p><strong>Quá trình học tập/Bằng cấp chuyên môn:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Quá trình công tác:</strong></p><ul><li>…</li><li>…</li></ul><p><strong>Các dịch vụ của phòng khám:</strong></p><ul><li>…</li><li>…</li></ul>",
                         Img = "user_default.png" //await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME)
                     };
@@ -753,8 +760,13 @@ namespace DoctorManagement.Application.System.Users
                 if (await _userManager.IsInRoleAsync(user, role.Name) == false)
                 {
                     var rs = await _userManager.AddToRoleAsync(user, role.Name);
+                    var location = await _context.Locations.FindAsync(request.SubDistrictId);
+                    var district = await _context.Locations.FindAsync(location.ParentId);
+                    var province = await _context.Locations.FindAsync(district.ParentId);
+                    var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
                     var patients = new Patients()
                     {
+                        FullAddress = fullAddress,
                         UserId = user.Id,
                         Dob = request.Dob,
                         Name = request.Name,
@@ -769,6 +781,7 @@ namespace DoctorManagement.Application.System.Users
                         RelativePhone = request.RelativePhone,
                         RelativeRelationshipId = user.Id,
                         Identitycard = request.IdentityCard,
+                        RelativeEmail = request.Email
                     };
                     await _context.Patients.AddAsync(patients);
                     _context.SaveChanges();
@@ -1133,6 +1146,7 @@ namespace DoctorManagement.Application.System.Users
             doctor.Dob = request.Dob;
             doctor.LocationId = request.SubDistrictId;
             doctor.Booking = request.Booking;
+            doctor.BeforeBookingDay = request.BeforeBookingDay;
             doctor.MapUrl = request.MapUrl;
             doctor.Slug = request.Slug;
             doctor.Prefix = request.Prefix;

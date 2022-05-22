@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Models;
@@ -47,7 +48,7 @@ namespace DoctorManagement.DoctorApp.Controllers
                     Id = user.Id,
                     Address = user.DoctorVm.Address,
                     ClinicId = user.DoctorVm.GetClinic.Id,
-                    //img = user.DoctorVm.Img,
+                    Img = user.DoctorVm.Img,
                     Description = user.DoctorVm.Intro,
                     Services = user.DoctorVm.Services,
                     Slug = user.DoctorVm.Slug.Replace("-" + user.DoctorVm.No, ""),
@@ -55,14 +56,16 @@ namespace DoctorManagement.DoctorApp.Controllers
                     Prefix = user.DoctorVm.Prefix,
                     MapUrl = user.DoctorVm.MapUrl,
                     Booking = user.DoctorVm.Booking,
+                    BeforeBookingDay = user.DoctorVm.BeforeBookingDay,
                     Prizes = user.DoctorVm.Prizes,
                     ProvinceId = user.DoctorVm.Location.District.Province.Id,
                     DistrictId = user.DoctorVm.Location.District.Id,
                     SubDistrictId = user.DoctorVm.Location.Id,
                     Note = user.DoctorVm.Note,
                     TimeWorking = user.DoctorVm.TimeWorking,
-                    GetGalleries = user.DoctorVm.Galleries
+                    GetGalleries = user.DoctorVm.Galleries,
                 };
+               
                 return View(updateRequest);
             }
             return RedirectToAction("Error", "Home");
@@ -70,7 +73,8 @@ namespace DoctorManagement.DoctorApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(DoctorUpdateProfile request)
         {
-            ViewBag.Imgs = request.GetGalleries;
+            ViewBag.Img = request.Img;
+            ViewBag.Imgs = request.GetGalleries==null?new List<GalleryVm>(): request.GetGalleries;
             ViewBag.Clinic = await _userApiClient.GetAllClinic(request.ClinicId);
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             ViewBag.District = await _locationApiClient.CityGetAllDistrict(new Guid(), request.ProvinceId);
@@ -88,8 +92,34 @@ namespace DoctorManagement.DoctorApp.Controllers
                 specialities.Add(speciality);
             }
             ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(specialities));
+            var updateRequest = new DocterRequestAll()
+            {
+                Dob = request.Dob,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Gender = request.Gender,
+                Id = request.Id,
+                Address = request.Address,
+                ClinicId = request.ClinicId,
+                Img = request.Img,
+                Description = request.Description,
+                Services = request.Services,
+                Slug = request.Slug,
+                Educations = request.Educations,
+                Prefix = request.Prefix,
+                MapUrl = request.MapUrl,
+                Booking = request.Booking,
+                BeforeBookingDay = request.BeforeBookingDay,
+                Prizes = request.Prizes,
+                ProvinceId = request.ProvinceId,
+                DistrictId = request.DistrictId,
+                SubDistrictId = request.SubDistrictId,
+                Note = request.Note,
+                TimeWorking = request.TimeWorking,
+                GetGalleries = request.GetGalleries == null ? new List<GalleryVm>() : request.GetGalleries
+        };
             if (!ModelState.IsValid)
-                return View();
+                return View(updateRequest);
             var result = await _userApiClient.DoctorUpdateProfile(request);
             if (result.IsSuccessed)
             {

@@ -13,6 +13,7 @@ namespace DoctorManagement.Data.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Address { get; set; }
+        public string FullAddress { get; set; }
         public string Img { get; set; }
         public string Intro { get; set; }
         public string No { get; set; }
@@ -24,6 +25,7 @@ namespace DoctorManagement.Data.Entities
         public string Prizes { get; set; }
         public string Slug { get; set; }
         public int View { get; set; }
+        public int BeforeBookingDay { get; set; }
         public Gender Gender { get; set; }
         public DateTime Dob { get; set; }
         public string Prefix { get; set; }
@@ -31,7 +33,7 @@ namespace DoctorManagement.Data.Entities
         public string MapUrl { get; set; }
         public bool IsPrimary { get; set; }
         public Guid LocationId { get; set; }
-        public Guid ClinicId { get; set; }
+        public Guid? ClinicId { get; set; }
 
         public AppUsers AppUsers { get; set; }
         

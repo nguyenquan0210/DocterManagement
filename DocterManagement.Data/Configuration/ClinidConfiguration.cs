@@ -17,7 +17,7 @@ namespace DoctorManagement.Data.Configuration
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).IsRequired().HasMaxLength(150);
-            builder.Property(x => x.No).IsRequired().HasMaxLength(10);
+            builder.Property(x => x.No).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Address).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Description).HasMaxLength(int.MaxValue);
             builder.Property(x => x.Note).HasMaxLength(int.MaxValue);

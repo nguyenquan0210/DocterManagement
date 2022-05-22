@@ -76,5 +76,8 @@ namespace DoctorManagement.ViewModels.System.Doctors
         [Display(Name = "Mật khẩu hiện tại")]
         [DataType(DataType.Password)]
         public string CurrentPassword { get; set; }
+        [Display(Name = "Đặt trước")]
+        public int BeforeBookingDay { get; set; }
+        public string? Img { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Appointment;
+using DoctorManagement.ViewModels.Catalog.MedicalRecords;
 using DoctorManagement.ViewModels.Catalog.Schedule;
 using DoctorManagement.ViewModels.Catalog.SlotSchedule;
 using DoctorManagement.ViewModels.Common;
@@ -67,12 +68,14 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     i++;
                 }
             }
-            string day = slots.FirstOrDefault().CheckInDate.ToString("dd") + "-" + request.DoctorId.ToString().Remove(2);
-            int count = await _context.Doctors.Where(x => x.No.Contains("DK-" + day)).CountAsync();
+            string day = slots.FirstOrDefault().CheckInDate.ToString("dd") + request.DoctorId.ToString().Substring(0,1) + request.DoctorId.ToString().Substring(17, 18) + request.DoctorId.ToString().Substring(32, 33);
+            int count = await _context.Doctors.Where(x => x.No.Contains("DMDK" + day)).CountAsync();
             string str = "";
-            if (count < 9) str = "DK-" + day + "-00" + (count + 1);
-            else if (count < 99) str = "DK-" + day + "-0" + (count + 1);
-            else if (count < 999) str = "DK-" + day + "-" + (count + 1);
+            if (count < 9) str = "DMDK" + day + "0000" + (count + 1);
+            else if (count < 99) str = "DMDK" + day + "000" + (count + 1);
+            else if (count < 999) str = "DMDK" + day + "00" + (count + 1);
+            else if (count < 9999) str = "DMDK" + day + "0" + (count + 1);
+            else if (count < 99999) str = "DMDK" + day  + (count + 1);
             var appointments = new Appointments()
             {
                 CreatedAt = DateTime.Now,
@@ -197,30 +200,53 @@ namespace DoctorManagement.Application.Catalog.Appointment
         {
             var query = from a in _context.Appointments
                         join d in _context.Doctors on a.DoctorId equals d.UserId
+                        join ud in _context.AppUsers on d.UserId equals ud.Id
                         join p in _context.Patients on a.PatientId equals p.PatientId
+                        join u in _context.AppUsers on p.UserId equals u.Id
                         join slot in _context.schedulesSlots on a.SchedulesSlotId equals slot.Id
                         join sche in _context.Schedules on slot.ScheduleId equals sche.Id
-                        select new {a,d,p,slot,sche};
+                        join m in _context.MedicalRecords on a.Id equals m.AppointmentId into me
+                        from m in me.DefaultIfEmpty()
+                        select new {a,d,p,slot,sche,u,m,ud};
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.a.No.Contains(request.Keyword)|| x.p.Name.Contains(request.Keyword) ||
                 x.d.FirstName.Contains(request.Keyword) || x.d.LastName.Contains(request.Keyword));
             }
+            if (!string.IsNullOrEmpty(request.UserName))
+            {
+                query = query.Where(x => x.u.UserName == request.UserName);
+            }
+            if (!string.IsNullOrEmpty(request.UserNameDoctor))
+            {
+                query = query.Where(x => x.ud.UserName == request.UserNameDoctor);
+            }
             int totalRow = await query.CountAsync();
-
+            query = query.OrderByDescending(x => x.sche.CheckInDate);
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new AppointmentVm()
                 {
                     Id = x.a.Id,
                     CreatedAt = x.a.CreatedAt,
+                    Status = x.a.Status,
+                    No = x.a.No,
+                    Stt = x.a.Stt,
+                    IsDoctor = x.a.IsDoctor,
+                    Note = x.a.Note,
                     Patient = new PatientVm()
                     {
                         Id = x.p.PatientId,
                         Name = x.p.Name,
                         No = x.p.No,
                         Address = x.p.Address,
+                        Dob = x.p.Dob,
+                        FullAddress = x.p.FullAddress,
+                        Gender = x.p.Gender,
+                        Identitycard = x.p.Identitycard,
+                        RelativeName = x.p.RelativeName,
+                        RelativePhone = x.p.RelativePhone,
                     },
                     Schedule = new ScheduleVm()
                     {
@@ -241,9 +267,21 @@ namespace DoctorManagement.Application.Catalog.Appointment
                         FirstName = x.d.FirstName,
                         LastName = x.d.LastName,
                         Address = x.d.Address,
+                        Prefix = x.d.Prefix,
+                        FullName = x.d.Prefix+" "+ x.d.LastName + " " + x.d.FirstName,
+                        FullAddress = x.d.FullAddress,
+                        Img = "user-content/"+ x.d.Img,
                     },
-                    Status = x.a.Status,
-                    No = x.a.No,
+                    MedicalRecord = x.m !=null ? new MedicalRecordVm()
+                    {
+                        Id = x.m.Id,
+                        Status = x.m.Status,
+                        StatusIllness = x.m.StatusIllness,
+                        Date = x.m.CreatedAt,
+                        Diagnose = x.m.Diagnose,
+                        Note = x.m.Note,
+                        Prescription = x.m.Prescription
+                    }: new MedicalRecordVm()
 
                 }).ToListAsync();
 

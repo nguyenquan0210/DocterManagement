@@ -90,8 +90,6 @@
                                     <th>Ngày khám</th>
                                     <th>Tên Bệnh nhân</th>
                                     <th>Số điện thoại</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Giới tính</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -104,15 +102,20 @@
                                 {
                                     <tr id="row_@item.Id">
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
-                                      @*  <td class="text-sm"><h6 class="ms-3 my-auto">@item.CheckInDate.ToShortDateString()</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.FromTime</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.ToTime</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Qty</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.AvailableQty</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.BookedQty</h6></td>*@
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Stt</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@(item.SlotSchedule.FromTime.ToString().Substring(0,5)+" - "+ item.Schedule.CheckInDate.ToShortDateString())</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Patient.Name</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Patient.RelativePhone</h6></td>
                                         
                                         <td>
-                                           @* <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>*@
+                                            <span class="badge 
+                                            @(item.Status==StatusAppointment.approved?"badge-success":
+                                                                item.Status==StatusAppointment.cancel?"badge-danger":
+                                                                item.Status==StatusAppointment.complete?"badge-dark":"badge-warning")
+                                            badge-sm" id="status_@item.Id">
+                                                @(item.Status==StatusAppointment.approved?"Đã đặt khám":
+                                                                item.Status==StatusAppointment.cancel?"Đã hủy":
+                                                                item.Status==StatusAppointment.complete?"Đã khám bệnh":"Đợi xử lý")</span>
                                         </td>
                                         <td class="text-sm">
                                             <a  asp-action = "Detailt" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">

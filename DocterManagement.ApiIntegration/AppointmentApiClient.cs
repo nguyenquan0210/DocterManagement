@@ -68,7 +68,9 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<PagedResult<AppointmentVm>>(
                $"/api/appointment/paging?pageIndex={request.PageIndex}" +
                $"&pageSize={request.PageSize}" +
-               $"&keyword={request.Keyword}");
+               $"&keyword={request.Keyword}" +
+               $"&userName={request.UserName}" +
+               $"&userNameDoctor={request.UserNameDoctor}");
         }
 
         public async Task<ApiResult<bool>> Update(AppointmentUpdateRequest request)

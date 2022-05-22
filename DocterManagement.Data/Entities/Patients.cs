@@ -12,6 +12,7 @@ namespace DoctorManagement.Data.Entities
         public Guid PatientId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+        public string FullAddress { get; set; }
         public string Img { get; set; }
         public string No { get; set; }
         public Gender Gender { get; set; }
@@ -20,8 +21,9 @@ namespace DoctorManagement.Data.Entities
         public string RelativeName { get; set; }
         public Guid RelativeRelationshipId { get; set; }
         public string RelativePhone { get; set; }
+        public string RelativeEmail { get; set; }
         public string Identitycard { get; set; }
-        public Guid LocationId { get; set; }
+        public Guid? LocationId { get; set; }
         public Guid UserId { get; set; }
         public Guid EthnicId { get; set; }
         public AppUsers AppUsers { get; set; }

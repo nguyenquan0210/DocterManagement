@@ -41,13 +41,17 @@ namespace DoctorManagement.Application.Catalog.Clinic
             if (count < 9) str = "PK-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
             else if (count < 99) str = "PK-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
             else if (count < 999) str = "PK-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
-            
+            var location = await _context.Locations.FindAsync(request.LocationId);
+            var district = await _context.Locations.FindAsync(location.ParentId);
+            var province = await _context.Locations.FindAsync(district.ParentId);
+            var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
             var clinics = new Clinics()
             {
                 Name = request.Name,
                 ImgLogo = await SaveFile(request.ImgLogo, CLINIC_CONTENT_FOLDER_NAME),
                 Description = request.Description,
                 Address = request.Address ,
+                FullAddress = fullAddress,
                 LocationId = request.LocationId,
                 Status = Status.Active,
                 No = str

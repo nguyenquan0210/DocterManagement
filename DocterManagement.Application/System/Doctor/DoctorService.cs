@@ -51,7 +51,7 @@ namespace DoctorManagement.Application.System.Doctor
                 }).ToList(),
                 GetClinic = new GetClinicVm()
                 {
-                    Id = x.ClinicId,
+                    Id = x.ClinicId.Value,
                     Name = x.Clinics.Name
                 }
                
@@ -177,6 +177,7 @@ namespace DoctorManagement.Application.System.Doctor
                 Address = x.p.Address,
                 FullAddress = x.p.Address + ", " + x.sd.Name+", " + x.d.Name + ", " + x.pro.Name ,
                 RelativePhone = x.p.RelativePhone,
+                RelativeEmail = x.p.RelativeEmail,
                 Dob = x.p.Dob,
                 Gender = x.p.Gender,
                 Identitycard = x.p.Identitycard,
@@ -193,10 +194,15 @@ namespace DoctorManagement.Application.System.Doctor
         public async Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request)
         {
             var patient = await _context.Patients.FindAsync(request.Id);
+            var location = await _context.Locations.FindAsync(request.LocationId);
+            var district = await _context.Locations.FindAsync(location.ParentId);
+            var province = await _context.Locations.FindAsync(district.ParentId);
+            var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
             if (patient == null) return new ApiErrorResult<bool>("");
 
             patient.LocationId = request.LocationId;
             patient.Name = request.Name;
+            patient.FullAddress = fullAddress;
             patient.Address = request.Address;
             patient.Identitycard = request.Identitycard;
             patient.Dob = request.Dob;
@@ -204,6 +210,7 @@ namespace DoctorManagement.Application.System.Doctor
             patient.EthnicId = request.EthnicId;
             patient.RelativeName = request.RelativeName;
             patient.RelativePhone = request.RelativePhone;
+            patient.RelativeEmail = request.RelativeEmail;
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
             return new ApiErrorResult<bool>("");
@@ -223,8 +230,13 @@ namespace DoctorManagement.Application.System.Doctor
             else if (count < 999) str = "DMP" + year + month + "00" + (count + 1);
             else if (count < 9999) str = "DMP" + year + month + "0" + (count + 1);
             else if (count < 99999) str = "DMP" + year + month + (count + 1);
+            var location = await _context.Locations.FindAsync(request.LocationId);
+            var district = await _context.Locations.FindAsync(location.ParentId);
+            var province = await _context.Locations.FindAsync(district.ParentId);
+            var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
             var patient = new Patients()
             {
+                FullAddress = fullAddress,
                 Address = request.Address,
                 Identitycard = request.Identitycard,
                 Dob = request.Dob,
@@ -234,6 +246,7 @@ namespace DoctorManagement.Application.System.Doctor
                 EthnicId = request.EthnicId,
                 RelativeName = request.RelativeName,
                 RelativePhone = request.RelativePhone,
+                RelativeEmail = request.RelativeEmail,
                 UserId = user.Id,
                 No = str,
                 IsPrimary = false,

@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.ApiIntegration;
+using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.System.Patient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -120,9 +121,23 @@ namespace DoctorManagement.WebApp.Controllers
             }
             return null;
         }
-        public IActionResult Appointment()
+        public async Task<IActionResult> Appointment(string keyword, int pageIndex = 1, int pageSize = 15)
         {
-            return View();
+            var request = new GetAppointmentPagingRequest()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                UserName = User.Identity.Name
+            };
+            var data = await _appointmentApiClient.GetAppointmentPagings(request);
+            ViewBag.Keyword = keyword;
+
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            return View(data.Data);
         }
     }
 }

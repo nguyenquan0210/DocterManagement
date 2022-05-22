@@ -11,7 +11,7 @@ namespace DoctorManagement.ViewModels.System.Doctors
     public class DoctorUpdateProfile
     {
         [Display(Name = "Giới thiệu")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Display(Name = "Địa chỉ")]
         public string Address { get; set; }
@@ -45,16 +45,18 @@ namespace DoctorManagement.ViewModels.System.Doctors
         [Display(Name = "Phường/xã")]
         public Guid SubDistrictId { get; set; }
         [Display(Name = "Dịch vụ khám bệnh")]
-        public string Services { get; set; }
+        public string? Services { get; set; }
         [Display(Name = "Giải thưởng")]
-        public string Prizes { get; set; }
+        public string? Prizes { get; set; }
         [Display(Name = "Học vấn")]
-        public string Educations { get; set; }
+        public string? Educations { get; set; }
         [Display(Name = "Ghi chú")]
-        public string Note { get; set; }
+        public string? Note { get; set; }
         [Display(Name = "Giờ làm việc")]
-        public string TimeWorking { get; set; }
+        public string? TimeWorking { get; set; }
         public List<GalleryVm>? GetGalleries { get; set; }
         public Guid Id { get; set; }
+        public string? Img { get; set; }
+        public int BeforeBookingDay { get; set; }
     }
 }

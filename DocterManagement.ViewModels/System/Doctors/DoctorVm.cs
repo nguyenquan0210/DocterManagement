@@ -47,5 +47,7 @@ namespace DoctorManagement.ViewModels.System.Doctors
         public List<RateVm> Rates { get; set; }
         public List<GalleryVm> Galleries { get; set; }
         public string TimeWorking { get; set; }
+        public string FullName { get; set; }
+        public int BeforeBookingDay { get; set; }
     }
 }
