@@ -29,7 +29,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
         public async Task<ApiResult<bool>> Create(SpecialityCreateRequest request)
         {
             string year = DateTime.Now.ToString("yy");
-            int count = await _context.Clinics.Where(x => x.No.Contains("SP-" + year)).CountAsync();
+            int count = await _context.Specialities.Where(x => x.No.Contains("SP-" + year)).CountAsync();
             string str = "";
             if (count < 9) str = "SP-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
             else if (count < 99) str = "SP-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
@@ -128,7 +128,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
         public async Task<ApiResult<SpecialityVm>> GetById(Guid Id)
         {
             var speciality = await _context.Specialities.FindAsync(Id);
-            if (speciality == null) throw new DoctorManageException($"Cannot find a speciality with id: { Id}");
+            if (speciality == null) return new ApiErrorResult<SpecialityVm>("null");
             var rs = new SpecialityVm()
             {
                 Id = speciality.Id,

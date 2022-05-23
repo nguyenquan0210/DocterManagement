@@ -29,6 +29,7 @@ using Users.TwilioClient;
 using Twilio.Clients;
 using DoctorManagement.Application.System.Doctor;
 using DoctorManagement.Application.Catalog.SlotSchedule;
+using DoctorManagement.Application.Catalog.MasterData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,7 @@ builder.Services.AddTransient<ILocationService, LocationService>();
 builder.Services.AddTransient<ISpecialityService, SpecialityService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IDoctorService, DoctorService>();
+builder.Services.AddTransient<IMasterDataService, MasterDataService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddHttpClient<ITwilioRestClient, TwilioClient>();
 

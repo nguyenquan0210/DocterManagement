@@ -89,7 +89,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _specialityService.GetById(Id);
             if (!result.IsSuccessed)
-                return BadRequest("Cannot find speciality");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>

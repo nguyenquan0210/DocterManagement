@@ -26,6 +26,7 @@ namespace DoctorManagement.Data.Entities
         public Guid? LocationId { get; set; }
         public Guid UserId { get; set; }
         public Guid EthnicId { get; set; }
+        public DateTime CratedAt { get; set; }
         public AppUsers AppUsers { get; set; }
         public Ethnics Ethnics { get; set; }
         public Locations Locations { get; set; }

@@ -74,7 +74,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
            _context.Clinics.Add(clinics);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Tạo phòng khám không thành công!");
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
         {
@@ -240,7 +240,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                        join dt in _context.Doctors on u.Id equals dt.UserId
                        where r.Name.ToUpper() == "DOCTOR" && dt.ClinicId == Id
                        select dt;
-            if (clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { Id}");
+            if (clinics == null) return new ApiErrorResult<ClinicVm>("null");
             var rs = new ClinicVm()
             {
                 Id = clinics.Id,
@@ -331,8 +331,8 @@ namespace DoctorManagement.Application.Catalog.Clinic
         {
             var i = _context.ImageClinics.Where(x=> x.ClinicId == request.Id).Count();
             var clinics = await _context.Clinics.FindAsync(request.Id);
-            if (clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { request.Id}");
-            request.Address = request.Address;
+            if (clinics == null) return new ApiErrorResult<bool>("null");
+            clinics.Address = request.Address;
             clinics.Name = request.Name;
             clinics.Description = request.Description;
             clinics.Address = request.Address;
@@ -361,7 +361,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
             }
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Cập nhật không thành công!");
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.Data.Entities
+namespace DoctorManagement.ViewModels.Catalog.MasterData
 {
-    public class MainMenus
+    public class MainMenuVm
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

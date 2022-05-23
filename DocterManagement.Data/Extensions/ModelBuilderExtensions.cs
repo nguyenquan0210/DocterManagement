@@ -61,6 +61,14 @@ namespace DoctorManagement.Data.Extensions
                new Specialities() { Id = new Guid("8D04DCE4-969A-435D-BBA4-DF3F325983DC"), Title = "Tiêu hóa",Description = "Điều trị các bệnh về tiêu hoá", SortOrder = 1, No= "SP-22-001", IsDeleted=false }
              
                );
+            modelBuilder.Entity<Informations>().HasData(
+              new Informations() { Id = new Guid("8D04DCE4-969A-435D-BBA4-DF3F325983DC"), Company = "Công ty TNHH DoctorMedio", Email = "nguyenquan52000@gmail.com", Hotline = "0373951042", FullAddress = "Thôn An lương, Xã Tam Anh Bắc, Huyện Núi Thành, Tỉnh Quảng Nam", IsDeleted = false,Image="default",TimeWorking="7:30-18:00 mỗi tuần" }
+
+              );
+            modelBuilder.Entity<MainMenus>().HasData(
+             new MainMenus() { Id = new Guid("8D04DCE4-969A-435D-BBA4-DF3F325983DC"), Controller = "Home", Action = "Index", SortOrder = 1, CratedAt = new DateTime(2000,10,02), IsDeleted = true, Image = "default", Name = "Trang Chủ",ParentId= new Guid(),Type="MenuHeader" }
+
+             );
         }
     }
 }

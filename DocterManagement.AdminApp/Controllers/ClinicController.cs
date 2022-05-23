@@ -53,7 +53,7 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.Location = await _locationApiClient.GetAllSubDistrict(request.LocationId,request.DistrictId);
 
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
 
             var result = await _clinicApiClient.Create(request);
 
@@ -118,7 +118,7 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.Imgs = request.Images;
             ViewBag.Status = SeletectStatus(request.Status);
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
 
             var result = await _clinicApiClient.Update(request);
             if (result.IsSuccessed)

@@ -196,7 +196,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a id="menu_city" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#quanlythanhpho" aria-controls="quanlythanhpho" role="button">
+                <a id="menu-masterdata" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#masterdata" aria-controls="masterdata" role="button">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>box-3d-50</title>
@@ -213,25 +213,80 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Quản lý phường/xã</span>
+                    <span class="nav-link-text ms-1">Quản lý dữ liệu chủ</span>
                 </a>
-                <div class="collapse " id="quanlythanhpho">
+                <div class="collapse " id="masterdata">
                     <ul class="nav ms-4 ps-3">
+                       
                         <li class="nav-item ">
-                            <a id="a_city" class="nav-link  " aria-expanded="false" asp-controller="City" asp-action="Index">
-                                <span class="sidenav-mini-icon"> TP </span>
-                                <span class="sidenav-normal"> Danh sách phường/xã <b class="caret"></b></span>
+                            <a id="a_information" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#information">
+                                <span class="sidenav-mini-icon"> NV </span>
+                                <span class="sidenav-normal"> Quản lý  Thông tin <b class="caret"></b></span>
                             </a>
+                            <div class="collapse " id="information">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                       <a id="a-info" class="nav-link  " aria-expanded="false" asp-controller="MasterData" asp-action="Detailt">
+                                            <span class="sidenav-mini-icon"> XTT </span>
+                                            <span class="sidenav-normal"> Xem TT liên hệ <b class="caret"></b></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a id="a-uda-info" class="nav-link   " aria-expanded="false" asp-controller="MasterData" asp-action="Update">
+                                            <span class="sidenav-mini-icon"> STT </span>
+                                            <span class="sidenav-normal"> Sửa TT liên hệ <b class="caret"></b></span>
+                                        </a>
+                                    </li>
 
+                                </ul>
+                            </div>
                         </li>
                         <li class="nav-item ">
-                            <a id="a_ctecity" class="nav-link   " aria-expanded="false" asp-controller="City" asp-action="Create">
-                                <span class="sidenav-mini-icon"> TTP </span>
-                                <span class="sidenav-normal"> Thêm phường/xã <b class="caret"></b></span>
+                            <a id="a_menumain" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#menumain">
+                                <span class="sidenav-mini-icon"> NV </span>
+                                <span class="sidenav-normal"> Quản lý  Menu <b class="caret"></b></span>
                             </a>
+                            <div class="collapse " id="menumain">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a id="a_amenumain" class="nav-link" asp-controller="MasterData" asp-action="MenuMain">
+                                            <span class="sidenav-mini-icon text-xs"> TK </span>
+                                            <span class="sidenav-normal"> Danh sách Menu </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a id="a_ctemenumain" class="nav-link " asp-controller="MasterData" asp-action="CreateMainMenu">
+                                            <span class="sidenav-mini-icon text-xs"> TTK </span>
+                                            <span class="sidenav-normal"> Thêm Menu </span>
+                                        </a>
+                                    </li>
 
+                                </ul>
+                            </div>
                         </li>
+                        <li class="nav-item ">
+                            <a id="a_ethnic" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#ethnic">
+                                <span class="sidenav-mini-icon"> NV </span>
+                                <span class="sidenav-normal"> Quản lý  dân tộc <b class="caret"></b></span>
+                            </a>
+                            <div class="collapse " id="ethnic">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a id="a_aethnic" class="nav-link" asp-controller="MasterData" asp-action="Ethnic">
+                                            <span class="sidenav-mini-icon text-xs"> DT </span>
+                                            <span class="sidenav-normal"> Danh sách dân tộc </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a id="a_cteethnic" class="nav-link " asp-controller="MasterData" asp-action="CreateEthnic">
+                                            <span class="sidenav-mini-icon text-xs"> TDT </span>
+                                            <span class="sidenav-normal"> Thêm dân tộc </span>
+                                        </a>
+                                    </li>
 
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </li>

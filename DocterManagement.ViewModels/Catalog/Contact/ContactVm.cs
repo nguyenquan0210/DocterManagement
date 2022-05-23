@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.Data.Entities
+namespace DoctorManagement.ViewModels.Catalog.Contact
 {
-    public class Contacts
+    public class ContactVm
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
@@ -14,6 +14,5 @@ namespace DoctorManagement.Data.Entities
         public string PhoneNumber { get; set; }
         public string YourMessage { get; set; }
         public DateTime CratedAt { get; set; }
-
     }
 }

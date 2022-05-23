@@ -124,7 +124,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _clinicService.GetById(Id);
             if (!result.IsSuccessed)
-                return BadRequest("Cannot find clinic");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>
