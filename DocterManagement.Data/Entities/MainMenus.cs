@@ -16,6 +16,8 @@ namespace DoctorManagement.Data.Entities
         public string Image { get; set; }
         public string Action { get; set; }
         public string Controller { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public Guid ParentId { get; set; }
         public DateTime CratedAt { get; set; }
     }

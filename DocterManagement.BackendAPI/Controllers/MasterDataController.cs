@@ -50,11 +50,11 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// 
+        /// Tạo mới menu
         /// </summary>
-        /// Tạo mới chuyên khoa
-        [HttpPost("create-mainmenu")]
+        /// 
         [Authorize]
+        [HttpPost("create-mainmenu")]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<ApiResult<bool>>> CreateMainMenu([FromForm] MainMenuCreateRequest request)
         {
@@ -69,7 +69,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Xóa chuyên khoa
+        /// Xóa menu
         /// </summary>
         /// 
         [HttpDelete("delete-mainmenu/{Id}")]
@@ -86,7 +86,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(affectedResult);
         }
         /// <summary>
-        /// Cập nhật chuyên khoa
+        /// Cập nhật menu
         /// </summary>
         /// 
         [HttpPut("update-mainmenu")]
@@ -104,10 +104,9 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Lấy danh sách phân trang chuyên khoa
+        /// Lấy danh sách phân trang menu
         /// </summary>
         /// 
-        //http://localhost/api/categories/paging?pageIndex=1&pageSize=10&keyword=
         [HttpGet("get-paging-mainmenu")]
         public async Task<ActionResult<ApiResult<PagedResult<MainMenuVm>>>> GetAllPagingMainMenu([FromQuery] GetMainMenuPagingRequest request)
         {
@@ -115,7 +114,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Lấy chuyên khoa theo id
+        /// Lấy menu theo id
         /// </summary>
         /// 
         [HttpGet("get-by-mainmenuid/{Id}")]
@@ -127,7 +126,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Lấy tất cả danh sách chuyên khoa
+        /// Lấy tất cả danh sách menu
         /// </summary>
         /// 
         [HttpGet("get-all-mainmenu")]
@@ -137,10 +136,10 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(MainMenu);
         }
         /// <summary>
-        /// 
-        /// </summary>
         /// Tạo mới chuyên khoa
-        [HttpPost("create-mainmenu")]
+        /// </summary>
+        /// 
+        [HttpPost("create-ethnic")]
         [Authorize]
         public async Task<ActionResult<ApiResult<bool>>> CreateEthnic(EthnicCreateRequest request)
         {
@@ -192,9 +191,8 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Lấy danh sách phân trang chuyên khoa
         /// </summary>
         /// 
-        //http://localhost/api/categories/paging?pageIndex=1&pageSize=10&keyword=
-        [HttpGet("get-paging-ethnic")]
-        public async Task<ActionResult<ApiResult<PagedResult<EthnicVm>>>> GetAllPagingEthnic([FromQuery] GetEthnicPagingRequest request)
+        [HttpGet("get-paging-ethnics")]
+        public async Task<ActionResult<ApiResult<PagedResult<EthnicsVm>>>> GetAllPagingEthnic([FromQuery] GetEthnicPagingRequest request)
         {
             var result = await _masterDataService.GetAllPagingEthnic(request);
             return Ok(result);
@@ -204,7 +202,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("get-by-ethnicid/{Id}")]
-        public async Task<ActionResult<ApiResult<EthnicVm>>> GetByIdEthnic(Guid Id)
+        public async Task<ActionResult<ApiResult<EthnicsVm>>> GetByIdEthnic(Guid Id)
         {
             var result = await _masterDataService.GetByIdEthnic(Id);
             if (!result.IsSuccessed)
@@ -216,7 +214,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("get-all-ethnic")]
-        public async Task<ActionResult<ApiResult<List<EthnicVm>>>> GetAllEthnic()
+        public async Task<ActionResult<ApiResult<List<EthnicsVm>>>> GetAllEthnic()
         {
             var Ethnic = await _masterDataService.GetAllEthnic();
             return Ok(Ethnic);

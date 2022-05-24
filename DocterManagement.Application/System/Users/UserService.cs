@@ -907,14 +907,14 @@ namespace DoctorManagement.Application.System.Users
             {
                 if (doctor != null)
                 {
-                    if (request.ThumbnailImage != null)
+                    /*if (request.ThumbnailImage != null)
                     {
                         if (doctor.Img != null && doctor.Img != "user_default.png")
                         {
                             await _storageService.DeleteFileAsyncs(doctor.Img, USER_CONTENT_FOLDER_NAME);
                         }
                         doctor.Img = await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME);
-                    }
+                    }*/
                     doctor.Address = request.Address;
                     doctor.ClinicId = request.ClinicId;
                     doctor.ServicesSpecialities = new List<ServicesSpecialities>();
@@ -953,11 +953,11 @@ namespace DoctorManagement.Application.System.Users
                         spe_service_isdelete.IsDelete = true;
                     }
                     var i = 0;
-                    var remove_gallery = new Galleries();
-                    doctor.Galleries = new List<Galleries>();
-                    if (request.Galleries != null)
+                   /* var remove_gallery = new Galleries();
+                    doctor.Galleries = new List<Galleries>();*/
+                    /*if (request.Galleries != null)
                     {
-                        /*var remove_galleries = _context.Galleries.Where(x => x.DoctorId == doctor.UserId).ToList();
+                        *//*var remove_galleries = _context.Galleries.Where(x => x.DoctorId == doctor.UserId).ToList();
                         if (remove_galleries.Count() > 0)
                         {
                             foreach (var item in remove_galleries)
@@ -966,7 +966,7 @@ namespace DoctorManagement.Application.System.Users
                                 await _storageService.DeleteFileAsyncs(remove_gallery.Img, GALLERY_CONTENT_FOLDER_NAME);
                                 _context.Galleries.Remove(remove_gallery);
                             }
-                        }*/
+                        }*//*
                         foreach (var file in request.Galleries)
                         {
                             var image = new Galleries()
@@ -978,12 +978,12 @@ namespace DoctorManagement.Application.System.Users
                             doctor.Galleries.Add(image);
                             i++;
                         }
-                    }
+                    }*/
                     doctor.Intro = WebUtility.HtmlDecode(request.Description);
-                    doctor.Services = WebUtility.HtmlDecode(request.Services);
+                    doctor.Services = request.Services;
                     doctor.Prizes = WebUtility.HtmlDecode(request.Prizes);
                     doctor.Note = WebUtility.HtmlDecode(request.Note);
-                    doctor.TimeWorking = WebUtility.HtmlDecode(request.TimeWorking);
+                    doctor.TimeWorking =request.TimeWorking;
                     doctor.Educations = WebUtility.HtmlDecode(request.Educations);
                     doctor.FirstName = request.FirstName;
                     doctor.LastName = request.LastName;

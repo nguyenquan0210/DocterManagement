@@ -43,6 +43,10 @@ namespace DoctorManagement.Data.EF
             modelBuilder.ApplyConfiguration(new ContactConfigration());
             modelBuilder.ApplyConfiguration(new InformationConfigration());
             modelBuilder.ApplyConfiguration(new MainMenuConfigration());
+            modelBuilder.ApplyConfiguration(new HistoryActivesConfigration());
+            modelBuilder.ApplyConfiguration(new HistoryActiveDetailtConfigration());
+            modelBuilder.ApplyConfiguration(new NotificationConfigration());
+            modelBuilder.ApplyConfiguration(new AnnualServiceFeeConfigration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -80,6 +84,10 @@ namespace DoctorManagement.Data.EF
         public DbSet<MainMenus> MainMenus { get; set; }
         public DbSet<Contacts> Contacts { get; set; }
         public DbSet<Informations> Informations { get; set; }
+        public DbSet<HistoryActives> HistoryActives { get; set; }
+        public DbSet<HistoryActiveDetailts> historyActiveDetailts { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<AnnualServiceFees> AnnualServiceFees { get; set; }
     }
 }
 #pragma warning restore CS1591

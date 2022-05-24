@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DoctorManagement.ViewModels.Catalog.MasterData
 {
-    public class EthnicVm
+    public class EthnicsVm
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

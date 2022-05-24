@@ -74,6 +74,7 @@ namespace DoctorManagement.Application.Catalog.Schedule
                         DoctorId = user.Id,
                         BookedQty = 0,
                         AvailableQty = request.Qty,
+                        CreatedAt = DateTime.Now
                     };
                     schedules.schedulesSlots = new List<SchedulesSlots>();
                     for (var j = 1; j <= request.Qty; j++)

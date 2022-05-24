@@ -260,7 +260,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<ApiResult<PagedResult<EthnicVm>>> GetAllPagingEthnic(GetEthnicPagingRequest request)
+        public async Task<ApiResult<PagedResult<EthnicsVm>>> GetAllPagingEthnic(GetEthnicPagingRequest request)
         {
             var query = from e in _context.Ethnics select e;
             //2. filter
@@ -272,7 +272,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new EthnicVm()
+                .Select(x => new EthnicsVm()
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -281,21 +281,21 @@ namespace DoctorManagement.Application.Catalog.MasterData
                   
                 }).ToListAsync();
 
-            var pagedResult = new PagedResult<EthnicVm>()
+            var pagedResult = new PagedResult<EthnicsVm>()
             {
                 TotalRecords = totalRow,
                 PageSize = request.PageSize,
                 PageIndex = request.PageIndex,
                 Items = data
             };
-            return new ApiSuccessResult<PagedResult<EthnicVm>>(pagedResult);
+            return new ApiSuccessResult<PagedResult<EthnicsVm>>(pagedResult);
         }
 
-        public async Task<ApiResult<List<EthnicVm>>> GetAllEthnic()
+        public async Task<ApiResult<List<EthnicsVm>>> GetAllEthnic()
         {
             var query = _context.Ethnics.Where(x => x.IsDeleted == false);
 
-            var rs = await query.Select(x => new EthnicVm()
+            var rs = await query.Select(x => new EthnicsVm()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -303,14 +303,14 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 IsDeleted = x.IsDeleted,
             
             }).ToListAsync();
-            return new ApiSuccessResult<List<EthnicVm>>(rs);
+            return new ApiSuccessResult<List<EthnicsVm>>(rs);
         }
 
-        public async Task<ApiResult<EthnicVm>> GetByIdEthnic(Guid Id)
+        public async Task<ApiResult<EthnicsVm>> GetByIdEthnic(Guid Id)
         {
             var MainMenu = await _context.Ethnics.FindAsync(Id);
-            if (MainMenu == null) return new ApiErrorResult<EthnicVm>("Null");
-            var rs = new EthnicVm()
+            if (MainMenu == null) return new ApiErrorResult<EthnicsVm>("Null");
+            var rs = new EthnicsVm()
             {
                 Id = MainMenu.Id,
                 Name = MainMenu.Name,
@@ -318,7 +318,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 IsDeleted = MainMenu.IsDeleted,
          
             };
-            return new ApiSuccessResult<EthnicVm>(rs);
+            return new ApiSuccessResult<EthnicsVm>(rs);
         }
     }
 }

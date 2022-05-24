@@ -112,7 +112,8 @@ namespace DoctorManagement.Application.Catalog.Speciality
                     Id = x.Id,
                     IsDeleted = x.IsDeleted,
                     No = x.No,
-                    Description = x.Description
+                    Description = x.Description,
+                    Img = SPECIALITY_CONTENT_FOLDER_NAME + "/" + x.Img,
                 }).ToListAsync();
 
             var pagedResult = new PagedResult<SpecialityVm>()
@@ -136,7 +137,8 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 SortOrder = speciality.SortOrder,
                 IsDeleted = speciality.IsDeleted,
                 No = speciality.No,
-                Description = speciality.Description
+                Description = speciality.Description,
+                Img = SPECIALITY_CONTENT_FOLDER_NAME + "/" + speciality.Img,
             };
             return new ApiSuccessResult<SpecialityVm>(rs);
         }
@@ -151,7 +153,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
             speciality.IsDeleted = request.IsDeleted;
             if (request.Img != null)
             {
-                //if (speciality.Img != null) await _storageService.DeleteFileAsyncs(speciality.Img, SPECIALITY_CONTENT_FOLDER_NAME);
+                if (speciality.Img != null&& speciality.Img!="default") await _storageService.DeleteFileAsyncs(speciality.Img, SPECIALITY_CONTENT_FOLDER_NAME);
                 speciality.Img = await SaveFile(request.Img, SPECIALITY_CONTENT_FOLDER_NAME);
             }
 

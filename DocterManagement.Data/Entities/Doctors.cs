@@ -48,5 +48,6 @@ namespace DoctorManagement.Data.Entities
 
         public List<ServicesSpecialities> ServicesSpecialities { get; set; }
         public List<Appointments> Appointments { get; set; }
+        public List<AnnualServiceFees> AnnualServiceFees { get; set; }
     }
 }

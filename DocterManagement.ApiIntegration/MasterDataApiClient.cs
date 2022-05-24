@@ -94,9 +94,9 @@ namespace DoctorManagement.ApiIntegration
             return await Delete($"/api/masterData/delete-mainmenu/{Id}");
         }
 
-        public async Task<ApiResult<List<EthnicVm>>> GetAllEthnic()
+        public async Task<ApiResult<List<EthnicsVm>>> GetAllEthnic()
         {
-            return  await GetListAsync<EthnicVm>($"/api/masterData/get-all-ethnic");
+            return  await GetListAsync<EthnicsVm>($"/api/masterData/get-all-ethnic");
         }
 
         public async Task<ApiResult<List<MainMenuVm>>> GetAllMainMenu()
@@ -105,9 +105,9 @@ namespace DoctorManagement.ApiIntegration
 
         }
 
-        public async Task<ApiResult<PagedResult<EthnicVm>>> GetAllPagingEthnic(GetEthnicPagingRequest request)
+        public async Task<ApiResult<PagedResult<EthnicsVm>>> GetAllPagingEthnic(GetEthnicPagingRequest request)
         {
-            return await GetAsync<PagedResult<EthnicVm>>(
+            return await GetAsync<PagedResult<EthnicsVm>>(
                $"/api/masterData/get-paging-ethnic?pageIndex={request.PageIndex}" +
                $"&pageSize={request.PageSize}" +
                $"&keyword={request.Keyword}");
@@ -126,9 +126,9 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<InformationVm>($"/api/masterData/get-by-information");
         }
 
-        public async Task<ApiResult<EthnicVm>> GetByIdEthnic(Guid Id)
+        public async Task<ApiResult<EthnicsVm>> GetByIdEthnic(Guid Id)
         {
-            return await GetAsync<EthnicVm>($"/api/masterData/get-by-ethnicid/{Id}");
+            return await GetAsync<EthnicsVm>($"/api/masterData/get-by-ethnicid/{Id}");
         }
 
         public async Task<ApiResult<MainMenuVm>> GetByIdMainMenu(Guid Id)

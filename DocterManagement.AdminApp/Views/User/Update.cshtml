@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "Update";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    List<GalleryVm> images = ViewBag.Imgs;
+  
     var i = 0;
 }
 <style>
@@ -127,9 +127,9 @@
                             <span asp-validation-for="Gender" class="text-danger"></span>
                         </div>
                      </div>
-                     <div class="row mt-4">
+                     <div class="row">
                         <div class="col-2">
-                            <label asp-for="Dob" class="form-label"></label>
+                            <label asp-for="Dob" class="form-label mt-4"></label>
                             <input asp-for="Dob" class="form-control datetimepicker flatpickr-input" autocomplete="off" />
                             <span asp-validation-for="Dob" class="text-danger"></span>
                         </div>
@@ -148,14 +148,14 @@
                             <input asp-for="Slug" class="multisteps-form__input form-control"  />
                             <span asp-validation-for="Slug" class="text-danger"></span>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <label asp-for="Booking" class="form-label mt-4"></label>
                             <div class="form-check form-switch ps-0">
                                 <input asp-for="Booking" type="checkbox" class="form-check-input mt-1 ms-auto "  />
                             </div>
                             <span asp-validation-for="Booking" class="text-danger"></span>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <label asp-for="IsPrimary" class="form-label mt-4"></label>
                             <div class="form-check form-switch ps-0">
                                 <input asp-for="IsPrimary" type="checkbox" class="form-check-input mt-1 ms-auto "  />
@@ -224,18 +224,18 @@
                     
 
                     <div class="row">
-                        <div class="col-6">
-                            <label asp-for="TimeWorking" class="form-label mt-4"></label>
-                            <textarea asp-for="TimeWorking" class="classic-editor form-control datetimepicker"  >  </textarea>
-                            <span asp-validation-for="TimeWorking" class="text-danger"></span>
-                        </div>
-                        <div class="col-6">
-                            <label asp-for="Services" class="form-label mt-4"></label>
-                            <textarea asp-for="Services" class="classic-editor multisteps-form__input form-control" >  </textarea>
-                            <span asp-validation-for="Services" class="text-danger"></span>
-                        </div>
+                            <div class="col-6">
+                                <label asp-for="TimeWorking" class="form-label mt-4"></label>
+                                <input asp-for="TimeWorking" placeholder="Thứ 2 17:00 - 19:00 .."  class="multisteps-form__input form-control" />
+                                <span asp-validation-for="TimeWorking" class="text-danger"></span>
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="Services" class="form-label mt-4"></label>
+                                <input asp-for="Services" placeholder="Siêu âm .."  class="multisteps-form__input form-control" />
+                                <span asp-validation-for="Services" class="text-danger"></span>
+                            </div>
                        
-                    </div>
+                         </div>
                     <div class="row">
                         <div class="col-6">
                             <label asp-for="Educations" class="form-label mt-4"></label>
@@ -265,14 +265,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
-                            <label asp-for="ThumbnailImage" class="form-label mt-4"></label>
-                            <input asp-for="ThumbnailImage" type = "file" class="multisteps-form__input form-control"  />
-                            <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
-                        </div>
-                        <div class="col-3 text-center mt-4 ">
-                                    <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(ViewBag.Img ==null ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/user-content/" + ViewBag.Img)" alt="">
-                         </div>
+                       
                           <div class="col-5">
                             <label asp-for="Status" class="form-label mt-4"></label>
                              <select asp-for="Status" asp-items="@ViewBag.Status" class= "multisteps-form__input form-control" >
@@ -282,72 +275,18 @@
 
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <label asp-for="Galleries" class="form-label mt-4"></label>
-                            <input  asp-for="Galleries"  class="multisteps-form__input form-control"   />
-                            <span asp-validation-for="Galleries" class="text-danger"></span>
-                        </div>
-                        <div class="col-12  " id="file_img" >
-                         </div>
-                         <div class="col-12  "  id="show-file-img">
-                             @if (images.Count() > 0)
-                                {
-                                    <div class="row form-control dropzone dz-clickable dz-started mt-4" >
-                                        @foreach(var img in images)
-                                         {
-                                             <div class="col-1  dz-preview dz-processing dz-image-preview dz-error dz-complete" id ="row_@img.Id">
-                                                 <div id = "Img_@i" onclick="ConfirmDelete(@i)" data-id="@img.Id" >
-                                                      <div class="dz-image"><img class="col-2 w-100 border-radius-lg shadow-lg mx-auto" data-dz-thumbnail="" alt="" src="@(Configuration["BaseAddress"] + "/img/" + img.Name)"></div>
-                                                      <div class="dz-details"><div class="dz-size"></div><div class="dz-filename"></div></div>
-                                                      <div style="left: 75px;" class="dz-error-mark"> <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
-                                                          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                          <title>Error</title>
-                                                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
-                                                              <path
-                                                                d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z">
-                                                              </path>
-                                                            </g>
-                                                          </g>
-                                                        </svg> 
-                                                      </div>
-                                                    </div>
-                                                </div>
-                                                i++;
-                                        }
-                                        <div class="col-1  dz-preview dz-processing dz-image-preview dz-error dz-complete" >
-                                            <div class="dz-image">
-                                                <a id = "Img-delete-all" onclick="ConfirmDeleteAll()" data-id="@Model.Id" class="btn bg-gradient-dark col-2 w-100 h-100 border-radius-lg shadow-lg mx-auto ">Xóa tất cả</a>
-                                                <div style="left: 60px;" class="dz-error-mark remove-all"> <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
-                                                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                      <title>Error</title>
-                                                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                        <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
-                                                          <path
-                                                            d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z">
-                                                          </path>
-                                                        </g>
-                                                      </g>x
-                                                    </svg> 
-                                                  </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                         </div>
-                    </div>
+                   
                     <input asp-for="Id" type = "hidden"/>
                     
                    @* @Html.TextBoxFor(x=>x.GetGalleries, new{ type = "hidden"})*@
                             
                        @* <input asp-for="Galleries" type = "hidden"/>*@
                        
-                       @for (int g = 0; g < Model.GetGalleries.Count(); g++)
+                     @*  @for (int g = 0; g < Model.GetGalleries.Count(); g++)
                         {
                             @Html.TextBoxFor(x=>x.GetGalleries[g].Id, new{ type = "hidden"})
                             @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
-                        }
+                        }*@
                     
                     <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
                 </div>
@@ -414,6 +353,26 @@
     <script src="~/js/plugins/flatpickr.min.js"></script>
     <script src="~/js/plugins/dropzone.min.js"></script>
     <script>
+         if (document.getElementById('TimeWorking')) {
+          var TimeWorking = document.getElementById('TimeWorking');
+          const example = new Choices(TimeWorking, {
+            delimiter: '+',
+            editItems: true,
+            maxItemCount: 7,
+            removeItemButton: true,
+            addItems: true
+          });
+        }
+        if (document.getElementById('Services')) {
+          var Services = document.getElementById('Services');
+          const example = new Choices(Services, {
+            delimiter: '+',
+            editItems: true,
+            maxItemCount: 50,
+            removeItemButton: true,
+            addItems: true
+          });
+        }
         if (document.getElementById('ClinicId')) {
             var clinic = document.getElementById('ClinicId');
             const example = new Choices(clinic);
@@ -561,7 +520,7 @@
                     success: function (result) {
                         if (result.response == 2) {
                             $("#row_" + empId).remove();
-                            if(@images.Count == 1){
+                            if(1 == 1){
                                 $("#show-file-img").empty();
                             }
                               $("#title").html("Xóa Thành Công");

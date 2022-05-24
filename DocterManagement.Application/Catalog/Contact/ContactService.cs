@@ -28,6 +28,7 @@ namespace DoctorManagement.Application.Catalog.Contact
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber,
                 YourMessage = request.YourMessage,
+                Name = request.Name,
             };
             _context.Contacts.Add(contact);
             var rs = await _context.SaveChangesAsync();

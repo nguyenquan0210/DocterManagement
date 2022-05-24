@@ -30,9 +30,6 @@ namespace DoctorManagement.ViewModels.System.Users
         [Display(Name = "Trạng thái")]
         public Status Status { get; set; }
 
-        [Display(Name = "Ảnh đại diện")]
-        public IFormFile? ThumbnailImage { get; set; }
-
         [Display(Name = "Chuyên Khoa")]
         public ICollection<Guid> Specialities { get; set; }
         [Display(Name = "Phòng Khám")]
@@ -58,17 +55,15 @@ namespace DoctorManagement.ViewModels.System.Users
         [Display(Name = "Phường/xã")]
         public Guid SubDistrictId { get; set; }
         [Display(Name = "Dịch vụ khám bệnh")]
-        public string Services { get; set; }
+        public string? Services { get; set; }
         [Display(Name = "Giải thưởng")]
-        public string Prizes { get; set; }
+        public string? Prizes { get; set; }
         [Display(Name = "Học vấn")]
-        public string Educations { get; set; }
+        public string? Educations { get; set; }
         [Display(Name = "Ghi chú")]
-        public string Note { get; set; }
+        public string? Note { get; set; }
         [Display(Name = "Giờ làm việc")]
-        public string TimeWorking { get; set; }
-        [Display(Name = "Hình ảnh")]
-        public IFormFileCollection? Galleries { get; set; }
-        public List<GalleryVm>? GetGalleries { get; set; }
+        public string? TimeWorking { get; set; }
+       
     }
 }

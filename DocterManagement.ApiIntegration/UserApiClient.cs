@@ -201,62 +201,11 @@ namespace DoctorManagement.ApiIntegration
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var requestContent = new MultipartFormDataContent();
-            if (request.Galleries != null)
-            {
-                byte[] data;
-                foreach (var gallery in request.Galleries)
-                {
-                    using (var br = new BinaryReader(gallery.OpenReadStream()))
-                    {
-                        data = br.ReadBytes((int)gallery.OpenReadStream().Length);
-                    }
-                    ByteArrayContent bytes = new ByteArrayContent(data);
-                    requestContent.Add(bytes, "galleries", gallery.FileName);
-                }
-            }
-            if (request.ThumbnailImage != null)
-            {
-                byte[] data;
-                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
-                {
-                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
-                }
-                ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
-            }
-            foreach (var speciality in request.Specialities)
-            {
-                requestContent.Add(new StringContent(speciality.ToString()), "specialities");
-            }
-
-            requestContent.Add(new StringContent(request.Id.ToString()), "id");
-            requestContent.Add(new StringContent(request.Status.ToString()), "status");
-            requestContent.Add(new StringContent(request.MapUrl.ToString()), "mapUrl");
-            requestContent.Add(new StringContent(request.Slug.ToString()), "slug");
-            requestContent.Add(new StringContent(request.Prefix.ToString()), "prefix");
-            requestContent.Add(new StringContent(request.IsPrimary.ToString()), "isPrimary");
-            requestContent.Add(new StringContent(request.Booking.ToString()), "booking");
-            requestContent.Add(new StringContent(request.SubDistrictId.ToString()), "subDistrictId");
-            requestContent.Add(new StringContent(request.DistrictId.ToString()), "districtId");
-            requestContent.Add(new StringContent(request.ProvinceId.ToString()), "provinceId");
-            requestContent.Add(new StringContent(request.FirstName.ToString()), "firstName");
-            requestContent.Add(new StringContent(request.LastName.ToString()), "lastName");
-            requestContent.Add(new StringContent(request.Address.ToString()), "address");
-            //requestContent.Add(new StringContent(request.Email.ToString()), "email");
-            //requestContent.Add(new StringContent(request.PhoneNumber.ToString()), "phoneNumber");
-            requestContent.Add(new StringContent(request.ClinicId.ToString()), "clinicId");
-            requestContent.Add(new StringContent(request.Gender.ToString()), "gender");
-            requestContent.Add(new StringContent(request.Dob.ToString()), "dob");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
-            requestContent.Add(new StringContent(request.Educations.ToString()), "educations");
-            requestContent.Add(new StringContent(request.Services.ToString()), "services");
-            requestContent.Add(new StringContent(request.Note.ToString()), "note");
-            requestContent.Add(new StringContent(request.Prizes.ToString()), "prizes");
-            requestContent.Add(new StringContent(request.TimeWorking.ToString()), "timeWorking");
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
 
-            var response = await client.PutAsync($"/api/users/update-doctor/{id}", requestContent);
+            var response = await client.PutAsync($"/api/users/update-doctor/{id}", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);

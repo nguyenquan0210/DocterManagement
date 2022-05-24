@@ -17,6 +17,7 @@ namespace DoctorManagement.Data.Configuration
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
             builder.Property(x => x.PhoneNumber).IsRequired().HasMaxLength(100);
             builder.Property(x => x.YourMessage).IsRequired().HasMaxLength(int.MaxValue);
         }

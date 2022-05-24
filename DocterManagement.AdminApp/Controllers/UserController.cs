@@ -144,16 +144,11 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             var result = await _userApiClient.GetById(id);
-            //var doctor = await _userApiClient.Get
             if (result.IsSuccessed)
             {
                 var user = result.Data;
-                //ViewBag.Gender = SeletectGender(user.Gender.ToString());
                 ViewBag.Status = SeletectStatus(user.Status);
-                ViewBag.Img = user.DoctorVm.Img;
                 ViewBag.Clinic = await _userApiClient.GetAllClinic(user.DoctorVm.GetClinic.Id);
-                ViewBag.Imgs = user.DoctorVm.Galleries;
-                //ViewBag.Speciality = await _userApiClient.GetAllSpeciality(new Guid());
                 ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(user.DoctorVm.GetSpecialities));
                 ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
                 ViewBag.District = await _locationApiClient.CityGetAllDistrict(user.DoctorVm.Location.District.Id, user.DoctorVm.Location.District.Province.Id);
@@ -161,16 +156,13 @@ namespace DoctorManagement.AdminApp.Controllers
                 var updateRequest = new UserUpdateRequest()
                 {
                     Dob = user.DoctorVm.Dob,
-                    //Email = user.Email,
                     FirstName = user.DoctorVm.FirstName,
                     LastName = user.DoctorVm.LastName,
-                    //PhoneNumber = user.PhoneNumber,
                     Gender = user.DoctorVm.Gender,
                     Id = id,
                     Address = user.DoctorVm.Address,
                     Status = user.Status,
                     ClinicId = user.DoctorVm.GetClinic.Id,
-                    //img = user.DoctorVm.Img,
                     Description = user.DoctorVm.Intro,
                     Services = user.DoctorVm.Services,
                     Slug = user.DoctorVm.Slug.Replace("-"+user.DoctorVm.No,""),
@@ -185,7 +177,6 @@ namespace DoctorManagement.AdminApp.Controllers
                     SubDistrictId = user.DoctorVm.Location.Id,
                     Note = user.DoctorVm.Note,
                     TimeWorking = user.DoctorVm.TimeWorking,
-                    GetGalleries = user.DoctorVm.Galleries
                 };
                 return View(updateRequest);
             }
@@ -220,12 +211,8 @@ namespace DoctorManagement.AdminApp.Controllers
             return rs;
         }
         [HttpPost]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromForm] UserUpdateRequest request)
+        public async Task<IActionResult> Update( UserUpdateRequest request)
         {
-            //ViewBag.Img = request.img;
-            ViewBag.Imgs = request.GetGalleries;
-            //ViewBag.Gender = SeletectGender(request.Gender.ToString());
             ViewBag.Status = SeletectStatus(request.Status);
             ViewBag.Clinic = await _userApiClient.GetAllClinic(request.ClinicId);
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
@@ -256,7 +243,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+            
             return View(request);
         }
         public List<SelectListItem> SeletectGender(string id)

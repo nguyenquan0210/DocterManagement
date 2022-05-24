@@ -30,10 +30,10 @@ namespace DoctorManagement.ApiIntegration
 
         Task<int> DeleteEthnic(Guid Id);
 
-        Task<ApiResult<PagedResult<EthnicVm>>> GetAllPagingEthnic(GetEthnicPagingRequest request);
+        Task<ApiResult<PagedResult<EthnicsVm>>> GetAllPagingEthnic(GetEthnicPagingRequest request);
 
-        Task<ApiResult<List<EthnicVm>>> GetAllEthnic();
+        Task<ApiResult<List<EthnicsVm>>> GetAllEthnic();
 
-        Task<ApiResult<EthnicVm>> GetByIdEthnic(Guid Id);
+        Task<ApiResult<EthnicsVm>> GetByIdEthnic(Guid Id);
     }
 }
