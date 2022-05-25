@@ -17,11 +17,11 @@ namespace DoctorManagement.ViewModels.System.Users
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set;}
 
-        public string UserName { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Mật khẩu hiện tại")]
         [DataType(DataType.Password)]
-        public string currentPassword { get; set; }
+        public string CurrentPassword { get; set; }
        
     }
 }

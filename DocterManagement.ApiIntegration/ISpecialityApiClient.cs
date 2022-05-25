@@ -16,7 +16,7 @@ namespace DoctorManagement.ApiIntegration
 
         Task<int> Delete(Guid Id);
 
-        Task<ApiResult<List<SpecialityVm>>> GetMenu();
+        Task<ApiResult<List<SpecialityVm>>> GetAllSpeciality();
 
         Task<ApiResult<SpecialityVm>> GetById(Guid Id);
     }

@@ -1,10 +1,26 @@
-﻿@model DoctorManagement.ViewModels.System.Users.UserUpdateRequest
+﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.System.Doctors
+@using Newtonsoft.Json
+@model DoctorManagement.ViewModels.System.Doctors.DoctorUpdateRequest
 
 @{
     ViewData["Title"] = "Update";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<GalleryVm> images = ViewBag.Imgs;
+    var i = 0;
 }
-
+<style>
+    
+    .dropzone .dz-preview .dz-error-mark svg {
+    display: none;
+    }
+    .dropzone .dz-preview .remove-all svg {
+    display: block;
+    }
+    .dropzone .dz-preview:hover .dz-error-mark svg {
+    display: block;
+    }
+</style>
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @section Header{
@@ -52,13 +68,16 @@
                             Tài khoản nhân viên.
                         </p>
                     </div>
+
                     @if (TempData["AlertMessage"] != null)
                     {
+
                         <div id="AlertBox" data-notify="container" class="col-xs-12 col-sm-12 alert @TempData["AlertType"] alert-with-icon hide1" role="alert" data-notify-position="top-center" style="">
 
                             <span data-notify="title"></span> <span data-notify="message">@TempData["AlertMessage"]</span>
                             <a href="#" target="_blank" data-notify="url"></a>
                         </div>
+
                         <style>
                             .seachvisble {
                                 display: none;
@@ -66,58 +85,171 @@
                         </style>
                     }
                 <div class="card-body pt-0">
-                    <div class="row">
-                        <div class="col-6">
-                            <label asp-for="Name" class="form-label mt-4"></label>
-                            <input asp-for="Name" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                     <div class="row">
+                        <div class="col-3">
+                            <label asp-for="Prefix" class="form-label mt-4"></label>
+                            <input asp-for="Prefix" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Prefix" class="text-danger"></span>
 
                         </div>
-                        <div class="col-6">
+                        <div class="col-3">
+                            <label asp-for="LastName" class="form-label mt-4"></label>
+                            <input asp-for="LastName" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="FirstName" class="form-label mt-4"></label>
+                            <input asp-for="FirstName" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-3">
                             <label asp-for="Gender" class="form-label mt-4"></label>
-                             <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
+                                @* <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
                                     
-                                </select>
+                                </select>*@
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-check mb-3">
+                                          <input class="form-check-input" type="radio" asp-for="Gender" value="@Gender.Male" id="customRadio1">
+                                          <label class="custom-control-label" for="customRadio1">Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check mb-3">
+                                          <input class="form-check-input" type="radio" asp-for="Gender" value="@Gender.Female" id="customRadio2">
+                                          <label class="custom-control-label" for="customRadio2">Nữ</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                             <span asp-validation-for="Gender" class="text-danger"></span>
-
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-4">
-                            <label asp-for="Dob" class="form-label mt-4"></label>
-                            <input asp-for="Dob" class="form-control datetimepicker"  />
+                     </div>
+                     <div class="row mt-4">
+                        <div class="col-3">
+                            <label asp-for="Dob" class="form-label"></label>
+                            <input asp-for="Dob" class="form-control datetimepicker flatpickr-input" autocomplete="off" />
                             <span asp-validation-for="Dob" class="text-danger"></span>
                         </div>
-                        <div class="col-8">
+                        <div class="col-6">
+                            <label asp-for="Slug" class="form-label"></label>
+                            <input asp-for="Slug" class="multisteps-form__input form-control"  />
+                            <span asp-validation-for="Slug" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="Booking" class="form-label"></label>
+                            <div class="form-check form-switch ps-0">
+                                <input asp-for="Booking" type="checkbox" class="form-check-input mt-1 ms-auto "  />
+                            </div>
+                            <span asp-validation-for="Booking" class="text-danger"></span>
+                        </div>
+                        
+                     </div>
+                    
+                     <div class="row ">
+                         <div class="col-4">
+                                <label asp-for="ProvinceId" class="control-label mt-4"></label>
+                                <select asp-for="ProvinceId" asp-items="ViewBag.Province" class= "multisteps-form__input form-control" >
+                                    <option>-- Chọn Thành Phố --</option>
+                                </select>
+                                <span asp-validation-for="ProvinceId" class="text-danger"></span>
+                         </div>
+                         <div class="col-4" id="distric">
+                             <label asp-for="DistrictId" class="control-label mt-4"></label>
+                              <div id="dfeature">
+                                  <select asp-for="DistrictId" asp-items="ViewBag.District" class= "multisteps-form__input form-control" >
+                                     <option>-- Chọn Quận Huyện --</option>
+                                 </select>
+                              </div>
+                             <span asp-validation-for="DistrictId" class="text-danger"></span>
+                         </div>
+                         <div class="col-4"  id="sdistric">
+                             <label asp-for="SubDistrictId" class="control-label mt-4"></label>
+                             <div id="sfeature">
+                                  <select asp-for="SubDistrictId" asp-items="ViewBag.SubDistrict" class= "multisteps-form__input form-control" >
+                                     <option>-- Chọn Phường Xã --</option>
+                                 </select>
+                             </div>
+                             <span asp-validation-for="SubDistrictId" class="text-danger"></span>
+                         </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-5">
                             <label asp-for="Address" class="form-label mt-4"></label>
                             <input asp-for="Address" class="multisteps-form__input form-control" />
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
-                       
-                    </div>
-                    <div class="row">
+                        <div class="col-7">
+                            <label asp-for="MapUrl" class="form-label mt-4"></label>
+                            <input asp-for="MapUrl" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="MapUrl" class="text-danger"></span>
+                        </div>
+                     </div>
+                     <div class="row ">
+                            <div class="col-4">
+                                 <label asp-for="ClinicId" class="control-label mt-4"></label>
+                                <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
+                                    <option>-- Chọn phòng khám --</option>
+                                </select>
+                                <span asp-validation-for="ClinicId" class="text-danger"></span>
+                            </div>
+                            <div class="col-8">
+                                 <label asp-for="Specialities" class="control-label mt-4"></label>
+                                <select asp-for="Specialities" class= "multisteps-form__input form-control" >
+                                   
+                                </select>
+                                <span asp-validation-for="Specialities" class="text-danger"></span>
+
+                            </div>
+                            
+                     </div>
+                    
+
+                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="Email" class="form-label mt-4"></label>
-                            <input asp-for="Email" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <label asp-for="TimeWorking" class="form-label mt-4"></label>
+                            <textarea asp-for="TimeWorking" class="classic-editor form-control datetimepicker"  >  </textarea>
+                            <span asp-validation-for="TimeWorking" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Services" class="form-label mt-4"></label>
+                            <textarea asp-for="Services" class="classic-editor multisteps-form__input form-control" >  </textarea>
+                            <span asp-validation-for="Services" class="text-danger"></span>
+                        </div>
+                       
+                     </div>
+                     <div class="row">
+                        <div class="col-6">
+                            <label asp-for="Educations" class="form-label mt-4"></label>
+                            <textarea asp-for="Educations" class="classic-editor multisteps-form__input form-control" >  </textarea>
+                            <span asp-validation-for="Educations" class="text-danger"></span>
 
                         </div>
                         <div class="col-6">
-                            <label asp-for="PhoneNumber" class="form-label mt-4"></label>
-                            <input asp-for="PhoneNumber" class="multisteps-form__input form-control"  />
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+                            <label asp-for="Prizes" class="form-label mt-4"></label>
+                            <textarea asp-for="Prizes" class=" classic-editor multisteps-form__input form-control"  >  </textarea>
+                            <span asp-validation-for="Prizes" class="text-danger"></span>
                         </div>
-                    </div>
+                     </div>
                      <div class="row">
                         <div class="col-12">
                             <label asp-for="Description" class="form-label mt-4"></label>
-                            <textarea asp-for="Description" class="multisteps-form__input form-control"  >  </textarea>
+                            <textarea asp-for="Description" class="classic-editor multisteps-form__input form-control"  >  </textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5">
+                     </div>
+                     <div class="row">
+                        <div class="col-12">
+                            <label asp-for="Note" class="form-label mt-4"></label>
+                            <textarea asp-for="Note" class="classic-editor multisteps-form__input form-control"  >  </textarea>
+                            <span asp-validation-for="Note" class="text-danger"></span>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-4">
                             <label asp-for="ThumbnailImage" class="form-label mt-4"></label>
                             <input asp-for="ThumbnailImage" type = "file" class="multisteps-form__input form-control"  />
                             <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
@@ -125,12 +257,76 @@
                         <div class="col-3 text-center mt-4 ">
                                     <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(ViewBag.Img ==null ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/user-content/" + ViewBag.Img)" alt="">
                          </div>
-                          
-                    </div>
-                    <input asp-for="Id" type = "hidden"/>
-                    <input asp-for="img" type = "hidden"/>
-                    <input asp-for="Description" type = "hidden"/>
-                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                         
+                     </div>
+                     <div class="row">
+                        <div class="col-4">
+                            <label asp-for="Galleries" class="form-label mt-4"></label>
+                            <input  asp-for="Galleries"  class="multisteps-form__input form-control"   />
+                            <span asp-validation-for="Galleries" class="text-danger"></span>
+                        </div>
+                        <div class="col-12  " id="file_img" >
+                         </div>
+                         <div class="col-12  "  id="show-file-img">
+                             @if (images.Count() > 0)
+                                {
+                                    <div class="row form-control dropzone dz-clickable dz-started mt-4" >
+                                        @foreach(var img in images)
+                                         {
+                                             <div class="col-1  dz-preview dz-processing dz-image-preview dz-error dz-complete" id ="row_@img.Id">
+                                                 <div id = "Img_@i" onclick="ConfirmDelete(@i)" data-id="@img.Id" >
+                                                      <div class="dz-image"><img class="col-2 w-100 border-radius-lg shadow-lg mx-auto" data-dz-thumbnail="" alt="" src="@(Configuration["BaseAddress"] + "/img/" + img.Name)"></div>
+                                                      <div class="dz-details"><div class="dz-size"></div><div class="dz-filename"></div></div>
+                                                      <div style="left: 75px;" class="dz-error-mark"> <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
+                                                          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                          <title>Error</title>
+                                                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
+                                                              <path
+                                                                d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z">
+                                                              </path>
+                                                            </g>
+                                                          </g>
+                                                        </svg> 
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                i++;
+                                        }
+                                        <div class="col-1  dz-preview dz-processing dz-image-preview dz-error dz-complete" >
+                                            <div class="dz-image">
+                                                <a id = "Img-delete-all" onclick="ConfirmDeleteAll()" data-id="@Model.Id" class="btn bg-gradient-dark col-2 w-100 h-100 border-radius-lg shadow-lg mx-auto ">Xóa tất cả</a>
+                                                <div style="left: 60px;" class="dz-error-mark remove-all"> <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
+                                                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                      <title>Error</title>
+                                                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
+                                                          <path
+                                                            d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z">
+                                                          </path>
+                                                        </g>
+                                                      </g>x
+                                                    </svg> 
+                                                  </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                         </div>
+                     </div>
+                     <input asp-for="Id" type = "hidden"/>
+                    
+                      @* @Html.TextBoxFor(x=>x.GetGalleries, new{ type = "hidden"})*@
+                            
+                       @* <input asp-for="Galleries" type = "hidden"/>*@
+                       
+                       @for (int g = 0; g < Model.GetGalleries.Count(); g++)
+                        {
+                            @Html.TextBoxFor(x=>x.GetGalleries[g].Id, new{ type = "hidden"})
+                            @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
+                        }
+                    
+                      <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
                 </div>
                 </div>
            </form>
@@ -138,7 +334,56 @@
 
         </div>
     </div>
+    <div id="myModel" onclick="EnableQuesion()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-warning swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
+            <div class="swal2-icon swal2-warning swal2-icon-show" style="display: flex;">
+                <div class="swal2-icon-content">!</div>
+            </div>
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">Bạn có chắc không?</h2>
+            <div id="quesion" class="swal2-html-container" style="display: block;">Bạn sẽ không thể hoàn nguyên điều này!</div>
+            <div class="swal2-actions">
+                <div class="swal2-loader"></div>
+                <button id="okok" type="button" class="swal2-confirm btn bg-gradient-success" aria-label="" onclick="Delete()" style="display: inline-block;">Có, xóa nó!</button>
+                <button type="button" class="swal2-cancel btn bg-gradient-danger" aria-label="" onclick="Enable()" style="display: inline-block;">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+    <div id="loaderDir" onclick="EnableDel()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-success swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
 
+            <div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;">
+                <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div>
+                <span class="swal2-success-line-tip"></span>
+                <span class="swal2-success-line-long"></span>
+                <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div>
+                <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
+            </div>
+
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">
+                <font style="vertical-align: inherit;">
+                    <font id = "title" style="vertical-align: inherit;">Đã xóa!</font>
+                </font>
+            </h2>
+            <div class="swal2-html-container" style="display: block;">
+                <font style="vertical-align: inherit;">
+                    <font id = "descript" style="vertical-align: inherit;">Tệp của bạn đã bị xóa.</font>
+                </font>
+            </div>
+
+
+
+            <div class="swal2-actions">
+                <div class="swal2-loader"></div>
+                <button type="button" onclick="Enable()" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">
+                    <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">VÂNG</font></font>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+    <input type="hidden" id="hiddenEmployeeId" />
+    <input type="hidden" id="checkDeleteAll" />
 </div>
 
 @section jsFooter{
@@ -150,18 +395,20 @@
             var clinic = document.getElementById('ClinicId');
             const example = new Choices(clinic);
         }
-        if (document.getElementById('SpecialityId')) {
-            var speciality = document.getElementById('SpecialityId');
-            const example = new Choices(speciality);
-        }
-         if (document.getElementById('Gender')) {
-            var gender = document.getElementById('Gender');
-            const example = new Choices(gender, {
-                        searchEnabled: false
-                    });
-        }
-        
+        var dateindex = @Html.Raw(ViewBag.SetChoices);
+         if (document.getElementById('Specialities')) {
              
+             var Speciality = document.getElementById('Specialities');
+              const examples = new Choices(Speciality, {
+              removeItemButton: true
+             });
+             examples.setChoices(
+               dateindex,
+                'value',
+                'label',
+                false,
+              );
+         }
         if (document.querySelector('.datetimepicker')) {
             flatpickr('.datetimepicker', {
                 allowInput: true,
@@ -172,10 +419,16 @@
 
             }); // flatpickr
         }
-
-      
-
-
+         if (document.getElementById('ProvinceId')) {
+            var Province = document.getElementById('ProvinceId');
+            const example = new Choices(Province);
+        }
+        //if (document.getElementById('DistrictId')) {            var DistrictId = document.getElementById('DistrictId');            const example = new Choices(DistrictId);
+        //}
+        if (document.getElementById('SubDistrictId')) {
+            var SubDistrictId = document.getElementById('SubDistrictId');
+            const example = new Choices(SubDistrictId);
+        } 
     </script>
     <script>
        
@@ -187,14 +440,165 @@
                             var files = $('#ThumbnailImage').val();
             $("#ThumbnailImage").attr("value", files.slice(12));
                         });
-       
+        $("#Galleries").change(function (event) {
+            var files = event.target.files;
+            $("#file_img").append('<div class="row form-control dropzone dz-clickable dz-started mt-5" ><div id="listImg"></div></div>')
+            $("#listImg").empty();
+            for(let i = 0; i < files.length; i++){
+                var mgabyte = files[i].size / 1000000 ;
+                var fileName = files[i].name;
+                var lImg = "<div class='col-2  dz-preview dz-processing dz-image-preview dz-error dz-complete'>"
+                      +"<div class='dz-image'><img id='src_imgs_" + i + "' class='col-2 w-100 border-radius-lg shadow-lg mx-auto' data-dz-thumbnail alt='' src=''></div>"
+                      +"<div class='dz-details' style='left: -30px;'><div class='dz-size'><span data-dz-size=''><strong>"
+                      +"<font style='vertical-align: inherit;'><font style='vertical-align: inherit;'>" + mgabyte.toFixed(3) + "</font></font></strong>"
+                      +"<font style='vertical-align: inherit;'><font style='vertical-align: inherit;'> MB</font></font></span></div>"
+                      +"<div class='dz-filename'>"
+                      +"<span data-dz-name=''><font style='vertical-align: inherit;'><font style='vertical-align: inherit;'>"+fileName+"</font></font></span></div></div>"
+                      +"<div class='dz-progress'><span class='dz-upload' data-dz-uploadprogress='' style='width: 100%;'></span></div></div>"
+                $("#listImg").append(lImg);
+                $("#src_imgs_"+i).attr("src", window.URL.createObjectURL(files[i]));
+            }
+            //$("#src_imgs").attr("src", window.URL.createObjectURL(files[0]));
+        });
 
+    </script>
+    <script>
+
+        var ok = document.getElementById("loaderDir");
+        var cel = document.getElementById("myModel");
+
+        var EnableQuesion = function () {
+            cel.classList.add("delete_none");
+            cel.classList.remove("delete_block");
+
+        }
+        var EnableDel = function () {
+            ok.classList.add("delete_none");
+            ok.classList.remove("delete_block");
+
+        }
+
+        var ConfirmDelete = function (Id) {
+            var idImg = $("#Img_"+Id).attr("data-id");
+            $("#hiddenEmployeeId").val(idImg);
+            $("#checkDeleteAll").val(false);
+            document.getElementById("myModel").classList.toggle('delete_none');
+            document.getElementById("myModel").classList.toggle('delete_block');
+            $("#quesion").html("Bạn sẽ không thể hoàn nguyên điều này!");
+            $("#okok").html("Có, xóa nó!");
+        }
+        var ConfirmDeleteAll = function () {
+            var idClinic = $("#Img-delete-all").attr("data-id");
+            $("#hiddenEmployeeId").val(idClinic);
+            $("#checkDeleteAll").val(true);
+            document.getElementById("myModel").classList.toggle('delete_none');
+            document.getElementById("myModel").classList.toggle('delete_block');
+            $("#quesion").html("Bạn sẽ không thể hoàn nguyên điều này!");
+            $("#okok").html("Có, xóa tất cả!");
+        }
+        var Delete = function () {
+            EnableQuesion();
+            var empId = $("#hiddenEmployeeId").val();
+            var check = $("#checkDeleteAll").val();
+            if(check=="true"){
+                $.ajax({
+                    url: "/User/DeleteAllImg",
+                    data: { doctorId: empId},
+                    dataType: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.response == 2) {
+                            $("#show-file-img").empty();
+                              $("#title").html("Xóa Thành Công");
+                            $("#descript").html("Xóa tất cả hình ảnh thành công.");
+                        } else{
+                            $("#title").html("Lỗi sever!");
+                            $("#descript").html("Không thể thực hiện chức năng này.");
+                        }
+
+                    }
+                })
+            }else{
+                $.ajax({
+                    url: "/User/DeleteImg",
+                    data: { imgId: empId},
+                    dataType: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.response == 2) {
+                            $("#row_" + empId).remove();
+                            if(@images.Count == 1){
+                                $("#show-file-img").empty();
+                            }
+                              $("#title").html("Xóa Thành Công");
+                            $("#descript").html("Xóa người dùng thành công.");
+                        } else{
+                            $("#title").html("Lỗi sever!");
+                            $("#descript").html("Không thể thực hiện chức năng này.");
+                        }
+
+                    }
+                })
+            }
+
+            document.getElementById("loaderDir").classList.toggle('delete_none');
+            document.getElementById("loaderDir").classList.toggle('delete_block');
+        }
+    </script>
+    <script>
+        var DistrictId = "";
+        var ProvinceId = "";
+        $(document).ready(function () {
+            $("#ProvinceId").change(function () {
+                $('#DistrictId option').remove();
+                ProvinceId = $('#ProvinceId option:selected').val();
+                if (ProvinceId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/User/GetDistrict?ProvinceId= + ' + ProvinceId, 
+                        success: function (result) {
+                            var s = '<option >-- Chọn Quận Huyện --</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#DistrictId').html(s);
+                        }
+                    })
+                }
+            })
+             $("#DistrictId").change(function () {
+                //$('#sdistric div.choices div.choices__list--dropdown div.choices__list div.choices__item').remove();
+                $('#sfeature div.choices').remove();
+                $('#sdistric #sfeature').html('<select  class="multisteps-form__input form-control" data-val="true" data-val-required="The SubDistrictId field is required." id="SubDistrictId" name="SubDistrictId"></select>');
+                DistrictId = $('#DistrictId option:selected').val();
+                if (DistrictId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/User/GetSubDistrict?DistrictId= + ' + DistrictId, 
+                        success: function (result) {
+                            var s = '<option >-- Chọn Phường Xã --</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option  value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#SubDistrictId').html(s);
+                        }
+                    })
+                }
+            })
+           
+        });
+      
+            $("#sdistric").click(function() {
+              if (document.getElementById('SubDistrictId')) {
+                    var SubDistrictId = document.getElementById('SubDistrictId');
+                    const example = new Choices(SubDistrictId);
+                }       
+            });
     </script>
     @* Kanban scripts *@
     <script src="~/js/plugins/dragula/dragula.min.js"></script>
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
     <script>
-
         var menu_bd = document.getElementById("menu_acc");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
@@ -206,20 +610,21 @@
         dashboardsExamples.classList.add("show");
         var usersExample = document.getElementById("quanlynhanvien");
         usersExample.classList.add("show");
-
-
     </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
     <script>
+        var allEditors = document.querySelectorAll(".classic-editor");
+        allEditors.forEach(function(userItem) {
+          ClassicEditor
+            .create( userItem, {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
         
-     ClassicEditor
-    .create( document.querySelector( '#Description' ), {
-        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
-        
-    } )
-    .catch( error => {
-        console.log( error );
-    } );
+            } )
+            .catch( error => {
+                console.log( error );
+            } );
+        });
+     
     </script>
 }
 

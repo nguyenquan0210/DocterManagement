@@ -11,14 +11,15 @@ namespace DoctorManagement.Utilities.Constants
         public const string MainConnectionString = "DoctorManagementDb";
         public const string CartSession = "CartSession";
         public const string CheckDoctorId = "CheckDoctorId";
-
+        public const string OtpSession = "";
+        public const string Patient = "";
+        public const string Doctor = "";
         public class AppSettings
         {
             public const string Token = "Token";
             public const string Role = "Role";
             public const string BaseAddress = "BaseAddress";
         }
-
        
     }
 }

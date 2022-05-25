@@ -11,39 +11,46 @@ namespace DoctorManagement.ViewModels.System.Users
 {
     public class ManageRegisterRequest
     {
-        [Display(Name = "Họ Tên")]
-        public string? Name { get; set; }
-
+        [Display(Name = "Họ")]
+        public string LastName { get; set; }
+        [Display(Name = "Tên")]
+        public string FirstName { get; set; }
+        [Display(Name = "Tiếp đầu ngữ")]
+        public string Prefix { get; set; }
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]
         public DateTime Dob { get; set; }
         [Display(Name = "Giới tính")]
-        public Gender? Gender { get; set; }
+        public Gender Gender { get; set; }
 
         [Display(Name = "Địa chỉ")]
-        public string? Address { get; set; }
+        public string Address { get; set; }
 
         [Display(Name = "E-mail")]
         public string? Email { get; set; }
 
         [Display(Name = "Số điện thoại")]
-        public string? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
-        [Display(Name = "Tài khoản")]
-        public string? UserName { get; set; }
-
-        [Display(Name = "Mật khẩu")]
-        [DataType(DataType.Password)]
-        public string? Password { get; set; }
-
-        [Display(Name = "Hình ảnh")]
-
-        public IFormFile? ThumbnailImage { get; set; }
+        [Display(Name = "MapUrl")]
+        public string MapUrl { get; set; }
+      
+        [Display(Name = "WordPress Slug")]
+        public string Slug { get; set; }
 
         [Display(Name = "Chuyên Khoa")]
-        public Guid SpecialityId { get; set; }
+        public ICollection<Guid> SpecialityId { get; set; }
+
         [Display(Name = "Phòng Khám")]
         public Guid ClinicId { get; set; }
+        [Display(Name = "Thành Phố")]
+        public Guid ProvinceId { get; set; }
+        [Display(Name = "Quận/huyện")]
+        public Guid DistrictId { get; set; }
+        [Display(Name = "Phường/xã")]
+        public Guid SubDistrictId { get; set; }
+        [Display(Name = "Đã trả phí dịch vụ")]
+        public bool PaidtheFee { get; set; }
 
     }
 }

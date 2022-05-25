@@ -41,13 +41,17 @@ namespace DoctorManagement.Application.Catalog.Clinic
             if (count < 9) str = "PK-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
             else if (count < 99) str = "PK-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
             else if (count < 999) str = "PK-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
-            
+            var location = await _context.Locations.FindAsync(request.LocationId);
+            var district = await _context.Locations.FindAsync(location.ParentId);
+            var province = await _context.Locations.FindAsync(district.ParentId);
+            var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
             var clinics = new Clinics()
             {
                 Name = request.Name,
                 ImgLogo = await SaveFile(request.ImgLogo, CLINIC_CONTENT_FOLDER_NAME),
                 Description = request.Description,
                 Address = request.Address ,
+                FullAddress = fullAddress,
                 LocationId = request.LocationId,
                 Status = Status.Active,
                 No = str
@@ -70,7 +74,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
            _context.Clinics.Add(clinics);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Tạo phòng khám không thành công!");
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
         {
@@ -111,10 +115,26 @@ namespace DoctorManagement.Application.Catalog.Clinic
             await _storageService.DeleteFileAsyncs(image.Img,CLINICS_CONTENT_FOLDER_NAME);
             _context.ImageClinics.Remove(image);
             check = 2;
-           
-
             await _context.SaveChangesAsync();
-            return new ApiSuccessResult<int>(check); ;
+            return new ApiSuccessResult<int>(check); 
+        }
+        public async Task<ApiResult<int>> DeleteAllImg(Guid Id)
+        {
+            var images = _context.ImageClinics.Where(x=>x.ClinicId == Id).ToList();
+            int check = 0;
+            if (images.Count == 0) return new ApiSuccessResult<int>(check);
+            foreach (var image in images)
+            {
+                var removeImg = await _context.ImageClinics.FindAsync(image.Id);
+                await _storageService.DeleteFileAsyncs(removeImg.Img, CLINICS_CONTENT_FOLDER_NAME);
+                _context.ImageClinics.Remove(removeImg);
+            }
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0)
+            {
+                check = 2;
+            }
+            return new ApiSuccessResult<int>(check);
         }
 
         public async Task<ApiResult<List<ClinicVm>>> GetAll()
@@ -159,6 +179,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     Status = x.c.Status,
                     Address =  x.c.Address,
                     No = x.c.No,
+                    FullAddress = x.c.Address + ", " + x.sd.Name + ", " + x.d.Name + ", " + x.p.Name,
                     LocationVm = new LocationVm()
                     {
                         Id = x.sd.Id,
@@ -219,7 +240,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                        join dt in _context.Doctors on u.Id equals dt.UserId
                        where r.Name.ToUpper() == "DOCTOR" && dt.ClinicId == Id
                        select dt;
-            if (clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { Id}");
+            if (clinics == null) return new ApiErrorResult<ClinicVm>("null");
             var rs = new ClinicVm()
             {
                 Id = clinics.Id,
@@ -229,6 +250,10 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 Status = clinics.Status,
                 No = clinics.No,
                 ImgLogo = CLINIC_CONTENT_FOLDER_NAME + "/" + clinics.ImgLogo,
+                Note = clinics.Note,
+                CreatedAt = clinics.CreatedAt,
+                FullAddress = clinics.Address +", " + sd.Name + ", " + d.Name + ", " + p.Name,
+                MapUrl = clinics.MapUrl,
                 LocationVm = new LocationVm()
                 {
                     Id = sd.Id,
@@ -270,18 +295,22 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     Img = USER_CONTENT_FOLDER_NAME + "/" + u.Img,
                     No = u.No,
                     UserId = u.UserId,
+                    Booking = u.Booking,
+                    Services = u.Services,
+                    Slug = u.Slug,
+                    Address = u.Address,
+                    Dob = u.Dob,
+                    Educations = u.Educations,
+                    FirstName = u.FirstName,
+                    Gender = u.Gender,
+                    LastName = u.LastName,
+                    MapUrl = u.MapUrl,
+                    Prefix = u.Prefix,
+                    Note = u.Note,
                     User = new UserVm()
 					{
-                        Name = u.AppUsers.Name,
                         Email = u.AppUsers.Email,
                         PhoneNumber = u.AppUsers.PhoneNumber,
-                        Gender = u.AppUsers.Gender,
-                        Dob = u.AppUsers.Dob
-					},
-                    GetSpeciality = new GetSpecialityVm()
-					{
-                        Id = u.Specialities.Id,
-                        Title = u.Specialities.Title
 					},
                     Rates = u.Rates.Select(r => new RateVm()
 					{
@@ -302,8 +331,8 @@ namespace DoctorManagement.Application.Catalog.Clinic
         {
             var i = _context.ImageClinics.Where(x=> x.ClinicId == request.Id).Count();
             var clinics = await _context.Clinics.FindAsync(request.Id);
-            if (clinics == null) throw new DoctorManageException($"Cannot find a Clinic with id: { request.Id}");
-            request.Address = request.Address;
+            if (clinics == null) return new ApiErrorResult<bool>("null");
+            clinics.Address = request.Address;
             clinics.Name = request.Name;
             clinics.Description = request.Description;
             clinics.Address = request.Address;
@@ -332,7 +361,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
             }
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Cập nhật không thành công!");
         }
     }
 }

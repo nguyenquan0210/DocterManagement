@@ -49,10 +49,6 @@ namespace DoctorManagement.Data.Extensions
                 EmailConfirmed = true,
                 PasswordHash = hasher.HashPassword(null, "quax2h1408$"),
                 SecurityStamp = string.Empty,
-                Name = "Nguyễn Đình Quân",
-                Dob = new DateTime(2000, 10, 02),
-                Gender = Enums.Gender.Male,
-                Date = new DateTime(2021, 12, 17),
                 RoleId = roleId,
                 Status = Enums.Status.Active
             });
@@ -62,9 +58,17 @@ namespace DoctorManagement.Data.Extensions
                 UserId = adminId
             });
             modelBuilder.Entity<Specialities>().HasData(
-               new Specialities() { Id = new Guid("8D04DCE4-969A-435D-BBA4-DF3F325983DC"), Title = "Tiêu hóa",Description = "Điều trị các bệnh về tiêu hoá", SortOrder = 1 }
+               new Specialities() { Id = new Guid("8D04DCE4-969A-435D-BBA4-DF3F325983DC"), Title = "Tiêu hóa",Description = "Điều trị các bệnh về tiêu hoá", SortOrder = 1, No= "SP-22-001", IsDeleted= false,Img = "default", }
              
                );
+            modelBuilder.Entity<Informations>().HasData(
+              new Informations() { Id = new Guid("B0603A9C-A60E-496F-B096-E1B18CAD69E0"), Company = "Công ty TNHH DoctorMedio", Email = "nguyenquan52000@gmail.com", Hotline = "0373951042", FullAddress = "Thôn An lương, Xã Tam Anh Bắc, Huyện Núi Thành, Tỉnh Quảng Nam", IsDeleted = false,Image="default",TimeWorking="7:30-18:00 mỗi tuần", AccountBank="34569876567823" }
+             
+              );
+            modelBuilder.Entity<MainMenus>().HasData(
+             new MainMenus() { Id = new Guid("8D04DCE4-969A-435D-BBA4-DF3F325983DC"), Controller = "Home", Action = "Index", SortOrder = 1, CratedAt = new DateTime(2000,10,02), IsDeleted = true, Image = "default", Name = "Trang Chủ",ParentId= new Guid(),Type="MenuHeader",Title="trang chủ",Description="" }
+
+             );
         }
     }
 }

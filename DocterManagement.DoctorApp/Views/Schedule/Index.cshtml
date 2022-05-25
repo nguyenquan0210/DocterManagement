@@ -90,6 +90,8 @@
                                     <th>Từ thời gian</th>
                                     <th>Đến thời gian</th>
                                     <th>Số lượng</th>
+                                    <th>Số lượng sẵn có</th>
+                                    <th>Số lượng đã đặt</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -106,9 +108,11 @@
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.FromTime</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.ToTime</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Qty</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.AvailableQty</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.BookedQty</h6></td>
                                         
                                         <td>
-                                            <span class="badge @(item.Status == Status.Active ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.Status == Status.Active ? "Hoạt động" : "đã khóa")</span>
+                                            <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>
                                         </td>
                                         <td class="text-sm">
                                             <a  asp-action = "Detailt" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
@@ -117,7 +121,7 @@
                                             <a  asp-action = "Update" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
                                                 <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
-                                            <a id = "Speciality_@i" onclick="@(item.Status == Status.InActive ? "ConfirmDelete("+@i+")": "ConfirmStatus("+@i+")")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
+                                            <a id = "Speciality_@i" onclick="@(item.IsDeleted == false ? "ConfirmDelete("+@i+")": "ConfirmStatus("+@i+")")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
                                                 <i class="fas fa-trash text-secondary"></i>
                                             </a>
                                         </td>
@@ -128,11 +132,13 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                   <th>Thứ</th>
+                                    <th>Thứ</th>
                                     <th>Ngày khám</th>
                                     <th>Từ thời gian</th>
                                     <th>Đến thời gian</th>
                                     <th>Số lượng</th>
+                                    <th>Số lượng sẵn có</th>
+                                    <th>Số lượng đã đặt</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -302,7 +308,6 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
 
     <script>
-
          var menu_bd = document.getElementById("menu_speciality");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
@@ -310,8 +315,5 @@
         a_xbd.classList.add("active");
         var usersExample = document.getElementById("managespeciality");
         usersExample.classList.add("show");
-
-
-
     </script>
 }

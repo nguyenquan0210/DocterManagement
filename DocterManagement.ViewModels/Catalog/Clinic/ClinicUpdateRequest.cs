@@ -29,5 +29,7 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         public IFormFileCollection? ImgClinics { get; set; }
         public Guid Id { get; set; }
         public Status Status { get; set; }
+
+        public List<ImageClinicVm>? Images { get; set; }
     }
 }

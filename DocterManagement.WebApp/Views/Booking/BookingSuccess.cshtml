@@ -1,0 +1,708 @@
+﻿@model DoctorManagement.ViewModels.Catalog.Appointment.AppointmentVm
+@{
+    ViewData["Title"] = "BookingSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@section Stylesheet{
+    <style>
+        .root-layout[_ngcontent-serverApp-c55] {
+            background-color: #f6f6f6
+        }
+    </style>
+    <style>
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @@media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @@media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c54] .ant-collapse-content-box {
+            padding: 0 !important
+        }
+
+        nz-collapse-panel[_ngcontent-serverApp-c54] {
+            padding: 0 !important
+        }
+
+        [_nghost-serverApp-c54] .ant-collapse-header {
+            cursor: pointer !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 600 !important;
+            color: currentColor !important
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c54] .ant-collapse-header {
+                cursor: auto !important
+            }
+
+            nz-collapse-panel[_ngcontent-serverApp-c54] {
+                border-style: none !important
+            }
+        }
+
+        a[_ngcontent-serverApp-c54]:hover {
+            color: currentColor
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c194] .ant-steps-item-icon {
+            float: none !important
+        }
+
+        [_nghost-serverApp-c194] .ant-steps-item-tail {
+            display: none !important
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c193] .ant-steps {
+            align-items: stretch
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c193] .ant-steps-item {
+                margin-top: 1rem
+            }
+        }
+
+        [_nghost-serverApp-c193] .ant-steps-item.ant-steps-item-active .ant-steps-item-icon {
+            --tw-border-opacity: 1 !important;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity)) !important;
+            --tw-bg-opacity: 1 !important;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity)) !important;
+            --tw-text-opacity: 1 !important;
+            color: rgb(255 255 255 / var(--tw-text-opacity)) !important
+        }
+
+        [_nghost-serverApp-c193] .ant-steps-item.ant-steps-item-active .ant-steps-item-icon .ant-steps-icon {
+            --tw-text-opacity: 1 !important;
+            color: rgb(255 255 255 / var(--tw-text-opacity)) !important
+        }
+
+        [_nghost-serverApp-c193] .ant-steps-item .ant-steps-item-icon {
+            position: absolute;
+            top: .75rem;
+            left: .75rem
+        }
+
+        [_nghost-serverApp-c193] .ant-steps-item .step-button {
+            display: flex;
+            flex: 1 1 0%;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: .75rem;
+            padding-left: 2.75rem
+        }
+
+        [_nghost-serverApp-c193] .ant-steps-item .ant-steps-item-container {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c193] .ant-steps-item .ant-steps-item-container {
+                border-radius: .5rem
+            }
+        }
+
+        [_nghost-serverApp-c193] .ant-steps-item .ant-steps-item-container .ant-steps-item-title {
+            display: flex
+        }
+
+        [_nghost-serverApp-c193] .ant-steps-item .ant-steps-item-content {
+            min-height: auto
+        }
+    </style>
+    <style>
+        .wrapper-main[_ngcontent-serverApp-c72] {
+            background: linear-gradient(90deg, #00c6fb 0%, #0758d8 98.74%)
+        }
+
+        @@media only screen and (max-width: 767px) {
+            .banner-navigation[_ngcontent-serverApp-c72] {
+                background: white
+            }
+        }
+
+        .selected[_ngcontent-serverApp-c72] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [nz-carousel-content][_ngcontent-serverApp-c73] {
+            overflow: hidden
+        }
+    </style>
+    <style>
+        .main-search[_ngcontent-serverApp-c68] {
+            margin: 0;
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: .5rem;
+            border-color: transparent;
+            padding: .75rem 2.25rem .75rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+
+        .main-search[_ngcontent-serverApp-c68]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .main-search[_ngcontent-serverApp-c68]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            outline: 2px solid transparent;
+            outline-offset: 2px
+        }
+
+        @@media (min-width: 782px) {
+            .main-search[_ngcontent-serverApp-c68] {
+                padding-right: .75rem;
+                padding-left: 3rem
+            }
+        }
+
+        .main-search[_ngcontent-serverApp-c68]::-webkit-calendar-picker-indicator {
+            display: none !important
+        }
+    </style>
+    <style>
+        .bookmark_hospital[_ngcontent-serverApp-c71]::-webkit-scrollbar {
+            background: transparent;
+            width: 0px
+        }
+    </style>
+    <style>
+        .typical-doctor-card[_ngcontent-serverApp-c195] {
+            box-shadow: 0 1px 2px #0000001a, 0 1px 1px #0000000f
+        }
+
+        .btn-booking-primary[_ngcontent-serverApp-c195] {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            width: 124px;
+            height: 41px;
+            left: 0px;
+            top: 0px;
+            background: #eff6ff;
+            border: 1px solid #eff6ff;
+            box-sizing: border-box;
+            box-shadow: 0 1px 1px #0000000d;
+            border-radius: 4px;
+            flex: none;
+            order: 0;
+            align-self: stretch;
+            flex-grow: 0
+        }
+
+        .limit-line-break[_ngcontent-serverApp-c195] {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            line-height: 16px;
+            max-height: 32px;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c211] .ant-tabs-nav-operations {
+            display: none !important
+        }
+
+        [_nghost-serverApp-c211] .ant-tabs-tab {
+            padding: 0
+        }
+
+        [_nghost-serverApp-c211] .ant-tabs-tab-active {
+            border: 1px solid #1A76E3;
+            background: #eff6ff
+        }
+
+        .active[_ngcontent-serverApp-c211] {
+            border-top: 1px solid #1A76E3;
+            border-bottom: 1px solid #1A76E3
+        }
+
+        [_nghost-serverApp-c211] .ant-tabs-tabpane {
+            min-height: 200px
+        }
+    </style>
+    <style>
+        .ant-radio-group[_ngcontent-serverApp-c208] {
+            display: flex;
+            height: 10rem;
+            flex-direction: column;
+            gap: 1rem;
+            font-weight: 500;
+            line-height: 17px;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            .ant-radio-group[_ngcontent-serverApp-c208] {
+                height: 20rem
+            }
+        }
+    </style>
+    <style>
+        .item-slot[_ngcontent-serverApp-c210] {
+            width: -moz-fit-content;
+            width: fit-content;
+            border: 1px solid #e5e7eb
+        }
+
+        .arrow-down-close[_ngcontent-serverApp-c210] {
+            transform: rotate(0);
+            transition: transform .3s linear
+        }
+
+        .arrow-down-open[_ngcontent-serverApp-c210] {
+            transform: rotate(-180deg);
+            transition: transform .3s linear
+        }
+
+        .slot-unavailable[_ngcontent-serverApp-c210] {
+            cursor: not-allowed;
+            background: #d7d7d7;
+            color: #9ca3af
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c180] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem .5rem 2rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c180]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c180]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+    </style>
+    <style>
+        .active[_ngcontent-serverApp-c179] {
+            border: 2px solid #1a76e3
+        }
+
+        .active[_ngcontent-serverApp-c179] .item[_ngcontent-serverApp-c179] {
+            padding: 7px
+        }
+
+        .item-row[_ngcontent-serverApp-c179] {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: .5rem
+        }
+
+        .item-row__label[_ngcontent-serverApp-c179] {
+            margin: 0;
+            white-space: nowrap;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 400;
+            line-height: 19px
+        }
+
+        .item-row__value[_ngcontent-serverApp-c179] {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 500;
+            line-height: 19px
+        }
+
+        .item-name-bg[_ngcontent-serverApp-c179],
+        .item-name[_ngcontent-serverApp-c179] {
+            margin: 0;
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%)
+        }
+    </style>
+    <style>
+        .ant-collapse-borderless[_ngcontent-serverApp-c206]>.ant-collapse-item[_ngcontent-serverApp-c206] {
+            border: none !important
+        }
+
+        .profile-card[_ngcontent-serverApp-c206] .ant-tabs-nav {
+            margin-bottom: 0
+        }
+
+        .profile-card[_ngcontent-serverApp-c206] .ant-tabs-tab {
+            border-top-width: 4px;
+            border-color: transparent
+        }
+
+        .profile-card[_ngcontent-serverApp-c206] .ant-tabs-tab .ant-tabs-tab-btn:hover {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .profile-card[_ngcontent-serverApp-c206] .ant-tabs-tab.ant-tabs-tab-active {
+            --tw-border-opacity: 1;
+            border-top-color: rgb(26 118 227 / var(--tw-border-opacity))
+        }
+
+        .profile-card[_ngcontent-serverApp-c206] .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        .label[_ngcontent-serverApp-c170] {
+            white-space: nowrap;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 400;
+            line-height: 19px;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        .value[_ngcontent-serverApp-c170] {
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 500;
+            line-height: 19px;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        .value--green[_ngcontent-serverApp-c170] {
+            --tw-text-opacity: 1;
+            color: rgb(34 197 94 / var(--tw-text-opacity))
+        }
+
+        .item-wrapper[_ngcontent-serverApp-c170] {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-top: .75rem;
+            padding-bottom: .75rem
+        }
+    </style>
+    <style>
+        .label[_ngcontent-serverApp-c171] {
+            white-space: nowrap;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 400;
+            line-height: 19px;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        .value[_ngcontent-serverApp-c171] {
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 500;
+            line-height: 19px;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        .value--blue[_ngcontent-serverApp-c171] {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .item-wrapper[_ngcontent-serverApp-c171] {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-top: .75rem;
+            padding-bottom: .75rem
+        }
+    </style>
+}
+
+<app-result _nghost-serverapp-c263="" class="ng-star-inserted">
+    <app-result-booking _ngcontent-serverapp-c173="" _nghost-serverapp-c172="" class="ng-star-inserted">
+        <div _ngcontent-serverapp-c172="" class="md:max-w-7xl md:mx-auto ng-star-inserted">
+            <section _ngcontent-serverapp-c172=""
+                class="flex flex-col justify-center bg-gray-50 md:bg-transparent items-center pt-10"><img
+                    _ngcontent-serverapp-c172="" class="w-[100px] h-[100px]"
+                    src="~/img/booking/svg/Successful.svg">
+                <p _ngcontent-serverapp-c172="" class="font-medium text-xl text-gray-800 py-6 m-0">Đặt lịch
+                    thành công </p>
+            </section>
+            <section _ngcontent-serverapp-c172="" class="rounded-lg shadow ng-star-inserted">
+                <app-header-info _ngcontent-serverapp-c172="" _nghost-serverapp-c169=""
+                    class="ng-star-inserted">
+                    <div _ngcontent-serverapp-c169="" class="flex flex-col md:flex-row ng-star-inserted">
+                        <div _ngcontent-serverapp-c169=""
+                            class="w-full flex flex-row items-center gap-4 py-6 px-4">
+                            <div _ngcontent-serverapp-c169="" class="flex flex-row">
+                                <div _ngcontent-serverapp-c169=""
+                                    class="cursor-pointer w-full h-full flex items-center ng-star-inserted">
+                                    <img _ngcontent-serverapp-c169=""
+                                        defaultimage="../assets/img/placeholder.svg" alt=""
+                                        class="w-[60px] h-[60px] object-scale-down rounded-full lazyload  ng-lazyloaded"
+                                        src="@(Configuration["BaseAddress"] + "/img/user-content/" + Model.Doctor.Img)">
+                                </div>
+                                
+                                
+                            </div>
+                            <div _ngcontent-serverapp-c169="" class="flex flex-col gap-1">
+                                <p _ngcontent-serverapp-c169=""
+                                    class="cursor-pointer font-medium text-base leading-19 m-0">@(Model.Doctor.Prefix + Model.Doctor.LastName+" "+ Model.Doctor.FirstName)</p>
+                                <p _ngcontent-serverapp-c169=""
+                                    class="font-normal text-sm text-gray-500 leading-17 m-0"> @Model.Doctor.FullAddress </p>
+                            </div>
+                        </div>
+                        <div _ngcontent-serverapp-c169=""
+                            class="info-qrcode flex flex-col justify-center items-center">
+                            <qrcode _ngcontent-serverapp-c169="" class="ng-star-inserted">
+                                <div class="qrcode"><canvas height="130" width="130"
+                                        style="height: 130px; width: 130px;"></canvas></div>
+                            </qrcode>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                </app-header-info>
+                
+                
+                <div _ngcontent-serverapp-c172="" class="flex flex-col md:flex-row">
+                    <app-appointment-info _ngcontent-serverapp-c172="" class="md:basis-1/2 ng-star-inserted"
+                        _nghost-serverapp-c170="">
+                        <div _ngcontent-serverapp-c170="" class="w-full p-4 ng-star-inserted">
+                            <p _ngcontent-serverapp-c170=""
+                                class="font-medium text-base leading-19 py-[10px] m-0">Thông tin đặt khám
+                            </p>
+                            <div _ngcontent-serverapp-c170="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c170="" class="label m-0">Mã phiếu khám</p>
+                                <p _ngcontent-serverapp-c170="" class="value m-0">@Model.No</p>
+                            </div>
+                            <div _ngcontent-serverapp-c170="" class="flex flex-col">
+                                <div _ngcontent-serverapp-c170="" class="item-wrapper ng-star-inserted">
+                                    <p _ngcontent-serverapp-c170="" class="label m-0">STT</p>
+                                    <p _ngcontent-serverapp-c170="" class="value m-0">@Model.Stt</p>
+                                </div>
+                                
+                                <p _ngcontent-serverapp-c170=""
+                                    class="font-normal text-sm text-gray-500 leading-17 text-right m-0"></p>
+                            </div>
+                            <div _ngcontent-serverapp-c170="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c170="" class="label m-0">Ngày khám</p>
+                                <p _ngcontent-serverapp-c170="" class="value m-0">@Model.Schedule.CheckInDate.ToShortDateString()</p>
+                            </div>
+                        </div>
+                    </app-appointment-info>
+                    
+                    <app-patient-info _ngcontent-serverapp-c172="" class="md:basis-1/2 ng-star-inserted"
+                        _nghost-serverapp-c171="">
+                        <div _ngcontent-serverapp-c171="" class="w-full p-4 ng-star-inserted">
+                            <p _ngcontent-serverapp-c171=""
+                                class="font-medium text-base leading-19 py-[10px] m-0">Thông tin bệnh nhân
+                            </p>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c171="" class="label m-0">Bệnh nhân</p>
+                                <p _ngcontent-serverapp-c171="" class="value m-0"> @Model.Patient.Name</p>
+                            </div>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c171="" class="label m-0">Điện thoại</p>
+                                <p _ngcontent-serverapp-c171="" class="value m-0">@Model.Patient.RelativePhone</p>
+                            </div>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c171="" class="label m-0">Ngày sinh</p>
+                                <p _ngcontent-serverapp-c171="" class="value m-0">@Model.Patient.Dob.ToShortDateString()</p>
+                            </div>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c171="" class="label m-0">Giới tính</p>
+                                <p _ngcontent-serverapp-c171="" class="value m-0">@(Model.Patient.Gender == DoctorManagement.Data.Enums.Gender.Male?"Nam":"Nữ")</p>
+                            </div>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c171="" class="label m-0">Mã BHYT</p>
+                                <p _ngcontent-serverapp-c171="" class="value value--blue m-0">---</p>
+                            </div>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c171="" class="label m-0">Địa chỉ</p>
+                                <p _ngcontent-serverapp-c171="" class="value m-0">@Model.Patient.Address</p>
+                            </div>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c171="" class="label m-0">Ghi chú</p>
+                                <p _ngcontent-serverapp-c171="" class="value m-0">---</p>
+                            </div>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <p _ngcontent-serverapp-c171="" class="label m-0">Tệp đính kèm</p>
+                                <p _ngcontent-serverapp-c171="" class="value m-0"></p>
+                            </div>
+                            <div _ngcontent-serverapp-c171="" class="item-wrapper">
+                                <div _ngcontent-serverapp-c171="" class="mt-4 flex gap-4">
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </app-patient-info>
+                    
+                </div>
+                <div _ngcontent-serverapp-c172=""
+                    class="font-normal text-sm leading-17 text-gray-500 text-center bg-gray-50 py-4"> Tổng
+                    đài hỗ trợ và chăm sóc khách hàng<a _ngcontent-serverapp-c172="" href="tel:1900-2805"
+                        target="_blank">1900-2805</a></div>
+            </section>
+            
+            <section _ngcontent-serverapp-c172=""
+                class="flex flex-row justify-center items-center p-4 gap-[10px] ng-star-inserted"><a
+                    _ngcontent-serverapp-c172="" routerlink="/lich-kham"
+                    class="cursor-pointer border-white w-full md:w-auto font-semibold text-sm leading-17 bg-white shadow px-4 py-3 rounded"
+                    href="/lich-kham?id=6285afdf8881b81104d4bd7e"> Xem phiếu khám</a>
+                
+            </section>
+            
+            
+        </div>
+        
+    </app-result-booking>
+    
+</app-result>
+

@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.Catalog.SlotSchedule;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -56,13 +57,20 @@ namespace DoctorManagement.ApiIntegration
         {
             return await GetAsync<ScheduleVm>($"/api/schedule/{Id}");
         }
-
+        public async Task<ApiResult<SlotScheduleVm>> GetByScheduleSlotId(Guid Id)
+        {
+            return await GetAsync<SlotScheduleVm>($"/api/slotschedule/{Id}");
+        }
         public async Task<ApiResult<List<ScheduleVm>>> GetAllSchedule()
         {
             var data = await GetListAsync<ScheduleVm>($"/api/schedule/all");
             return data;
         }
-
+        public async Task<ApiResult<List<DoctorScheduleClientsVm>>> GetScheduleDoctor(Guid DoctorId)
+        {
+            var data = await GetListAsync<DoctorScheduleClientsVm>($"/api/schedule/GetScheduleDoctor/{DoctorId}");
+            return data;
+        }
         public async Task<ApiResult<PagedResult<ScheduleVm>>> GetSchedulePagings(GetSchedulePagingRequest request)
         {
             return await GetAsync<PagedResult<ScheduleVm>>(

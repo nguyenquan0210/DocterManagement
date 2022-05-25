@@ -14,8 +14,7 @@ namespace DoctorManagement.Data.Configuration
         public void Configure(EntityTypeBuilder<AppUsers> builder)
         {
             builder.ToTable("AppUsers");
-
-            builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            
             builder.Property(x => x.PasswordHash).IsRequired().HasMaxLength(255);
             builder.Property(x => x.UserName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.PhoneNumber).IsRequired().HasMaxLength(11);

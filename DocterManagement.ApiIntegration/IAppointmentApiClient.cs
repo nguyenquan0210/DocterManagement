@@ -12,7 +12,7 @@ namespace DoctorManagement.ApiIntegration
     {
         Task<ApiResult<PagedResult<AppointmentVm>>> GetAppointmentPagings(GetAppointmentPagingRequest request);
         Task<ApiResult<bool>> Update(AppointmentUpdateRequest request);
-        Task<ApiResult<bool>> Create(AppointmentCreateRequest request);
+        Task<ApiResult<string>> Create(AppointmentCreateRequest request);
 
         Task<int> Delete(Guid Id);
 

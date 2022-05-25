@@ -31,7 +31,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _clinicService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }
@@ -70,6 +70,23 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
+        /// Xóa tất cả hình ảnh phòng khám
+        /// </summary>
+        /// 
+        [HttpDelete("{Id}/delete-all-images")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<int>>> DeleteAllImageClinic([FromRoute] Guid Id)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _clinicService.DeleteAllImg(Id);
+
+            return Ok(result);
+        }
+        /// <summary>
         /// Cập nhật phòng khám
         /// </summary>
         /// 
@@ -84,7 +101,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _clinicService.Update(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
             return Ok(result);
         }
 
@@ -107,7 +124,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _clinicService.GetById(Id);
             if (!result.IsSuccessed)
-                return BadRequest("Cannot find clinic");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Update";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @section Header{
     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
         <li class="breadcrumb-item text-sm">
@@ -82,11 +82,11 @@
 
                         </div>
                         <div class="col-3">
-                            <label asp-for="Status" class="form-label mt-4"></label>
-                             <select asp-for="Status" asp-items="ViewBag.Status" class= "multisteps-form__input form-control" >
-                                    
-                                </select>
-                            <span asp-validation-for="Status" class="text-danger"></span>
+                            <label asp-for="IsDeleted" class="form-label mt-4"></label>
+                               <div class="form-check form-switch ps-0">
+                                   <input asp-for="IsDeleted" type="checkbox" class="form-check-input mt-1 ms-auto "  readonly />
+                               </div>
+                            <span asp-validation-for="IsDeleted" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row">
@@ -98,6 +98,17 @@
 
                         </div>
                        
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mt-4">
+                            <label asp-for="Img" class="form-label "></label>
+                            <input asp-for="Img" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Img" class="text-danger"></span>
+
+                        </div>
+                         <div class="col-2 text-center mt-5 ">
+                               <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(Configuration["BaseAddress"] + "/img/" + ViewBag.Image)" alt="">
+                         </div>
                     </div>
                     <input hidden asp-for="Id"/>
                     <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
@@ -115,12 +126,14 @@
     <script src="~/js/plugins/quill.min.js"></script>
      <script>
       
-         if (document.getElementById('Status')) {
-            var Status = document.getElementById('Status');
-            const example = new Choices(Status, {
-                        searchEnabled: false
-                    });
-        }
+        $("#Img").change(function (event) {
+            var file = event.target.files;
+            $("#src_img").attr("src", window.URL.createObjectURL(file[0]));
+        });
+        $("#Img").change(function () {
+            var file = $('#Img').val();
+            $("#Img").attr("value", file.slice(12));
+        });
         
     </script>
     @* Kanban scripts *@

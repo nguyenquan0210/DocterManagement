@@ -22,8 +22,8 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPost]
-        [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] AppointmentCreateRequest request)
+        //[Authorize]
+        public async Task<ActionResult<ApiResult<Guid>>> Create([FromBody] AppointmentCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -31,7 +31,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _appointmentService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }
@@ -89,7 +89,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _appointmentService.GetById(Id);
             if (result == null)
-                return BadRequest("Cannot find appointment");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>

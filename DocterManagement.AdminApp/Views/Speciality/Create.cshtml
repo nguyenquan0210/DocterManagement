@@ -81,15 +81,19 @@
                             <span asp-validation-for="Description" class="text-danger"></span>
 
                         </div>
-                        @*<div class="col-3">
-                            <label asp-for="Status" class="form-label mt-4"></label>
-                             <select asp-for="Status" asp-items="ViewBag.Status" class= "multisteps-form__input form-control" >
-                                    
-                                </select>
-                            <span asp-validation-for="Status" class="text-danger"></span>
-                        </div>*@
+                       
                     </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label asp-for="Img" class="form-label "></label>
+                            <input asp-for="Img" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Img" class="text-danger"></span>
 
+                        </div>
+                         <div class="col-2 text-center mt-4 ">
+                               <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="" alt="">
+                         </div>
+                    </div>
                     <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
                 </div>
                 </div>
@@ -103,6 +107,18 @@
 
 @section jsFooter{
     <script src="~/js/plugins/quill.min.js"></script>
+    <script>
+       
+        $("#Img").change(function (event) {
+            var file = event.target.files;
+            $("#src_img").attr("src", window.URL.createObjectURL(file[0]));
+        });
+        $("#Img").change(function () {
+            var file = $('#Img').val();
+            $("#Img").attr("value", file.slice(12));
+        });
+
+    </script>
     @* Kanban scripts *@
     <script src="~/js/plugins/dragula/dragula.min.js"></script>
     <script src="~/js/plugins/jkanban/jkanban.js"></script>

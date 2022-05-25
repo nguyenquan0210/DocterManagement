@@ -28,6 +28,9 @@ builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 builder.Services.AddTransient<IClinicApiClient, ClinicApiClient>();
 builder.Services.AddTransient<ISpecialityApiClient, SpecialityApiClient>();
 builder.Services.AddTransient<ILocationApiClient, LocationApiClient>();
+builder.Services.AddTransient<IMasterDataApiClient, MasterDataApiClient>();
+builder.Services.AddTransient<IContactApiClient, ContactApiClient>();
+builder.Services.AddTransient<IAnnualServiceFeeApiClient, AnnualServiceFeeApiClient>();
 
 IMvcBuilder builde = builder.Services.AddRazorPages();
 

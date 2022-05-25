@@ -5,6 +5,7 @@
 @{
 	ViewData["Title"] = "Index";
 	Layout = "~/Views/Shared/_Layout.cshtml";
+	var i =1;
 }
 
 
@@ -85,7 +86,7 @@
 						<table class="table table-flush" id="list">
 							<thead class="thead-light">
 								<tr>
-									<th>Mã vai trò</th>
+									<th>STT</th>
 									<th>Tên vai trò</th>
 									<th>Mô tả</th>
 									<th>Thao tác</th>
@@ -95,7 +96,7 @@
 								@foreach (var item in Model)
 								{
 									<tr id="row_@item.Id">
-										<td class="text-sm"><h6 class="ms-3 my-auto">@item.Id</h6></td>
+										<td class="text-sm"><h6 class="ms-3 my-auto">@i</h6></td>
 										<td class="text-sm"><h6 class="ms-3 my-auto">@item.Name</h6></td>
 										<td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>
 										@*<td>
@@ -111,7 +112,7 @@
 											</a>*@
 										</td>
 									</tr>
-
+									i++;
 								}
 
 							</tbody>

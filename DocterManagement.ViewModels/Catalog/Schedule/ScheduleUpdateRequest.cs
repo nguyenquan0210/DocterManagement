@@ -14,5 +14,8 @@ namespace DoctorManagement.ViewModels.Catalog.Schedule
         public TimeSpan ToTime { get; set; }
         public bool Status { get; set; }
         public int Qty { get; set; }
+        public int? BookedQty { get; set; }
+        public int? AvailableQty { get; set; }
+        public string? CheckInDate { get; set; }
     }
 }

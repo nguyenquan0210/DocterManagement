@@ -19,7 +19,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
 
         Task<ApiResult<PagedResult<SpecialityVm>>> GetAllPaging(GetSpecialityPagingRequest request);
 
-        Task<ApiResult<List<SpecialityVm>>> GetAll();
+        Task<ApiResult<List<SpecialityVm>>> GetAllSpeciality();
 
         Task<ApiResult<SpecialityVm>> GetById(Guid Id);
     }

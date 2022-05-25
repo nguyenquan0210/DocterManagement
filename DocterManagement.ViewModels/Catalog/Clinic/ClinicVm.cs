@@ -19,8 +19,13 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         public string Address { get; set; }
         public LocationVm LocationVm { get; set; }
         public Status Status { get; set; }
-
         public List<ImageClinicVm> Images { get; set; }
         public List<DoctorVm> DoctorVms { get; set; }
+        public string FullAddress { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public string MapUrl { get; set; }
+        public string Note { get; set; }
+      
     }
 }

@@ -13,5 +13,6 @@ namespace DoctorManagement.ViewModels.Catalog.Speciality
         public Guid Id { get; set; }
         [Display(Name = "Tên khoa")]
         public string Title { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

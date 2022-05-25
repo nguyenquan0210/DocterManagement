@@ -25,7 +25,7 @@ namespace DoctorManagement.Application.Catalog.Comment
             var comments = new CommentsPost()
             {
                 CheckComentId = request.CheckComentId,
-                Date = DateTime.Now,
+                CreatedAt = DateTime.Now,
                 Description = request.Description,
                 CheckLevel = request.CheckLevel,
                 UserId = request.UserId,
@@ -55,7 +55,7 @@ namespace DoctorManagement.Application.Catalog.Comment
             var rs = await query.Select(x => new CommentVm()
             {
                 Id = x.Id,
-                Date = x.Date,
+                Date = x.CreatedAt,
                 Description = x.Description,
                 UserId = x.UserId,
                 PostId = x.PostId,
@@ -80,7 +80,7 @@ namespace DoctorManagement.Application.Catalog.Comment
                 .Take(request.PageSize)
                 .Select(x => new CommentVm()
                 {
-                    Date = x.Date,
+                    Date = x.CreatedAt,
                     Description = x.Description,
                     Id = x.Id,
                     UserId = x.UserId,
@@ -105,7 +105,7 @@ namespace DoctorManagement.Application.Catalog.Comment
             var rs = new CommentVm()
             {
                 Id = comments.Id,
-                Date = comments.Date,
+                Date = comments.CreatedAt,
                 Description = comments.Description,
                 CheckLevel = comments.CheckLevel,
                 CheckComentId = comments.CheckComentId,

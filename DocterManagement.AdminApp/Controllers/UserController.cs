@@ -1,10 +1,13 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Catalog.Speciality;
+using DoctorManagement.ViewModels.System.Models;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.AdminApp.Controllers
 {
@@ -12,15 +15,14 @@ namespace DoctorManagement.AdminApp.Controllers
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
-        /* private readonly IRoleApiClient _roleApiClient;*/
+        private readonly ILocationApiClient _locationApiClient;
 
         public UserController(IUserApiClient userApiClient,
-            /*IRoleApiClient roleApiClient,*/
-            IConfiguration configuration)
+            IConfiguration configuration, ILocationApiClient locationApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
-            /*_roleApiClient = roleApiClient;*/
+            _locationApiClient = locationApiClient;
         }
 
         public async Task<IActionResult> Index(string keyword, string rolename, int pageIndex = 1, int pageSize = 10)
@@ -70,6 +72,7 @@ namespace DoctorManagement.AdminApp.Controllers
             }).ToList();
             return rs;
         }
+       
         public async Task<IActionResult> ListRole()
         {
             var data = await _userApiClient.GetAllRole();
@@ -88,21 +91,26 @@ namespace DoctorManagement.AdminApp.Controllers
         {
             ViewBag.Clinic = await _userApiClient.GetAllClinic(new Guid());
             ViewBag.Speciality = await _userApiClient.GetAllSpeciality(new Guid());
-            ViewBag.Gender = SeletectGender("0");
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
             return View();
         }
 
         [HttpPost]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] ManageRegisterRequest request)
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create(ManageRegisterRequest request)
         {
             ViewBag.Clinic = await _userApiClient.GetAllClinic(request.ClinicId);
-            ViewBag.Speciality = await _userApiClient.GetAllSpeciality(request.SpecialityId);
-            ViewBag.Gender = SeletectGender(request.Gender.ToString());
+            //ViewBag.Speciality = await _userApiClient.GetAllSpeciality(request.SpecialityId);
+            ViewBag.Province = await _locationApiClient.GetAllProvince(request.ProvinceId);
+            ViewBag.District = await _locationApiClient.CityGetAllDistrict(request.DistrictId, request.ProvinceId==null?new Guid():request.ProvinceId);
+            ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(request.SubDistrictId,request.DistrictId == null ? new Guid() : request.DistrictId);
+            //ViewBag.Gender = SeletectGender(request.Gender.ToString());
             if (!ModelState.IsValid)
                 return View();
             
-            var result = await _userApiClient.RegisterUser(request);
+            var result = await _userApiClient.RegisterDocter(request);
 
             if (result.IsSuccessed)
             {
@@ -113,49 +121,118 @@ namespace DoctorManagement.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetSubDistrict(Guid DistrictId)
+        {
+            if (!string.IsNullOrWhiteSpace(DistrictId.ToString()))
+            {
+                var district = await _locationApiClient.GetAllSubDistrict(null, DistrictId);
+                return Json(district);
+            }
+            return null;
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetDistrict(Guid ProvinceId)
+        {
+            if (!string.IsNullOrWhiteSpace(ProvinceId.ToString()))
+            {
+                var district = await _locationApiClient.CityGetAllDistrict(null, ProvinceId);
+                return Json(district);
+            }
+            return null;
+        }
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
             var result = await _userApiClient.GetById(id);
-            //var doctor = await _userApiClient.Get
             if (result.IsSuccessed)
             {
                 var user = result.Data;
-                ViewBag.Gender = SeletectGender(user.Gender.ToString());
                 ViewBag.Status = SeletectStatus(user.Status);
-                ViewBag.Img = user.DoctorVm.Img;
                 ViewBag.Clinic = await _userApiClient.GetAllClinic(user.DoctorVm.GetClinic.Id);
-                ViewBag.Speciality = await _userApiClient.GetAllSpeciality(user.DoctorVm.GetSpeciality.Id);
+                ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(user.DoctorVm.GetSpecialities));
+                ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+                ViewBag.District = await _locationApiClient.CityGetAllDistrict(user.DoctorVm.Location.District.Id, user.DoctorVm.Location.District.Province.Id);
+                ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(user.DoctorVm.Location.Id, user.DoctorVm.Location.District.Id);
                 var updateRequest = new UserUpdateRequest()
                 {
-                    Dob = user.Dob,
-                    Email = user.Email,
-                    Name = user.Name,
-                    PhoneNumber = user.PhoneNumber,
-                    Gender = user.Gender,
+                    Dob = user.DoctorVm.Dob,
+                    FirstName = user.DoctorVm.FirstName,
+                    LastName = user.DoctorVm.LastName,
+                    Gender = user.DoctorVm.Gender,
                     Id = id,
                     Address = user.DoctorVm.Address,
-                    Status = user.Status ,
-                    SpecialityId = user.DoctorVm.GetSpeciality.Id,
+                    Status = user.Status,
                     ClinicId = user.DoctorVm.GetClinic.Id,
-                    img = user.DoctorVm.Img,
-                    Description = user.DoctorVm.Description
+                    Description = user.DoctorVm.Intro,
+                    Services = user.DoctorVm.Services,
+                    Slug = user.DoctorVm.Slug.Replace("-"+user.DoctorVm.No,""),
+                    Educations = user.DoctorVm.Educations,
+                    Prefix = user.DoctorVm.Prefix,
+                    MapUrl = user.DoctorVm.MapUrl,
+                    Booking = user.DoctorVm.Booking,
+                    IsPrimary = user.DoctorVm.IsPrimary,
+                    Prizes = user.DoctorVm.Prizes,
+                    ProvinceId = user.DoctorVm.Location.District.Province.Id,
+                    DistrictId = user.DoctorVm.Location.District.Id,
+                    SubDistrictId = user.DoctorVm.Location.Id,
+                    Note = user.DoctorVm.Note,
+                    TimeWorking = user.DoctorVm.TimeWorking,
                 };
                 return View(updateRequest);
             }
             return RedirectToAction("Error", "Home");
         }
-
-        [HttpPost]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromForm] UserUpdateRequest request)
+        public async Task<List<SetChoicesVm>> SeletectSpecialities(List<GetSpecialityVm> specialities)
         {
-            ViewBag.Img = request.img;
-            ViewBag.Gender = SeletectGender(request.Gender.ToString());
+            var chose = await _userApiClient.GetAllSpeciality(new Guid());
+            var rs = new List<SetChoicesVm>();
+            foreach (var spe in specialities)
+            {
+
+                var chose_spe = new SetChoicesVm()
+                {
+                    selected = true,
+                    label = spe.Title,
+                    value = spe.Id.ToString()
+                };
+                rs.Add(chose_spe);
+                chose = chose.Where(x => x.Value != spe.Id.ToString()).ToList();
+            }
+            foreach(var spe in chose)
+            {
+                var chose_spe = new SetChoicesVm()
+                {
+                    selected = false,
+                    label = spe.Text,
+                    value = spe.Value
+                };
+                rs.Add(chose_spe);
+            }
+            return rs;
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update( UserUpdateRequest request)
+        {
             ViewBag.Status = SeletectStatus(request.Status);
             ViewBag.Clinic = await _userApiClient.GetAllClinic(request.ClinicId);
-            ViewBag.Speciality = await _userApiClient.GetAllSpeciality(request.SpecialityId);
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = await _locationApiClient.CityGetAllDistrict(new Guid(), request.ProvinceId);
+            ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(new Guid(), request.DistrictId);
+            var getallspecialities = await _userApiClient.GetAllSpeciality(new Guid());
+            var specialities = new List<GetSpecialityVm>();
+            foreach (var spe in getallspecialities)
+            {
+                var speciality = new GetSpecialityVm()
+                {
+                    Id = new Guid(spe.Value),
+                    IsDeleted = false,
+                    Title = spe.Text
+                };
+                specialities.Add(speciality);
+            }
+            
+            ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(specialities));
             if (!ModelState.IsValid)
                 return View();
 
@@ -167,7 +244,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+            
             return View(request);
         }
         public List<SelectListItem> SeletectGender(string id)
@@ -287,9 +364,10 @@ namespace DoctorManagement.AdminApp.Controllers
             {
                 var user = result.Data;
                 ViewBag.Img = user.DoctorVm.Img;
-                ViewBag.Gender = user.Gender == Gender.Male ? "Nam" : "Nữ";
-                ViewBag.Dob = user.Dob.ToShortDateString();
+                ViewBag.Gender = user.DoctorVm.Gender == Gender.Male ? "Nam" : "Nữ";
+                ViewBag.Dob = user.DoctorVm.Dob.ToShortDateString();
                 ViewBag.Status = user.Status == Status.NotActivate ? "Ngừng hoạt động" : user.Status == Status.Active ? "Hoạt động": "không hoạt động";
+                ViewBag.Specialities = user.DoctorVm.GetSpecialities;
                 var updateRequest = new UserVm()
                 {
                     Email = user.Email,
@@ -329,9 +407,9 @@ namespace DoctorManagement.AdminApp.Controllers
             if (result.IsSuccessed)
             {
                 var user = result.Data;
-                ViewBag.Img = user.DoctorVm.Img;
-                ViewBag.Gender = user.Gender == Gender.Male ? "Nam" : "Nữ";
-                ViewBag.Dob = user.Dob.ToShortDateString();
+                ViewBag.Img = user.PatientVm.Img;
+                ViewBag.Gender = user.PatientVm.Gender == Gender.Male ? "Nam" : "Nữ";
+                ViewBag.Dob = user.PatientVm.Dob.ToShortDateString();
                 ViewBag.Status = user.Status == Status.NotActivate ? "Ngừng hoạt động" : user.Status == Status.Active ? "Hoạt động" : "không hoạt động";
                 var updateRequest = new UserVm()
                 {
@@ -382,7 +460,18 @@ namespace DoctorManagement.AdminApp.Controllers
             var result = await _userApiClient.Delete(idUser);
             return Json(new { response = result });
         }
-
+        [HttpPost]
+        public async Task<IActionResult> DeleteImg(Guid imgId)
+        {
+            var result = await _userApiClient.DeleteImg(imgId);
+            return Json(new { response = result });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllImg(Guid doctorId)
+        {
+            var result = await _userApiClient.DeleteAllImg(doctorId);
+            return Json(new { response = result });
+        }
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

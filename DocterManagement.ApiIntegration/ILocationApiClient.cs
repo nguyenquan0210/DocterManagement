@@ -20,6 +20,8 @@ namespace DoctorManagement.ApiIntegration
 
         Task<List<SelectListItem>> GetAllSubDistrict(Guid? SubDistricyId, Guid DistricyId);
         Task<List<SelectListItem>> GetAllDistrict(Guid? DistricyId);
+        Task<List<SelectListItem>> CityGetAllDistrict(Guid? DistricyId, Guid ProvinceId);
+
         Task<List<SelectListItem>> GetAllProvince(Guid? ProvinceId);
 
         Task<ApiResult<LocationVm>> GetById(Guid Id);

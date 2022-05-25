@@ -26,7 +26,10 @@ namespace DoctorManagement.Data.EF
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new ClinidConfiguration());
             modelBuilder.ApplyConfiguration(new CommentsPostConfiguration());
-            //modelBuilder.ApplyConfiguration(new DistricConfiguration());
+            modelBuilder.ApplyConfiguration(new EthnicConfiguration());
+            modelBuilder.ApplyConfiguration(new ServicesSpecialityConfiguration());
+            modelBuilder.ApplyConfiguration(new AttachedfileConfiguration());
+            modelBuilder.ApplyConfiguration(new GalleryConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());
             modelBuilder.ApplyConfiguration(new ImageClinicConfiguration());
             modelBuilder.ApplyConfiguration(new ImagePostConfiguration());
@@ -37,6 +40,13 @@ namespace DoctorManagement.Data.EF
             modelBuilder.ApplyConfiguration(new SchedulesConfiguration());
             modelBuilder.ApplyConfiguration(new SchedulesDetailConfiguration());
             modelBuilder.ApplyConfiguration(new LocationConfiguration());
+            modelBuilder.ApplyConfiguration(new ContactConfigration());
+            modelBuilder.ApplyConfiguration(new InformationConfigration());
+            modelBuilder.ApplyConfiguration(new MainMenuConfigration());
+            modelBuilder.ApplyConfiguration(new HistoryActivesConfigration());
+            modelBuilder.ApplyConfiguration(new HistoryActiveDetailtConfigration());
+            modelBuilder.ApplyConfiguration(new NotificationConfigration());
+            modelBuilder.ApplyConfiguration(new AnnualServiceFeeConfigration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -64,9 +74,20 @@ namespace DoctorManagement.Data.EF
         public DbSet<Posts> Posts { get; set; }
         public DbSet<Rates> Rates { get; set; }
         public DbSet<Schedules> Schedules { get; set; }
-        public DbSet<SchedulesDetailts> SchedulesDetails { get; set; }
+        public DbSet<SchedulesSlots> schedulesSlots { get; set; }
         public DbSet<Specialities> Specialities { get; set; }
         public DbSet<Locations> Locations { get; set; }
+        public DbSet<Ethnics> Ethnics { get; set; }
+        public DbSet<Galleries> Galleries { get; set; }
+        public DbSet<Attachedfiles> Attachedfiles { get; set; }
+        public DbSet<ServicesSpecialities> ServicesSpecialities { get; set; }
+        public DbSet<MainMenus> MainMenus { get; set; }
+        public DbSet<Contacts> Contacts { get; set; }
+        public DbSet<Informations> Informations { get; set; }
+        public DbSet<HistoryActives> HistoryActives { get; set; }
+        public DbSet<HistoryActiveDetailts> historyActiveDetailts { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<AnnualServiceFees> AnnualServiceFees { get; set; }
     }
 }
 #pragma warning restore CS1591

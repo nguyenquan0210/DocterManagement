@@ -1,0 +1,537 @@
+.root-layout[_ngcontent-serverApp-c55] {
+    background-color: #f6f6f6
+}
+
+/* style 2 */
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+/* end style 2 */
+
+/* style 3 */
+[_nghost-serverApp-c54] .ant-collapse-content-box {
+    padding: 0 !important
+}
+
+nz-collapse-panel[_ngcontent-serverApp-c54] {
+    padding: 0 !important
+}
+
+[_nghost-serverApp-c54] .ant-collapse-header {
+    cursor: pointer !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+    font-size: .875rem !important;
+    line-height: 1.25rem !important;
+    font-weight: 600 !important;
+    color: currentColor !important
+}
+
+@media (min-width: 782px) {
+    [_nghost-serverApp-c54] .ant-collapse-header {
+        cursor: auto !important
+    }
+
+    nz-collapse-panel[_ngcontent-serverApp-c54] {
+        border-style: none !important
+    }
+}
+
+a[_ngcontent-serverApp-c54]:hover {
+    color: currentColor
+}
+/* end style 3 */
+
+/* style 4 */
+        [disabled][_ngcontent-serverApp-c149] {
+            opacity: .4
+        }
+
+        [_nghost-serverApp-c149] .ant-tabs-nav-list {
+            width: 100%
+        }
+
+        [_nghost-serverApp-c149] .ant-tabs-tab {
+            width: calc(100% / 3);
+            justify-content: center;
+            cursor: default !important
+        }
+
+        [_nghost-serverApp-c149] .ant-tabs-tab-btn {
+            font-weight: 600;
+            line-height: 17px;
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity))
+        }
+
+
+/* end style 4*/
+/* style 5*/
+[disabled][_ngcontent-serverApp-c146] {
+    opacity: .4
+}
+
+@media only screen and (max-width: 767px) {
+    [_nghost-serverApp-c146] .otp-input {
+        width: 40px !important;
+        height: 44px !important
+    }
+}
+/* end style 5*/
+
+/* style 6*/
+        [disabled][_ngcontent-serverApp-c147] {
+            opacity: .4
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c147] {
+            flex-direction: column
+        }
+
+        .ant-row[_ngcontent-serverApp-c147] {
+            margin: 0
+        }
+/* end style 6*/
+
+/* style 7*/
+.otp-input[_ngcontent-serverApp-c72] {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    border: solid 1px #c5c5c5;
+    text-align: center;
+    font-size: 32px
+}
+
+.ng-otp-input-wrapper[_ngcontent-serverApp-c72] .otp-input[_ngcontent-serverApp-c72]:not(:last-child) {
+    margin-right: 8px
+}
+
+@media screen and (max-width: 767px) {
+    .otp-input[_ngcontent-serverApp-c72] {
+        width: 40px;
+        font-size: 24px;
+        height: 40px
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .otp-input[_ngcontent-serverApp-c72] {
+        width: 30px;
+        font-size: 18px;
+        height: 30px
+    }
+}
+/* end style 7*/
+
+/* style 8*/
+        [_nghost-serverApp-c155] .ant-tabs-nav-list {
+            width: 100%;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .tab-link:hover {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .ant-tabs-tab {
+            width: 50%;
+            justify-content: center
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .ant-tabs-tab .ant-tabs-tab-btn {
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .ant-tabs-tab .ant-tabs-tab-btn:hover {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .form-control[_ngcontent-serverApp-c155] {
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c155]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c155]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-label[_ngcontent-serverApp-c155] {
+            margin-bottom: .25rem;
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c155] {
+            margin-right: 0
+        }
+/* end style 8*/
+
+/* style 9*/
+        .form-control[_ngcontent-serverApp-c154] {
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: 0;
+            border-top-right-radius: .375rem;
+            border-bottom-right-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem
+        }
+
+        .form-control[_ngcontent-serverApp-c154]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c154]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-label[_ngcontent-serverApp-c154] {
+            margin-bottom: .25rem;
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c154] {
+            flex-direction: column;
+            margin: 0
+        }
+/* end style 9*/
+
+/* style 10*/
+[disabled][_ngcontent-serverApp-c148] {
+    opacity: .4
+}
+
+[_nghost-serverApp-c148] .ant-select-selector {
+    height: 44px !important;
+    align-items: center !important;
+    border-radius: 4px !important
+}
+
+[_nghost-serverApp-c148] .ant-select-selection-search {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important
+}
+
+.ant-radio-group[_ngcontent-serverApp-c148] {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem
+}
+
+.ant-radio-wrapper[_ngcontent-serverApp-c148] {
+    height: 100%;
+    width: 50%;
+    margin: 0;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    padding-left: 1rem
+}
+
+[_nghost-serverApp-c148] .ant-radio {
+    top: 0rem
+}
+/* end style 10*/
+
+/* style 11*/
+        cdk-virtual-scroll-viewport {
+            display: block;
+            position: relative;
+            overflow: auto;
+            contain: strict;
+            transform: translateZ(0);
+            will-change: scroll-position;
+            -webkit-overflow-scrolling: touch
+        }
+
+        .cdk-virtual-scroll-content-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            contain: content
+        }
+
+        [dir=rtl] .cdk-virtual-scroll-content-wrapper {
+            right: 0;
+            left: auto
+        }
+
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper {
+            min-height: 100%
+        }
+
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]) {
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: 0;
+            margin-right: 0;
+            border-left-width: 0;
+            border-right-width: 0;
+            outline: none
+        }
+
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper {
+            min-width: 100%
+        }
+
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]) {
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            border-top-width: 0;
+            border-bottom-width: 0;
+            outline: none
+        }
+
+        .cdk-virtual-scroll-spacer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 1px;
+            width: 1px;
+            transform-origin: 0 0
+        }
+
+        [dir=rtl] .cdk-virtual-scroll-spacer {
+            right: 0;
+            left: auto;
+            transform-origin: 100% 0
+        }
+/* end style 11*/
+
+/* style 12*/
+.wrapper-main[_ngcontent-serverApp-c67] {
+    background: linear-gradient(90deg, #00c6fb 0%, #0758d8 98.74%)
+}
+
+@media only screen and (max-width: 767px) {
+    .banner-navigation[_ngcontent-serverApp-c67] {
+        background: white
+    }
+}
+
+.selected[_ngcontent-serverApp-c67] {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(26 118 227 / var(--tw-text-opacity))
+}
+/* end style 12*/
+
+/* style 13*/
+[nz-carousel-content][_ngcontent-serverApp-c68] {
+    overflow: hidden
+}
+/* end style 13*/
+
+/* style 14*/
+.main-search[_ngcontent-serverApp-c64] {
+    margin: 0;
+    display: block;
+    width: 100%;
+    flex: 1 1 0%;
+    border-radius: .5rem;
+    border-color: transparent;
+    padding: .75rem 2.25rem .75rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5rem
+}
+
+.main-search[_ngcontent-serverApp-c64]::placeholder {
+    font-size: .875rem;
+    line-height: 1.25rem
+}
+
+.main-search[_ngcontent-serverApp-c64]:focus {
+    --tw-border-opacity: 1;
+    border-color: rgb(26 118 227 / var(--tw-border-opacity));
+    outline: 2px solid transparent;
+    outline-offset: 2px
+}
+
+@media (min-width: 782px) {
+    .main-search[_ngcontent-serverApp-c64] {
+        padding-right: .75rem;
+        padding-left: 3rem
+    }
+}
+
+.main-search[_ngcontent-serverApp-c64]::-webkit-calendar-picker-indicator {
+    display: none !important
+}
+/* end style 14*/
+/* style 15*/
+.bookmark_hospital[_ngcontent-serverApp-c66]::-webkit-scrollbar {
+    background: transparent;
+    width: 0px
+}
+/* style 15*/

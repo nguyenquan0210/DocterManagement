@@ -28,7 +28,7 @@ namespace DoctorManagement.ApiIntegration
             _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<ApiResult<bool>> Create(AppointmentCreateRequest request)
+        public async Task<ApiResult<string>> Create(AppointmentCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -42,9 +42,9 @@ namespace DoctorManagement.ApiIntegration
             var response = await client.PostAsync($"/api/appointment/", httpContent);
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(body);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<string>>(body);
         }
 
         public async Task<int> Delete(Guid Id)
@@ -68,7 +68,9 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<PagedResult<AppointmentVm>>(
                $"/api/appointment/paging?pageIndex={request.PageIndex}" +
                $"&pageSize={request.PageSize}" +
-               $"&keyword={request.Keyword}");
+               $"&keyword={request.Keyword}" +
+               $"&userName={request.UserName}" +
+               $"&userNameDoctor={request.UserNameDoctor}");
         }
 
         public async Task<ApiResult<bool>> Update(AppointmentUpdateRequest request)

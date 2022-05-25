@@ -1,0 +1,73 @@
+﻿@{
+    string patientname = ViewBag.PatientName;
+}
+
+<div _ngcontent-serverapp-c50="" class="inline-flex space-x-4 items-center">
+    @if(patientname == null)
+    {
+        <div id="user-info"><a  asp-controller="Login" asp-action="Index" class="btn-outline my-2 py-2 whitespace-nowrap">Đăng nhập</a></div>
+    }
+    else
+    {
+        <div _ngcontent-serverapp-c50="" class="relative group ng-star-inserted">
+            <div _ngcontent-serverapp-c50=""
+                class="cursor-pointer flex gap-1 text-sm truncate w-24 items-center"
+                title="@*@Model.Name*@"> @*@(Model.Name.Length > 13? Model.Name.Substring(0,13): Model.Name)*@ <svg _ngcontent-serverApp-c50=""
+                    width="6" height="3" aria-hidden="true"
+                    class="overflow-visible text-slate-400">
+                    <path _ngcontent-serverApp-c50="" d="M0 0L3 3L6 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></div>
+            <ul _ngcontent-serverapp-c50=""
+                class="z-50 hidden w-max whitespace-nowrap group-hover:block absolute top-full right-0 2xl:right-auto py-2 rounded-lg bg-white shadow ring-1 ring-slate-900/5 text-sm leading-6">
+                <li _ngcontent-serverapp-c50=""><a _ngcontent-serverapp-c50="" asp-action="Appointment" asp-controller="Profile"
+                        routerlink="" class="flex px-4 py-2 hover:bg-gray-100"
+                        > Lịch khám</a></li>
+                <li _ngcontent-serverapp-c50=""><a _ngcontent-serverapp-c50=""
+                        routerlink="/thanh-toan" class="flex px-4 py-2 hover:bg-gray-100"
+                        href="/thanh-toan"> Lịch sử thanh toán</a></li>
+                <li _ngcontent-serverapp-c50=""><a _ngcontent-serverapp-c50="" asp-action="Index" asp-controller="Profile"
+                        routerlink="" class="flex px-4 py-2 hover:bg-gray-100"
+                        > Hồ sơ</a></li>
+                <li _ngcontent-serverapp-c50=""><a _ngcontent-serverapp-c50=""
+                        routerlink="" class="flex px-4 py-2 hover:bg-gray-100"
+                         asp-action="Logout" asp-controller="Login"> Thoát</a></li>
+            </ul>
+        </div> 
+    }
+    <div _ngcontent-serverapp-c50="" class="relative hidden lg:flex group py-2"><button
+            _ngcontent-serverapp-c50="" id="languages-menu-button" type="button"
+            aria-haspopup="true" aria-expanded="false"
+            class="text-xs border-0 leading-5 cursor-pointer bg-slate-400/10 rounded-full py-1 pr-2 pl-1 flex items-center space-x-1 hover:bg-slate-400/20"><img
+                _ngcontent-serverapp-c50="" width="18" height="18" loading="lazy"
+                alt="Tiếng Việt" src="~/img/booking/svg/vietnam.svg"><span
+                _ngcontent-serverapp-c50="" class="capitalize tabular-nums">Vi</span><svg
+                _ngcontent-serverApp-c50="" width="6" height="3" aria-hidden="true"
+                class="ml-2 overflow-visible text-slate-400">
+                <path _ngcontent-serverApp-c50="" d="M0 0L3 3L6 0" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg></button>
+        <div _ngcontent-serverapp-c50="" id="languages-menu-items"
+            aria-labelledby="languages-menu-items" role="menu" tabindex="0"
+            class="hidden group-hover:block absolute top-full right-0 2xl:right-auto py-2 w-40 rounded-lg bg-white shadow ring-1 ring-slate-900/5 text-sm leading-6 text-slate-700">
+            <div _ngcontent-serverapp-c50=""
+                class="cursor-pointer flex items-center px-3 py-1 hover:bg-primary hover:text-white text-primary cursor-not-allowed">
+                <img _ngcontent-serverapp-c50="" width="18" height="18" loading="lazy"
+                    alt="Tiếng Việt" class="mr-2"
+                    src="~/img/booking/svg/vietnam.svg"> Tiếng Việt <svg
+                    _ngcontent-serverApp-c50="" width="24" height="24" fill="none"
+                    aria-hidden="true" class="ml-auto ng-star-inserted">
+                    <path _ngcontent-serverApp-c50="" d="m7.75 12.75 2.25 2.5 6.25-6.5"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                </svg>
+                
+            </div>
+            <div _ngcontent-serverapp-c50=""
+                class="cursor-pointer flex items-center px-3 py-1 hover:bg-primary hover:text-white">
+                <img _ngcontent-serverapp-c50="" width="18" height="18" loading="lazy"
+                    alt="English" class="mr-2" src="~/img/booking/svg/us.svg">
+                English
+                
+            </div>
+        </div>
+    </div>
+</div>

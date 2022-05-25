@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -31,20 +32,31 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<bool>> Create(SpecialityCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var requestContent = new MultipartFormDataContent();
+            
+            if (request.Img != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.Img.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Img.OpenReadStream().Length);
+                }
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "img", request.Img.FileName);
+            }
+            requestContent.Add(new StringContent(request.Title.ToString()), "title");
+            requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
-            var response = await client.PostAsync($"/api/speciality/", httpContent);
-            var body = await response.Content.ReadAsStringAsync();
+            var response = await client.PostAsync($"/api/speciality", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
         public async Task<int> Delete(Guid Id)
@@ -57,9 +69,9 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<SpecialityVm>($"/api/speciality/{Id}");
         }
 
-        public Task<ApiResult<List<SpecialityVm>>> GetMenu()
+        public async Task<ApiResult<List<SpecialityVm>>> GetAllSpeciality()
         {
-            throw new NotImplementedException();
+            return await GetListAsync<SpecialityVm>($"/api/speciality/get-all-speciality");
         }
 
         public async Task<ApiResult<PagedResult<SpecialityVm>>> GetSpecialityPagings(GetSpecialityPagingRequest request)
@@ -73,20 +85,34 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<bool>> Update(SpecialityUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var requestContent = new MultipartFormDataContent();
 
-            var response = await client.PutAsync($"/api/speciality/", httpContent);
-            var body = await response.Content.ReadAsStringAsync();
+            if (request.Img != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.Img.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Img.OpenReadStream().Length);
+                }
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "img", request.Img.FileName);
+            }
+            requestContent.Add(new StringContent(request.Id.ToString()), "id");
+            requestContent.Add(new StringContent(request.IsDeleted.ToString()), "isDeleted");
+            requestContent.Add(new StringContent(request.SortOrder.ToString()), "sortOrder");
+            requestContent.Add(new StringContent(request.Title.ToString()), "title");
+            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+
+            var response = await client.PutAsync($"/api/speciality", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
     }
 }

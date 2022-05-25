@@ -17,6 +17,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
 
         Task<ApiResult<int>> Delete(Guid Id);
         Task<ApiResult<int>> DeleteImg(Guid Id);
+        Task<ApiResult<int>> DeleteAllImg(Guid Id);
 
         Task<ApiResult<PagedResult<ClinicVm>>> GetAllPaging(GetClinicPagingRequest request);
 

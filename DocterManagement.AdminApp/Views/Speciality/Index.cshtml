@@ -50,16 +50,16 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả tài khoản</h5>
+                            <h5 class="mb-0">Tất cả danh sách chuyên khoa</h5>
                             <p class="text-sm mb-0">
-                                Chỉ có người quảng trị mới quản lý tất cả tài khoản.
+                                
                             </p>
                         </div>
-                        <div class="ms-auto my-auto mt-lg-0 mt-4 col-5">
+                        <div class="ms-auto my-auto mt-lg-0 mt-4 ">
                            
                             <div class="ms-auto my-auto">
                                 
-                                <a asp-action="Create" asp-controller="Location"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm Nhân viên</a>
+                                <a asp-action="Create" asp-controller="Speciality"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm Chuyên khoa</a>
                                 
                             </div>
                         </div>
@@ -101,21 +101,26 @@
                                 {
                                     <tr id="row_@item.Id">
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Title</h6></td>
+                                        <td class="text-xs font-weight-bold">
+                                            <div class="d-flex align-items-center">
+                                                <img src="@(Configuration["BaseAddress"] + "/img/" + @item.Img)" class="avatar avatar-xs me-2" alt="user image">
+                                                <h6 class="ms-3 my-auto">@item.Title</h6>
+                                            </div>
+                                        </td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.SortOrder</h6></td>
                                         
                                         <td>
-                                            <span class="badge @(item.Status == Status.Active ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.Status == Status.Active ? "Hoạt động" : "đã khóa")</span>
+                                            <span class="badge @(item.IsDeleted ? "badge-danger" : "badge-success") badge-sm" id="status_@item.Id">@(item.IsDeleted ?  "đã khóa" :"Hoạt động")</span>
                                         </td>
                                         <td class="text-sm">
-                                            <a  asp-action = "Detailt" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
+                                            <a  asp-action = "DetailtSpeciality" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
                                                 <i class="fas fa-eye text-secondary"></i>
                                             </a>
                                             <a  asp-action = "Update" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
                                                 <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
-                                            <a id = "Speciality_@i" onclick="@(item.Status == Status.InActive ? "ConfirmDelete("+@i+")": "ConfirmStatus("+@i+")")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
+                                            <a id = "Speciality_@i" onclick="ConfirmDelete("@i")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
                                                 <i class="fas fa-trash text-secondary"></i>
                                             </a>
                                         </td>

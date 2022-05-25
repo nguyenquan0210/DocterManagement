@@ -11,7 +11,9 @@ namespace DoctorManagement.ViewModels.System.Users
     {
         public ManageRegisterRequestValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage("Họ tên là bắt buộc")
+            RuleFor(x => x.FirstName).NotEmpty().WithMessage("Tên là bắt buộc")
+                .MaximumLength(100).WithMessage("Tên không được quá 100 ký tự");
+            RuleFor(x => x.LastName).NotEmpty().WithMessage("Họ là bắt buộc")
                 .MaximumLength(100).WithMessage("Họ không được quá 100 ký tự");
 
             RuleFor(x => x.Dob).NotEmpty().WithMessage("Ngày sinh là bắt buộc là bắt buộc");
@@ -24,14 +26,14 @@ namespace DoctorManagement.ViewModels.System.Users
 
             RuleFor(x => x.Address).NotEmpty().WithMessage("Địa chỉ là bắt buộc");
 
-            RuleFor(x => x.UserName).NotEmpty().WithMessage("Tên tài khoản là bắt buộc");
+            RuleFor(x => x.MapUrl).NotEmpty().WithMessage("MapUrl tài khoản là bắt buộc");
 
-            RuleFor(x => x.ThumbnailImage).NotEmpty().WithMessage("Hình ảnh là bắt buộc");
+            RuleFor(x => x.Slug).NotEmpty().WithMessage("WordPress Slug là bắt buộc");
 
-            RuleFor(x => x.Password).NotEmpty().WithMessage("Mật khẩu là bắt buộc")
+            /*RuleFor(x => x.Password).NotEmpty().WithMessage("Mật khẩu là bắt buộc")
                 .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$")
                 .WithMessage("Hơn 3 chữ cái viết hoa và viết thường, ký tự số từ 10-99, kí tự đặt biệt")
-                .MinimumLength(6).WithMessage("Mật khẩu có ít nhất 6 ký tự");
+                .MinimumLength(6).WithMessage("Mật khẩu có ít nhất 6 ký tự");*/
         }
     }
 }

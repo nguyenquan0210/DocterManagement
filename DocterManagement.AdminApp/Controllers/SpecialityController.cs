@@ -44,7 +44,8 @@ namespace DoctorManagement.AdminApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create( SpecialityCreateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] SpecialityCreateRequest request)
         {
             ViewBag.Location = await _locationApiClient.GetAllProvince(new Guid());
             if (!ModelState.IsValid)
@@ -66,20 +67,21 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             var result = await _specialityApiClient.GetById(id);
-            //var doctor = await _specialityApiClient.Get
+            
             if (result.IsSuccessed)
             {
                 var speciality = result.Data;
                
-                ViewBag.Status = SeletectStatus(speciality.Status);
+                ViewBag.Image = speciality.Img;
                 
                 var updateRequest = new SpecialityUpdateRequest()
                 {
                     Title = speciality.Title,
                     Id = id,
                     SortOrder = speciality.SortOrder,
-                    Status = speciality.Status,
-                    Description = speciality.Description
+                    IsDeleted = speciality.IsDeleted,
+                    Description = speciality.Description,
+                    
                 };
                 return View(updateRequest);
             }
@@ -87,10 +89,9 @@ namespace DoctorManagement.AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(SpecialityUpdateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] SpecialityUpdateRequest request)
         {
-           
-            ViewBag.Status = SeletectStatus(request.Status);
             if (!ModelState.IsValid)
                 return View();
 
@@ -105,33 +106,22 @@ namespace DoctorManagement.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-        [HttpGet]
-        public async Task<IActionResult> Detailt(Guid id)
+        
+        public async Task<IActionResult> DetailtSpeciality(Guid id)
         {
             var result = await _specialityApiClient.GetById(id);
             if (result.IsSuccessed)
             {
-                var specialityData = result.Data;
-                ViewBag.Status = specialityData.Status == Status.NotActivate ? "Ngừng hoạt động" : specialityData.Status == Status.Active ? "Hoạt động" : "không hoạt động";
-                var Speciality = new SpecialityVm()/*_mapper.Map<SpecialityVm>(Specialitydata);*/
-                {
-                    Title = specialityData.Title,
-                    Id = id,
-                    No = specialityData.No,
-                    Description = specialityData.Description,
-                    Status = specialityData.Status, //== Status.Active ? true : false
-                    SortOrder = specialityData.SortOrder
-                };
-                return View(Speciality);
+                return View(result.Data);
             }
             return RedirectToAction("Error", "Home");
         }
-       
         [HttpPost]
         public async Task<IActionResult> Delete(Guid Id)
         {
             var result = await _specialityApiClient.Delete(Id);
             return Json(new { response = result });
         }
+
     }
 }

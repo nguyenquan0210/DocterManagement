@@ -53,7 +53,7 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.Location = await _locationApiClient.GetAllSubDistrict(request.LocationId,request.DistrictId);
 
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
 
             var result = await _clinicApiClient.Create(request);
 
@@ -90,7 +90,8 @@ namespace DoctorManagement.AdminApp.Controllers
                     Status = clinic.Status,
                     Description = clinic.Description,
                     LocationId = clinic.LocationVm.Id,
-                    DistrictId = clinic.LocationVm.District.Id
+                    DistrictId = clinic.LocationVm.District.Id,
+                    Images = clinic.Images,
                 };
                 return View(updateRequest);
             }
@@ -114,10 +115,10 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.District = await _locationApiClient.GetAllDistrict(request.DistrictId);
             ViewBag.Location = await _locationApiClient.GetAllSubDistrict(request.LocationId, request.DistrictId);
             ViewBag.Img = request.ImgLogo;
-            ViewBag.Imgs = request.ImgClinics;
+            ViewBag.Imgs = request.Images;
             ViewBag.Status = SeletectStatus(request.Status);
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
 
             var result = await _clinicApiClient.Update(request);
             if (result.IsSuccessed)
@@ -159,6 +160,12 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> DeleteImg(Guid imgId)
         {
             var result = await _clinicApiClient.DeleteImg(imgId);
+            return Json(new { response = result });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllImg(Guid clinicId)
+        {
+            var result = await _clinicApiClient.DeleteAllImg(clinicId);
             return Json(new { response = result });
         }
         [HttpPost]

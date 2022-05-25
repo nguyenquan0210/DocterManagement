@@ -21,7 +21,8 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Tạo mới chuyên khoa
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] SpecialityCreateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromForm] SpecialityCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -29,7 +30,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _specialityService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }
@@ -56,7 +57,8 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] SpecialityUpdateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromForm] SpecialityUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +66,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _specialityService.Update(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>
@@ -87,7 +89,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _specialityService.GetById(Id);
             if (!result.IsSuccessed)
-                return BadRequest("Cannot find speciality");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>
@@ -95,9 +97,9 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("get-all-speciality")]
-        public async Task<ActionResult<ApiResult<List<SpecialityVm>>>> GetAll()
+        public async Task<ActionResult<ApiResult<List<SpecialityVm>>>> GetAllSpeciality()
         {
-            var speciality = await _specialityService.GetAll();
+            var speciality = await _specialityService.GetAllSpeciality();
             return Ok(speciality);
         }
     }
