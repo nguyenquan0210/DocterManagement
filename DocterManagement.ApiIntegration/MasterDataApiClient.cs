@@ -108,7 +108,7 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<PagedResult<EthnicsVm>>> GetAllPagingEthnic(GetEthnicPagingRequest request)
         {
             return await GetAsync<PagedResult<EthnicsVm>>(
-               $"/api/masterData/get-paging-ethnic?pageIndex={request.PageIndex}" +
+               $"/api/masterData/get-paging-ethnics?pageIndex={request.PageIndex}" +
                $"&pageSize={request.PageSize}" +
                $"&keyword={request.Keyword}");
         }

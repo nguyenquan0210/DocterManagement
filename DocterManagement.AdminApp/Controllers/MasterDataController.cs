@@ -185,6 +185,15 @@ namespace DoctorManagement.AdminApp.Controllers
 
             return View(request);
         }
+        public async Task<IActionResult> DetailtMainMenu(Guid id)
+        {
+            var result = await _masterDataApiClient.GetByIdMainMenu(id);
+            if (result.IsSuccessed)
+            {
+                return View(result.Data);
+            }
+            return RedirectToAction("Error", "Home");
+        }
         public List<SelectListItem> SeletectTypeMenu()
         {
             List<SelectListItem> type = new List<SelectListItem>()
@@ -217,6 +226,12 @@ namespace DoctorManagement.AdminApp.Controllers
             }
             return Json(select);
         }
+        [HttpGet]
+        public async Task<IActionResult> DeleteMainMenu(Guid Id)
+        {
+            var result = await _masterDataApiClient.DeleteMainMenu(Id);
+            return Json(new { response = result });
+        }
         public async Task<IActionResult> Ethnic(string keyword, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetEthnicPagingRequest()
@@ -225,15 +240,14 @@ namespace DoctorManagement.AdminApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };
-            var data = await _masterDataApiClient.GetAllPagingEthnic(request);
             ViewBag.Keyword = keyword;
-
-            if (TempData["result"] != null)
+            var data = await _masterDataApiClient.GetAllPagingEthnic(request);
+            if (data.IsSuccessed)
             {
-                ViewBag.SuccessMsg = TempData["result"];
+                return View(data.Data);
             }
-            return View(data.Data);
-
+            
+            return RedirectToAction("Error", "Home");
         }
         public IActionResult CreateEthnic()
         {
@@ -292,6 +306,11 @@ namespace DoctorManagement.AdminApp.Controllers
 
             return View(request);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> DeleteEthnic(Guid Id)
+        {
+            var result = await _masterDataApiClient.DeleteEthnic(Id);
+            return Json(new { response = result });
+        }
     }
 }

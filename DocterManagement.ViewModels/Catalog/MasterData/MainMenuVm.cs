@@ -18,5 +18,8 @@ namespace DoctorManagement.ViewModels.Catalog.MasterData
         public string Controller { get; set; }
         public Guid ParentId { get; set; }
         public DateTime CratedAt { get; set; }
+        public string Description { get; set; }
+        public string Title { get; set; }
+        public string ParentName { get; set; }
     }
 }

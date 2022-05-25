@@ -19,6 +19,6 @@ namespace DoctorManagement.ViewModels.Catalog.Speciality
 
         public int SortOrder { get; set; }
         public bool IsDeleted { get; set; }
-        public IFormFile Img { get; set; }
+        public IFormFile? Img { get; set; }
     }
 }

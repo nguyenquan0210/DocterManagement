@@ -120,19 +120,25 @@
                             <input asp-for="Dob" class="form-control datetimepicker flatpickr-input" autocomplete="off" />
                             <span asp-validation-for="Dob" class="text-danger"></span>
                         </div>
-                        <div class="col-5">
+                        <div class="col-4">
                             <label asp-for="Email" class="form-label"></label>
                             <input asp-for="Email" class="multisteps-form__input form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
 
                         </div>
-                        <div class="col-5">
+                        <div class="col-4">
                             <label asp-for="PhoneNumber" class="form-label"></label>
                             <input asp-for="PhoneNumber" class="multisteps-form__input form-control" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
 
                         </div>
-
+                        <div class="col-2">
+                            <label asp-for="PaidtheFee" class="form-label "></label>
+                               <div class="form-check form-switch ps-0">
+                                   <input asp-for="PaidtheFee" type="checkbox" class="form-check-input mt-1 ms-auto "  />
+                               </div>
+                            <span asp-validation-for="PaidtheFee" class="text-danger"></span>
+                        </div>
                     </div>
                     
                     <div class="row ">

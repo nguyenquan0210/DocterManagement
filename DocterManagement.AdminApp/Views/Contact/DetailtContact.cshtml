@@ -1,6 +1,6 @@
-﻿@model DoctorManagement.ViewModels.Catalog.MasterData.EthnicCreateRequest
+﻿@model  DoctorManagement.ViewModels.Catalog.Contact.ContactVm
 @{
-    ViewData["Title"] = "CreateEthnic";
+    ViewData["Title"] = "DetailtContact";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,13 +23,13 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý chuyên khoa</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm chuyên khoa</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Thêm chuyên khoa</h6>
 }
 @section Search{
-	<form asp-controller="User" asp-action="Index"  method="get">
+	<form asp-action="Index"  method="get">
 		<div class="input-group">
 			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
 			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
@@ -40,57 +40,46 @@
     <div class="row mb-5">
         <div class="col-lg-12 mt-lg-0 mt-4">
 
-           <form asp-action="UpdateAdmin" enctype="multipart/form-data" method="post">
-                @Html.AntiForgeryToken()
+           
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Thông tin liên hệ</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            Chi tiết thông tin liên hệ
                         </p>
                     </div>
 
-                    @if (TempData["AlertMessage"] != null)
-                    {
-
-                        <div id="AlertBox" data-notify="container" class="col-xs-12 col-sm-12 alert @TempData["AlertType"] alert-with-icon hide1" role="alert" data-notify-position="top-center" style="">
-
-                            <span data-notify="title"></span> <span data-notify="message">@TempData["AlertMessage"]</span>
-                            <a href="#" target="_blank" data-notify="url"></a>
-                        </div>
-
-                        <style>
-                            .seachvisble {
-                                display: none;
-                            }
-                        </style>
-                    }
                 <div class="card-body pt-0">
                     
                     <div class="row">
                         <div class="col-4">
                             <label asp-for="Name" class="form-label mt-4"></label>
-                            <input asp-for="Name" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <p  class="multisteps-form__input form-control" > @Model.Name</p>
 
                         </div>
-                        <div class="col-6">
-                            <label asp-for="Description" class="form-label mt-4"></label>
-                            <textarea asp-for="Description" class="multisteps-form__input form-control"  ></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
+                        <div class="col-4">
+                           <label asp-for="PhoneNumber" class="form-label mt-4"></label>
+                            <p  class="multisteps-form__input form-control" > @Model.PhoneNumber</p>
+
                         </div>
-                        <div class="col-2">
-                            <label asp-for="SortOrder" class="form-label mt-4"></label>
-                            <input asp-for="SortOrder" class="multisteps-form__input form-control" />
-                            <span asp-validation-for="SortOrder" class="text-danger"></span>
+                       <div class="col-4">
+                           <label asp-for="Email" class="form-label mt-4"></label>
+                            <p  class="multisteps-form__input form-control" > @Model.Email</p>
 
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label asp-for="YourMessage" class="form-label mt-4"></label>
+                            <p  class="multisteps-form__input form-control" > @Model.YourMessage</p>
 
-                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                        </div>
+                        
+                    </div>
+                    
                 </div>
                 </div>
-           </form>
+        
 
 
         </div>
@@ -100,25 +89,10 @@
 
 @section jsFooter{
    
-   
-   
-    @* Kanban scripts *@
-    <script src="~/js/plugins/dragula/dragula.min.js"></script>
-    <script src="~/js/plugins/jkanban/jkanban.js"></script>
     <script>
-
-    var menu_bd = document.getElementById("menu-masterdata");
+        var menu_bd = document.getElementById("menu-contact");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_ethnic");
-        a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_cteethnic");
-        a_acc.classList.add("active");
-        var dashboardsExamples = document.getElementById("masterdata");
-        dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("ethnic");
-        usersExample.classList.add("show");
-
     </script>
 }
 

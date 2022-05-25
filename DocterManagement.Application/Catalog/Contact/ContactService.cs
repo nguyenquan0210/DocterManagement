@@ -66,7 +66,7 @@ namespace DoctorManagement.Application.Catalog.Contact
                 CratedAt = x.CratedAt,
                 IsDeleted = x.IsDeleted,
                 YourMessage = x.YourMessage,
-
+                Name = x.Name
             }).ToListAsync();
             return new ApiSuccessResult<List<ContactVm>>(rs);
         }
@@ -91,6 +91,7 @@ namespace DoctorManagement.Application.Catalog.Contact
                     CratedAt = x.CratedAt,
                     IsDeleted = x.IsDeleted,
                     YourMessage = x.YourMessage,
+                    Name = x.Name
                 }).ToListAsync();
 
             var pagedResult = new PagedResult<ContactVm>()
@@ -115,7 +116,7 @@ namespace DoctorManagement.Application.Catalog.Contact
                 IsDeleted = contacts.IsDeleted,
                 YourMessage = contacts.YourMessage,
                 PhoneNumber = contacts.PhoneNumber,
-               
+               Name = contacts.Name
             };
             return new ApiSuccessResult<ContactVm>(rs);
         }

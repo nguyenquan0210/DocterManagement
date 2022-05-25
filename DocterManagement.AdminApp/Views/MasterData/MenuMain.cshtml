@@ -99,10 +99,14 @@
                                 {
                                     <tr id="row_@item.Id">
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Type</h6></td>
-                                        <td class="text-xs font-weight-bold">
+                                        <td class="text-sm">
                                             <div class="d-flex align-items-center">
-                                                <img src="@(Configuration["BaseAddress"] + "/img/" + @item.Image)" class="avatar avatar-xs me-2" alt="user image">
-                                                <span>@item.Name</span>
+                                                @if (!item.Image.Contains("default"))
+                                                {
+                                                    <img src="@(Configuration["BaseAddress"] + "/img/" + @item.Image)" class="avatar avatar-xs me-2" alt="user image">
+                                                }
+                                                
+                                                <h6 class="ms-3 my-auto">@item.Name</h6>
                                             </div>
                                         </td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Controller</h6></td>
@@ -113,13 +117,13 @@
                                             <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>
                                         </td>
                                         <td class="text-sm">
-                                            <a asp-controller = "Clinic" asp-action = "Detailt" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
+                                            <a asp-controller = "MasterData" asp-action = "DetailtMainMenu" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
                                                 <i class="fas fa-eye text-secondary"></i>
                                             </a>
                                             <a asp-controller = "MasterData" asp-action = "UpdateMainMenu" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
                                                 <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
-                                            <a id = "Clinic_@i" onclick="ConfirmDelete(@i)" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
+                                            <a id = "Menu_@i" onclick="ConfirmDelete(@i)" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
                                                 <i class="fas fa-trash text-secondary"></i>
                                             </a>
                                         </td>
@@ -249,16 +253,16 @@
         }
 
         var ConfirmDelete = function (Id) {
-            var ClinicId = $("#Clinic_"+Id).attr("data-id");
-            $("#hiddenEmployeeId").val(ClinicId);
+            var MenuId = $("#Menu_"+Id).attr("data-id");
+            $("#hiddenEmployeeId").val(MenuId);
             document.getElementById("myModel").classList.toggle('delete_none');
             document.getElementById("myModel").classList.toggle('delete_block');
             $("#quesion").html("Bạn sẽ không thể hoàn nguyên điều này!");
             $("#okok").html("Có, xóa nó!");
         }
         var ConfirmStatus = function (Id) {
-           var ClinicId = $("#Clinic_"+Id).attr("data-id");
-            $("#hiddenEmployeeId").val(ClinicId);
+           var MenuId = $("#Menu_"+Id).attr("data-id");
+            $("#hiddenEmployeeId").val(MenuId);
             document.getElementById("myModel").classList.toggle('delete_none');
             document.getElementById("myModel").classList.toggle('delete_block');
             $("#quesion").html("Bạn có muốn tạm dừng hoạt động phòng khám này?");
@@ -274,16 +278,16 @@
             var empId = $("#hiddenEmployeeId").val();
 
             $.ajax({
-                url: "/Clinic/Delete",
+                url: "/MasterData/DeleteMainMenu",
                 data: { Id: empId},
                 dataType: "json",
-                type: "POST",
+                type: "GET",
                 success: function (result) {
-                    if (result.response == 2) {
+                    if (result.response == 1) {
                         $("#row_" + empId).remove();
                           $("#title").html("Xóa Thành Công");
                         $("#descript").html("Xóa người dùng thành công.");
-                    } else if(result.response == 1) {
+                    } else if(result.response == 2) {
                         document.getElementById("status_" + empId).classList.toggle('badge-success');
                         document.getElementById("status_" + empId).classList.toggle('badge-danger');
                         $("#status_" + empId).html("đã khóa");

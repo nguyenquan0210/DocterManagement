@@ -63,7 +63,13 @@
                             </a>
                            
                         </li>
-                      
+                        <li class="nav-item ">
+                            <a id="a_typeaccc" class="nav-link "  asp-controller="ServiceFee" asp-action="ServiceFeePaging" >
+                                <span class="sidenav-mini-icon"> T </span>
+                                <span class="sidenav-normal"> Danh sách nộp phí <b class="caret"></b></span>
+                            </a>
+                           
+                        </li>
                     </ul>
                 </div>
             </li>
@@ -290,8 +296,8 @@
                     </ul>
                 </div>
             </li>
-            @*<li class="nav-item">
-                <a id="menu_news" data-bs-toggle="collapse" href="#quanlytintuc" class="nav-link collapsed" aria-controls="quanlytintuc" role="button" aria-expanded="false">
+            <li class="nav-item">
+                <a id="menu-contact" asp-action="ContactPaging" asp-controller="Contact"  class="nav-link collapsed">@*data-bs-toggle="collapse" href="#quanlytintuc"*@ @*aria-controls="quanlytintuc" role="button" aria-expanded="false"*@
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 44 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>megaphone</title>
@@ -308,14 +314,14 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Quản lý tin tức</span>
+                    <span class="nav-link-text ms-1">Quản lý liên hệ</span>
                 </a>
-                <div class="collapse " id="quanlytintuc">
+                @*<div class="collapse " id="quanlytintuc">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
                             <a id="a_news" class="nav-link  " aria-expanded="false" asp-controller="News" asp-action="Index">
                                 <span class="sidenav-mini-icon"> TT </span>
-                                <span class="sidenav-normal"> Danh sách tin tức <b class="caret"></b></span>
+                                <span class="sidenav-normal"> Danh sách liên hệ <b class="caret"></b></span>
                             </a>
 
                         </li>
@@ -328,8 +334,8 @@
                         </li>
 
                     </ul>
-                </div>
-            </li>*@
+                </div>*@
+            </li>
             @*<li class="nav-item">
                 <a id="menu_service" data-bs-toggle="collapse" href="#quanlydichvu" class="nav-link collapsed" aria-controls="quanlydichvu" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">

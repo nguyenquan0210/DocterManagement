@@ -6,20 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.Application.System.AnnualServiceFee
+namespace DoctorManagement.ApiIntegration
 {
-    public interface IAnnualServiceFeeService
+    public interface IAnnualServiceFeeApiClient
     {
-        //Task<ApiResult<bool>> Create(AnnualServiceFeeCreateRequest request);
-
-        //Task<ApiResult<bool>> Update(AnnualServiceFeeUpdateRequest request);
-
-        //Task<ApiResult<int>> Delete(Guid Id);
-
         Task<ApiResult<PagedResult<AnnualServiceFeeVm>>> GetAllPaging(GetAnnualServiceFeePagingRequest request);
-
-        //Task<ApiResult<List<AnnualServiceFeeVm>>> GetAllAnnualServiceFee();
-
         Task<ApiResult<AnnualServiceFeeVm>> GetById(Guid Id);
     }
 }

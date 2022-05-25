@@ -1,9 +1,11 @@
-﻿@using DoctorManagement.ViewModels.Common;
-@model PagedResult<DoctorManagement.ViewModels.Catalog.MasterData.EthnicsVm>
+﻿
+@using DoctorManagement.ViewModels.Common;
+@model PagedResult<DoctorManagement.ViewModels.Catalog.Contact.ContactVm>
 @{
-    ViewData["Title"] = "Ethnic";
+    ViewData["Title"] = "ContactPaging";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @section Header{
     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
         <li class="breadcrumb-item text-sm">
@@ -79,9 +81,10 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>Stt</th>
-                                    <th>Tên dân tộc</th>
-                                    <th>Mô tả</th>
-                                    <th>Thứ tự s/xếp</th>
+                                    <th>Tên</th>
+                                    <th>Điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Ngày</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -95,19 +98,21 @@
                                     <tr id="row_@item.Id">
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@i</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Name</h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Description </h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.SortOrder </h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.PhoneNumber </h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Email </h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.CratedAt.ToShortDateString()</h6></td>
+                                       
                                         
                                         <td>
                                             <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>
                                         </td>
                                         <td class="text-sm">
-                                           @* <a asp-controller = "MasterData" asp-action = "Detailt" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
+                                            <a asp-controller = "Contact" asp-action = "DetailtContact" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
                                                 <i class="fas fa-eye text-secondary"></i>
-                                            </a>*@
-                                            <a asp-controller = "MasterData" asp-action = "UpdateEthnic" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
-                                                <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
+                                            @*<a asp-controller = "Contact" asp-action = "U" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
+                                                <i class="fas fa-user-edit text-secondary"></i>
+                                            </a>*@
                                             <a id = "Clinic_@i" onclick="ConfirmDelete(@i)" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
                                                 <i class="fas fa-trash text-secondary"></i>
                                             </a>
@@ -119,9 +124,10 @@
                             <tfoot>
                                 <tr>
                                     <th>Stt</th>
-                                    <th>Tên dân tộc</th>
-                                    <th>Mô tả</th>
-                                    <th>Thứ tự s/xếp</th>
+                                    <th>Tên</th>
+                                    <th>Điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Ngày</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -262,21 +268,21 @@
             var empId = $("#hiddenEmployeeId").val();
 
             $.ajax({
-                url: "/MasterData/DeleteEthnic",
+                url: "/Clinic/Delete",
                 data: { Id: empId},
                 dataType: "json",
-                type: "GET",
+                type: "POST",
                 success: function (result) {
-                    if (result.response == 1) {
+                    if (result.response == 2) {
                         $("#row_" + empId).remove();
                           $("#title").html("Xóa Thành Công");
                         $("#descript").html("Xóa người dùng thành công.");
-                    } else if(result.response == 2) {
+                    } else if(result.response == 1) {
                         document.getElementById("status_" + empId).classList.toggle('badge-success');
                         document.getElementById("status_" + empId).classList.toggle('badge-danger');
                         $("#status_" + empId).html("đã khóa");
-                        $("#title").html("Khóa Thành Công");
-                        $("#descript").html("Khóa dân tộc thành công.");
+                        $("#title").html("Chặn Thành Công");
+                        $("#descript").html("Chặn người dùng thành công.");
                     }else{
                         $("#title").html("Lỗi sever!");
                         $("#descript").html("Không thể thực hiện chức năng này.");
@@ -293,21 +299,10 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
 
     <script>
-
-        var menu_bd = document.getElementById("menu-masterdata");
+        var menu_bd = document.getElementById("menu-contact");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_ethnic");
-        a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_aethnic");
-        a_acc.classList.add("active");
-        var dashboardsExamples = document.getElementById("masterdata");
-        dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("ethnic");
-        usersExample.classList.add("show");
-
-
-
     </script>
 }
+
 

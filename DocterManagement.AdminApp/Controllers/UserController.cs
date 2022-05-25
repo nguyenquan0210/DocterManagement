@@ -72,6 +72,7 @@ namespace DoctorManagement.AdminApp.Controllers
             }).ToList();
             return rs;
         }
+       
         public async Task<IActionResult> ListRole()
         {
             var data = await _userApiClient.GetAllRole();

@@ -89,7 +89,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _appointmentService.GetById(Id);
             if (result == null)
-                return BadRequest("Cannot find appointment");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>

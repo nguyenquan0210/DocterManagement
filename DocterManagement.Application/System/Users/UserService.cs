@@ -657,7 +657,7 @@ namespace DoctorManagement.Application.System.Users
             else if (count < 9999) str = "DTD" + year + month + "0" + (count + 1);
             else if (count < 99999) str = "DTD" + year + month + (count + 1);
 
-            var password = "DOCtor" + new Random().Next(100000,999999) +"$";
+            var password = "pw"+ str + new Random().Next(100000,999999) +"$";
             string[] username = request.Email.Split('@');
             user = new AppUsers()
             {
@@ -710,6 +710,20 @@ namespace DoctorManagement.Application.System.Users
                         };
                         doctor.ServicesSpecialities.Add(servicesSpecialities);
                     }
+                    doctor.AnnualServiceFees = new List<AnnualServiceFees>();
+                    var serviceFee = new AnnualServiceFees()
+                    {
+                        CreatedAt = DateTime.Now,
+                        NeedToPay = 2400000,
+                        TuitionPaidFreeNumBer = request.PaidtheFee ? 2400000 : 0,
+                        Contingency = request.PaidtheFee ? 0 : -2400000,
+                        TuitionPaidFreeText = request.PaidtheFee ? "hai triệu bốn trăm VN đồng" : "",
+                        PaidDate = request.PaidtheFee ? DateTime.Now : new DateTime(),
+                        Type = request.PaidtheFee ? "offline" : "online",
+                        Status = request.PaidtheFee ? StatusAppointment.complete : StatusAppointment.pending,
+                        Note = request.PaidtheFee ? "Đã thanh toán khi tạo hồ sơ đăng kí thành viên đội ngủ bác sĩ sử dụng dịch vụ." : "",
+                    };
+                    doctor.AnnualServiceFees.Add(serviceFee);
                     await _context.Doctors.AddAsync(doctor);
                     _context.SaveChanges();
                     user.PasswordHash = password;

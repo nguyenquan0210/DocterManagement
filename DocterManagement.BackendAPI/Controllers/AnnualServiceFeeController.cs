@@ -26,7 +26,18 @@ namespace DoctorManagement.BackendAPI.Controllers
             var user = await _annualServiceFeeService.GetAllPaging(request);
             return Ok(user);
         }
-        
+        /// <summary>
+        /// Lấy nộp phí dịch vụ theo id
+        /// </summary>
+        /// 
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<ApiResult<AnnualServiceFeeVm>>> GetById(Guid Id)
+        {
+            var result = await _annualServiceFeeService.GetById(Id);
+            if (result == null)
+                return BadRequest(result);
+            return Ok(result);
+        }
 
     }
 }

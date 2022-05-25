@@ -14,5 +14,6 @@ namespace DoctorManagement.ViewModels.Catalog.Contact
         public string PhoneNumber { get; set; }
         public string YourMessage { get; set; }
         public DateTime CratedAt { get; set; }
+        public string Name { get; set; }
     }
 }

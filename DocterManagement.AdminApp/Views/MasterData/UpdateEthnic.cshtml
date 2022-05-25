@@ -40,7 +40,7 @@
     <div class="row mb-5">
         <div class="col-lg-12 mt-lg-0 mt-4">
 
-           <form asp-action="UpdateAdmin" enctype="multipart/form-data" method="post">
+           <form asp-action="UpdateEthnic" method="post">
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
@@ -118,18 +118,17 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
     <script>
 
-     var menu_bd = document.getElementById("menu-masterdata");
+      var menu_bd = document.getElementById("menu-masterdata");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_menumain");
+        var a_xbd = document.getElementById("a_ethnic");
         a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_amenumain");
+        var a_acc = document.getElementById("a_cteethnic");
         a_acc.classList.add("active");
         var dashboardsExamples = document.getElementById("masterdata");
         dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("menumain");
+        var usersExample = document.getElementById("ethnic");
         usersExample.classList.add("show");
-
     </script>
 }
 

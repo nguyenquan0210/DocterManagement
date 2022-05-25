@@ -49,7 +49,8 @@ namespace DoctorManagement.ViewModels.System.Users
         public Guid DistrictId { get; set; }
         [Display(Name = "Phường/xã")]
         public Guid SubDistrictId { get; set; }
-        
+        [Display(Name = "Đã trả phí dịch vụ")]
+        public bool PaidtheFee { get; set; }
 
     }
 }

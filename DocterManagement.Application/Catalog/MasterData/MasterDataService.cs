@@ -106,7 +106,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             var MainMenu = await _context.MainMenus.FindAsync(Id);
             int check = 0;
             if (MainMenu == null) return new ApiSuccessResult<int>(check);
-            if (MainMenu.IsDeleted = false)
+            if (MainMenu.IsDeleted == false)
             {
                 MainMenu.IsDeleted = true;
                 check = 2;
@@ -180,6 +180,8 @@ namespace DoctorManagement.Application.Catalog.MasterData
         {
             var MainMenu = await _context.MainMenus.FindAsync(Id);
             if (MainMenu == null) return new ApiErrorResult<MainMenuVm>("Null");
+            var menuparent = new MainMenus();
+            if(MainMenu.ParentId != Guid.Empty) menuparent = await _context.MainMenus.FindAsync(MainMenu.ParentId);
             var rs = new MainMenuVm()
             {
                 Id = MainMenu.Id,
@@ -191,7 +193,10 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 CratedAt = MainMenu.CratedAt,
                 Image = MASTERDATA_CONTENT_FOLDER_NAME + "/" + MainMenu.Image,
                 ParentId = MainMenu.ParentId,
-                Type = MainMenu.Type
+                Type = MainMenu.Type,
+                Description = MainMenu.Description,
+                Title = MainMenu.Title,
+                ParentName = menuparent.Name
             };
             return new ApiSuccessResult<MainMenuVm>(rs);
         }
@@ -251,7 +256,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             var ethnics = await _context.Ethnics.FindAsync(Id);
             int check = 0;
             if (ethnics == null) return new ApiSuccessResult<int>(check);
-            if (ethnics.IsDeleted = false)
+            if (ethnics.IsDeleted == false)
             {
                 ethnics.IsDeleted = true;
                 check = 2;
