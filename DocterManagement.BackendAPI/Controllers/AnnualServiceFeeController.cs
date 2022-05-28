@@ -38,6 +38,57 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-
+        [HttpPut("canceled-service-fee")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<bool>>> CanceledServiceFee([FromBody] AnnualServiceFeeCancelRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _annualServiceFeeService.CanceledServiceFee(request);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
+        }
+        [HttpGet("approved-service-fee/{Id}")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<bool>>> ApprovedServiceFee(Guid Id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _annualServiceFeeService.ApprovedServiceFee(Id);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
+        }
+        [HttpPut("payment-service-fee")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<bool>>> PaymentServiceFee([FromBody] AnnualServiceFeePaymentRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _annualServiceFeeService.PaymentServiceFee(request);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
+        }
+        [HttpPut("payment-service-fee-doctor")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<bool>>> PaymentServiceFeeDoctor([FromBody] AnnualServiceFeePaymentDoctorRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _annualServiceFeeService.PaymentServiceFeeDoctor(request);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
+        }
     }
 }

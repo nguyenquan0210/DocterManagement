@@ -32,6 +32,10 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("CancelReason")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<decimal>("Contingency")
                         .HasColumnType("decimal(18,2)");
 
@@ -47,6 +51,11 @@ namespace DoctorManagement.Data.Migrations
 
                     b.Property<decimal>("NeedToPay")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("No")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Note")
                         .HasMaxLength(100)
@@ -159,7 +168,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "b013a1d3-7bf3-4ef6-bb77-47c7a030e88d",
+                            ConcurrencyStamp = "b00b8e21-16a3-439b-8104-e2efd0e1646b",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -167,7 +176,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"),
-                            ConcurrencyStamp = "bdea9330-a7b3-4d27-aba7-438d991d5a9c",
+                            ConcurrencyStamp = "fb60f697-36dd-4cda-a080-473e31b2163e",
                             Description = "doctor role",
                             Name = "doctor",
                             NormalizedName = "doctor"
@@ -175,7 +184,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("50fe257e-6475-41f0-93f7-f530d622362b"),
-                            ConcurrencyStamp = "015e28ff-cea7-4dbb-9c4d-c042f5c65aee",
+                            ConcurrencyStamp = "4e642f0f-e57f-42d1-be6a-5035137e90af",
                             Description = "patient role",
                             Name = "patient",
                             NormalizedName = "patient"
@@ -256,14 +265,14 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cb92de42-7abc-482a-946b-f98a323331cd",
+                            ConcurrencyStamp = "c1dedbbb-149e-461d-904c-939dcc7dc5a1",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nguyenquan52000@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyenquan52000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOQ8vWq9DLr6i5FDV5zkn2KfGwYYXINl15ONmvhDshDFzoTD327OMmY7Ah0GAy6Ahw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHbyWd9vvdYFow8poUxq4sniXF0zfoQKalzzalTCAbPdtsqdeD4KAuK4z/BaxM1wgA==",
                             PhoneNumber = "0373951042",
                             PhoneNumberConfirmed = false,
                             RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
@@ -722,7 +731,17 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("AccountBankName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Company")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -750,6 +769,9 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("ServiceFee")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("TimeWorking")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -764,12 +786,15 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("b0603a9c-a60e-496f-b096-e1b18cad69e0"),
                             AccountBank = "34569876567823",
+                            AccountBankName = "Vietinbank",
                             Company = "Công ty TNHH DoctorMedio",
+                            Content = "Nộp phí sử dụng dịch vụ bác sĩ.",
                             Email = "nguyenquan52000@gmail.com",
                             FullAddress = "Thôn An lương, Xã Tam Anh Bắc, Huyện Núi Thành, Tỉnh Quảng Nam",
                             Hotline = "0373951042",
                             Image = "default",
                             IsDeleted = false,
+                            ServiceFee = 2400000m,
                             TimeWorking = "7:30-18:00 mỗi tuần"
                         });
                 });

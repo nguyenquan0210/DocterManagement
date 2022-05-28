@@ -12,8 +12,11 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
     {
         //Task<ApiResult<bool>> Create(AnnualServiceFeeCreateRequest request);
 
-        //Task<ApiResult<bool>> Update(AnnualServiceFeeUpdateRequest request);
+        Task<ApiResult<bool>> CanceledServiceFee(AnnualServiceFeeCancelRequest request);
+        Task<ApiResult<bool>> ApprovedServiceFee(Guid Id);
 
+        Task<ApiResult<bool>> PaymentServiceFee(AnnualServiceFeePaymentRequest request);
+        Task<ApiResult<bool>> PaymentServiceFeeDoctor(AnnualServiceFeePaymentDoctorRequest request);
         //Task<ApiResult<int>> Delete(Guid Id);
 
         Task<ApiResult<PagedResult<AnnualServiceFeeVm>>> GetAllPaging(GetAnnualServiceFeePagingRequest request);

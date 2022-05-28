@@ -18,9 +18,11 @@ namespace DoctorManagement.Data.Entities
         public string TuitionPaidFreeText { get; set; }
         public decimal Contingency { get; set; }
         public string AccountBank { get; set; }
+        public string No { get; set; }
         public string Type { get; set; }
         public string Image { get; set; }
         public string Note { get; set; }
+        public string CancelReason { get; set; }
         public string TransactionCode { get; set; }
         public DateTime PaidDate { get; set; }
         public Doctors Doctors { get; set; }

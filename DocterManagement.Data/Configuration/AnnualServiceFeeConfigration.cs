@@ -20,9 +20,11 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Image).HasMaxLength(100);
             builder.Property(x => x.AccountBank).HasMaxLength(100);
             builder.Property(x => x.Type).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.No).IsRequired().HasMaxLength(100);
             builder.Property(x => x.TuitionPaidFreeText).HasMaxLength(100);
             builder.Property(x => x.Note).HasMaxLength(100);
             builder.Property(x => x.TransactionCode).HasMaxLength(100);
+            builder.Property(x => x.CancelReason).HasMaxLength(100);
 
             builder.HasOne(x => x.Doctors).WithMany(x => x.AnnualServiceFees).HasForeignKey(x => x.DoctorId);
 

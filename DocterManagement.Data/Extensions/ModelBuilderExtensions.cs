@@ -62,7 +62,8 @@ namespace DoctorManagement.Data.Extensions
              
                );
             modelBuilder.Entity<Informations>().HasData(
-              new Informations() { Id = new Guid("B0603A9C-A60E-496F-B096-E1B18CAD69E0"), Company = "Công ty TNHH DoctorMedio", Email = "nguyenquan52000@gmail.com", Hotline = "0373951042", FullAddress = "Thôn An lương, Xã Tam Anh Bắc, Huyện Núi Thành, Tỉnh Quảng Nam", IsDeleted = false,Image="default",TimeWorking="7:30-18:00 mỗi tuần", AccountBank="34569876567823" }
+              new Informations() { Id = new Guid("B0603A9C-A60E-496F-B096-E1B18CAD69E0"), Company = "Công ty TNHH DoctorMedio", Email = "nguyenquan52000@gmail.com", Hotline = "0373951042", FullAddress = "Thôn An lương, Xã Tam Anh Bắc, Huyện Núi Thành, Tỉnh Quảng Nam",
+                  IsDeleted = false,Image="default",TimeWorking="7:30-18:00 mỗi tuần", AccountBank="34569876567823" , AccountBankName="Vietinbank", Content="Nộp phí sử dụng dịch vụ bác sĩ.",ServiceFee= 2400000 }
              
               );
             modelBuilder.Entity<MainMenus>().HasData(

@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Catalog.MasterData;
 using DoctorManagement.ViewModels.System.Doctors;
 using System;
 using System.Collections.Generic;
@@ -25,5 +26,7 @@ namespace DoctorManagement.ViewModels.System.AnnualServiceFee
         public DateTime PaidDate { get; set; }
 
         public DoctorVm Doctor { get; set; }
+        public string No { get; set; }
+        public InformationVm Information { get; set; }
     }
 }

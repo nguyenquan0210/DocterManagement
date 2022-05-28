@@ -38,6 +38,14 @@
 		</div>
 	</form>
 }
+<style>
+    .swal2-validation-message {
+         display: none;
+    }
+    .form-section__form-group.error .swal2-validation-message {
+        display: block;
+    }
+</style>
 <div class="container-fluid my-3 py-3">
     <div class="row mb-5">
         <div class="col-lg-12 mt-lg-0 mt-4">
@@ -208,20 +216,112 @@
                             </div>
                         </div>
                     </div>
-                    @if(Model.Status != StatusAppointment.complete||Model.Status != StatusAppointment.cancel)
+                    @if (Model.CreatedAt.AddDays(365) > DateTime.Now)
                     {
-                        <a asp-action="@(Model.Status == StatusAppointment.pending?"PayTuition":"Approved")" class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">@(Model.Status == StatusAppointment.pending?"Nộp phí":"Phê duyệt")</a>
+                        
+                        <div class="row">
+                            @if(Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.complete)
+                            {
+                                if(Model.Status == StatusAppointment.complete)
+                                {
+                                    <a asp-action="PaymentServiceFeePDF" asp-route-id="@Model.Id"  class="btn bg-gradient-info btn-sm float-end mt-6 mb-0">Hủy</a>
+                                }
+                                <div class="@(Model.Status == StatusAppointment.pending||Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.cancel?"col-10":"col-12")">
+                                
+                                    <button onclick="CanceledServiveFee()" class="btn bg-gradient-danger btn-sm float-end mt-6 mb-0">Hủy</button>
+                                
+                                </div>
+                            }
+                            @if(Model.Status == StatusAppointment.pending||Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.cancel)
+                            {
+
+                                <div class="@(Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.complete?"col-2":"col-12")">
+                                
+                                    <a asp-action="@(Model.Status == StatusAppointment.pending?"PaymentServiceFee":"ApprovedServiceFee")" asp-route-id="@Model.Id" class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">@(Model.Status == StatusAppointment.pending?"Nộp phí":"Phê duyệt")</a>
+                                
+                                </div>
+                            }
+                        </div>
                     }
+                   
                     
                        </div>
                 </div>
         </div>
     </div>
+    <div id="myModel" class="swal2-container swal2-center swal2-backdrop-show delete_none " style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container"
+            class="swal2-popup swal2-modal swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true"
+            style="display: grid;"><button type="button" class="swal2-close" aria-label="Đóng hộp thoại này"
+                style="display: none;">
+                <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;">×</font>
+                </font>
+            </button>
+            <ul class="swal2-progress-steps" style="display: none;"></ul>
+            <div class="swal2-icon" style="display: none;"></div><img class="swal2-image" style="display: none;">
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">
+                <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;">Lý do hủy duyệt</font>
+                </font>
+            </h2>
+            <form asp-action="CanceledServiceFee" method="post" id="canceled">
+                <div class="form-section__form-group ">
 
+                    <label class="swal2-checkbox" style="width:85%">Lý do hủy</label>
+            
+                    <textarea name="CancelReason" id="CancelReason" autocapitalize="off" class="swal2-textarea" style="width:85%"></textarea>
+           
+                    <div class="swal2-validation-message" id="swal2-validation-message" ></div>
+                </div>
+                <input type="hidden" name="Id" value ="@Model.Id" />
+                <div class="swal2-actions">
+                    <div class="swal2-loader"></div><a onclick="CanceledServiveFee()"  class="swal2-confirm btn bg-gradient-info"
+                        aria-label="" style="display: inline-block;    margin-left: 10px;  margin-right: 10px;">
+                        <font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">Đóng</font>
+                        </font>
+                    </a>
+                    <button class="swal2-cancel btn bg-gradient-danger" aria-label=""
+                        style="display: inline-block;">
+                      Hủy
+                    </button>
+                </div>
+            </form>
+           
+        </div>
+    </div>
 </div>
 
 @section jsFooter{
-   
+   <script>
+        $(function () {
+            $(document).on("click", function (e) {
+                 if ($(e.target).is("#myModel") === true) {
+                        $("#myModel").removeClass("delete_block");
+                    }
+            });
+        });
+        var cel = document.getElementById("myModel");
+
+       
+        function CanceledServiveFee() {
+            document.getElementById("myModel").classList.toggle('delete_block');
+           
+        }
+       
+   </script>
+   <script src="~/js/Validator.js"></script>
+   <script>
+        Validator({
+	        form: "#canceled",
+	        formGroup: ".form-section__form-group",
+	        errorMessage: ".swal2-validation-message",
+	        rules: [
+                Validator.isRequired('#CancelReason', 'Vui lòng nhập lý do hủy.')
+	        ]
+        })
+    </script>
     <script>
         var menu_bd = document.getElementById("menu-contact");
         menu_bd.classList.add("active");

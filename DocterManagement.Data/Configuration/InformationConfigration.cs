@@ -23,6 +23,8 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.TimeWorking).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Hotline).IsRequired().HasMaxLength(10);
             builder.Property(x => x.AccountBank).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.AccountBankName).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.Content).IsRequired().HasMaxLength(100);
         }
     }
 }

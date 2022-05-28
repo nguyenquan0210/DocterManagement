@@ -16,5 +16,9 @@ namespace DoctorManagement.ViewModels.Catalog.MasterData
         public string Hotline { get; set; }
         public string TimeWorking { get; set; }
         public string FullAddress { get; set; }
+        public string AccountBank { get; set; }
+        public string AccountBankName { get; set; }
+        public decimal ServiceFee { get; set; }
+        public string Content { get; set; }
     }
 }

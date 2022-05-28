@@ -1,14 +1,18 @@
 ﻿using DoctorManagement.Application.Common;
 using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
+using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Catalog.MasterData;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.AnnualServiceFee;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Users;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +22,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
     {
         private readonly DoctorManageDbContext _context;
         private readonly IStorageService _storageService;
-        private const string AnnualServiceFee_CONTENT_FOLDER_NAME = "annualservicefee-content";
+        private const string ANNUALSERVICEFEE_CONTENT_FOLDER_NAME = "annualservicefee-content";
         public AnnualServiceFeeService(DoctorManageDbContext context, IStorageService storageService)
         {
             _context = context;
@@ -30,27 +34,41 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             var check = ",";
             var doctor = from d in _context.Doctors select d;
             var annualServiceFees = new List<AnnualServiceFees>();
-            foreach(var item in list)
+            var information = await _context.Informations.FirstOrDefaultAsync();
+            string day = DateTime.Now.ToString("dd") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("YY");
+            int count = await _context.AnnualServiceFees.Where(x => x.No.Contains("DMPM" + day)).CountAsync();
+            string str = "";
+                
+            foreach (var item in list)
             {
                 if (!check.Contains(item.DoctorId.ToString()))
                 {
                     if (item.CreatedAt.AddDays(365) < DateTime.Now)
                     {
+                        if (count < 9) str = "DMPM" + day + "00000" + (count + 1);
+                        else if (count < 99) str = "DMPM" + day + "0000" + (count + 1);
+                        else if (count < 999) str = "DMPM" + day + "000" + (count + 1);
+                        else if (count < 9999) str = "DMPM" + day + "00" + (count + 1);
+                        else if (count < 99999) str = "DMPM" + day + "0" + (count + 1);
+                        else if (count < 999999) str = "DMPM" + day + (count + 1);
                         var a = new AnnualServiceFees()
                         {
-                            Status = Data.Enums.StatusAppointment.pending,
-                            CreatedAt = DateTime.Now,
+                            Status = StatusAppointment.pending,
+                            CreatedAt = item.CreatedAt,
                             DoctorId = item.DoctorId,
-                            NeedToPay = 2400000,
+                            NeedToPay = item.Contingency > information.ServiceFee? 0 : (information.ServiceFee - item.Contingency),
                             TuitionPaidFreeNumBer=0,
-                            Contingency = -2400000,
+                            Contingency = item.Contingency > information.ServiceFee?item.Contingency - information.ServiceFee:0,
                             Type = "Chưa Nộp",
                             PaidDate = new DateTime(),
+                            No = str
                         };
                         annualServiceFees.Add(a);
+                        count++;
                     }
+                    check = check+ item.DoctorId.ToString()+",";
                 }
-                check = check+","+ item.DoctorId.ToString();
+                
             }
             await _context.AnnualServiceFees.AddRangeAsync(annualServiceFees);
             await _context.SaveChangesAsync();
@@ -116,8 +134,10 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             if (service == null) return new ApiErrorResult<AnnualServiceFeeVm>("null");
             var doctor = await _context.Doctors.FindAsync(service.DoctorId);
             var user = await _context.AppUsers.FindAsync(service.DoctorId);
+            var information = await _context.Informations.FirstOrDefaultAsync();
             var rs = new AnnualServiceFeeVm()
             {
+                No = service.No,
                 Id = service.Id,
                 Status = service.Status,
                 AccountBank = service.AccountBank,
@@ -131,6 +151,19 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                 TuitionPaidFreeNumBer = service.TuitionPaidFreeNumBer,
                 TuitionPaidFreeText = service.TuitionPaidFreeText,
                 Type = service.Type,
+                Information = new InformationVm()
+                {
+                    Company = information.Company,
+                    Email = information.Email,
+                    FullAddress = information.FullAddress,
+                    Hotline = information.Hotline,
+                    Image = information.Image,
+                    TimeWorking = information.TimeWorking,
+                    AccountBank = information.AccountBank,
+                    AccountBankName = information.AccountBankName,
+                    ServiceFee = information.ServiceFee,
+                    Content = information.Content,
+                },
                 Doctor = new DoctorVm()
                 {
                     No = doctor.No,
@@ -147,6 +180,96 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                 }
             };
             return new ApiSuccessResult<AnnualServiceFeeVm>(rs);
+        }
+
+        public  async Task<ApiResult<bool>> CanceledServiceFee(AnnualServiceFeeCancelRequest request)
+        {
+            var service = await _context.AnnualServiceFees.FindAsync(request.Id);
+            var information = await _context.Informations.FirstOrDefaultAsync();
+            if (service == null) return new ApiErrorResult<bool>("null");
+            service.Status = StatusAppointment.cancel;
+            service.CancelReason = request.CancelReason;
+            string day = DateTime.Now.ToString("dd") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("YY");
+            int count = await _context.AnnualServiceFees.Where(x => x.No.Contains("DMPM" + day)).CountAsync();
+            string str = "";
+            if (count < 9) str = "DMPM" + day + "00000" + (count + 1);
+            else if (count < 99) str = "DMPM" + day + "0000" + (count + 1);
+            else if (count < 999) str = "DMPM" + day + "000" + (count + 1);
+            else if (count < 9999) str = "DMPM" + day + "00" + (count + 1);
+            else if (count < 99999) str = "DMPM" + day + "0" + (count + 1);
+            else if (count < 999999) str = "DMPM" + day + (count + 1);
+            var serviceFees = new AnnualServiceFees()
+            {
+                Status = StatusAppointment.pending,
+                CreatedAt = DateTime.Now,
+                DoctorId = service.DoctorId,
+                TuitionPaidFreeNumBer = 0,
+                Contingency = service.Contingency - service.TuitionPaidFreeNumBer,
+                TuitionPaidFreeText = "0 VN đồng.",
+                Type = "Chưa Nộp",
+                PaidDate = new DateTime(),
+                NeedToPay = information.ServiceFee,
+                No = str
+            };
+            await _context.AnnualServiceFees.AddAsync(serviceFees);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("");
+        }
+
+        public async Task<ApiResult<bool>> ApprovedServiceFee(Guid Id)
+        {
+            var service = await _context.AnnualServiceFees.FindAsync(Id);
+            if (service == null) return new ApiErrorResult<bool>("null");
+            service.Status = StatusAppointment.complete;
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("");
+        }
+
+        public async Task<ApiResult<bool>> PaymentServiceFee(AnnualServiceFeePaymentRequest request)
+        {
+            var service = await _context.AnnualServiceFees.FindAsync(request.Id);
+            if (service == null) return new ApiErrorResult<bool>("null");
+            service.Status = StatusAppointment.complete;
+            service.Note = request.Note;
+            service.PaidDate = DateTime.Now;
+            service.TuitionPaidFreeNumBer = request.TuitionPaidFreeNumBer;
+            service.TuitionPaidFreeText = request.TuitionPaidFreeText;
+            service.Type = "trực tiếp";
+            service.Contingency =  service.Contingency  +  (request.TuitionPaidFreeNumBer > service.NeedToPay?(request.TuitionPaidFreeNumBer - service.NeedToPay):0) ;
+            service.NeedToPay = request.TuitionPaidFreeNumBer > service.NeedToPay ? 0 : (service.NeedToPay - request.TuitionPaidFreeNumBer);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("");
+        }
+        public async Task<ApiResult<bool>> PaymentServiceFeeDoctor(AnnualServiceFeePaymentDoctorRequest request)
+        {
+            var service = await _context.AnnualServiceFees.FindAsync(request.Id);
+            if (service == null) return new ApiErrorResult<bool>("null");
+            service.Status = StatusAppointment.approved;
+            service.Note = request.Note;
+            service.PaidDate = DateTime.Now;
+            service.TuitionPaidFreeNumBer = request.TuitionPaidFreeNumBer;
+            service.TuitionPaidFreeText = request.TuitionPaidFreeText;
+            service.TransactionCode = request.TransactionCode;
+            service.AccountBank = request.AccountBank;
+            service.Image = await SaveFile(request.Image, ANNUALSERVICEFEE_CONTENT_FOLDER_NAME);
+            service.Type = "trực tuyến";
+            service.NeedToPay = service.NeedToPay + (request.TuitionPaidFreeNumBer - service.NeedToPay);
+            service.Contingency = service.Contingency + (request.TuitionPaidFreeNumBer - service.NeedToPay);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("");
+        }
+        private async Task<string> SaveFile(IFormFile? file, string folderName)
+        {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsyncs(file.OpenReadStream(), fileName, folderName);
+            return fileName;
         }
     }
 }
