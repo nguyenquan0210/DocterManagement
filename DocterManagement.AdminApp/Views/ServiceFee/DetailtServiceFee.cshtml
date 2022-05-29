@@ -107,7 +107,7 @@
 
                                 </div>
                             </div>
-                            <div class="row">
+                           @* <div class="row">
                                
                                 <div class="col-2">
                                    <label asp-for="NeedToPay" class="form-label mt-4"></label>
@@ -124,12 +124,12 @@
                                     <p  class="multisteps-form__input form-control" > @Model.TuitionPaidFreeNumBer</p>
 
                                 </div>
-                               <div class="col-6">
+                                <div class="col-6">
                                    <label asp-for="TuitionPaidFreeText" class="form-label mt-4"></label>
                                     <p  class="multisteps-form__input form-control" > @Model.TuitionPaidFreeText</p>
 
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                         </div>
@@ -174,7 +174,7 @@
                                 </div>
                                <div class="col-6">
                                    <label asp-for="TuitionPaidFreeText" class="form-label mt-4"></label>
-                                    <p  class="multisteps-form__input form-control" > @Model.TuitionPaidFreeText</p>
+                                    <input asp-for="TuitionPaidFreeNumBer" class="multisteps-form__input form-control" readonly /> 
 
                                 </div>
                             </div>
@@ -213,6 +213,14 @@
                                     <p  class="multisteps-form__input form-control" > @Model.Note</p>
 
                                 </div>
+                                @if(Model.Status == StatusAppointment.cancel)
+                                {
+                                     <div class="col-12">
+                                       <label asp-for="CancelReason" class="form-label mt-4"></label>
+                                        <p  class="multisteps-form__input form-control" > @Model.CancelReason</p>
+
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -222,14 +230,18 @@
                         <div class="row">
                             @if(Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.complete)
                             {
-                                if(Model.Status == StatusAppointment.complete)
-                                {
-                                    <a asp-action="PaymentServiceFeePDF" asp-route-id="@Model.Id"  class="btn bg-gradient-info btn-sm float-end mt-6 mb-0">Hủy</a>
-                                }
-                                <div class="@(Model.Status == StatusAppointment.pending||Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.cancel?"col-10":"col-12")">
                                 
+                                <div class="@(Model.Status == StatusAppointment.pending||Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.cancel?"col-10":"col-12")">
+                                    @if(Model.Status == StatusAppointment.complete)
+                                    {
+                                        <a style="margin:0 20px" asp-action="PaymentServiceFeePDF" asp-route-id="@Model.Id"  class="btn bg-gradient-info btn-sm mt-6 mb-0">In phiếu</a>
+                                    }
+                                    @if(Model.Type != "trực tiếp")
+                                    {
+                                        
                                     <button onclick="CanceledServiveFee()" class="btn bg-gradient-danger btn-sm float-end mt-6 mb-0">Hủy</button>
                                 
+                                    }
                                 </div>
                             }
                             @if(Model.Status == StatusAppointment.pending||Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.cancel)

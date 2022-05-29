@@ -53,13 +53,13 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                         else if (count < 999999) str = "DMPM" + day + (count + 1);
                         var a = new AnnualServiceFees()
                         {
-                            Status = StatusAppointment.pending,
-                            CreatedAt = item.CreatedAt,
+                            Status = item.Contingency > information.ServiceFee?StatusAppointment.complete: StatusAppointment.pending,
+                            CreatedAt = item.CreatedAt.AddDays(366),
                             DoctorId = item.DoctorId,
                             NeedToPay = item.Contingency > information.ServiceFee? 0 : (information.ServiceFee - item.Contingency),
                             TuitionPaidFreeNumBer=0,
                             Contingency = item.Contingency > information.ServiceFee?item.Contingency - information.ServiceFee:0,
-                            Type = "Chưa Nộp",
+                            Type = item.Contingency > information.ServiceFee ? item.Type:"Chưa Nộp",
                             PaidDate = new DateTime(),
                             No = str
                         };
@@ -80,6 +80,28 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.d.FirstName.Contains(request.Keyword));
+            }
+            if (request.status != null)
+            {
+                query = query.Where(x => x.c.Status == request.status);
+            }
+            if (!string.IsNullOrEmpty(request.day))
+            {
+                var fromdate = DateTime.Parse(request.day + "/" + request.month + "/" +request.year);
+                var todate = fromdate.AddDays(1);
+                query = query.Where(x => x.c.CreatedAt>= fromdate && x.c.CreatedAt <= todate);
+            }
+            else if (!string.IsNullOrEmpty(request.month))
+            {
+                var fromdate = DateTime.Parse("01/" + request.month + "/" + request.year);
+                var todate = fromdate.AddMonths(1);
+                query = query.Where(x => x.c.CreatedAt >= fromdate && x.c.CreatedAt <= todate);
+            }
+            else
+            {
+                var fromdate = DateTime.Parse("01/01/" + request.year);
+                var todate = fromdate.AddYears(1);
+                query = query.Where(x => x.c.CreatedAt >= fromdate && x.c.CreatedAt <= todate);
             }
             int totalRow = await query.CountAsync();
 
@@ -151,6 +173,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                 TuitionPaidFreeNumBer = service.TuitionPaidFreeNumBer,
                 TuitionPaidFreeText = service.TuitionPaidFreeText,
                 Type = service.Type,
+                CancelReason = service.CancelReason,
                 Information = new InformationVm()
                 {
                     Company = information.Company,
@@ -201,14 +224,14 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             var serviceFees = new AnnualServiceFees()
             {
                 Status = StatusAppointment.pending,
-                CreatedAt = DateTime.Now,
+                CreatedAt = service.CreatedAt.AddDays(1),
                 DoctorId = service.DoctorId,
+                NeedToPay = (service.TuitionPaidFreeNumBer - service.Contingency) > 0 ? service.TuitionPaidFreeNumBer - service.Contingency : 0,
+                Contingency = (service.TuitionPaidFreeNumBer - service.Contingency)>0?0: service.Contingency - service.TuitionPaidFreeNumBer,
                 TuitionPaidFreeNumBer = 0,
-                Contingency = service.Contingency - service.TuitionPaidFreeNumBer,
                 TuitionPaidFreeText = "0 VN đồng.",
                 Type = "Chưa Nộp",
                 PaidDate = new DateTime(),
-                NeedToPay = information.ServiceFee,
                 No = str
             };
             await _context.AnnualServiceFees.AddAsync(serviceFees);
@@ -221,6 +244,13 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
         {
             var service = await _context.AnnualServiceFees.FindAsync(Id);
             if (service == null) return new ApiErrorResult<bool>("null");
+            var serviceFees = await _context.AnnualServiceFees.Where(x => x.DoctorId == service.DoctorId && x.CreatedAt > service.CreatedAt).OrderByDescending(x => x.CreatedAt).ToListAsync();
+            foreach(var remove in serviceFees)
+            {
+                var removeservice = await _context.AnnualServiceFees.FindAsync(remove.Id);
+                _context.AnnualServiceFees.Remove(removeservice);
+            }
+            
             service.Status = StatusAppointment.complete;
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();

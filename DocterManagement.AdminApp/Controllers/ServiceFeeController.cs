@@ -1,6 +1,10 @@
 ﻿using DoctorManagement.ApiIntegration;
+using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.AnnualServiceFee;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using Rotativa.AspNetCore;
 using System.Drawing;
 
@@ -22,31 +26,70 @@ namespace DoctorManagement.AdminApp.Controllers
             _locationApiClient = locationApiClient;
             _annualServiceFeeApiClient = annualServiceFeeApiClient;
         }
-        public async Task<IActionResult> ServiceFeePaging(string keyword, string rolename, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> ServiceFeePaging(string keyword, StatusAppointment? status, string day, string month,string year, string check, int pageIndex = 1, int pageSize = 10)
         {
-            /* if (ViewBag.Role != null)
-             {
-                 rolename = ViewBag.Role;
-             }
-             if (rolename == null)
-             {
-                 rolename = "all";
-             }
-             ViewBag.rolename = SeletectRole(rolename);*/
-
             var request = new GetAnnualServiceFeePagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                //RoleName = rolename
+                day = day,
+                month = month,
+                year = year,
+                status = status
             };
+            if (check == "year"|| check==null)
+            {
+                request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                request.month = null;
+                request.day = null;
+                
+                ViewBag.Statitic = JsonConvert.SerializeObject(await _annualServiceFeeApiClient.GetServiceFeeStatiticYear(request));
+            }
+            else if(check == "month")
+            {
+                request.day = null;
+                request.month = month == null ? DateTime.Now.ToString("MM") : month;
+                request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                ViewBag.Statitic = JsonConvert.SerializeObject(await _annualServiceFeeApiClient.GetServiceFeeStatiticMonth(request));
+            }
+            else
+            {
+                request.day = day == null ? DateTime.Now.ToString("dd") : day;
+                request.month = month == null ? DateTime.Now.ToString("MM") : month;
+                request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                ViewBag.Statitic = JsonConvert.SerializeObject(await _annualServiceFeeApiClient.GetServiceFeeStatiticDay(request));
+            }
             var data = await _annualServiceFeeApiClient.GetAllPaging(request);
             ViewBag.Keyword = keyword;
-            
-           return View(data.Data);
-
-           
+            ViewBag.Day = request.day == null ? DateTime.Now.ToString("dd") : request.day;
+            ViewBag.Month = request.month == null ? DateTime.Now.ToString("MM") : request.month;
+            ViewBag.Year = request.year;
+            ViewBag.Status = request.status;
+            ViewBag.Check = check;
+            ViewBag.LStatus = SeletectStatus(request.status.ToString());
+            ViewBag.Days = SeletectDay(request.day == null ? DateTime.Now.ToString("dd") : request.day);
+            ViewBag.Months = SeletectMonth(request.month == null ? DateTime.Now.ToString("MM") : request.month);
+            ViewBag.Years = SeletectYear(request.year);
+            return View(data.Data);
+        }
+        public List<SelectListItem> SeletectStatus(string? id)
+        {
+            List<SelectListItem> gender = new List<SelectListItem>()
+            {
+                new SelectListItem(text: "Chờ xử lý", value: "0"),
+                new SelectListItem(text: "Chờ phê duyệt", value: "1"),
+                new SelectListItem(text: "Hoàn thành", value: "2"),
+                new SelectListItem(text: "Hủy bỏ", value: "3"),
+                new SelectListItem(text: "Tất cả", value: "")
+            };
+            var rs = gender.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = id == x.Value
+            }).ToList();
+            return rs;
         }
         public async Task<IActionResult> DetailtServiceFee(Guid id)
         {
@@ -124,7 +167,6 @@ namespace DoctorManagement.AdminApp.Controllers
                 //return View(result.Data);
             }
             return RedirectToAction("Error", "Home");
-           
         }
     }
 }

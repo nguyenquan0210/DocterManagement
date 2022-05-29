@@ -28,5 +28,6 @@ namespace DoctorManagement.ViewModels.System.AnnualServiceFee
         public DoctorVm Doctor { get; set; }
         public string No { get; set; }
         public InformationVm Information { get; set; }
+        public string CancelReason { get; set; }
     }
 }
