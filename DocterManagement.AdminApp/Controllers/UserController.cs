@@ -2,6 +2,7 @@
 using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.System.Models;
+using DoctorManagement.ViewModels.System.Statistic;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,29 +15,22 @@ namespace DoctorManagement.AdminApp.Controllers
     public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
         private readonly IConfiguration _configuration;
         private readonly ILocationApiClient _locationApiClient;
 
         public UserController(IUserApiClient userApiClient,
-            IConfiguration configuration, ILocationApiClient locationApiClient)
+            IConfiguration configuration, ILocationApiClient locationApiClient,
+            IStatisticApiClient statisticApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
             _locationApiClient = locationApiClient;
+            _statisticApiClient = statisticApiClient;
         }
 
-        public async Task<IActionResult> Index(string keyword, string rolename, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, string day, string month, string year, string check, string rolename, int pageIndex = 1, int pageSize = 10)
         {
-            if (ViewBag.Role != null)
-            {
-                rolename = ViewBag.Role;
-            }
-            if (rolename == null)
-            {
-                rolename = "all";
-            }
-            ViewBag.rolename = SeletectRole(rolename);
-
             var request = new GetUserPagingRequest()
             {
                 Keyword = keyword,
@@ -45,22 +39,60 @@ namespace DoctorManagement.AdminApp.Controllers
                 RoleName = rolename
             };
             var data = await _userApiClient.GetUsersPagings(request);
+            var requeststatictic = new GetHistoryActivePagingRequest()
+            {
+                Keyword = keyword,
+                day = day,
+                month = month,
+                year = year,
+                role = rolename
+            };
+            if (check == "year" || check == null)
+            {
+                requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                requeststatictic.month = null;
+                requeststatictic.day = null;
+
+                ViewBag.Statitic = JsonConvert.SerializeObject(await _statisticApiClient.GetServiceFeeStatiticYear(requeststatictic));
+            }
+            else if (check == "month")
+            {
+                requeststatictic.day = null;
+                requeststatictic.month = month == null ? DateTime.Now.ToString("MM") : month;
+                requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                ViewBag.Statitic = JsonConvert.SerializeObject(await _statisticApiClient.GetServiceFeeStatiticMonth(requeststatictic));
+            }
+            else
+            {
+                requeststatictic.day = day == null ? DateTime.Now.ToString("dd") : day;
+                requeststatictic.month = month == null ? DateTime.Now.ToString("MM") : month;
+                requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                ViewBag.Statitic = JsonConvert.SerializeObject(await _statisticApiClient.GetServiceFeeStatiticDay(requeststatictic));
+            }
             ViewBag.Keyword = keyword;
-            if (rolename != null)
-                ViewBag.Role = rolename;
+            ViewBag.Day = requeststatictic.day == null ? DateTime.Now.ToString("dd") : requeststatictic.day;
+            ViewBag.Month = requeststatictic.month == null ? DateTime.Now.ToString("MM") : requeststatictic.month;
+            ViewBag.Year = requeststatictic.year;
+            ViewBag.Role = requeststatictic.role;
+            ViewBag.Check = check;
+            ViewBag.rolename = SeletectRole(requeststatictic.role==null?"": requeststatictic.role);
+            ViewBag.Days = SeletectDay(requeststatictic.day == null ? DateTime.Now.ToString("dd") : requeststatictic.day);
+            ViewBag.Months = SeletectMonth(requeststatictic.month == null ? DateTime.Now.ToString("MM") : requeststatictic.month);
+            ViewBag.Years = SeletectYear(requeststatictic.year);
+           
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
             return View(data.Data);
         }
-        public List<SelectListItem> SeletectRole(string str)
+        public List<SelectListItem> SeletectRole(string? str)
         {
             List<SelectListItem> role = new List<SelectListItem>()
             {
                 new SelectListItem(text: "Bác sĩ", value: "doctor"),
                 new SelectListItem(text: "Bệnh nhân", value: "patient"),
-                new SelectListItem(text: "Tất cả", value: "all"),
+                new SelectListItem(text: "Tất cả", value: ""),
                 new SelectListItem(text: "Quản trị", value: "admin")
             };
            

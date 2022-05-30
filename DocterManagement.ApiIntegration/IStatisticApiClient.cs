@@ -10,8 +10,8 @@ namespace DoctorManagement.ApiIntegration
 {
     public interface IStatisticApiClient
     {
-        Task<List<StatisticNews>> GetServiceFeeStatiticYear(GetHistoryActivePagingRequest request);
-        Task<List<StatisticNews>> GetServiceFeeStatiticDay(GetHistoryActivePagingRequest request);
-        Task<List<StatisticNews>> GetServiceFeeStatiticMonth(GetHistoryActivePagingRequest request);
+        Task<List<StatisticActive>> GetServiceFeeStatiticYear(GetHistoryActivePagingRequest request);
+        Task<List<StatisticActive>> GetServiceFeeStatiticDay(GetHistoryActivePagingRequest request);
+        Task<List<StatisticActive>> GetServiceFeeStatiticMonth(GetHistoryActivePagingRequest request);
     }
 }

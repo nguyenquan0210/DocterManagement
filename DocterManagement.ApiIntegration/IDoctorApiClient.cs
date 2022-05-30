@@ -1,6 +1,7 @@
 ﻿using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace DoctorManagement.ApiIntegration
         Task<ApiResult<List<PatientVm>>> GetPatientProfile(string username);
         Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request);
         Task<ApiResult<bool>> AddInfo(AddPatientInfoRequest request);
+        Task<ApiResult<List<UserVm>>> GetAllUser(string role);
     }
 }

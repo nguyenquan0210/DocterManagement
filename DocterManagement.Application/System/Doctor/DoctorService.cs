@@ -6,6 +6,8 @@ using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Roles;
+using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -256,6 +258,61 @@ namespace DoctorManagement.Application.System.Doctor
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
             return new ApiErrorResult<bool>("Thêm hồ sơ bệnh không thành công!");
+        }
+
+        public async Task<ApiResult<List<UserVm>>> GetAllUser(string? role)
+        {
+            var query = from u in _context.AppUsers
+                        select u;
+
+            if (!string.IsNullOrEmpty(role))
+            {
+                query = query.Where(x => x.AppRoles.Name.Contains(role));
+            }
+
+            //3. Paging
+
+            var data = await query.Select(x => new UserVm()
+                {
+                    Email = x.Email,
+                    Name = x.AppRoles.Name.ToUpper() == "DOCTOR" ? x.Doctors.LastName + " " + x.Doctors.FirstName : x.AppRoles.Name == "PATIENT" ? x.Patients.FirstOrDefault(x => x.IsPrimary).Name : "Admin",
+                    PhoneNumber = x.PhoneNumber,
+                    UserName = x.UserName,
+                    Id = x.Id,
+                    Status = x.Status,
+                    Img = x.AppRoles.Name.ToUpper() == "DOCTOR" ? x.Doctors.Img : x.AppRoles.Name == "PATIENT" ? x.Patients.FirstOrDefault(x => x.IsPrimary).Img : "user_default.png",
+                    Date = x.CreatedAt,
+                    GetRole = new GetRoleVm()
+                    {
+                        Id = x.AppRoles.Id,
+                        Name = x.AppRoles.Name
+                    },
+                    DoctorVm = x.AppRoles.Name == "DOCTOR" ? new DoctorVm()
+                    {
+                        UserId = x.Doctors.UserId,
+                        Intro = x.Doctors.Intro,
+                        Address = x.Doctors.Address,
+                        Img = x.Doctors.Img,
+                        No = x.Doctors.No,
+                        //GetSpecialities = x new GetSpecialityVm() { Id = x.Doctors.Specialities.Id , Title = x.Doctors.Specialities.Title },
+                        //GetClinic = new GetClinicVm() { Id= x.Doctors.Clinics.Id , Name = x.Doctors.Clinics.Name }
+                    } : new DoctorVm(),
+                    PatientVm = x.AppRoles.Name == "PATIENT" ? new PatientVm()
+                    {
+                        UserId = x.Id,
+                        Address = x.Patients.FirstOrDefault(x => x.IsPrimary == true).Address,
+                        Img = x.Patients.FirstOrDefault(x => x.IsPrimary == true).Img,
+                        Dob = x.Patients.FirstOrDefault(x => x.IsPrimary == true).Dob,
+                        Gender = x.Patients.FirstOrDefault(x => x.IsPrimary == true).Gender,
+                        FullAddress = x.Patients.FirstOrDefault(x => x.IsPrimary == true).FullAddress,
+                        Name = x.Patients.FirstOrDefault(x => x.IsPrimary == true).Name,
+                        No = x.Patients.FirstOrDefault(x => x.IsPrimary == true).No,
+                    } : new PatientVm()
+                }).ToListAsync();
+
+            //4. Select and projection
+           
+            return new ApiSuccessResult<List<UserVm>>(data);
         }
     }
 }

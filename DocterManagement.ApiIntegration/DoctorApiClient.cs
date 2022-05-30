@@ -1,6 +1,7 @@
 ﻿using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -47,6 +48,10 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<List<PatientVm>>> GetPatientProfile(string username)
         {
            return  await GetListAsync<PatientVm>($"/api/client/get-patient-profile/{username}");
+        }
+        public async Task<ApiResult<List<UserVm>>> GetAllUser(string role)
+        {
+            return await GetListAsync<UserVm>($"/api/client/get-all-user/{role}");
         }
 
         public async Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request)

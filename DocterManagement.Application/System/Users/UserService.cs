@@ -544,7 +544,7 @@ namespace DoctorManagement.Application.System.Users
                 query = query.Where(x => x.UserName.Contains(request.Keyword)
                  || x.PhoneNumber.Contains(request.Keyword));
             }
-            if (!string.IsNullOrEmpty(request.RoleName) && request.RoleName.ToUpper() != "ALL")
+            if (!string.IsNullOrEmpty(request.RoleName))
             {
                 query = query.Where(x => x.AppRoles.Name.Contains(request.RoleName));
             }
