@@ -38,9 +38,9 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<ActionResult<ApiResult<List<HistoryActiveVm>>>> GetAll()
+        public async Task<ActionResult<ApiResult<List<HistoryActiveVm>>>> GetAll([FromQuery] GetHistoryActivePagingRequest request)
         {
-            var result = await _statisticService.ListActiveUser();
+            var result = await _statisticService.ListActiveUser(request);
             return Ok(result);
         }
     }

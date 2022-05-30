@@ -69,9 +69,35 @@ namespace DoctorManagement.Application.System.StatisticService
             
         }
 
-        public async Task<ApiResult<List<HistoryActiveVm>>> ListActiveUser()
+        public async Task<ApiResult<List<HistoryActiveVm>>> ListActiveUser(GetHistoryActivePagingRequest request)
         {
-            var query = _context.HistoryActives;
+            var query = from h in _context.HistoryActives select h;
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.User.Contains(request.Keyword));
+            }
+            if (!string.IsNullOrEmpty(request.role))
+            {
+                query = query.Where(x => x.Type.Contains(request.role));
+            }
+            if (!string.IsNullOrEmpty(request.day))
+            {
+                var fromdate = DateTime.Parse(request.day + "/" + request.month + "/" + request.year);
+                var todate = fromdate.AddDays(1);
+                query = query.Where(x => x.CreatedAt >= fromdate && x.CreatedAt <= todate);
+            }
+            else if (!string.IsNullOrEmpty(request.month))
+            {
+                var fromdate = DateTime.Parse("01/" + request.month + "/" + request.year);
+                var todate = fromdate.AddMonths(1);
+                query = query.Where(x => x.CreatedAt >= fromdate && x.CreatedAt <= todate);
+            }
+            else
+            {
+                var fromdate = DateTime.Parse("01/01/" + request.year);
+                var todate = fromdate.AddYears(1);
+                query = query.Where(x => x.CreatedAt >= fromdate && x.CreatedAt <= todate);
+            }
             return new ApiSuccessResult<List<HistoryActiveVm>>(query.Select(x=> new HistoryActiveVm()
             {
                 Id = x.Id,

@@ -13,5 +13,6 @@ namespace DoctorManagement.ViewModels.Common
         public int count { get; set; }
         public int view { get; set; }
         public int rating { get; set; }
+        public decimal amount { get; set; }
     }
 }

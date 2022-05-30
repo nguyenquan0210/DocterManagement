@@ -1,19 +1,18 @@
-﻿using DoctorManagement.Data.Enums;
-using DoctorManagement.ViewModels.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoctorManagement.ViewModels.System.AnnualServiceFee
+namespace DoctorManagement.ViewModels.System.Statistic
 {
-    public class GetAnnualServiceFeePagingRequest : PagingResultBase
+    public class GetHistoryActivePagingRequest
     {
         public string? Keyword { get; set; }
         public string? day { get; set; }
         public string? month { get; set; }
         public string? year { get; set; }
-        public StatusAppointment? status { get; set; }
+        
+        public string? role { get; set; }
     }
 }

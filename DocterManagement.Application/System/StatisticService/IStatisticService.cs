@@ -10,7 +10,7 @@ namespace DoctorManagement.Application.System.StatisticService
 {
     public interface IStatisticService
     {
-        Task<ApiResult<List<HistoryActiveVm>>> ListActiveUser();
+        Task<ApiResult<List<HistoryActiveVm>>> ListActiveUser(GetHistoryActivePagingRequest request);
         Task<ApiResult<bool>> AddActiveUser(HistoryActiveCreateRequest request);
     }
 }

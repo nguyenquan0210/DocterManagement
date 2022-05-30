@@ -544,7 +544,7 @@ namespace DoctorManagement.Application.System.Users
                 query = query.Where(x => x.UserName.Contains(request.Keyword)
                  || x.PhoneNumber.Contains(request.Keyword));
             }
-            if (!string.IsNullOrEmpty(request.RoleName) && request.RoleName.ToUpper() != "ALL")
+            if (!string.IsNullOrEmpty(request.RoleName))
             {
                 query = query.Where(x => x.AppRoles.Name.Contains(request.RoleName));
             }
@@ -716,7 +716,7 @@ namespace DoctorManagement.Application.System.Users
                         CreatedAt = DateTime.Now,
                         NeedToPay = 2400000,
                         TuitionPaidFreeNumBer = request.PaidtheFee ? 2400000 : 0,
-                        Contingency = request.PaidtheFee ? 0 : -2400000,
+                        Contingency =  0 ,
                         TuitionPaidFreeText = request.PaidtheFee ? "hai triệu bốn trăm VN đồng" : "",
                         PaidDate = request.PaidtheFee ? DateTime.Now : new DateTime(),
                         Type = request.PaidtheFee ? "offline" : "online",

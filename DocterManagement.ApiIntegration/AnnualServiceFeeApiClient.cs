@@ -69,12 +69,102 @@ namespace DoctorManagement.ApiIntegration
         {
             return await GetAsync<PagedResult<AnnualServiceFeeVm>>(
                $"/api/annualServiceFee/paging?pageIndex={request.PageIndex}" +
-               $"&pageSize={request.PageSize}" +
-               $"&keyword={request.Keyword}");
+                $"&pageSize={request.PageSize}" +
+                $"&keyword={request.Keyword}" +
+                $"&day={request.day}" +
+                $"&month={request.month}" +
+                $"&year={request.year}" +
+                $"&status={request.status}");
         }
         public async Task<ApiResult<AnnualServiceFeeVm>> GetById(Guid Id)
         {
             return await GetAsync<AnnualServiceFeeVm>($"/api/annualServiceFee/{Id}");
+        }
+
+        public async Task<List<StatisticNews>> GetServiceFeeStatiticYear(GetAnnualServiceFeePagingRequest request)
+        {
+            var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
+                $"/api/annualServiceFee/paging?pageIndex={1}" +
+                $"&pageSize={10000}" +
+                $"&keyword={request.Keyword}" +
+                $"&day={request.day}" +
+                $"&month={request.month}" +
+                $"&year={request.year}" +
+                $"&status={request.status}");
+            var fromdate = DateTime.Parse("01/01/" + request.year);
+            var datenews = data.Data.Items.Where(x => x.CreatedAt.ToString("yyyy") == request.year).Select(x => x.CreatedAt.ToString("MM/yyyy")).Distinct();
+            List<StatisticNews> model = new List<StatisticNews>();
+
+            for (var i = 1; i <= 12; i++)
+            {
+                model.Add(new StatisticNews
+                {
+                    date = i == 1 ? "thg " + fromdate.ToString("MM/yyyy") : "thg " + fromdate.ToString("MM") ,
+                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy")).Sum(x=>x.TuitionPaidFreeNumBer))/1000000 ,
+                    count = data.Data.Items.Count(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy"))
+                });
+                fromdate = fromdate.AddMonths(1);
+            }
+            return model.OrderBy(x => x.date).ToList();
+        }
+        public async Task<List<StatisticNews>> GetServiceFeeStatiticDay(GetAnnualServiceFeePagingRequest request)
+        {
+            var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
+                $"/api/annualServiceFee/paging?pageIndex={1}" +
+                $"&pageSize={10000}" +
+                $"&keyword={request.Keyword}" +
+                $"&day={request.day}" +
+                $"&month={request.month}" +
+                $"&year={request.year}" +
+                $"&status={request.status}");
+            var fromdate = DateTime.Parse(request.day + "/" + request.month + "/" + request.year);
+            var datenews = data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy") == request.day + "/" + request. month + "/" + request.year).Select(x => x.CreatedAt.ToString("dd/MM/yyyy HH")).Distinct();
+           
+            List<StatisticNews> model = new List<StatisticNews>();
+
+            for (var i =1;i<=24;i++)
+            {
+                var date = datenews.FirstOrDefault(x => x == fromdate.ToString("dd/MM/yyyy HH"));
+                model.Add(new StatisticNews
+                {
+                    date = i==1 ? fromdate.ToString("HH dd/MM/yyyy ") : fromdate.ToString("HH") + "h",
+                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH")).Sum(x => x.TuitionPaidFreeNumBer)) / 1000000,
+                    count = data.Data.Items.Count(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH"))
+                });
+                fromdate = fromdate.AddHours(1);
+            }
+            return model.OrderBy(x => x.date).ToList();
+        }
+        public async Task<List<StatisticNews>> GetServiceFeeStatiticMonth(GetAnnualServiceFeePagingRequest request)
+        {
+            var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
+                $"/api/annualServiceFee/paging?pageIndex={1}" +
+                $"&pageSize={10000}" +
+                $"&keyword={request.Keyword}" +
+                $"&day={request.day}" +
+                $"&month={request.month}" +
+                $"&year={request.year}" +
+                $"&status={request.status}");
+            var fromdate = DateTime.Parse("01/" + request.month + "/" + request.year);
+            var datenews = data.Data.Items.Where(x => x.CreatedAt.ToString("MM/yyyy") == request.month + "/" + request.year).Select(x => x.CreatedAt.ToString("dd/MM/yyyy")).Distinct();
+
+            List<StatisticNews> model = new List<StatisticNews>();
+
+            for (var i = 1; i <= 31; i++)
+            {
+                if(fromdate.ToString("MM") == request.month)
+                {
+                    model.Add(new StatisticNews
+                    {
+                        date = i == 1 ? "Ng " + fromdate.ToString("dd/MM/yyyy") : "Ng "+ fromdate.ToString("dd"),
+                        amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")).Sum(x => x.TuitionPaidFreeNumBer)) / 1000000,
+                        count = data.Data.Items.Count(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy"))
+                    });
+
+                }
+                fromdate = fromdate.AddDays(1);
+            }
+            return model.OrderBy(x => x.date).ToList();
         }
 
         public async Task<ApiResult<bool>> PaymentServiceFee(AnnualServiceFeePaymentRequest request)

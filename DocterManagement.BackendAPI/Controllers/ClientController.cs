@@ -3,6 +3,7 @@ using DoctorManagement.Application.System.Users;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DoctorManagement.BackendAPI.Controllers
@@ -61,6 +62,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         public async Task<ActionResult<ApiResult<List<DoctorVm>>>> GetPatientProfile(string userName)
         {
             var user = await _doctorService.GetPatientProfile(userName);
+            return Ok(user);
+        }
+        /// <summary>
+        /// Lấy tất cả danh sách người dùng theo vai trò
+        /// </summary>
+        /// 
+        [HttpGet("get-all-user/{role}")]
+        public async Task<ActionResult<ApiResult<List<UserVm>>>> GetAllUser(string role)
+        {
+            var user = await _doctorService.GetAllUser(role);
             return Ok(user);
         }
         /// <summary>

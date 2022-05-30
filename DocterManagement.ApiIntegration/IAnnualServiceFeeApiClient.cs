@@ -18,5 +18,9 @@ namespace DoctorManagement.ApiIntegration
 
         Task<ApiResult<bool>> PaymentServiceFee(AnnualServiceFeePaymentRequest request);
         Task<ApiResult<bool>> PaymentServiceFeeDoctor(AnnualServiceFeePaymentDoctorRequest request);
+
+        Task<List<StatisticNews>> GetServiceFeeStatiticYear(GetAnnualServiceFeePagingRequest request);
+        Task<List<StatisticNews>> GetServiceFeeStatiticDay(GetAnnualServiceFeePagingRequest request);
+        Task<List<StatisticNews>> GetServiceFeeStatiticMonth(GetAnnualServiceFeePagingRequest request);
     }
 }
