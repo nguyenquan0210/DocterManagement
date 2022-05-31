@@ -28,15 +28,21 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 Diagnose = request.Diagnose,
                 Note = request.Note,
                 StatusIllness = request.StatusIllness,
-                Prescription = request.Prescription,
                 CreatedAt = DateTime.Now,
                 Status = Status.Active,
+                TotalAmount = request.TotalAmount,
                 AppointmentId = request.AppointmentId,
             };
             _context.MedicalRecords.Add(medical);
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            if (rs != 0)
+            {
+                var appointment = await _context.Appointments.FindAsync(request.AppointmentId);
+                appointment.Status = StatusAppointment.complete;
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("");
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -69,7 +75,6 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 AppointmentId = x.AppointmentId,
                 Diagnose = x.Diagnose,
                 Note = x.Note,
-                Prescription = x.Prescription,
                 StatusIllness = x.StatusIllness,
                 Status = x.Status
             }).ToListAsync();
@@ -95,7 +100,6 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                     AppointmentId = x.AppointmentId,
                     Diagnose = x.Diagnose,
                     Note = x.Note,
-                    Prescription = x.Prescription,
                     StatusIllness = x.StatusIllness,
                     Status = x.Status
 
@@ -123,7 +127,6 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 AppointmentId = medicalRecords.AppointmentId,
                 Diagnose = medicalRecords.Diagnose,
                 Note = medicalRecords.Note,
-                Prescription = medicalRecords.Prescription,
                 Status = medicalRecords.Status
             };
             return new ApiSuccessResult<MedicalRecordVm>(rs);
@@ -135,7 +138,6 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             if (medical == null) return new ApiSuccessResult<bool>(false);
 
             medical.Status = request.Status;
-            medical.Prescription = request.Prescription;
             medical.Diagnose = request.Diagnose;
             medical.StatusIllness = request.StatusIllness;
             medical.Note = request.Note;

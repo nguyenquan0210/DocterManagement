@@ -29,7 +29,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _medicalRecordService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }

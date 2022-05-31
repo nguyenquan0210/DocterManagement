@@ -281,7 +281,6 @@ namespace DoctorManagement.Application.Catalog.Appointment
                         Date = x.m.CreatedAt,
                         Diagnose = x.m.Diagnose,
                         Note = x.m.Note,
-                        Prescription = x.m.Prescription
                     }: new MedicalRecordVm()
 
                 }).ToListAsync();

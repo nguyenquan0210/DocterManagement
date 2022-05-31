@@ -15,9 +15,7 @@ namespace DoctorManagement.ViewModels.Catalog.MedicalRecords
         public StatusIllness StatusIllness { get; set; }
 
         public string? Note { get; set; }
-
-        public Guid PatientId { get; set; }
-        public Guid DoctorId { get; set; }
+        public decimal TotalAmount { get; set; }
         public Guid AppointmentId { get; set; }
     }
 }

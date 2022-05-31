@@ -10,6 +10,7 @@ namespace DoctorManagement.Data.Enums
     {
         heavy,
         central,
-        light
+        light, 
+        Other
     }
 }

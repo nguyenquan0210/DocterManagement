@@ -11,8 +11,6 @@ namespace DoctorManagement.Data.Entities
     {
         public Guid Id { get; set; }
         public string Diagnose { get; set; }
-        public string Prescription { get; set; }
-
         public DateTime CreatedAt { get; set; }
         public StatusIllness StatusIllness { get; set; }
 
@@ -22,5 +20,7 @@ namespace DoctorManagement.Data.Entities
 
         public Appointments Appointments { get; set; }
         public Guid AppointmentId { get; set; }
+
+        public List<MedicineDetailts> MedicineDetailts { get; set; }
     }
 }

@@ -479,7 +479,7 @@ namespace DoctorManagement.Application.System.Users
                     View = doctor.View,
                     TimeWorking = doctor.TimeWorking,
                     Location = new LocationVm() { Id = location.Id, Name = location.Name, District = new DistrictVm() { Id = district.Id, Name = district.Name, Province = new ProvinceVm() { Id = province.Id, Name = province.Name } } },
-                    GetClinic = new GetClinicVm() { Id = clinic.Id, Name = clinic.Name },
+                    GetClinic = clinic == null?new GetClinicVm(): new GetClinicVm() { Id = clinic.Id, Name = clinic.Name },
                     GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.spe.Id, Title = x.spe.Title }).ToList(),
                     Rates = rates.Select(x => new RateVm() { Id = x.r.Id, Rating = x.r.Rating }).ToList(),
                     Galleries = galleries.Select(x => new GalleryVm() { Id = x.Id, Name = GALLERY_CONTENT_FOLDER_NAME + "/" + x.Img }).ToList(),
@@ -711,17 +711,27 @@ namespace DoctorManagement.Application.System.Users
                         };
                         doctor.ServicesSpecialities.Add(servicesSpecialities);
                     }
+                    var day = DateTime.Now.ToString("dd") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("YY");
+                    count = await _context.AnnualServiceFees.Where(x => x.No.Contains("DMPM" + day)).CountAsync();
+                    str = "";
+                    if (count < 9) str = "DMPM" + day + "00000" + (count + 1);
+                    else if (count < 99) str = "DMPM" + day + "0000" + (count + 1);
+                    else if (count < 999) str = "DMPM" + day + "000" + (count + 1);
+                    else if (count < 9999) str = "DMPM" + day + "00" + (count + 1);
+                    else if (count < 99999) str = "DMPM" + day + "0" + (count + 1);
+                    else if (count < 999999) str = "DMPM" + day + (count + 1);
                     doctor.AnnualServiceFees = new List<AnnualServiceFees>();
                     var serviceFee = new AnnualServiceFees()
                     {
                         CreatedAt = DateTime.Now,
+                        No = str,
                         NeedToPay = information.ServiceFee,
                         TuitionPaidFreeNumBer = request.PaidtheFee ? information.ServiceFee : 0,
                         InitialAmount = information.ServiceFee,
                         Contingency =  0 ,
                         TuitionPaidFreeText = request.PaidtheFee ? "" : "",
                         PaidDate = request.PaidtheFee ? DateTime.Now : new DateTime(),
-                        Type = request.PaidtheFee ? "offline" : "online",
+                        Type = request.PaidtheFee ? "trực tiếp" : "chưa nộp",
                         Status = request.PaidtheFee ? StatusAppointment.complete : StatusAppointment.pending,
                         Note = request.PaidtheFee ? "Đã thanh toán khi tạo hồ sơ đăng kí thành viên đội ngủ bác sĩ sử dụng dịch vụ." : "",
                     };

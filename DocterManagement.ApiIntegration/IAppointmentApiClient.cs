@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Appointment;
+using DoctorManagement.ViewModels.Catalog.MedicalRecords;
 using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace DoctorManagement.ApiIntegration
         Task<ApiResult<bool>> Update(AppointmentUpdateRequest request);
         Task<ApiResult<bool>> CanceledAppointment(AppointmentCancelRequest request);
         Task<ApiResult<string>> Create(AppointmentCreateRequest request);
-
+        Task<ApiResult<bool>> CreateMedicalRecord(MedicalRecordCreateRequest request);
         Task<int> Delete(Guid Id);
 
         Task<ApiResult<List<AppointmentVm>>> GetAllAppointment();

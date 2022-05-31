@@ -1,7 +1,9 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Catalog.Appointment;
+using DoctorManagement.ViewModels.Catalog.MedicalRecords;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DoctorManagement.DoctorApp.Controllers
 {
@@ -113,8 +115,24 @@ namespace DoctorManagement.DoctorApp.Controllers
             //var doctor = await _appointmentApiClient.Get
             if (result.IsSuccessed)
             {
+                ViewBag.Status = SeletectStatus(StatusIllness.Other);
                 ViewBag.Appointment = result.Data;
                 return View();
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateMedicalRecord(MedicalRecordCreateRequest request)
+        {
+            ViewBag.Appointment = (await _appointmentApiClient.GetById(request.AppointmentId)).Data;
+            ViewBag.Status = SeletectStatus(request.StatusIllness);
+            if (!ModelState.IsValid)
+                return View(request);
+            var result = await _appointmentApiClient.CreateMedicalRecord(request);
+            //var doctor = await _appointmentApiClient.Get
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("DetailtAppointment", new {id = request.AppointmentId});
             }
             return RedirectToAction("Error", "Home");
         }
@@ -130,7 +148,23 @@ namespace DoctorManagement.DoctorApp.Controllers
             }
             return RedirectToAction("Error", "Home");
         }
-
+        public List<SelectListItem> SeletectStatus(StatusIllness status)
+        {
+            List<SelectListItem> lstatus = new List<SelectListItem>()
+            {
+                new SelectListItem(text: "Nặng", value: StatusIllness.heavy.ToString()),
+                new SelectListItem(text: "Vừa", value: StatusIllness.central.ToString()),
+                new SelectListItem(text: "Nhẹ", value: StatusIllness.light.ToString()),
+                new SelectListItem(text: "Khác", value: StatusIllness.Other.ToString())
+            };
+            var rs = lstatus.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = status.ToString() == x.Value
+            }).ToList();
+            return rs;
+        }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid Id)
         {
