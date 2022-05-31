@@ -14,6 +14,7 @@ namespace DoctorManagement.Data.Entities
         public StatusAppointment Status { get; set; }
         public Guid DoctorId { get; set; }
         public decimal NeedToPay { get; set; }
+        public decimal InitialAmount { get; set; }
         public decimal TuitionPaidFreeNumBer { get; set; }
         public string TuitionPaidFreeText { get; set; }
         public decimal Contingency { get; set; }

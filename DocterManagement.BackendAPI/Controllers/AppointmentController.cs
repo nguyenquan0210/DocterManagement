@@ -69,7 +69,23 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest();
             return Ok(result);
         }
-
+        /// <summary>
+        /// Hủy đặt khám 
+        /// </summary>
+        /// 
+        [HttpPut("cancel-appointment")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<bool>>> CanceledAppointment([FromBody] AppointmentCancelRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _appointmentService.CanceledAppointment(request);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
+        }
         /// <summary>
         /// Lấy danh sách đặt khám phân trang
         /// </summary>

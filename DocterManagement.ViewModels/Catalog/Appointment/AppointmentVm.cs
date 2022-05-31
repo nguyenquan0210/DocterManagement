@@ -26,5 +26,6 @@ namespace DoctorManagement.ViewModels.Catalog.Appointment
         public PatientVm Patient { get; set; }
         public DoctorVm Doctor { get; set; }
         public MedicalRecordVm MedicalRecord { get; set; }
+        public string CancelReason { get; set; }
     }
 }

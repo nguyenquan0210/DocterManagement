@@ -107,23 +107,26 @@ namespace DoctorManagement.DoctorApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> Detailt(Guid id)
+        public async Task<IActionResult> CreateMedicalRecord(Guid id)
+        {
+            var result = await _appointmentApiClient.GetById(id);
+            //var doctor = await _appointmentApiClient.Get
+            if (result.IsSuccessed)
+            {
+                ViewBag.Appointment = result.Data;
+                return View();
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> DetailtAppointment(Guid id)
         {
             var result = await _appointmentApiClient.GetById(id);
             if (result.IsSuccessed)
             {
-                var appointmentData = result.Data;
-                ViewBag.Status = appointmentData.Status == StatusAppointment.complete ? "Ngừng hoạt động" : appointmentData.Status == StatusAppointment.pending ? "Hoạt động" : "không hoạt động";
-                var Appointment = new AppointmentVm()/*_mapper.Map<AppointmentVm>(Appointmentdata);*/
-                {
-                    //Title = appointmentData.Title,
-                    Id = id,
-                    No = appointmentData.No,
-                    //Description = appointmentData.Description,
-                    Status = appointmentData.Status, //== Status.Active ? true : false
-                    //SortOrder = appointmentData.SortOrder
-                };
-                return View(Appointment);
+                //ViewBag.Status = appointmentData.Status == StatusAppointment.complete ? "Ngừng hoạt động" : appointmentData.Status == StatusAppointment.pending ? "Hoạt động" : "không hoạt động";
+                
+                return View(result.Data);
             }
             return RedirectToAction("Error", "Home");
         }
@@ -133,6 +136,18 @@ namespace DoctorManagement.DoctorApp.Controllers
         {
             var result = await _appointmentApiClient.Delete(Id);
             return Json(new { response = result });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CanceledAppointment(AppointmentCancelRequest request)
+        {
+            if (!ModelState.IsValid) return RedirectToAction("DetailtAppointment", new { id = request.Id });
+            var result = await _appointmentApiClient.CanceledAppointment(request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("DetailtAppointment", new {id = request.Id});
+            }
+            return RedirectToAction("Error", "Home");
         }
     }
 }

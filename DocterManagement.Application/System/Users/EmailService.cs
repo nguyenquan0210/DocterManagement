@@ -57,7 +57,14 @@ namespace DoctorManagement.Application.System.Users
 
             await SendEmail(userEmailOptions);
         }
+        public async Task SendEmailCancelAppoitment(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolders("Hủy lịch khám #{{No}}", userEmailOptions.PlaceHolders);
 
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("CancelAppointment"), userEmailOptions.PlaceHolders);
+
+            await SendEmail(userEmailOptions);
+        }
         public EmailService(IOptions<SMTPConfigModel> smtpConfig)
         {
             _smtpConfig = smtpConfig.Value;

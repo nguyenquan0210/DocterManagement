@@ -86,7 +86,8 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 DoctorId = request.DoctorId,
                 Note = request.Note,
                 IsDoctor = request.IsDoctor,
-                Stt = stt + 1
+                Stt = stt + 1,
+                CancelDate = new DateTime()
             };
             if (request.formFiles != null)
             {
@@ -303,15 +304,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
             var patient = await _context.Patients.FindAsync(appointments.PatientId);
             var slotsche = await _context.schedulesSlots.FindAsync(appointments.SchedulesSlotId);
             var schedule = await _context.Schedules.FindAsync(slotsche.ScheduleId);
-            string[] locationIds = new string[] { patient.LocationId.ToString(), doctor.LocationId.ToString() };
-            string fulladdress = "";
-            for (var i = 0; i < locationIds.Length;i++)
-            {
-                var subdistrict = await _context.Locations.FindAsync(Guid.Parse(locationIds[i]));
-                var district = await _context.Locations.FindAsync(subdistrict.ParentId);
-                var province = await _context.Locations.FindAsync(district.ParentId);
-                fulladdress = fulladdress +  subdistrict.Name + "," + district.Name + "," + province.Name + (i==0?";":"");
-            }
+           
             var rs = new AppointmentVm()
             {
                 Id = appointments.Id,
@@ -321,6 +314,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 IsDoctor = appointments.IsDoctor,
                 No = appointments.No,
                 Note = appointments.Note,
+                CancelReason = appointments.CancelReason,
                 Schedule = new ScheduleVm()
                 {
                     Id = schedule.Id,
@@ -342,20 +336,21 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     FirstName = doctor.FirstName,
                     LastName = doctor.LastName,
                     MapUrl = doctor.MapUrl,
-                    FullAddress = doctor.Address+", " + fulladdress.Split(";")[1],
+                    FullAddress = doctor.FullAddress,
                     Img= doctor.Img
                 },
                 Patient = new PatientVm()
                 {
                     Id = patient.PatientId,
                     Address = patient.Address,
-                    FullAddress = patient.Address + ", " + fulladdress.Split(";")[0],
+                    FullAddress = patient.FullAddress,
                     Name = patient.Name,
                     Img = patient.Img,
                     Dob = patient.Dob,
                     Gender = patient.Gender,
                     Identitycard = patient.Identitycard,
                     RelativePhone = patient.RelativePhone,
+                    RelativeEmail = patient.RelativeEmail,
                     No = patient.No,
                 }
             };
@@ -370,6 +365,53 @@ namespace DoctorManagement.Application.Catalog.Appointment
             appointments.Status = request.Status;
             await _context.SaveChangesAsync();
             return  new ApiSuccessResult<bool>();
+        }
+
+        public async Task<ApiResult<bool>> CanceledAppointment(AppointmentCancelRequest request)
+        {
+            var appointments = await _context.Appointments.FindAsync(request.Id);
+            if (appointments == null) return new ApiErrorResult<bool>("null");
+            appointments.Status = StatusAppointment.cancel;
+            appointments.CancelReason = request.CancelReason;
+            appointments.CancelDate = DateTime.Now;
+            var slot = await _context.schedulesSlots.FindAsync(appointments.SchedulesSlotId);
+            var schedule = await _context.Schedules.FindAsync(slot.ScheduleId);
+            if (request.Checked== "patient"){
+                
+                slot.IsBooked = false;
+                
+                schedule.BookedQty = schedule.BookedQty - 1;
+                schedule.AvailableQty = schedule.AvailableQty + 1;
+            }
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0)
+            {
+                var user = await _context.Users.FindAsync(appointments.DoctorId);
+                var doctor = await _context.Doctors.FindAsync(appointments.DoctorId);
+                var patient = await _context.Patients.FindAsync(appointments.PatientId);
+                var userpatient = await _context.Users.FindAsync(patient.UserId);
+                if (user != null && patient != null) await SendEmailCancelAppoitment(user, userpatient, patient, schedule, slot, appointments);
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("");
+        }
+        private async Task SendEmailCancelAppoitment(AppUsers user, AppUsers userpatient, Patients patients, Schedules schedules, SchedulesSlots schedulesSlots, Appointments appointment)
+        {
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string>() { user.Email, userpatient.Email },
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{DoctorName}}",user.Doctors.Prefix +" " + user.Doctors.LastName + " " + user.Doctors.FirstName),
+                    new KeyValuePair<string, string>("{{PatientName}}", patients.Name),
+                    new KeyValuePair<string, string>("{{Date}}", schedules.CheckInDate.ToShortDateString()),
+                    new KeyValuePair<string, string>("{{CancelReason}}", appointment.CancelReason),
+                    new KeyValuePair<string, string>("{{No}}", appointment.No),
+                    new KeyValuePair<string, string>("{{CancelDate}}", appointment.CancelDate.ToString("HH:mm:ss dd/MM/yyyy")),
+                    new KeyValuePair<string, string>("{{TimeSpan}}", schedulesSlots.FromTime.ToString().Substring(0,5)+"-"+schedulesSlots.ToTime.ToString().Substring(0,5)),
+                }
+            };
+            await _emailService.SendEmailCancelAppoitment(options);
         }
     }
 }

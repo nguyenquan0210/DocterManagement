@@ -679,6 +679,7 @@ namespace DoctorManagement.Application.System.Users
                     var district = await _context.Locations.FindAsync(location.ParentId);
                     var province = await _context.Locations.FindAsync(district.ParentId);
                     var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
+                    var information = await _context.Informations.FirstOrDefaultAsync();
                     var doctor = new Doctors()
                     {   
                         UserId = user.Id,
@@ -714,10 +715,11 @@ namespace DoctorManagement.Application.System.Users
                     var serviceFee = new AnnualServiceFees()
                     {
                         CreatedAt = DateTime.Now,
-                        NeedToPay = 2400000,
-                        TuitionPaidFreeNumBer = request.PaidtheFee ? 2400000 : 0,
+                        NeedToPay = information.ServiceFee,
+                        TuitionPaidFreeNumBer = request.PaidtheFee ? information.ServiceFee : 0,
+                        InitialAmount = information.ServiceFee,
                         Contingency =  0 ,
-                        TuitionPaidFreeText = request.PaidtheFee ? "hai triệu bốn trăm VN đồng" : "",
+                        TuitionPaidFreeText = request.PaidtheFee ? "" : "",
                         PaidDate = request.PaidtheFee ? DateTime.Now : new DateTime(),
                         Type = request.PaidtheFee ? "offline" : "online",
                         Status = request.PaidtheFee ? StatusAppointment.complete : StatusAppointment.pending,

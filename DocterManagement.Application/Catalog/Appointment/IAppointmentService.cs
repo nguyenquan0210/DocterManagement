@@ -17,6 +17,8 @@ namespace DoctorManagement.Application.Catalog.Appointment
 
         Task<ApiResult<int>> Delete(Guid Id);
 
+        Task<ApiResult<bool>> CanceledAppointment(AppointmentCancelRequest request);
+
         Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPaging(GetAppointmentPagingRequest request);
 
         Task<ApiResult<List<AppointmentVm>>> GetAll();

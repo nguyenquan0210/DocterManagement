@@ -20,8 +20,6 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Prescription).IsRequired().HasMaxLength(150);
             builder.Property(x => x.Note).IsRequired().HasMaxLength(255);
 
-            builder.HasOne(x => x.Patients).WithMany(x => x.MedicalRecords).HasForeignKey(x => x.PatientId).OnDelete(DeleteBehavior.ClientCascade);
-            builder.HasOne(x => x.Doctors).WithMany(x => x.MedicalRecords).HasForeignKey(x => x.DoctorId).OnDelete(DeleteBehavior.ClientCascade);
             builder.HasOne(x => x.Appointments).WithOne(x => x.MedicalRecords).HasForeignKey<MedicalRecord>(x => x.AppointmentId);
 
         }

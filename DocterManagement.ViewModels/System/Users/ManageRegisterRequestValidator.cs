@@ -17,7 +17,6 @@ namespace DoctorManagement.ViewModels.System.Users
                 .MaximumLength(100).WithMessage("Họ không được quá 100 ký tự");
 
             RuleFor(x => x.Dob).NotEmpty().WithMessage("Ngày sinh là bắt buộc là bắt buộc");
-
             RuleFor(x => x.Email).NotEmpty().WithMessage("E-mail là bắt buộc")
                 .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")
                 .WithMessage("Định dạng email không khớp");

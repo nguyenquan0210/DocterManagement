@@ -42,7 +42,9 @@ namespace DoctorManagement.ViewModels.System.Users
         public ICollection<Guid> SpecialityId { get; set; }
 
         [Display(Name = "Phòng Khám")]
-        public Guid ClinicId { get; set; }
+        
+        public Guid? ClinicId { get; set; }
+
         [Display(Name = "Thành Phố")]
         public Guid ProvinceId { get; set; }
         [Display(Name = "Quận/huyện")]

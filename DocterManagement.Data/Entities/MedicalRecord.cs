@@ -18,11 +18,8 @@ namespace DoctorManagement.Data.Entities
 
         public Status Status { get; set; }
         public string Note { get; set; }
+        public decimal TotalAmount { get; set; }
 
-        public Patients Patients { get; set; }
-        public Guid PatientId { get; set; }
-        public Doctors Doctors { get; set; }
-        public Guid DoctorId { get; set; }
         public Appointments Appointments { get; set; }
         public Guid AppointmentId { get; set; }
     }

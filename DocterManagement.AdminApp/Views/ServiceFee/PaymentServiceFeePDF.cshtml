@@ -153,7 +153,7 @@
 						</thead>
 						<tbody>
 							@{
-								var mainamount = Model.Information.ServiceFee;
+								var mainamount = Model.InitialAmount;
 								var surplusamount = mainamount - (Model.TuitionPaidFreeNumBer - Model.Contingency);
 								var totalamount = mainamount > surplusamount ? mainamount - surplusamount : 0;
 							}

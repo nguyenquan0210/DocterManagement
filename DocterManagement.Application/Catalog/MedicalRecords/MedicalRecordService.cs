@@ -31,9 +31,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 Prescription = request.Prescription,
                 CreatedAt = DateTime.Now,
                 Status = Status.Active,
-                PatientId = request.PatientId,
                 AppointmentId = request.AppointmentId,
-                DoctorId = request.DoctorId
             };
             _context.MedicalRecords.Add(medical);
             var rs = await _context.SaveChangesAsync();
@@ -68,8 +66,6 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             {
                 Id = x.Id,
                 Date = x.CreatedAt,
-                DoctorId= x.DoctorId,
-                PatientId = x.PatientId,
                 AppointmentId = x.AppointmentId,
                 Diagnose = x.Diagnose,
                 Note = x.Note,
@@ -96,8 +92,6 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 {
                     Id = x.Id,
                     Date = x.CreatedAt,
-                    DoctorId = x.DoctorId,
-                    PatientId = x.PatientId,
                     AppointmentId = x.AppointmentId,
                     Diagnose = x.Diagnose,
                     Note = x.Note,
@@ -125,8 +119,6 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             {
                 Id = medicalRecords.Id,
                 Date = medicalRecords.CreatedAt,
-                PatientId = medicalRecords.PatientId,
-                DoctorId = medicalRecords.DoctorId,
                 StatusIllness = medicalRecords.StatusIllness,
                 AppointmentId = medicalRecords.AppointmentId,
                 Diagnose = medicalRecords.Diagnose,

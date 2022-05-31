@@ -17,5 +17,6 @@ namespace DoctorManagement.Application.System.Users
 
         Task SendEmailChangePassword(UserEmailOptions userEmailOptions);
         Task SendEmailAppoitment(UserEmailOptions userEmailOptions);
+        Task SendEmailCancelAppoitment(UserEmailOptions userEmailOptions);
     }
 }

@@ -145,7 +145,7 @@
                          <div class="col-4">
                                 <label asp-for="ProvinceId" class="control-label mt-4"></label>
                                 <select asp-for="ProvinceId" asp-items="ViewBag.Province" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn Thành Phố --</option>
+                                    <option >-- Chọn Thành Phố --</option>
                                 </select>
                                 <span asp-validation-for="ProvinceId" class="text-danger"></span>
                          </div>
@@ -186,7 +186,7 @@
                             <div class="col-4">
                                 <label asp-for="ClinicId" class="control-label mt-4"></label>
                                 <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn phòng khám --</option>
+                                    <option value="">-- Chọn phòng khám --</option>
                                 </select>
                                 <span asp-validation-for="ClinicId" class="text-danger"></span>
                             </div>

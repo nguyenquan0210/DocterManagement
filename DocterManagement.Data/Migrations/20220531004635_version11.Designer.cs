@@ -4,6 +4,7 @@ using DoctorManagement.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoctorManagement.Data.Migrations
 {
     [DbContext(typeof(DoctorManageDbContext))]
-    partial class DoctorManageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220531004635_version11")]
+    partial class version11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,9 +101,6 @@ namespace DoctorManagement.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CancelDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CancelReason")
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
@@ -178,7 +177,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "6465dfa0-6e09-471e-b2ac-98051cecbc1f",
+                            ConcurrencyStamp = "16743055-bd8f-4a4c-bf6e-43ef124a943e",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -186,7 +185,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"),
-                            ConcurrencyStamp = "5d8e7ed8-a006-4905-bc4c-e812dbd3b27c",
+                            ConcurrencyStamp = "4e766e27-92af-4661-a754-d07feb471416",
                             Description = "doctor role",
                             Name = "doctor",
                             NormalizedName = "doctor"
@@ -194,7 +193,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("50fe257e-6475-41f0-93f7-f530d622362b"),
-                            ConcurrencyStamp = "b4d9a432-4c27-4d01-9f49-764e7db2a537",
+                            ConcurrencyStamp = "1b1b9828-8e53-4390-9b1b-4e0db526fcae",
                             Description = "patient role",
                             Name = "patient",
                             NormalizedName = "patient"
@@ -275,14 +274,14 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "db3ce7d0-f38b-4b35-a0ab-5df6bfa81454",
+                            ConcurrencyStamp = "d353b462-1ac9-445b-8a01-7e8dfe7b09ee",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nguyenquan52000@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyenquan52000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAwtKKY4TkLIcvPYxTBWC5k7YUdAc1kvNVFZKQYP40VMwSGggSkkgEVLpz1SIxO91w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECCDwsA5w7T1nxOw8DUtbmblPMizCMvLOF8LdS4KlBxAOjtXL8BO7Om9lOVqeaNQow==",
                             PhoneNumber = "0373951042",
                             PhoneNumberConfirmed = false,
                             RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
@@ -934,7 +933,7 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<Guid?>("DoctorsUserId")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
@@ -942,7 +941,7 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<Guid?>("PatientsPatientId")
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Prescription")
@@ -956,17 +955,14 @@ namespace DoctorManagement.Data.Migrations
                     b.Property<int>("StatusIllness")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId")
                         .IsUnique();
 
-                    b.HasIndex("DoctorsUserId");
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("PatientsPatientId");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("MedicalRecords", (string)null);
                 });
@@ -1565,15 +1561,23 @@ namespace DoctorManagement.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DoctorManagement.Data.Entities.Doctors", null)
+                    b.HasOne("DoctorManagement.Data.Entities.Doctors", "Doctors")
                         .WithMany("MedicalRecords")
-                        .HasForeignKey("DoctorsUserId");
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
 
-                    b.HasOne("DoctorManagement.Data.Entities.Patients", null)
+                    b.HasOne("DoctorManagement.Data.Entities.Patients", "Patients")
                         .WithMany("MedicalRecords")
-                        .HasForeignKey("PatientsPatientId");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
 
                     b.Navigation("Appointments");
+
+                    b.Navigation("Doctors");
+
+                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Patients", b =>

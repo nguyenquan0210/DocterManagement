@@ -15,6 +15,8 @@ namespace DoctorManagement.Data.Entities
         public StatusAppointment Status { get; set; }
         public Guid SchedulesSlotId { get; set; }
         public string No { get; set; }
+        public string CancelReason { get; set; }
+        public DateTime CancelDate { get; set; }
         public string Note { get; set; }
         public bool IsDoctor { get; set; }
         public int Stt { get; set; }

@@ -1,0 +1,61 @@
+﻿@model DoctorManagement.ViewModels.Catalog.MedicalRecords.MedicalRecordCreateRequest
+
+@{
+    ViewData["Title"] = "CreateMedicalRecord";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CreateMedicalRecord</h1>
+
+<h4>MedicalRecordCreateRequest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateMedicalRecord">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Diagnose" class="control-label"></label>
+                <input asp-for="Diagnose" class="form-control" />
+                <span asp-validation-for="Diagnose" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prescription" class="control-label"></label>
+                <input asp-for="Prescription" class="form-control" />
+                <span asp-validation-for="Prescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusIllness" class="control-label"></label>
+                <input asp-for="StatusIllness" class="form-control" />
+                <span asp-validation-for="StatusIllness" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Note" class="control-label"></label>
+                <input asp-for="Note" class="form-control" />
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PatientId" class="control-label"></label>
+                <input asp-for="PatientId" class="form-control" />
+                <span asp-validation-for="PatientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoctorId" class="control-label"></label>
+                <input asp-for="DoctorId" class="form-control" />
+                <span asp-validation-for="DoctorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppointmentId" class="control-label"></label>
+                <input asp-for="AppointmentId" class="form-control" />
+                <span asp-validation-for="AppointmentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

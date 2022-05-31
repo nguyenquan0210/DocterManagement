@@ -57,6 +57,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                             CreatedAt = item.CreatedAt.AddDays(366),
                             DoctorId = item.DoctorId,
                             NeedToPay = item.Contingency > information.ServiceFee? 0 : (information.ServiceFee - item.Contingency),
+                            InitialAmount = information.ServiceFee,
                             TuitionPaidFreeNumBer=0,
                             Contingency = item.Contingency > information.ServiceFee?item.Contingency - information.ServiceFee:0,
                             Type = item.Contingency > information.ServiceFee ? item.Type:"Chưa Nộp",
@@ -172,6 +173,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                 TransactionCode = service.TransactionCode,
                 TuitionPaidFreeNumBer = service.TuitionPaidFreeNumBer,
                 TuitionPaidFreeText = service.TuitionPaidFreeText,
+                InitialAmount = service.InitialAmount,
                 Type = service.Type,
                 CancelReason = service.CancelReason,
                 Information = new InformationVm()
@@ -229,6 +231,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                 NeedToPay = (service.TuitionPaidFreeNumBer - service.Contingency) > 0 ? service.TuitionPaidFreeNumBer - service.Contingency : 0,
                 Contingency = (service.TuitionPaidFreeNumBer - service.Contingency)>0?0: service.Contingency - service.TuitionPaidFreeNumBer,
                 TuitionPaidFreeNumBer = 0,
+                InitialAmount = service.InitialAmount,
                 TuitionPaidFreeText = "0 VN đồng.",
                 Type = "Chưa Nộp",
                 PaidDate = new DateTime(),
