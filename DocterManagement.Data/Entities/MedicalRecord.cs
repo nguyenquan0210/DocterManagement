@@ -22,5 +22,6 @@ namespace DoctorManagement.Data.Entities
         public Guid AppointmentId { get; set; }
 
         public List<MedicineDetailts> MedicineDetailts { get; set; }
+        public List<ServiceDetailts> ServiceDetailts { get; set; }
     }
 }

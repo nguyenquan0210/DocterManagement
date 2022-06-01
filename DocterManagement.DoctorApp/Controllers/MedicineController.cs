@@ -51,6 +51,8 @@ namespace DoctorManagement.DoctorApp.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] MedicineCreateRequest request)
         {
+            var user = await _userApiClient.GetByUserName(User.Identity.Name);
+            ViewBag.ParentId = user.Data.DoctorVm.GetClinic.Id == new Guid() ? user.Data.DoctorVm.UserId : user.Data.DoctorVm.GetClinic.Id;
             if (!ModelState.IsValid)
                 return View();
 
@@ -63,7 +65,7 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+         
             return View(request);
         }
         [HttpGet]
@@ -84,7 +86,8 @@ namespace DoctorManagement.DoctorApp.Controllers
                     IsDeleted = Medicine.IsDeleted,
                     Description = Medicine.Description,
                     Price = Medicine.Price,
-
+                    Unit = Medicine.Unit,
+                    ImageText = Medicine.Image,
                 };
                 return View(updateRequest);
             }
@@ -106,7 +109,7 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+           
             return View(request);
         }
 

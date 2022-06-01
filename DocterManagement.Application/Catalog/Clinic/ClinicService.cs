@@ -5,6 +5,7 @@ using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
+using DoctorManagement.ViewModels.Catalog.Service;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.Common.Extensions;
@@ -296,7 +297,6 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     No = u.No,
                     UserId = u.UserId,
                     Booking = u.Booking,
-                    Services = u.Services,
                     Slug = u.Slug,
                     Address = u.Address,
                     Dob = u.Dob,
@@ -307,6 +307,13 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     MapUrl = u.MapUrl,
                     Prefix = u.Prefix,
                     Note = u.Note,
+                    Services = u.Services.Select(s => new ServiceVm()
+                    {
+                        Id = s.Id,
+                        Description = s.Description,
+                        ServiceName = s.ServiceName,
+                        Price = s.Price,
+                    }).ToList(),
                     User = new UserVm()
 					{
                         Email = u.AppUsers.Email,

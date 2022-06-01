@@ -60,7 +60,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+           
             return View(request);
         }
         [HttpGet]
@@ -103,7 +103,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+           
             return View(request);
         }
         

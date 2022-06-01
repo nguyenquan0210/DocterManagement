@@ -16,6 +16,7 @@ namespace DoctorManagement.Data.Configuration
             builder.ToTable("MedicineDetailts");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Use).HasMaxLength(150);
 
             builder.HasOne(x => x.Medicine).WithMany(x => x.MedicineDetailts).HasForeignKey(x => x.MedicineId);
             builder.HasOne(x => x.MedicalRecord).WithMany(x => x.MedicineDetailts).HasForeignKey(x => x.MedicalRecordId);

@@ -284,7 +284,6 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Dob.ToString()), "dob");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
             requestContent.Add(new StringContent(request.Educations.ToString()), "educations");
-            requestContent.Add(new StringContent(request.Services.ToString()), "services");
             requestContent.Add(new StringContent(request.Note.ToString()), "note");
             requestContent.Add(new StringContent(request.Prizes.ToString()), "prizes");
             requestContent.Add(new StringContent(request.TimeWorking.ToString()), "timeWorking");

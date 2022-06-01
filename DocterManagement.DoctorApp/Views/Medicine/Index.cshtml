@@ -28,10 +28,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý chuyên khoa</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách chuyên khoa</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý kệ thuốc</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách toa thuốc</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Danh sách chuyên khoa phổ biến</h6>
+    <h6 class="font-weight-bolder mb-0">Danh sách toa thuốc</h6>
 }
 @section Search{
 	<form asp-action="Index"  method="get">
@@ -50,9 +50,9 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả danh sách chuyên khoa</h5>
+                            <h5 class="mb-0">Danh sách toa thuốc</h5>
                             <p class="text-sm mb-0">
-                                
+                               Tất cả danh sách các toa thuốc trong kệ thuốc. 
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4 ">
@@ -88,6 +88,7 @@
                                     <th>Stt</th>
                                     <th>Tên thuốc</th>
                                     <th>Mô tả</th>
+                                    <th>Đơn vị</th>
                                     <th>Giá tiền</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
@@ -108,13 +109,14 @@
                                             </div>
                                         </td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Unit</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Price</h6></td>
                                         
                                         <td>
                                             <span class="badge @(item.IsDeleted ? "badge-danger" : "badge-success") badge-sm" id="status_@item.Id">@(item.IsDeleted ?  "đã khóa" :"Hoạt động")</span>
                                         </td>
                                         <td class="text-sm">
-                                            <a  asp-action = "DetailtSpeciality" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
+                                            <a  asp-action = "DetailtMedicine" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
                                                 <i class="fas fa-eye text-secondary"></i>
                                             </a>
                                             <a  asp-action = "Update" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
@@ -131,10 +133,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                   <th>Mã  khoa</th>
-                                    <th>Tên khoa</th>
+                                    <th>Stt</th>
+                                    <th>Tên thuốc</th>
                                     <th>Mô tả</th>
-                                    <th>Vị trí sắp xếp</th>
+                                    <th>Đơn vị</th>
+                                    <th>Giá tiền</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -305,12 +308,12 @@
 
     <script>
 
-         var menu_bd = document.getElementById("menu_speciality");
+        var menu_bd = document.getElementById("menu-medicine");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_speciality");
+        var a_xbd = document.getElementById("a-medicine");
         a_xbd.classList.add("active");
-        var usersExample = document.getElementById("managespeciality");
+        var usersExample = document.getElementById("medicine");
         usersExample.classList.add("show");
 
 

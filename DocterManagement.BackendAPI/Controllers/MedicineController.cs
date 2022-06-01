@@ -19,7 +19,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// Tạo mới chuyên khoa
+        /// Tạo mới kệ thuốc
         [HttpPost]
         [Authorize]
         [Consumes("multipart/form-data")]
@@ -36,7 +36,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Xóa chuyên khoa
+        /// Xóa kệ thuốc
         /// </summary>
         /// 
         [HttpDelete("{Id}")]
@@ -53,7 +53,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(affectedResult);
         }
         /// <summary>
-        /// Cập nhật chuyên khoa
+        /// Cập nhật kệ thuốc
         /// </summary>
         /// 
         [HttpPut]
@@ -71,7 +71,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Lấy danh sách phân trang chuyên khoa
+        /// Lấy danh sách phân trang kệ thuốc
         /// </summary>
         /// 
         [HttpGet("paging")]
@@ -81,7 +81,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Lấy chuyên khoa theo id
+        /// Lấy kệ thuốc theo id
         /// </summary>
         /// 
         [HttpGet("{Id}")]
@@ -93,7 +93,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Lấy tất cả danh sách chuyên khoa
+        /// Lấy tất cả danh sách kệ thuốc
         /// </summary>
         /// 
         [HttpGet("get-all-medicine")]

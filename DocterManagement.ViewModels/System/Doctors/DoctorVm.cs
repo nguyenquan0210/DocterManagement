@@ -1,6 +1,7 @@
 ﻿using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
+using DoctorManagement.ViewModels.Catalog.Service;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.System.Users;
 using System;
@@ -36,7 +37,6 @@ namespace DoctorManagement.ViewModels.System.Doctors
         public Gender Gender { get; set; }
         public DateTime Dob { get; set; }
         public string Prefix { get; set; }
-        public string Services { get; set; }
         public string MapUrl { get; set; }
         public bool IsPrimary { get; set; }
         public LocationVm Location { get; set; }
@@ -46,6 +46,7 @@ namespace DoctorManagement.ViewModels.System.Doctors
 
         public List<RateVm> Rates { get; set; }
         public List<GalleryVm> Galleries { get; set; }
+        public List<ServiceVm> Services { get; set; }
         public string TimeWorking { get; set; }
         public string FullName { get; set; }
         public int BeforeBookingDay { get; set; }

@@ -5,6 +5,7 @@ using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
+using DoctorManagement.ViewModels.Catalog.Service;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
@@ -304,7 +305,7 @@ namespace DoctorManagement.Application.System.Users
             var province = new Locations();
             var doctor = await _context.Doctors.FindAsync(user.Id);
             var clinic = await _context.Clinics.FindAsync(doctor != null ? doctor.ClinicId : new Guid());
-            
+            var service = from ser in _context.Services where ser.DoctorId == doctor.UserId select ser;
             var specialities = from s in _context.ServicesSpecialities
                              join spe in _context.Specialities on s.SpecialityId equals spe.Id where s.IsDelete ==false
                              where s.DoctorId == user.Id
@@ -323,6 +324,7 @@ namespace DoctorManagement.Application.System.Users
                 location = await _context.Locations.FindAsync(doctor.LocationId);
                 district = await _context.Locations.FindAsync(location.ParentId);
                 province = await _context.Locations.FindAsync(district.ParentId);
+
             }
             else if (patient != null)
             {
@@ -354,7 +356,6 @@ namespace DoctorManagement.Application.System.Users
                     Address = doctor.Address,
                     Img = doctor.Img,
                     No = doctor.No,
-                    Services = doctor.Services,
                     Slug = doctor.Slug,
                     Booking = doctor.Booking,
                     BeforeBookingDay = doctor.BeforeBookingDay,
@@ -369,6 +370,13 @@ namespace DoctorManagement.Application.System.Users
                     Prizes = doctor.Prizes,
                     View = doctor.View,
                     TimeWorking = doctor.TimeWorking,
+                    Services = service.Select(s => new ServiceVm()
+                    {
+                        Id = s.Id,
+                        Description = s.Description,
+                        ServiceName = s.ServiceName,
+                        Price = s.Price,
+                    }).ToList(),
                     Location = new LocationVm() { Id = location.Id, Name = location.Name, District = new DistrictVm() { Id = district.Id, Name = district.Name, Province = new ProvinceVm() { Id = province.Id, Name = province.Name } } },
                     GetClinic = new GetClinicVm(){ Id = clinic.Id, Name = clinic.Name},
                     GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.spe.Id, Title = x.spe.Title }).ToList(),
@@ -412,7 +420,7 @@ namespace DoctorManagement.Application.System.Users
             var province = new Locations();
             var doctor = await _context.Doctors.FindAsync(user.Id);
             var clinic = await _context.Clinics.FindAsync(doctor != null ? doctor.ClinicId : new Guid());
-
+            var service = from ser in _context.Services where ser.DoctorId == doctor.UserId select ser;
             var specialities = from s in _context.ServicesSpecialities
                                join spe in _context.Specialities on s.SpecialityId equals spe.Id
                                where s.IsDelete == false
@@ -463,7 +471,13 @@ namespace DoctorManagement.Application.System.Users
                     Address = doctor.Address,
                     Img = doctor.Img,
                     No = doctor.No,
-                    Services = doctor.Services,
+                    Services = service.Select(s => new ServiceVm()
+                    {
+                        Id = s.Id,
+                        Description = s.Description,
+                        ServiceName = s.ServiceName,
+                        Price = s.Price,
+                    }).ToList(),
                     Slug = doctor.Slug,
                     Booking = doctor.Booking,
                     BeforeBookingDay = doctor.BeforeBookingDay,
@@ -1006,7 +1020,6 @@ namespace DoctorManagement.Application.System.Users
                         }
                     }*/
                     doctor.Intro = WebUtility.HtmlDecode(request.Description);
-                    doctor.Services = request.Services;
                     doctor.Prizes = WebUtility.HtmlDecode(request.Prizes);
                     doctor.Note = WebUtility.HtmlDecode(request.Note);
                     doctor.TimeWorking =request.TimeWorking;
@@ -1097,7 +1110,7 @@ namespace DoctorManagement.Application.System.Users
                         }
                     }
                     doctor.Intro = WebUtility.HtmlDecode(request.Description);
-                    doctor.Services = WebUtility.HtmlDecode(request.Services);
+                    
                     doctor.Prizes = WebUtility.HtmlDecode(request.Prizes);
                     doctor.Note = WebUtility.HtmlDecode(request.Note);
                     doctor.TimeWorking = WebUtility.HtmlDecode(request.TimeWorking);
@@ -1161,7 +1174,6 @@ namespace DoctorManagement.Application.System.Users
                 spe_service_isdelete.IsDelete = true;
             }
             doctor.Intro = WebUtility.HtmlDecode(request.Description);
-            doctor.Services = WebUtility.HtmlDecode(request.Services);
             doctor.Prizes = WebUtility.HtmlDecode(request.Prizes);
             doctor.Note = WebUtility.HtmlDecode(request.Note);
             doctor.TimeWorking = WebUtility.HtmlDecode(request.TimeWorking);

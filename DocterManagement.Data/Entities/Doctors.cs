@@ -29,7 +29,6 @@ namespace DoctorManagement.Data.Entities
         public Gender Gender { get; set; }
         public DateTime Dob { get; set; }
         public string Prefix { get; set; }
-        public string Services { get; set; }
         public string MapUrl { get; set; }
         public bool IsPrimary { get; set; }
         public Guid LocationId { get; set; }
@@ -49,5 +48,6 @@ namespace DoctorManagement.Data.Entities
         public List<ServicesSpecialities> ServicesSpecialities { get; set; }
         public List<Appointments> Appointments { get; set; }
         public List<AnnualServiceFees> AnnualServiceFees { get; set; }
+        public List<Services> Services { get; set; }
     }
 }

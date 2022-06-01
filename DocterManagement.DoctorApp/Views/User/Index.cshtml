@@ -396,16 +396,12 @@
                     
 
                          <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <label asp-for="TimeWorking" class="form-label mt-4"></label>
                                 <input asp-for="TimeWorking" placeholder="Thứ 2 17:00 - 19:00 .."  class="multisteps-form__input form-control" />
                                 <span asp-validation-for="TimeWorking" class="text-danger"></span>
                             </div>
-                            <div class="col-6">
-                                <label asp-for="Services" class="form-label mt-4"></label>
-                                <input asp-for="Services" placeholder="Siêu âm .."  class="multisteps-form__input form-control" />
-                                <span asp-validation-for="Services" class="text-danger"></span>
-                            </div>
+                            
                        
                          </div>
                          <div class="row">
@@ -987,16 +983,7 @@
             addItems: true
           });
         }
-        if (document.getElementById('Services')) {
-          var Services = document.getElementById('Services');
-          const example = new Choices(Services, {
-            delimiter: '+',
-            editItems: true,
-            maxItemCount: 50,
-            removeItemButton: true,
-            addItems: true
-          });
-        }
+        
         
         if (document.getElementById('ClinicId')) {
             var clinic = document.getElementById('ClinicId');

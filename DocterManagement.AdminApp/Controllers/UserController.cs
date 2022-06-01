@@ -197,7 +197,6 @@ namespace DoctorManagement.AdminApp.Controllers
                     Status = user.Status,
                     ClinicId = user.DoctorVm.GetClinic.Id,
                     Description = user.DoctorVm.Intro,
-                    Services = user.DoctorVm.Services,
                     Slug = user.DoctorVm.Slug.Replace("-"+user.DoctorVm.No,""),
                     Educations = user.DoctorVm.Educations,
                     Prefix = user.DoctorVm.Prefix,

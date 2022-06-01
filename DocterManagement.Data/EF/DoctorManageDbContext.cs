@@ -49,6 +49,8 @@ namespace DoctorManagement.Data.EF
             modelBuilder.ApplyConfiguration(new AnnualServiceFeeConfigration());
             modelBuilder.ApplyConfiguration(new MedicineDetailtConfigration());
             modelBuilder.ApplyConfiguration(new MedicineConfigration());
+            modelBuilder.ApplyConfiguration(new ServicesConfigration());
+            modelBuilder.ApplyConfiguration(new ServiceDetailtConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -92,6 +94,8 @@ namespace DoctorManagement.Data.EF
         public DbSet<AnnualServiceFees> AnnualServiceFees { get; set; }
         public DbSet<MedicineDetailts> MedicineDetailts { get; set; }
         public DbSet<Medicines> Medicines { get; set; }
+        public DbSet<ServiceDetailts> ServiceDetailts { get; set; }
+        public DbSet<Services> Services { get; set; }
     }
 }
 #pragma warning restore CS1591

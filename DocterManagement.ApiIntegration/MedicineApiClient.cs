@@ -52,6 +52,7 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Price.ToString()), "price");
             requestContent.Add(new StringContent(request.ParentId.ToString()), "parentId");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            requestContent.Add(new StringContent(request.Unit.ToString()), "unit");
 
             var response = await client.PostAsync($"/api/medicine", requestContent);
             var result = await response.Content.ReadAsStringAsync();
@@ -108,6 +109,7 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.IsDeleted.ToString()), "isDeleted");
             requestContent.Add(new StringContent(request.Name.ToString()), "name");
             requestContent.Add(new StringContent(request.Price.ToString()), "price");
+            requestContent.Add(new StringContent(request.Unit.ToString()), "unit");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
             var response = await client.PutAsync($"/api/medicine", requestContent);

@@ -29,7 +29,6 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Experiences).HasMaxLength(int.MaxValue);
             builder.Property(x => x.Slug).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Prefix).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.Services).HasMaxLength(100);
             builder.Property(x => x.MapUrl).IsRequired().HasMaxLength(int.MaxValue);
 
             builder.HasOne(x => x.AppUsers).WithOne(x => x.Doctors).HasForeignKey<Doctors>(x => x.UserId);

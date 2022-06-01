@@ -133,15 +133,15 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     ser = ser + speciality.s.Title + (i == cuot ? "" : "-").ToString();
                     i++;
                 }
-                doctor.Services = ser;
+                
                
-                if (user != null&& patient!= null) await SendEmailAppoitment(user, userpatient, patient, schedule, slotsche, appointments);
+                if (user != null&& patient!= null) await SendEmailAppoitment(user, userpatient, patient, schedule, slotsche, appointments, ser);
                
                 return new ApiSuccessResult<Guid>(appointments.Id);
             }
             return new ApiErrorResult<Guid>("Đặt khám không thành công!");
         }
-        private async Task SendEmailAppoitment(AppUsers user, AppUsers userpatient, Patients patients, Schedules schedules, SchedulesSlots schedulesSlots, Appointments appointment)
+        private async Task SendEmailAppoitment(AppUsers user, AppUsers userpatient, Patients patients, Schedules schedules, SchedulesSlots schedulesSlots, Appointments appointment, string str)
         {
             UserEmailOptions options = new UserEmailOptions
             {
@@ -151,7 +151,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     new KeyValuePair<string, string>("{{UserName}}", user.UserName),
                     new KeyValuePair<string, string>("{{Stt}}", appointment.Stt.ToString()),
                     new KeyValuePair<string, string>("{{Address}}", user.Doctors.Clinics.Address),
-                    new KeyValuePair<string, string>("{{Speciality}}", user.Doctors.Services),
+                    new KeyValuePair<string, string>("{{Speciality}}", str),
                     new KeyValuePair<string, string>("{{DoctorName}}",user.Doctors.Prefix +" " + user.Doctors.LastName + " " + user.Doctors.FirstName),
                     new KeyValuePair<string, string>("{{PatientName}}", patients.Name),
                     new KeyValuePair<string, string>("{{PhoneNumber}}", userpatient.PhoneNumber),

@@ -12,6 +12,11 @@ namespace DoctorManagement.Data.Entities
         public Guid MedicalRecordId { get; set; }
         public Guid MedicineId { get; set; }
         public int Qty { get; set; }
+        public string Use { get; set; }
+        public int Morning { get; set; }
+        public int Noon { get; set; }
+        public int Afternoon { get; set; }
+        public int Night { get; set; }
 
         public MedicalRecord MedicalRecord { get; set; }
         public Medicines Medicine { get; set; }

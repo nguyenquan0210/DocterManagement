@@ -2,6 +2,7 @@
 using DoctorManagement.Data.Entities;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
+using DoctorManagement.ViewModels.Catalog.Service;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
@@ -80,7 +81,7 @@ namespace DoctorManagement.Application.System.Doctor
                         select new { r, a };
 
             var galleries = _context.Galleries.Where(x => x.DoctorId == doctor.UserId);
-
+            var service = from ser in _context.Services where ser.DoctorId == doctor.UserId select ser;
             var location = await _context.Locations.FindAsync(doctor.LocationId);
             var district = await _context.Locations.FindAsync(location.ParentId);
             var province = await _context.Locations.FindAsync(district.ParentId);
@@ -96,7 +97,13 @@ namespace DoctorManagement.Application.System.Doctor
                 FullAddress = fulladdreess,
                 Img = USER_CONTENT_FOLDER_NAME + "/" + doctor.Img,
                 No = doctor.No,
-                Services = doctor.Services,
+                Services = service.Select(s => new ServiceVm()
+                {
+                    Id = s.Id,
+                    Description = s.Description,
+                    ServiceName = s.ServiceName,
+                    Price = s.Price,
+                }).ToList(),
                 Slug = doctor.Slug,
                 Booking = doctor.Booking,
                 Dob = doctor.Dob,

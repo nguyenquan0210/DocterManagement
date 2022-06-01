@@ -37,6 +37,8 @@ namespace DoctorManagement.Application.Catalog.Medicine
                 Name = request.Name,
                 Price = request.Price,
                 ParentId = request.ParentId,
+                Unit = request.Unit,
+
             };
             _context.Medicines.Add(medicine);
             var rs = await _context.SaveChangesAsync();
@@ -82,6 +84,7 @@ namespace DoctorManagement.Application.Catalog.Medicine
                 ParentId = x.ParentId,
                 Description = x.Description,
                 Image = MEDICINE_CONTENT_FOLDER_NAME + "/" + x.Image,
+                Unit = x.Unit,
             }).ToListAsync();
             return new ApiSuccessResult<List<MedicineVm>>(rs);
         }
@@ -113,6 +116,7 @@ namespace DoctorManagement.Application.Catalog.Medicine
                     Name = x.Name,
                     ParentId = x.ParentId,
                     Description = x.Description,
+                    Unit = x.Unit,
                     Image = MEDICINE_CONTENT_FOLDER_NAME + "/" + x.Image,
                 }).ToListAsync();
 
@@ -140,6 +144,7 @@ namespace DoctorManagement.Application.Catalog.Medicine
                 ParentId = x.ParentId,
                 Description = x.Description,
                 Image = MEDICINE_CONTENT_FOLDER_NAME + "/" + x.Image,
+                Unit = x.Unit,
             };
             return new ApiSuccessResult<MedicineVm>(rs);
         }
@@ -147,11 +152,12 @@ namespace DoctorManagement.Application.Catalog.Medicine
         public async Task<ApiResult<bool>> Update(MedicineUpdateRequest request)
         {
             var medicines = await _context.Medicines.FindAsync(request.Id);
-            if (medicines == null) return new ApiSuccessResult<bool>(false);
+            if (medicines == null) return new ApiErrorResult<bool>("");
 
             medicines.Description = request.Description;
             medicines.Name = request.Name;
             medicines.Price = request.Price;
+            medicines.Unit = request.Unit;
             medicines.IsDeleted = request.IsDeleted;
             if (request.Image != null)
             {
@@ -159,8 +165,9 @@ namespace DoctorManagement.Application.Catalog.Medicine
                 medicines.Image = await SaveFile(request.Image, MEDICINE_CONTENT_FOLDER_NAME);
             }
 
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool>(true);
+            var rs = await _context.SaveChangesAsync();
+            if(rs!= 0) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("");
         }
     }
 }

@@ -205,7 +205,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a id="menu_news" data-bs-toggle="collapse" href="#quanlytintuc" class="nav-link collapsed" aria-controls="quanlytintuc" role="button" aria-expanded="false">
+                <a id="menu-medicine" data-bs-toggle="collapse" href="#medicine" class="nav-link collapsed" aria-controls="medicine" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 44 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>megaphone</title>
@@ -222,19 +222,19 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Quản lý phòng thuốc</span>
+                    <span class="nav-link-text ms-1">Quản lý kệ thuốc</span>
                 </a>
-                <div class="collapse " id="quanlytintuc">
+                <div class="collapse " id="medicine">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_news" class="nav-link  " aria-expanded="false" asp-controller="Medicine" asp-action="Index">
+                            <a id="a-medicine" class="nav-link  " aria-expanded="false" asp-controller="Medicine" asp-action="Index">
                                 <span class="sidenav-mini-icon"> TT </span>
                                 <span class="sidenav-normal"> Danh sách thuốc <b class="caret"></b></span>
                             </a>
 
                         </li>
                         <li class="nav-item ">
-                            <a id="a_ctenews" class="nav-link   " aria-expanded="false" asp-controller="Medicine" asp-action="Create">
+                            <a id="a-ctemedicine" class="nav-link   " aria-expanded="false" asp-controller="Medicine" asp-action="Create">
                                 <span class="sidenav-mini-icon"> TTT </span>
                                 <span class="sidenav-normal"> Thêm thuốc <b class="caret"></b></span>
                             </a>
@@ -244,8 +244,8 @@
                     </ul>
                 </div>
             </li>
-            @*<li class="nav-item">
-                <a id="menu_service" data-bs-toggle="collapse" href="#quanlydichvu" class="nav-link collapsed" aria-controls="quanlydichvu" role="button" aria-expanded="false">
+            <li class="nav-item">
+                <a id="menu-service" data-bs-toggle="collapse" href="#service" class="nav-link collapsed" aria-controls="service" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>customer-support</title>
@@ -264,17 +264,17 @@
                     </div>
                     <span class="nav-link-text ms-1">Quản lý dịch vụ</span>
                 </a>
-                <div class="collapse " id="quanlydichvu">
+                <div class="collapse " id="service">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_service" class="nav-link  " aria-expanded="false" asp-controller="Servive" asp-action="Index">
+                            <a id="a-service" class="nav-link  " aria-expanded="false" asp-controller="Service" asp-action="Index">
                                 <span class="sidenav-mini-icon"> DV </span>
                                 <span class="sidenav-normal"> Danh sách dịch vụ <b class="caret"></b></span>
                             </a>
 
                         </li>
                         <li class="nav-item ">
-                            <a id="a_cteservice" class="nav-link   " aria-expanded="false" asp-controller="Service" asp-action="Create">
+                            <a id="a-cteservice" class="nav-link   " aria-expanded="false" asp-controller="Service" asp-action="Create">
                                 <span class="sidenav-mini-icon"> TDV </span>
                                 <span class="sidenav-normal"> Thêm dịch vụ <b class="caret"></b></span>
                             </a>
@@ -284,7 +284,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item">
+            @*<li class="nav-item">
                 <a id="menu_order" data-bs-toggle="collapse" href="#quanlydonhang" class="nav-link collapsed" aria-controls="quanlydonhang" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <svg class="text-dark" width="16px" height="16px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

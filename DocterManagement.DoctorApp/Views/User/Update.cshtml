@@ -208,16 +208,12 @@
                     
 
                      <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <label asp-for="TimeWorking" class="form-label mt-4"></label>
-                            <textarea asp-for="TimeWorking" class="classic-editor form-control datetimepicker"  >  </textarea>
+                            <input asp-for="TimeWorking" placeholder="Thứ 2 17:00 - 19:00 .."  class="multisteps-form__input form-control" />
                             <span asp-validation-for="TimeWorking" class="text-danger"></span>
                         </div>
-                        <div class="col-6">
-                            <label asp-for="Services" class="form-label mt-4"></label>
-                            <textarea asp-for="Services" class="classic-editor multisteps-form__input form-control" >  </textarea>
-                            <span asp-validation-for="Services" class="text-danger"></span>
-                        </div>
+                        
                        
                      </div>
                      <div class="row">
@@ -391,6 +387,16 @@
     <script src="~/js/plugins/flatpickr.min.js"></script>
     <script src="~/js/plugins/dropzone.min.js"></script>
     <script>
+        if (document.getElementById('TimeWorking')) {
+          var TimeWorking = document.getElementById('TimeWorking');
+          const example = new Choices(TimeWorking, {
+            delimiter: '+',
+            editItems: true,
+            maxItemCount: 7,
+            removeItemButton: true,
+            addItems: true
+          });
+        }
         if (document.getElementById('ClinicId')) {
             var clinic = document.getElementById('ClinicId');
             const example = new Choices(clinic);

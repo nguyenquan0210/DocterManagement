@@ -19,6 +19,7 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Name).IsRequired().HasMaxLength(150);
             builder.Property(x => x.Description).HasMaxLength(150);
             builder.Property(x => x.Image).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.Unit).IsRequired().HasMaxLength(50);
         }
     }
 }
