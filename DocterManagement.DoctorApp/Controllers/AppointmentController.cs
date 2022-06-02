@@ -1,9 +1,11 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Catalog.MedicalRecords;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.DoctorApp.Controllers
 {
@@ -12,13 +14,18 @@ namespace DoctorManagement.DoctorApp.Controllers
         private readonly IAppointmentApiClient _appointmentApiClient;
         private readonly IConfiguration _configuration;
         private readonly ILocationApiClient _locationApiClient;
+        private readonly IMedicineApiClient _medicineApiClient;
+        private readonly IServiceApiClient _serviceApiClient;
 
         public AppointmentController(IAppointmentApiClient AppointmentApiClient,
-            IConfiguration configuration, ILocationApiClient locationApiClient)
+            IConfiguration configuration, ILocationApiClient locationApiClient,
+            IMedicineApiClient medicineApiClient, IServiceApiClient serviceApiClient)
         {
             _appointmentApiClient = AppointmentApiClient;
             _configuration = configuration;
             _locationApiClient = locationApiClient;
+            _medicineApiClient = medicineApiClient;
+            _serviceApiClient = serviceApiClient;
         }
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
@@ -108,10 +115,44 @@ namespace DoctorManagement.DoctorApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        public async Task<List<SelectListItem>> SeletectMedicine(string? id)
+        {
+            var medicine = await _medicineApiClient.GetAll(User.Identity.Name);
+            var rs = medicine.Data.Select(x=> new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = id == x.Id.ToString()
+            }).ToList(); 
+            
+            return rs;
+        }
+        public async Task<List<SelectListItem>> SeletectService(string? id)
+        {
+            var service = await _serviceApiClient.GetAll(User.Identity.Name);
+            var rs = service.Data.Select(x => new SelectListItem()
+            {
+                Text = x.ServiceName,
+                Value = x.Id.ToString(),
+                Selected = id == x.Id.ToString()
+            }).ToList();
+
+            return rs;
+        }
         [HttpGet]
         public async Task<IActionResult> CreateMedicalRecord(Guid id)
         {
+            var session = HttpContext.Session.GetString(SystemConstants.Medicine);
+            var currentMedicine = JsonConvert.DeserializeObject<List<MedicineCreate>>(session == null ? JsonConvert.SerializeObject(new List<MedicineCreate>()) : session);
+            currentMedicine = currentMedicine.Where(x => x.AppointmentId == id).ToList();
+            ViewBag.Medicine = currentMedicine;
+            session = HttpContext.Session.GetString(SystemConstants.Service);
+            var currentService = JsonConvert.DeserializeObject<List<ServiceCreate>>(session == null ? JsonConvert.SerializeObject(new List<ServiceCreate>()) : session);
+            currentService = currentService.Where(x => x.AppointmentId == id).ToList();
+            ViewBag.Service = currentService;
             var result = await _appointmentApiClient.GetById(id);
+            ViewBag.MedicineSeleted = await SeletectMedicine("");
+            ViewBag.ServiceSeleted = await SeletectService("");
             //var doctor = await _appointmentApiClient.Get
             if (result.IsSuccessed)
             {
@@ -124,6 +165,17 @@ namespace DoctorManagement.DoctorApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMedicalRecord(MedicalRecordCreateRequest request)
         {
+            //HttpContext.Session.SetString(SystemConstants.OtpSession, JsonConvert.SerializeObject(registerPatientSession));
+            var session = HttpContext.Session.GetString(SystemConstants.Medicine);
+            var currentMedicine = JsonConvert.DeserializeObject<List<MedicineCreate>>(session == null ? JsonConvert.SerializeObject(new List<MedicineCreate>()) : session);
+            currentMedicine = currentMedicine.Where(x => x.AppointmentId == request.AppointmentId).ToList();
+            ViewBag.Medicine = currentMedicine;
+            session = HttpContext.Session.GetString(SystemConstants.Service);
+            var currentService = JsonConvert.DeserializeObject<List<ServiceCreate>>(session == null ? JsonConvert.SerializeObject(new List<ServiceCreate>()) : session);
+            currentService = currentService.Where(x => x.AppointmentId == request.AppointmentId).ToList();
+            ViewBag.Service = currentService;
+            ViewBag.MedicineSeleted = await SeletectMedicine("");
+            ViewBag.ServiceSeleted = await SeletectService("");
             ViewBag.Appointment = (await _appointmentApiClient.GetById(request.AppointmentId)).Data;
             ViewBag.Status = SeletectStatus(request.StatusIllness);
             if (!ModelState.IsValid)
@@ -136,6 +188,95 @@ namespace DoctorManagement.DoctorApp.Controllers
             }
             return RedirectToAction("Error", "Home");
         }
+        [HttpPost]
+        public async Task<IActionResult> AddMedicine(MedicineCreate create)
+        {
+            if (ModelState.IsValid)
+            {
+                var rsmedicine = (await _medicineApiClient.GetById(create.MedicineId)).Data;
+                var session = HttpContext.Session.GetString(SystemConstants.Medicine);
+                var currentMedicine = JsonConvert.DeserializeObject<List<MedicineCreate>>(session == null ? JsonConvert.SerializeObject(new List<MedicineCreate>()) : session);
+                var checkMedicine = currentMedicine.FirstOrDefault(x=>x.MedicineId == create.MedicineId);
+                if (checkMedicine != null) currentMedicine = currentMedicine.Where(x => x.MedicineId != create.MedicineId).ToList();
+                var medicine = new MedicineCreate()
+                {
+                    Afternoon = create.Afternoon,
+                    MedicineId = rsmedicine.Id,
+                    Morning = create.Morning,
+                    Name = rsmedicine.Name,
+                    Night = create.Night,
+                    Noon = create.Noon,
+                    Price = rsmedicine.Price,
+                    TotalAmount = rsmedicine.Price * create.Qty,
+                    TotalAmountString = (rsmedicine.Price * create.Qty).ToString("#,###,### vnđ"),
+                    Qty = create.Qty,
+                    Unit = rsmedicine.Unit,
+                    Use = create.Use,
+                    AppointmentId = create.AppointmentId,
+                };
+                currentMedicine.Add(medicine);
+                currentMedicine = currentMedicine.Where(x => x.AppointmentId == create.AppointmentId).ToList();
+                ViewBag.Medicine = currentMedicine;
+                HttpContext.Session.SetString(SystemConstants.Medicine, JsonConvert.SerializeObject(currentMedicine));
+                return Json(currentMedicine);
+            }
+            return null;
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddService(ServiceCreate create)
+        {
+            if (ModelState.IsValid)
+            {
+                var rsService = (await _serviceApiClient.GetById(create.ServiceId)).Data;
+                var session = HttpContext.Session.GetString(SystemConstants.Service);
+                var currentService = JsonConvert.DeserializeObject<List<ServiceCreate>>(session == null ? JsonConvert.SerializeObject(new List<ServiceCreate>()) : session);
+                var checkService = currentService.FirstOrDefault(x => x.ServiceId == create.ServiceId);
+                if (checkService != null) currentService = currentService.Where(x => x.ServiceId != create.ServiceId).ToList();
+                var Service = new ServiceCreate()
+                {
+                    ServiceId = rsService.Id,
+                    Name = rsService.ServiceName,
+                    Price = rsService.Price,
+                    TotalAmount = rsService.Price * create.Qty,
+                    TotalAmountString = (rsService.Price * create.Qty).ToString("#,###,### vnđ"),
+                    Qty = create.Qty,
+                    Unit = rsService.Unit,
+                    AppointmentId = create.AppointmentId,
+                };
+                currentService.Add(Service);
+                currentService = currentService.Where(x => x.AppointmentId == create.AppointmentId).ToList();
+                ViewBag.Service = currentService;
+                HttpContext.Session.SetString(SystemConstants.Service, JsonConvert.SerializeObject(currentService));
+                return Json(currentService);
+            }
+            return null;
+        }
+        [HttpGet]
+        public async Task<IActionResult> RemoveMedicine(Guid Id)
+        {
+            
+                var session = HttpContext.Session.GetString(SystemConstants.Medicine);
+                var currentMedicine = JsonConvert.DeserializeObject<List<MedicineCreate>>(session == null ? JsonConvert.SerializeObject(new List<MedicineCreate>()) : session);
+                var checkMedicine = currentMedicine.FirstOrDefault(x => x.MedicineId == Id);
+                if (checkMedicine != null) currentMedicine = currentMedicine.Where(x => x.MedicineId != Id).ToList();
+                
+                ViewBag.Medicine = currentMedicine;
+                HttpContext.Session.SetString(SystemConstants.Medicine, JsonConvert.SerializeObject(currentMedicine));
+                return Json(true);
+            
+        }
+        [HttpGet]
+        public async Task<IActionResult> RemoveService(Guid Id)
+        {
+                var session = HttpContext.Session.GetString(SystemConstants.Service);
+                var currentService = JsonConvert.DeserializeObject<List<ServiceCreate>>(session == null ? JsonConvert.SerializeObject(new List<ServiceCreate>()) : session);
+                var checkService = currentService.FirstOrDefault(x => x.ServiceId == Id);
+                if (checkService != null) currentService = currentService.Where(x => x.ServiceId != Id).ToList();
+                ViewBag.Service = currentService;
+                HttpContext.Session.SetString(SystemConstants.Service, JsonConvert.SerializeObject(currentService));
+                return Json(true);
+           
+        }
         [HttpGet]
         public async Task<IActionResult> DetailtAppointment(Guid id)
         {
@@ -144,6 +285,16 @@ namespace DoctorManagement.DoctorApp.Controllers
             {
                 //ViewBag.Status = appointmentData.Status == StatusAppointment.complete ? "Ngừng hoạt động" : appointmentData.Status == StatusAppointment.pending ? "Hoạt động" : "không hoạt động";
                 
+                return View(result.Data);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> PrintAppointment(Guid id)
+        {
+            var result = await _appointmentApiClient.GetById(id);
+            if (result.IsSuccessed)
+            {
                 return View(result.Data);
             }
             return RedirectToAction("Error", "Home");

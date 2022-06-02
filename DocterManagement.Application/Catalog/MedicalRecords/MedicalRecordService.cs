@@ -26,13 +26,39 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             var medical = new MedicalRecord()
             {
                 Diagnose = request.Diagnose,
-                Note = request.Note,
+                Note = request.Note == null?"Null" : request.Note,
                 StatusIllness = request.StatusIllness,
                 CreatedAt = DateTime.Now,
                 Status = Status.Active,
-                TotalAmount = request.TotalAmount,
+                TotalAmount = (request.Service.Sum(x=>x.Price.Value)* request.Service.Sum(x => x.Qty)) + (request.Medicine != null? (request.Medicine.Sum(x => x.Price.Value)* request.Medicine.Sum(x => x.Qty)) :0),
                 AppointmentId = request.AppointmentId,
             };
+            medical.ServiceDetailts = new List<ServiceDetailts>();
+            var Service = request.Service.Select(x => new ServiceDetailts()
+            {
+                ServicesId = x.ServiceId,
+                Qty = x.Qty,
+                Price = x.Price.Value,
+                TotalAmount = x.Qty * x.Price.Value
+            });
+            medical.ServiceDetailts.AddRange(Service);
+            if (request.Medicine != null)
+            {
+                medical.MedicineDetailts = new List<MedicineDetailts>();
+                var medicine = request.Medicine.Select(x => new MedicineDetailts()
+                {
+                    MedicineId = x.MedicineId,
+                    Qty = x.Qty,
+                    Afternoon = x.Afternoon==null?0:x.Afternoon.Value,
+                    Noon = x.Noon==null?0:x.Noon.Value,
+                    Night = x.Night==null?0:x.Night.Value,
+                    Morning = x.Morning==null?0:x.Morning.Value,
+                    Use = x.Use,
+                    Price = x.Price.Value,
+                    TotalAmount = x.Qty * x.Price.Value
+                });
+                medical.MedicineDetailts.AddRange(medicine);
+            }
             _context.MedicalRecords.Add(medical);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0)
@@ -71,7 +97,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             var rs = await query.Select(x => new MedicalRecordVm()
             {
                 Id = x.Id,
-                Date = x.CreatedAt,
+                CreateAt = x.CreatedAt,
                 AppointmentId = x.AppointmentId,
                 Diagnose = x.Diagnose,
                 Note = x.Note,
@@ -96,7 +122,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 .Select(x => new MedicalRecordVm()
                 {
                     Id = x.Id,
-                    Date = x.CreatedAt,
+                    CreateAt = x.CreatedAt,
                     AppointmentId = x.AppointmentId,
                     Diagnose = x.Diagnose,
                     Note = x.Note,
@@ -122,7 +148,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             var rs = new MedicalRecordVm()
             {
                 Id = medicalRecords.Id,
-                Date = medicalRecords.CreatedAt,
+                CreateAt = medicalRecords.CreatedAt,
                 StatusIllness = medicalRecords.StatusIllness,
                 AppointmentId = medicalRecords.AppointmentId,
                 Diagnose = medicalRecords.Diagnose,

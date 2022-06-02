@@ -12,7 +12,8 @@ namespace DoctorManagement.Data.Entities
         public Guid MedicalRecordId { get; set; }
         public Guid ServicesId { get; set; }
         public int Qty { get; set; }
-
+        public decimal Price { get; set; }
+        public decimal TotalAmount { get; set; }
         public MedicalRecord MedicalRecord { get; set; }
         public Services Services { get; set; }
     }

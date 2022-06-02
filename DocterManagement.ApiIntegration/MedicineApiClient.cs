@@ -72,9 +72,9 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<MedicineVm>($"/api/medicine/{Id}");
         }
 
-        public async Task<ApiResult<List<MedicineVm>>> GetAll(Guid ParentId)
+        public async Task<ApiResult<List<MedicineVm>>> GetAll(string UserName)
         {
-            return await GetListAsync<MedicineVm>($"/api/medicine/get-all-medicine");
+            return await GetListAsync<MedicineVm>($"/api/medicine/get-all-medicine/{UserName}");
         }
 
         public async Task<ApiResult<PagedResult<MedicineVm>>> GetAllPaging(GetMedicinePagingRequest request)

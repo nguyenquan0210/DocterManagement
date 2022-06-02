@@ -17,6 +17,8 @@ namespace DoctorManagement.Data.Entities
         public int Noon { get; set; }
         public int Afternoon { get; set; }
         public int Night { get; set; }
+        public decimal Price { get; set; }
+        public decimal TotalAmount { get; set; }
 
         public MedicalRecord MedicalRecord { get; set; }
         public Medicines Medicine { get; set; }

@@ -18,7 +18,7 @@ namespace DoctorManagement.ApiIntegration
 
         Task<ApiResult<PagedResult<MedicineVm>>> GetAllPaging(GetMedicinePagingRequest request);
 
-        Task<ApiResult<List<MedicineVm>>> GetAll(Guid ParentId);
+        Task<ApiResult<List<MedicineVm>>> GetAll(string UserName);
 
         Task<ApiResult<MedicineVm>> GetById(Guid Id);
     }

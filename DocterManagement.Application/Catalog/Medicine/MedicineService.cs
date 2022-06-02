@@ -70,9 +70,12 @@ namespace DoctorManagement.Application.Catalog.Medicine
             return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<ApiResult<List<MedicineVm>>> GetAll(Guid ParentId)
+        public async Task<ApiResult<List<MedicineVm>>> GetAll(string UserName)
         {
-            var query = _context.Medicines.Where(x => x.IsDeleted == false&& x.ParentId == ParentId);
+            var usser = await _context.AppUsers.FirstOrDefaultAsync(x => x.UserName == UserName);
+            var doctor = await _context.Doctors.FindAsync(usser.Id);
+            var parentId = doctor.ClinicId == null ? doctor.UserId : doctor.ClinicId;
+            var query = _context.Medicines.Where(x => x.IsDeleted == false&& x.ParentId == parentId);
 
             var rs = await query.Select(x => new MedicineVm()
             {

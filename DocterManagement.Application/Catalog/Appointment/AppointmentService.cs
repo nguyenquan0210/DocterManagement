@@ -12,6 +12,7 @@ using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Models;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Users;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -278,7 +279,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                         Id = x.m.Id,
                         Status = x.m.Status,
                         StatusIllness = x.m.StatusIllness,
-                        Date = x.m.CreatedAt,
+                        CreateAt = x.m.CreatedAt,
                         Diagnose = x.m.Diagnose,
                         Note = x.m.Note,
                     }: new MedicalRecordVm()
@@ -300,10 +301,13 @@ namespace DoctorManagement.Application.Catalog.Appointment
             var appointments = await _context.Appointments.FindAsync(Id);
             if (appointments == null) return new ApiErrorResult<AppointmentVm>("phiếu đăng ký lịch khám không tồn tại!");
             var doctor = await _context.Doctors.FindAsync(appointments.DoctorId);
+            var userdoctor = await _context.AppUsers.FindAsync(appointments.DoctorId);
             var patient = await _context.Patients.FindAsync(appointments.PatientId);
             var slotsche = await _context.schedulesSlots.FindAsync(appointments.SchedulesSlotId);
             var schedule = await _context.Schedules.FindAsync(slotsche.ScheduleId);
-           
+            var medicalRecord = await _context.MedicalRecords.FirstOrDefaultAsync(x=>x.AppointmentId==appointments.Id);
+            var medicine = from md in _context.MedicineDetailts join m in _context.Medicines on md.MedicineId equals m.Id where md.MedicalRecordId == medicalRecord.Id select new {m,md};
+            var services = from sd in _context.ServiceDetailts join s in _context.Services on sd.ServicesId equals s.Id where sd.MedicalRecordId == medicalRecord.Id select new { s, sd };
             var rs = new AppointmentVm()
             {
                 Id = appointments.Id,
@@ -336,7 +340,13 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     LastName = doctor.LastName,
                     MapUrl = doctor.MapUrl,
                     FullAddress = doctor.FullAddress,
-                    Img= doctor.Img
+                    Img= doctor.Img,
+                    FullName = doctor.Prefix +" "+ doctor.LastName + " " + doctor.FirstName,
+                    User = new UserVm()
+                    {
+                        Email = userdoctor.Email,
+                        PhoneNumber = userdoctor.PhoneNumber,
+                    }
                 },
                 Patient = new PatientVm()
                 {
@@ -351,6 +361,42 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     RelativePhone = patient.RelativePhone,
                     RelativeEmail = patient.RelativeEmail,
                     No = patient.No,
+                },
+                MedicalRecord = medicalRecord == null? new MedicalRecordVm() : new MedicalRecordVm()
+                {
+                    Id = medicalRecord.Id,
+                    Status = medicalRecord.Status,
+                    StatusIllness = medicalRecord.StatusIllness,
+                    CreateAt = medicalRecord.CreatedAt,
+                    AppointmentId = medicalRecord.AppointmentId,
+                    Diagnose = medicalRecord.Diagnose,
+                    Note = medicalRecord.Note,
+                    TotalAmount = medicalRecord.TotalAmount,
+                    Service = services.Select(x=> new ServiceCreate()
+                    {
+                        ServiceId = x.sd.ServicesId,
+                        TotalAmountString = x.sd.TotalAmount.ToString("#,###,### vnđ"),
+                        Name = x.s.ServiceName,
+                        Price = x.sd.Price,
+                        Qty = x.sd.Qty,
+                        Unit = x.s.Unit,
+                        TotalAmount = x.sd.TotalAmount
+                    }).ToList(),
+                    Medicine = medicine==null?null: medicine.Select(x => new MedicineCreate()
+                    {
+                        MedicineId = x.md.MedicineId,
+                        TotalAmountString = x.md.TotalAmount.ToString("#,###,### vnđ"),
+                        Name = x.m.Name,
+                        Price = x.md.Price,
+                        Qty = x.md.Qty,
+                        Unit = x.m.Unit,
+                        TotalAmount = x.md.TotalAmount,
+                        Afternoon = x.md.Afternoon,
+                        Morning = x.md.Morning,
+                        Night = x.md.Night,
+                        Noon = x.md.Noon,
+                        Use = x.md.Use
+                    }).ToList()
                 }
             };
             return new ApiSuccessResult<AppointmentVm>(rs);

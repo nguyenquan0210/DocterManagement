@@ -96,10 +96,10 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Lấy tất cả danh sách kệ thuốc
         /// </summary>
         /// 
-        [HttpGet("get-all-medicine")]
-        public async Task<ActionResult<ApiResult<List<MedicineVm>>>> GetAllMedicine(Guid ParentId)
+        [HttpGet("get-all-medicine/{UserName}")]
+        public async Task<ActionResult<ApiResult<List<MedicineVm>>>> GetAllMedicine(string UserName)
         {
-            var Medicine = await _medicineService.GetAll(ParentId);
+            var Medicine = await _medicineService.GetAll(UserName);
             return Ok(Medicine);
         }
     }

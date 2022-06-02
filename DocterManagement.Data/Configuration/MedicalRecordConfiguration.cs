@@ -17,7 +17,7 @@ namespace DoctorManagement.Data.Configuration
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Diagnose).IsRequired().HasMaxLength(150);
-            builder.Property(x => x.Note).IsRequired().HasMaxLength(255);
+            builder.Property(x => x.Note).HasMaxLength(255);
 
             builder.HasOne(x => x.Appointments).WithOne(x => x.MedicalRecords).HasForeignKey<MedicalRecord>(x => x.AppointmentId);
 

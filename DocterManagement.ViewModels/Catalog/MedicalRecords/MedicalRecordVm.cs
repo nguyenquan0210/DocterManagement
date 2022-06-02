@@ -11,11 +11,11 @@ namespace DoctorManagement.ViewModels.Catalog.MedicalRecords
     {
         public Guid Id { get; set; }
         public string Diagnose { get; set; }
-        public string Prescription { get; set; }
-
-        public DateTime Date { get; set; }
+        public List<MedicineCreate>? Medicine { get; set; }
+        public List<ServiceCreate> Service { get; set; }
+        public DateTime CreateAt { get; set; }
         public StatusIllness StatusIllness { get; set; }
-
+        public decimal TotalAmount { get; set; }
         public Status Status { get; set; }
         public string? Note { get; set; }
 
