@@ -71,7 +71,7 @@
                                             badge-sm" >
                                                 @(Model.Status==StatusAppointment.approved?"Đợi khám":
                                                                 Model.Status==StatusAppointment.cancel?"Đã hủy":
-                                                                Model.Status==StatusAppointment.complete?"Đã khám":"đợi sử lý")</span>
+                                                                Model.Status==StatusAppointment.complete?"Đã khám":"Lịch khám quá hạn")</span>
                                 </div>
                             </div>
                         </div>
@@ -199,8 +199,6 @@
                                 </div>
                             </div>
                         </div>
-                        @if (DateTime.Parse(Model.Schedule.CheckInDate.ToShortDateString()+ " " + Model.SlotSchedule.ToTime.ToString()) >= DateTime.Now.AddDays(-1))
-                        {
                         
                             <div class="row">
                                 @if(Model.Status == StatusAppointment.approved)
@@ -220,7 +218,7 @@
                                     </div>
                                 }
                             </div>
-                        }
+                       
                    
                     
                            </div>
@@ -437,9 +435,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if (DateTime.Parse(Model.Schedule.CheckInDate.ToShortDateString()+ " " + Model.SlotSchedule.ToTime.ToString()) < DateTime.Now.AddDays(-1))
-                            {
-                        
+                            
                                 <div class="row">
                                         <div class="col-12">
                                             @if(Model.Status == StatusAppointment.complete)
@@ -448,7 +444,6 @@
                                             }
                                         </div>
                                 </div>
-                            }
                         </div>
                     </div>
                 }

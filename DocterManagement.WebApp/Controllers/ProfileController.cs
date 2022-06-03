@@ -55,6 +55,7 @@ namespace DoctorManagement.WebApp.Controllers
                     Identitycard = data.Identitycard,
                     RelativePhone = data.RelativePhone,
                     RelativeName = data.RelativeName,
+                    RelativeEmail = data.RelativeEmail,
                     DistrictId = data.Location.District.Id,
                     ProvinceId = data.Location.District.Province.Id,
                 };
@@ -75,7 +76,16 @@ namespace DoctorManagement.WebApp.Controllers
             ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(new Guid(), request.DistrictId);
             if (!ModelState.IsValid) return View(request);
             var result = await _doctorApiClient.UpdateInfo(request);
-            if (!result.IsSuccessed) return View(request);
+            if (!result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return View(request);
+            }
+            TempData["AlertMessage"] = "Thay đổi thông tin thành công";
+            TempData["AlertType"] = "success";
+            TempData["AlertId"] = "successToast";
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> AddInfo()
@@ -101,6 +111,7 @@ namespace DoctorManagement.WebApp.Controllers
             if(!result.IsSuccessed) return View(request);
             return RedirectToAction("Index");
         }
+        
         [HttpGet]
         public async Task<IActionResult> GetSubDistrict(Guid DistrictId)
         {
@@ -121,7 +132,7 @@ namespace DoctorManagement.WebApp.Controllers
             }
             return null;
         }
-        public async Task<IActionResult> Appointment(string keyword, int pageIndex = 1, int pageSize = 15)
+        public async Task<IActionResult> Appointment(string keyword,Guid? Id, int pageIndex = 1, int pageSize = 15)
         {
             var request = new GetAppointmentPagingRequest()
             {
@@ -130,14 +141,22 @@ namespace DoctorManagement.WebApp.Controllers
                 PageSize = pageSize,
                 UserName = User.Identity.Name
             };
-            var data = await _appointmentApiClient.GetAppointmentPagings(request);
+            var appointments = await _appointmentApiClient.GetAppointmentPagings(request);
+            ViewBag.Appointments = appointments.Data.Items;
+            var appointment = new AppointmentVm();
+            if (Id!= null)
+            {
+                 appointment = (await _appointmentApiClient.GetById(Id.Value)).Data;
+            }
+            else{
+                var first = appointments.Data.Items.FirstOrDefault();
+                if(first == null) return View();
+                 appointment = (await _appointmentApiClient.GetById(first.Id)).Data;
+            }
             ViewBag.Keyword = keyword;
 
-            if (TempData["result"] != null)
-            {
-                ViewBag.SuccessMsg = TempData["result"];
-            }
-            return View(data.Data);
+           
+            return View(appointment);
         }
     }
 }

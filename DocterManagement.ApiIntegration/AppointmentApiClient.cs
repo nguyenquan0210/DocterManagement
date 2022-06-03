@@ -88,7 +88,8 @@ namespace DoctorManagement.ApiIntegration
                $"&pageSize={request.PageSize}" +
                $"&keyword={request.Keyword}" +
                $"&userName={request.UserName}" +
-               $"&userNameDoctor={request.UserNameDoctor}");
+               $"&userNameDoctor={request.UserNameDoctor}" +
+               $"&status={request.status}");
         }
 
         public async Task<ApiResult<bool>> Update(AppointmentUpdateRequest request)

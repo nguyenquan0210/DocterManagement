@@ -93,6 +93,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         [HttpGet("paging")]
         public async Task<ActionResult<ApiResult<PagedResult<AppointmentVm>>>> GetAllPaging([FromQuery] GetAppointmentPagingRequest request)
         {
+            await _appointmentService.AddExpired(request);
             var user = await _appointmentService.GetAllPaging(request);
             return Ok(user);
         }

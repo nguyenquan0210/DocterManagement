@@ -61,8 +61,8 @@
     <link rel="stylesheet" href="~/css/styles.90b16d66e7140c45.css" media="all" onload="this.media='all'">
     <style></style>
     @RenderSection("Stylesheet", required: false)
-    
-    <script src="~/js//jquery.min.js" ></script>
+    <style>.hiden-btn{display:none;}</style>
+    <script src="~/js/plugins/jquery.min.js" ></script>
 </head>
 
 <body class="bg-white text-gray-800 antialiased scroll-smooth">
@@ -234,16 +234,7 @@
                     class="relative site-footer bg-gray-50 py-3">
                     <div _ngcontent-serverapp-c54=""
                         class="max-w-7xl mx-auto text-gray-800 md:grid md:grid-cols-12 md:pt-10">
-                        <div _ngcontent-serverapp-c54="" class="px-4 py-6 text-sm col-span-12 md:col-span-4 space-y-2">
-                            <img _ngcontent-serverapp-c54="" width="177" height="60" loading="lazy"
-                                src="~/img/booking/logo.png" alt="DoctorMed">
-                            <p _ngcontent-serverapp-c54="" class="font-medium">CÔNG TY TNHH DoctorMed VIỆT NAM</p>
-                            <p _ngcontent-serverapp-c54=""><strong _ngcontent-serverapp-c54="">VPĐD:</strong> 523 Tô
-                                Hiến Thành, P.14, Q.10, TP. HCM</p>
-                            <p _ngcontent-serverapp-c54=""><strong _ngcontent-serverapp-c54="">Hotline:</strong><a
-                                    _ngcontent-serverapp-c54="" href="tel:19002805"
-                                    class="font-medium hover:underline">1900-2805</a> | 8:30 - 20:30 (T2 đến T7) </p>
-                        </div>
+                         @await Component.InvokeAsync("Information")
                         <nz-collapse _ngcontent-serverapp-c54="" nzexpandiconposition="right"
                             class="ant-collapse mx-4 md:mx-0 border-b md:border-0 col-span-12 md:col-span-2 ant-collapse-icon-position-right ant-collapse-borderless">
                             <nz-collapse-panel _ngcontent-serverapp-c54=""
@@ -390,19 +381,19 @@
                             <ul _ngcontent-serverapp-c54=""
                                 class="flex space-x-3 items-center justify-center md:justify-start">
                                 <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
-                                        href="https://www.facebook.com/DoctorMedVN"><img _ngcontent-serverapp-c54=""
+                                        href="https://www.facebook.com/quannguyen.itpro"><img _ngcontent-serverapp-c54=""
                                             src="~/img/booking/svg/facebook.svg" width="24" height="24"
                                             loading="lazy" alt="Facebook"></a></li>
                                 <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
-                                        href="https://www.youtube.com/channel/UCR4EoGCCtS7JA05PtOLSChg"><img
+                                        href="https://www.youtube.com/channel/UCCJlnOLUOjUq653EaZVqDgg"><img
                                             _ngcontent-serverapp-c54="" src="~/img/booking/svg/youtube.svg"
                                             width="24" height="24" loading="lazy" alt="YouTube"></a></li>
                                 <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
-                                        href="https://www.linkedin.com/in/DoctorMedvn/"><img _ngcontent-serverapp-c54=""
+                                        href="https://www.linkedin.com/in/qu%C3%A2n-nguy%E1%BB%85n-463b82240/"><img _ngcontent-serverapp-c54=""
                                             src="~/img/booking/svg/linkedin.svg" width="24" height="24"
                                             loading="lazy" alt="Linkedin"></a></li>
                                 <li _ngcontent-serverapp-c54=""><a _ngcontent-serverapp-c54="" target="_blank"
-                                        href="https://zalo.me/2433559446561086041"><img _ngcontent-serverapp-c54=""
+                                        href="https://zalo.me/0373951042"><img _ngcontent-serverapp-c54=""
                                             src="~/img/booking/svg/zalo.svg" width="36" height="16"
                                             loading="lazy" alt="Zalo"></a></li>
                             </ul>
@@ -463,21 +454,23 @@
     <noscript>Please enable JavaScript to continue using this application.</noscript>
 
 
+    <div class="cdk-overlay-container">
+       
+        @RenderSection("Alert", required: false)
+    </div>
      @RenderSection("JavaScript", required: false)
-
+     @*<script src="~/js/plugins/jquery.js"></script>*@
+	<script src="~/js/plugins/jquery.min.js"></script>
+     <script>
+		
+        setTimeout(
+          function() 
+          { 
+            $('#cdk-overlay-9').addClass('hiden-btn');
+          }, 5000);
+	</script>
     <script type="text/javascript"
         id="">!function (b, e, f, g, a, c, d) { b.fbq || (a = b.fbq = function () { a.callMethod ? a.callMethod.apply(a, arguments) : a.queue.push(arguments) }, b._fbq || (b._fbq = a), a.push = a, a.loaded = !0, a.version = "2.0", a.queue = [], c = e.createElement(f), c.async = !0, c.src = g, d = e.getElementsByTagName(f)[0], d.parentNode.insertBefore(c, d)) }(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js"); fbq("init", "996646364285366"); fbq("track", "PageView");</script>
-    <div class="cdk-overlay-container">
-        <div class="cdk-global-overlay-wrapper" dir="ltr">
-            <div id="cdk-overlay-0" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
-                <nz-message-container>
-                    <div class="ant-message" style="top: 24px;">
-                        
-                    </div>
-                </nz-message-container>
-            </div>
-        </div>
-    </div>
 </body>
 
 </html>

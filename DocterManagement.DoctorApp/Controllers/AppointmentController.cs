@@ -28,23 +28,44 @@ namespace DoctorManagement.DoctorApp.Controllers
             _serviceApiClient = serviceApiClient;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, StatusAppointment? status,string? check, int pageIndex = 1, int pageSize = 10)
         {
+            if(check== null&&keyword==null)
+            {
+                status = StatusAppointment.approved;
+            }
             var request = new GetAppointmentPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                UserNameDoctor = User.Identity.Name
-            };
+                UserNameDoctor = User.Identity.Name,
+                status =  status
+            }; 
             var data = await _appointmentApiClient.GetAppointmentPagings(request);
             ViewBag.Keyword = keyword;
+            ViewBag.Status = request.status.ToString();
+            ViewBag.LStatus = SeletectStatus(request.status.ToString());
 
-            if (TempData["result"] != null)
-            {
-                ViewBag.SuccessMsg = TempData["result"];
-            }
             return View(data.Data);
+        }
+        public List<SelectListItem> SeletectStatus(string? id)
+        {
+            List<SelectListItem> gender = new List<SelectListItem>()
+            {
+                new SelectListItem(text: "Quá hạn", value: StatusAppointment.pending.ToString()),
+                new SelectListItem(text: "Chờ khám", value: StatusAppointment.approved.ToString()),
+                new SelectListItem(text: "Đã khám", value: StatusAppointment.complete.ToString()),
+                new SelectListItem(text: "Hủy bỏ", value: StatusAppointment.cancel.ToString()),
+                new SelectListItem(text: "Tất cả", value: "")
+            };
+            var rs = gender.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = id == x.Value
+            }).ToList();
+            return rs;
         }
         [HttpGet]
         public async Task<IActionResult> Create()

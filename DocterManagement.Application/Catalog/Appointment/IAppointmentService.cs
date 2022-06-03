@@ -22,6 +22,8 @@ namespace DoctorManagement.Application.Catalog.Appointment
         Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPaging(GetAppointmentPagingRequest request);
 
         Task<ApiResult<List<AppointmentVm>>> GetAll();
+        Task<ApiResult<bool>> AddExpired(GetAppointmentPagingRequest request);
+        //Task<ApiResult<bool>> ToAppointmentTime(GetAppointmentPagingRequest request);
 
         Task<ApiResult<AppointmentVm>> GetById(Guid Id);
     }

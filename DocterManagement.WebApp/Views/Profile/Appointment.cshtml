@@ -1,11 +1,12 @@
 ﻿@using DoctorManagement.Data.Enums
 @using DoctorManagement.ViewModels.Common;
-@model PagedResult<DoctorManagement.ViewModels.Catalog.Appointment.AppointmentVm>
+@using DoctorManagement.ViewModels.Catalog.Appointment
+@model DoctorManagement.ViewModels.Catalog.Appointment.AppointmentVm
 @{
     ViewData["Title"] = "Appointment";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var i = 1;
-
+    var appointments = (List<AppointmentVm>)ViewBag.Appointments;
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration 
 @section Stylesheet{
@@ -617,7 +618,7 @@
         }
     </style>
 }
-@if(Model.Items!=null){
+@if(Model!=null){
 <app-list _nghost-serverapp-c258="" class="ng-tns-c258-36 ng-star-inserted">
     <section _ngcontent-serverapp-c258="" class="bg-gray-100 ng-tns-c258-36">
         <div _ngcontent-serverapp-c258=""
@@ -701,10 +702,10 @@
                                             @{
                                                 i = 1;
                                             }
-                                            @foreach(var item in Model.Items){
+                                            @foreach(var item in appointments){
 
-                                                <div _ngcontent-serverapp-c256="" onclick="showappoi(@i)" id="show-appoi_@i"
-                                                    class="check-show-info flex p-4 items-center gap-4 cursor-pointer @(i==1?"bg-gray-50":"") ng-star-inserted">
+                                                <a _ngcontent-serverapp-c256="" asp-action="Appointment" asp-route-id ="@item.Id"
+                                                    class="check-show-info flex p-4 items-center gap-4 cursor-pointer @(item.Id==Model.Id?"bg-gray-50":"") ng-star-inserted">
                                                     <div _ngcontent-serverapp-c256="" class="flex flex-1 flex-col">
                                                         <h2 _ngcontent-serverapp-c256="" class="font-medium">@item.Doctor.FullName</h2>
                                                         <p _ngcontent-serverapp-c256=""
@@ -716,7 +717,7 @@
                                                                 class="bg-green-50 px-2 py-1 inline-block rounded-full text-xs"
                                                                 style="color: rgb(52, 180, 31);"> @(item.Status==StatusAppointment.approved?"Đã đặt khám":
                                                                 item.Status==StatusAppointment.cancel?"Đã hủy":
-                                                                item.Status==StatusAppointment.complete?"Đã khám bệnh":"Đợi xử lý")</p>
+                                                                item.Status==StatusAppointment.complete?"Đã khám bệnh":"Đã quá hạn")</p>
                                                         </div>
                                                     </div>
                                                     <div _ngcontent-serverapp-c256=""
@@ -726,7 +727,7 @@
                                                         <p _ngcontent-serverapp-c256="" class="font-medium text-xl">
                                                             @item.Stt </p>
                                                     </div>
-                                                </div>
+                                                </a>
                                                 i++;
                                             }
                                         
@@ -741,14 +742,13 @@
                         @{
                             i = 1;
                         }
-                        @foreach(var appointment in Model.Items){
-
-                            <div _ngcontent-serverapp-c256="" id = "view-appoi_@i" @(i!=1?"hidden":"")
+                        
+                            <div _ngcontent-serverapp-c256="" id = "view-appoi_@i" 
                                 class="checkshow bg-white md:col-span-6 md:rounded-r-lg overflow-hidden  space-y-4 ng-star-inserted">
                                 <div _ngcontent-serverapp-c256=""
                                     class="flex justify-between items-center px-4 pt-4 lg:px-6 font-semibold">
                                     <div _ngcontent-serverapp-c256="" class="text-green-500">
-                                        <p _ngcontent-serverapp-c256="">STT: @appointment.Stt</p><span
+                                        <p _ngcontent-serverapp-c256="">STT: @Model.Stt</p><span
                                             _ngcontent-serverapp-c256=""
                                             class="text-sm font-normal text-gray-700"></span>
                                     </div>
@@ -767,9 +767,9 @@
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                 stroke-linejoin="round"></path>
                                         </svg>
-                                        <p _ngcontent-serverapp-c256="" class="ml-1">@(appointment.Status==StatusAppointment.approved?"Đã đặt khám":
-                                            appointment.Status==StatusAppointment.cancel?"hủy":
-                                            appointment.Status==StatusAppointment.complete?"Đã khám bệnh":"Đợi xử lý")</p>
+                                        <p _ngcontent-serverapp-c256="" class="ml-1">@(Model.Status==StatusAppointment.approved?"Đã đặt khám":
+                                            Model.Status==StatusAppointment.cancel?"Đã hủy":
+                                            Model.Status==StatusAppointment.complete?"Đã khám bệnh":"Đã quá hạn")</p>
                                     </div>
                                 </div>
                                 <div _ngcontent-serverapp-c256=""
@@ -777,11 +777,11 @@
                                         _ngcontent-serverapp-c256="" width="64" height="64"
                                         class="bg-gray-50 w-16 h-16  ng-star-inserted ng-lazyloaded"
                                         alt="ThS.BS Bùi Văn Chinh"
-                                        src="@(Configuration["BaseAddress"]+"/img/"+ appointment.Doctor.Img)">
+                                        src="@(Configuration["BaseAddress"]+"/img/"+ Model.Doctor.Img)">
                                 
                                     <div _ngcontent-serverapp-c256="" class="flex-1">
-                                        <h3 _ngcontent-serverapp-c256="" class="text-base font-medium">@appointment.Doctor.FullName</h3>
-                                        <p _ngcontent-serverapp-c256="" class="text-gray-500 text-sm">@appointment.Doctor.FullAddress</p>
+                                        <h3 _ngcontent-serverapp-c256="" class="text-base font-medium">@Model.Doctor.FullName</h3>
+                                        <p _ngcontent-serverapp-c256="" class="text-gray-500 text-sm">@Model.Doctor.FullAddress</p>
                                     </div>
                                     <qrcode _ngcontent-serverapp-c256="" class="ng-star-inserted">
                                         <div class="qrcode"><canvas height="130" width="130"
@@ -799,11 +799,11 @@
                                         <div _ngcontent-serverapp-c253="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c253="" class="whitespace-nowrap mr-2">Mã
                                                 phiếu khám</span><span _ngcontent-serverapp-c253=""
-                                                class="font-medium text-right">@appointment.No</span></div>
+                                                class="font-medium text-right">@Model.No</span></div>
                                         <div _ngcontent-serverapp-c253="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c253="" class="whitespace-nowrap mr-2">Ngày
                                                 khám</span><span _ngcontent-serverapp-c253=""
-                                                class="font-medium text-right">@(appointment.SlotSchedule.FromTime + " - "+appointment.Schedule.CheckInDate.ToShortDateString())</span></div>
+                                                class="font-medium text-right">@(Model.SlotSchedule.FromTime + " - "+Model.Schedule.CheckInDate.ToShortDateString())</span></div>
                                     
                                     
                                     
@@ -813,7 +813,7 @@
                                             class="flex justify-between ng-star-inserted"><span
                                                 _ngcontent-serverapp-c253="" class="whitespace-nowrap mr-2">Bác
                                                 sĩ</span><span _ngcontent-serverapp-c253=""
-                                                class="font-medium text-right">@appointment.Doctor.FullName</span></div>
+                                                class="font-medium text-right">@Model.Doctor.FullName</span></div>
                                     
                                     
                                     </div>
@@ -827,28 +827,28 @@
                                         <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Họ
                                                 và tên</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.Patient.Name</span></div>
+                                                class="font-medium text-right">@Model.Patient.Name</span></div>
                                         <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Năm
                                                 sinh</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.Patient.Dob.ToShortDateString() </span></div>
+                                                class="font-medium text-right">@Model.Patient.Dob.ToShortDateString() </span></div>
                                         <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Số
                                                 điện thoại</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.Patient.RelativePhone</span></div>
+                                                class="font-medium text-right">@Model.Patient.RelativePhone</span></div>
                                         <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Giới
                                                 tính</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@(appointment.Patient.Gender==Gender.Male?"Nam":"Nữ")</span></div>
+                                                class="font-medium text-right">@(Model.Patient.Gender==Gender.Male?"Nam":"Nữ")</span></div>
                                     
                                         <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Địa
                                                 chỉ</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.Patient.FullAddress</span></div>
+                                                class="font-medium text-right">@Model.Patient.FullAddress</span></div>
                                         <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Ghi
                                                 chú</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.Note</span></div>
+                                                class="font-medium text-right">@Model.Note</span></div>
                                         <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">File
                                                 đính kèm</span></div>
@@ -866,7 +866,7 @@
                                     <div _ngcontent-serverapp-c254="" class="p-4 lg:px-6 space-y-3 ng-star-inserted">
                                         <h4 _ngcontent-serverapp-c254="" class="font-medium">Kết quả khám
                                         </h4>
-                                        @if (appointment.MedicalRecord.Id == new Guid())
+                                        @if (Model.MedicalRecord.Id == new Guid())
                                         {
                                             
                                             <nz-empty _ngcontent-serverapp-c255=""
@@ -920,54 +920,66 @@
                                                 </p>
                                             </nz-empty>
                                         }else{
+                                            
                                             <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
-                                                _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Họ
-                                                và tên</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.MedicalRecord.Note </span>
+                                                _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Chuẩn đoán bệnh</span><span _ngcontent-serverapp-c254=""
+                                                class="font-medium text-right">@Model.MedicalRecord.Diagnose</span>
                                             </div>
-                                             <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
-                                                _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Họ
-                                                và tên</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.MedicalRecord.Prescription</span>
+                                            <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
+                                                _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Tình trạng bệnh</span><span _ngcontent-serverapp-c254=""
+                                                class="font-medium text-right">@Model.MedicalRecord.StatusIllness</span>
                                             </div>
-                                             <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
-                                                _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Họ
-                                                và tên</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.MedicalRecord.StatusIllness</span>
+                                            <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
+                                                _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Chú ý</span><span _ngcontent-serverapp-c254=""
+                                                class="font-medium text-right">@Model.MedicalRecord.Note </span>
                                             </div>
-                                             <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
-                                                _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Họ
-                                                và tên</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@appointment.MedicalRecord.Diagnose</span>
+                                            <h4 _ngcontent-serverapp-c254="" class="font-medium">Đơn thuốc
+                                            </h4>
+                                            <div _ngcontent-serverapp-c254="" class=" justify-between">
+                                                <span _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Tên thuốc</span>
+                                                
+                                                
+                                                <span _ngcontent-serverapp-c254=""class=" text-right" style="float:right; margin: 0 10px;">Đơn vị</span>
+                                                <span _ngcontent-serverapp-c254="" class=" text-right" style="float:right">Số lượng</span>
                                             </div>
                                             
+                                            @foreach(var item in Model.MedicalRecord.Medicine){
+
+                                                <div  _ngcontent-serverapp-c254="" class="bg-gray-50 justify-between">
+                                                    <span _ngcontent-serverapp-c254="" class="font-medium whitespace-nowrap mr-2">@item.Name</span>
+                                                    
+                                                    <span _ngcontent-serverapp-c254=""class="font-medium text-right" style="float:right; margin: 0 10px;">@item.Unit</span>
+                                                    <span _ngcontent-serverapp-c254="" class="font-medium whitespace-nowrap mr-2" style="float:right;">@item.Qty</span>
+                                                </div>
+                                                 <div  _ngcontent-serverapp-c254="" class="justify-between">
+                                                    <span _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Cách dùng: <span class="font-medium">@item.Use</span></span>
+                                                    <span _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2" style="float:right; margin: 0 10px;">tối: <span class="font-medium">@item.Night</span></span>
+                                                    <span _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2" style="float:right; margin: 0 10px;">chiều: <span class="font-medium">@item.Afternoon</span></span>
+                                                    <span _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2" style="float:right; margin: 0 10px;">trưa: <span class="font-medium">@item.Noon</span></span>
+                                                    <span _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2" style="float:right; margin: 0 10px;">sáng: <span class="font-medium">@item.Morning</span></span>
+                                                </div>
+                                            }
                                         }
                                     </div>
                                 </app-subclinical-result>
                                 <div _ngcontent-serverapp-c256=""
                                     class="bg-gray-50 p-4 lg:px-6 text-xs text-center">
                                     <p _ngcontent-serverapp-c256="">Tổng đài hỗ trợ và chăm sóc khách hàng <a
-                                            _ngcontent-serverapp-c256="" href="tel:19002805"
-                                            class="text-primary">1900-2805</a></p>
+                                            _ngcontent-serverapp-c256="" href="tel:0373951042"
+                                            class="text-primary">0373951042</a></p>
                                 </div>
-                                <div _ngcontent-serverapp-c256=""
-                                    class="p-4 lg:p-6 flex justify-between items-center gap-6 mt-auto">
-                                    <div _ngcontent-serverapp-c256=""><a _ngcontent-serverapp-c256="" asp-action="CancelAppointment" asp-route-id="@appointment.Id"
-                                            class="text-orange-500 hover:underline ng-star-inserted">Hủy
-                                            lịch</a>
-                                    
+                                @if(Model.Status == StatusAppointment.approved)
+                                {
+                                    <div _ngcontent-serverapp-c256=""
+                                        class="p-4 lg:p-6 flex justify-between items-center gap-6 mt-auto">
+                                        <div _ngcontent-serverapp-c256=""><a _ngcontent-serverapp-c256="" asp-action="CancelAppointment" asp-route-id="@Model.Id"
+                                                class="text-orange-500 hover:underline ng-star-inserted">Hủy
+                                                lịch</a>
+                                        </div>
                                     </div>
-                                
-                                </div>
-                                </div>
-                                i++;
-                            }
-                        
-                        
-                        
-                        
-                        
-                        
+                                    
+                                }
+                            </div>
                     </div>
                 </app-detail>
                 
@@ -987,7 +999,7 @@
                         class="flex overflow-y-auto hide-scroll-bar md:py-4 md:flex-col ng-tns-c135-20">
                         <li _ngcontent-serverapp-c258="" class="ng-tns-c135-20"><a
                                 _ngcontent-serverapp-c258="" routerlink="/lich-kham"
-                                class="menu-item item-active ng-tns-c135-20"  asp-action="Appointment" asp-controller="Profile">Lịch khám</a>
+                                class="menu-item item-active ng-tns-c135-20"  asp-action="Model" asp-controller="Profile">Lịch khám</a>
                         </li>
                         <li _ngcontent-serverapp-c258="" class="ng-tns-c135-20"><a
                                 _ngcontent-serverapp-c258="" routerlink="/thanh-toan"

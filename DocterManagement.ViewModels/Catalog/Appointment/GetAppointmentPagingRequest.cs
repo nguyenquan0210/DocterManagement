@@ -1,4 +1,5 @@
-﻿using DoctorManagement.ViewModels.Common;
+﻿using DoctorManagement.Data.Enums;
+using DoctorManagement.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace DoctorManagement.ViewModels.Catalog.Appointment
         public string? Keyword { get; set; }
         public string? UserName { get; set; }
         public string? UserNameDoctor { get; set; }
+        public StatusAppointment? status { get; set; }
     }
 }

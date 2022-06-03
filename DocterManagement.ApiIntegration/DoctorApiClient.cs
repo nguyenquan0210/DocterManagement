@@ -73,7 +73,7 @@ namespace DoctorManagement.ApiIntegration
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
-        public async Task<ApiResult<bool>> AddInfo(AddPatientInfoRequest request)
+        public async Task<ApiResult<Guid>> AddInfo(AddPatientInfoRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -87,9 +87,9 @@ namespace DoctorManagement.ApiIntegration
             var response = await client.PostAsync($"/api/client/add-patient-info", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<Guid>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+            return JsonConvert.DeserializeObject<ApiErrorResult<Guid>>(result);
         }
     }
 }

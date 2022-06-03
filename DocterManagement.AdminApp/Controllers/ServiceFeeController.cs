@@ -77,10 +77,10 @@ namespace DoctorManagement.AdminApp.Controllers
         {
             List<SelectListItem> gender = new List<SelectListItem>()
             {
-                new SelectListItem(text: "Chờ xử lý", value: "0"),
-                new SelectListItem(text: "Chờ phê duyệt", value: "1"),
-                new SelectListItem(text: "Hoàn thành", value: "2"),
-                new SelectListItem(text: "Hủy bỏ", value: "3"),
+               new SelectListItem(text: "Chờ xử lý", value: StatusAppointment.pending.ToString()),
+                new SelectListItem(text: "Chờ phê duyệt", value: StatusAppointment.approved.ToString()),
+                new SelectListItem(text: "Hoàn thành", value: StatusAppointment.complete.ToString()),
+                new SelectListItem(text: "Hủy bỏ", value: StatusAppointment.cancel.ToString()),
                 new SelectListItem(text: "Tất cả", value: "")
             };
             var rs = gender.Select(x => new SelectListItem()

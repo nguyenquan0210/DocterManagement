@@ -1,0 +1,13 @@
+﻿@using DoctorManagement.ViewModels.Catalog.MasterData
+@{
+    var information = (InformationVm)ViewBag.Information;
+}
+<div _ngcontent-serverapp-c54="" class="px-4 py-6 text-sm col-span-12 md:col-span-4 space-y-2">
+                            <img _ngcontent-serverapp-c54="" width="177" height="60" loading="lazy"
+                                src="~/img/booking/logo.png" alt="DoctorMed">
+                            <p _ngcontent-serverapp-c54="" class="font-medium">@information.Company</p>
+                            <p _ngcontent-serverapp-c54=""><strong _ngcontent-serverapp-c54="">VPĐD:</strong> @information.FullAddress</p>
+                            <p _ngcontent-serverapp-c54=""><strong _ngcontent-serverapp-c54="">Hotline:</strong><a
+                                    _ngcontent-serverapp-c54="" href="tel:@information.Hotline"
+                                    class="font-medium hover:underline">@information.Hotline</a> | @information.TimeWorking </p>
+                        </div>

@@ -200,6 +200,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
 
         public async Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPaging(GetAppointmentPagingRequest request)
         {
+            
             var query = from a in _context.Appointments
                         join d in _context.Doctors on a.DoctorId equals d.UserId
                         join ud in _context.AppUsers on d.UserId equals ud.Id
@@ -210,10 +211,11 @@ namespace DoctorManagement.Application.Catalog.Appointment
                         join m in _context.MedicalRecords on a.Id equals m.AppointmentId into me
                         from m in me.DefaultIfEmpty()
                         select new {a,d,p,slot,sche,u,m,ud};
+
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.a.No.Contains(request.Keyword)|| x.p.Name.Contains(request.Keyword) ||
+                query = query.Where(x => x.a.No.Contains(request.Keyword)|| x.p.Name.Contains(request.Keyword) || x.p.RelativePhone.Contains(request.Keyword) ||
                 x.d.FirstName.Contains(request.Keyword) || x.d.LastName.Contains(request.Keyword));
             }
             if (!string.IsNullOrEmpty(request.UserName))
@@ -224,8 +226,12 @@ namespace DoctorManagement.Application.Catalog.Appointment
             {
                 query = query.Where(x => x.ud.UserName == request.UserNameDoctor);
             }
+            if (request.status != null)
+            {
+                query = query.Where(x => x.a.Status == request.status);
+            }
             int totalRow = await query.CountAsync();
-            query = query.OrderByDescending(x => x.sche.CheckInDate);
+            query = query.OrderByDescending(x=>x.a.Status).ThenBy(x => x.sche.CheckInDate);
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new AppointmentVm()
@@ -340,7 +346,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     LastName = doctor.LastName,
                     MapUrl = doctor.MapUrl,
                     FullAddress = doctor.FullAddress,
-                    Img= doctor.Img,
+                    Img = "user-content/" + doctor.Img,
                     FullName = doctor.Prefix +" "+ doctor.LastName + " " + doctor.FirstName,
                     User = new UserVm()
                     {
@@ -457,6 +463,34 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 }
             };
             await _emailService.SendEmailCancelAppoitment(options);
+        }
+
+        public async Task<ApiResult<bool>> AddExpired(GetAppointmentPagingRequest request)
+        {
+            var expired = from a in _context.Appointments
+                          join d in _context.Doctors on a.DoctorId equals d.UserId
+                          join ud in _context.AppUsers on d.UserId equals ud.Id
+                          join p in _context.Patients on a.PatientId equals p.PatientId
+                          join u in _context.AppUsers on p.UserId equals u.Id
+                          join slot in _context.schedulesSlots on a.SchedulesSlotId equals slot.Id
+                          join sche in _context.Schedules on slot.ScheduleId equals sche.Id
+                          where sche.CreatedAt <= DateTime.Now.AddHours(-12) && a.Status == StatusAppointment.approved
+                          select new { a, u, ud};
+            if (!string.IsNullOrEmpty(request.UserName))
+            {
+                expired = expired.Where(x => x.u.UserName == request.UserName);
+            }
+            if (!string.IsNullOrEmpty(request.UserNameDoctor))
+            {
+                expired = expired.Where(x => x.ud.UserName == request.UserNameDoctor);
+            }
+            foreach (var remove in expired)
+            {
+                var addexpired = await _context.Appointments.FindAsync(remove.a.Id);
+                addexpired.Status = StatusAppointment.pending;
+            }
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
         }
     }
 }

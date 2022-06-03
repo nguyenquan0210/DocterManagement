@@ -1,12 +1,14 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.System.Patient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DoctorManagement.WebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class BookingController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,9 +18,10 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly IScheduleApiClient _scheduleApiClient;
         private readonly IAppointmentApiClient _appointmentApiClient;
         private readonly IClinicApiClient _clinicalApiClient;
+        private readonly ILocationApiClient _locationApiClient;
         public BookingController(ILogger<HomeController> logger, IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
             ISpecialityApiClient specialityApiClient, IScheduleApiClient scheduleApiClient, IAppointmentApiClient appointmentApiClient,
-            IClinicApiClient clinicApiClient)
+            IClinicApiClient clinicApiClient, ILocationApiClient locationApiClient)
         {
             _logger = logger;
             _userApiClient = userApiClient;
@@ -27,6 +30,7 @@ namespace DoctorManagement.WebApp.Controllers
             _scheduleApiClient = scheduleApiClient;
             _appointmentApiClient = appointmentApiClient;
             _clinicalApiClient = clinicApiClient;
+            _locationApiClient = locationApiClient;
         }
         public IActionResult Index()
         {
@@ -38,7 +42,11 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> BookingDoctorSetPatient(Guid doctorid, Guid scheduleid)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
             ViewBag.Doctor = (await _doctorApiClient.GetById(doctorid)).Data;
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(doctorid)).Data.ToList();
             ViewBag.GetScheduleDoctor = getScheduleDoctor;
@@ -60,8 +68,11 @@ namespace DoctorManagement.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> BookingDoctorSetPatient(AppointmentCreateRequest request)
         {
-            
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
             ViewBag.Doctor = (await _doctorApiClient.GetById(request.DoctorId)).Data;
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(request.DoctorId)).Data.ToList();
             ViewBag.GetScheduleDoctor = getScheduleDoctor;
@@ -79,9 +90,33 @@ namespace DoctorManagement.WebApp.Controllers
             }
             return View(request);
         }
+        [HttpPost]
+        public async Task<IActionResult> AddInfoParent(AddPatientInfoParentRequest request)
+        {
+            if (!ModelState.IsValid) RedirectToAction("BookingDoctorSetPatient", new { doctorid = request.doctorid, scheduleid = request.scheduleid });
+            var add = new AddPatientInfoRequest()
+            {
+                Address = request.Address,
+                DistrictId = request.DistrictId,
+                Dob = request.Dob,
+                EthnicId = request.EthnicId,
+                Gender = request.Gender,
+                Identitycard = request.Identitycard,
+                LocationId = request.LocationId,
+                Name = request.Name,
+                ProvinceId = request.ProvinceId,
+                RelativeEmail = request.RelativeEmail,
+                RelativeName = request.RelativeName,
+                RelativePhone = request.RelativePhone,
+                UserName = request.UserName,
+            };
+            await _doctorApiClient.AddInfo(add);
+            return RedirectToAction("BookingDoctorSetPatient",new { doctorid = request.doctorid, scheduleid = request.scheduleid });
+          
+        }
         public async Task<IActionResult> BookingClinicSetDoctor(Guid clinicId)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(clinicId)).Data;
 
             return View();
@@ -90,7 +125,7 @@ namespace DoctorManagement.WebApp.Controllers
         public async Task<IActionResult> BookingClinicSetDoctor(AppointmentCreateRequest request)
         {
             request.IsDoctor = false;
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(request.ClinicId.Value)).Data;
             
             if (!ModelState.IsValid) return View(request);
@@ -215,7 +250,7 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> BookingClinicSetPatient(Guid clinicId)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
             var clinic = await _clinicalApiClient.GetById(clinicId);
             if (!clinic.IsSuccessed)
             {

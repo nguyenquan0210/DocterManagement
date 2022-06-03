@@ -50,16 +50,23 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả lịch khám</h5>
+                            <h5 class="mb-0">@(ViewBag.Status=="pending"?"Lịch hẹn quá hạn":
+                                ViewBag.Status=="approved"?"Lịch hẹn chờ khám bệnh":
+                                ViewBag.Status=="complete"?"Lịch hẹn Đã khám bệnh":
+                                ViewBag.Status=="cancel"?"Lịch hẹn đã hủy":"Tất cả lịch hẹn")</h5>
                             <p class="text-sm mb-0">
                                 Lịch khám được tạo theo ngày trong tuần.
                             </p>
                         </div>
-                        <div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                        <div class="ms-auto my-auto mt-lg-0 mt-4  col-3 ">
                            
                             <div class="ms-auto my-auto">
+                                <form  asp-action="Index" method="get" class="m-4 col-11 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
+                                    <input type="hidden" name ="check" value="true" />
+                                    <select id ="seletedstatus" name="status" oninvalid="@ViewBag.Status" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.LStatus" >
+                                    </select>
+                                </form>
                                 
-                                <a asp-action="Create"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm lịch khám</a>
                                 
                             </div>
                         </div>
@@ -115,7 +122,7 @@
                                             badge-sm" id="status_@item.Id">
                                                 @(item.Status==StatusAppointment.approved?"Đã đặt khám":
                                                                 item.Status==StatusAppointment.cancel?"Đã hủy":
-                                                                item.Status==StatusAppointment.complete?"Đã khám bệnh":"Đợi xử lý")</span>
+                                                                item.Status==StatusAppointment.complete?"Đã khám bệnh":"Lịch hẹn quá hạn")</span>
                                         </td>
                                         <td class="text-sm">
                                             <a  asp-action = "DetailtAppointment" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
@@ -208,10 +215,20 @@
 </div>
 
 @section jsFooter{
-   
+    <script> 
+        if (document.getElementById('seletedstatus')) {
+            var seletedstatus = document.getElementById('seletedstatus');
+            const example = new Choices(seletedstatus, {
+                searchEnabled: false,
+            });
+        }
+        
+    </script>
     <script src="~/js/plugins/datatables.js"></script>
      
     <script>
+       
+       
         if (document.getElementById('list')) {
             const dataTableSearch = new simpleDatatables.DataTable("#list", {
                 searchable: false,

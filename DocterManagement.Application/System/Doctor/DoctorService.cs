@@ -52,7 +52,7 @@ namespace DoctorManagement.Application.System.Doctor
                     Id = x.SpecialityId,
                     Title = x.Specialities.Title
                 }).ToList(),
-                GetClinic = new GetClinicVm()
+                GetClinic = x.ClinicId==null? new GetClinicVm() : new GetClinicVm()
                 {
                     Id = x.ClinicId.Value,
                     Name = x.Clinics.Name
@@ -225,11 +225,11 @@ namespace DoctorManagement.Application.System.Doctor
             return new ApiErrorResult<bool>("");
         }
 
-        public async Task<ApiResult<bool>> AddInfo(AddPatientInfoRequest request)
+        public async Task<ApiResult<Guid>> AddInfo(AddPatientInfoRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             var patiens = _context.Patients.Where(x => x.IsPrimary && x.UserId == user.Id);
-            if (user == null) return new ApiErrorResult<bool>("Tài khoản tạo hồ sơ không được phép!");
+            if (user == null) return new ApiErrorResult<Guid>("Tài khoản tạo hồ sơ không được phép!");
             string year = DateTime.Now.ToString("yy");
             string month = DateTime.Now.ToString("MM");
             int count = await _context.Patients.Where(x => x.No.Contains("DMP" + year + month)).CountAsync();
@@ -263,8 +263,8 @@ namespace DoctorManagement.Application.System.Doctor
             };
             await _context.Patients.AddAsync(patient);
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("Thêm hồ sơ bệnh không thành công!");
+            if (rs != 0) return new ApiSuccessResult<Guid>(patient.PatientId);
+            return new ApiErrorResult<Guid>("Thêm hồ sơ bệnh không thành công!");
         }
 
         public async Task<ApiResult<List<UserVm>>> GetAllUser(string? role)
