@@ -75,6 +75,8 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Controller.ToString()), "controller");
             requestContent.Add(new StringContent(request.ParentId.ToString()), "parentId");
             requestContent.Add(new StringContent(request.Type.ToString()), "type");
+            requestContent.Add(new StringContent(request.Title.ToString()), "title");
+            requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
             var response = await client.PostAsync($"/api/masterData/create-mainmenu", requestContent);
             var result = await response.Content.ReadAsStringAsync();
@@ -220,7 +222,8 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.ParentId.ToString()), "parentId");
             requestContent.Add(new StringContent(request.Type.ToString()), "type");
             requestContent.Add(new StringContent(request.IsDeleted.ToString()), "isDeleted");
-
+            requestContent.Add(new StringContent(request.Title.ToString()), "title");
+            requestContent.Add(new StringContent(request.Description.ToString()), "description");
             var response = await client.PutAsync($"/api/masterData/update-mainmenu", requestContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

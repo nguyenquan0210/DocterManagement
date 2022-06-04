@@ -95,6 +95,20 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
+                            <label asp-for="Title" class="form-label mt-4"></label>
+                            <input asp-for="Title" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-8">
+                            <label asp-for="Description" class="form-label mt-4"></label>
+                            <textarea asp-for="Description" class="multisteps-form__input form-control" ></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
                             <label asp-for="Controller" class="form-label mt-4"></label>
                             <input asp-for="Controller" class="multisteps-form__input form-control" />
                             <span asp-validation-for="Controller" class="text-danger"></span>
@@ -114,7 +128,7 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="Image" class="form-label "></label>
+                            <label asp-for="Image" class="form-label mt-4"></label>
                             <input asp-for="Image" class="multisteps-form__input form-control" />
                             <span asp-validation-for="Image" class="text-danger"></span>
 

@@ -2,9 +2,10 @@
 @{
     var information = (InformationVm)ViewBag.Information;
 }
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 <div _ngcontent-serverapp-c54="" class="px-4 py-6 text-sm col-span-12 md:col-span-4 space-y-2">
                             <img _ngcontent-serverapp-c54="" width="177" height="60" loading="lazy"
-                                src="~/img/booking/logo.png" alt="DoctorMed">
+                                src="@(Configuration["BaseAddress"] + "/img/" + information.Image)" alt="DoctorMed">
                             <p _ngcontent-serverapp-c54="" class="font-medium">@information.Company</p>
                             <p _ngcontent-serverapp-c54=""><strong _ngcontent-serverapp-c54="">VPĐD:</strong> @information.FullAddress</p>
                             <p _ngcontent-serverapp-c54=""><strong _ngcontent-serverapp-c54="">Hotline:</strong><a

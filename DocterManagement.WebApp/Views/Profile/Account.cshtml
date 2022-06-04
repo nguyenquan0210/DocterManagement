@@ -1,0 +1,756 @@
+﻿@using DoctorManagement.ViewModels.System.Patient
+@model DoctorManagement.ViewModels.System.Users.ChangePasswordRequest
+
+@{
+    ViewData["Title"] = "Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var patient = (PatientVm)ViewBag.Patient;
+}
+@section Stylesheet{
+    <style>
+        .root-layout[_ngcontent-serverApp-c55] {
+            background-color: #f6f6f6
+        }
+    </style>
+    <style>
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @@media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @@media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c54] .ant-collapse-content-box {
+            padding: 0 !important
+        }
+
+        nz-collapse-panel[_ngcontent-serverApp-c54] {
+            padding: 0 !important
+        }
+
+        [_nghost-serverApp-c54] .ant-collapse-header {
+            cursor: pointer !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 600 !important;
+            color: currentColor !important
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c54] .ant-collapse-header {
+                cursor: auto !important
+            }
+
+            nz-collapse-panel[_ngcontent-serverApp-c54] {
+                border-style: none !important
+            }
+        }
+
+        a[_ngcontent-serverApp-c54]:hover {
+            color: currentColor
+        }
+    </style>
+    <style>
+        .wrapper-main[_ngcontent-serverApp-c67] {
+            background: linear-gradient(90deg, #00c6fb 0%, #0758d8 98.74%)
+        }
+
+        @@media only screen and (max-width: 767px) {
+            .banner-navigation[_ngcontent-serverApp-c67] {
+                background: white
+            }
+        }
+
+        .selected[_ngcontent-serverApp-c67] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [nz-carousel-content][_ngcontent-serverApp-c68] {
+            overflow: hidden
+        }
+    </style>
+    <style>
+        .main-search[_ngcontent-serverApp-c64] {
+            margin: 0;
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: .5rem;
+            border-color: transparent;
+            padding: .75rem 2.25rem .75rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+
+        .main-search[_ngcontent-serverApp-c64]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .main-search[_ngcontent-serverApp-c64]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            outline: 2px solid transparent;
+            outline-offset: 2px
+        }
+
+        @@media (min-width: 782px) {
+            .main-search[_ngcontent-serverApp-c64] {
+                padding-right: .75rem;
+                padding-left: 3rem
+            }
+        }
+
+        .main-search[_ngcontent-serverApp-c64]::-webkit-calendar-picker-indicator {
+            display: none !important
+        }
+    </style>
+    <style>
+        .bookmark_hospital[_ngcontent-serverApp-c66]::-webkit-scrollbar {
+            background: transparent;
+            width: 0px
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c135] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c135]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c135]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c135]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c135] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c135]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c157] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c157]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c157]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c157]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c157] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c157]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c161] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c161]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c161]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c161]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c161] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c161]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c159] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c159]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c159]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-select[_ngcontent-serverApp-c159] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-select[_ngcontent-serverApp-c159]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-select[_ngcontent-serverApp-c159]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-radio[_ngcontent-serverApp-c159] {
+            margin: 0;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-label[_ngcontent-serverApp-c159] {
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c158] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c158]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c158]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-select[_ngcontent-serverApp-c158] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-select[_ngcontent-serverApp-c158]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-select[_ngcontent-serverApp-c158]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-radio[_ngcontent-serverApp-c158] {
+            margin: 0;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-label[_ngcontent-serverApp-c158] {
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c170] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c170]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c170]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c170]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c170] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c170]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c169] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c169]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c169]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-label[_ngcontent-serverApp-c169] {
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+    </style>
+}
+<app-account _nghost-serverapp-c170="" class="ng-star-inserted">
+    <section _ngcontent-serverapp-c170="" class="bg-gray-100">
+        <div _ngcontent-serverapp-c170=""
+            class="max-w-7xl mx-auto md:p-4 grid grid-cols-1 md:grid-cols-12 md:gap-4 lg:py-10">
+            <div _ngcontent-serverapp-c170="" class="col-span-1 md:col-span-3">
+                <div _ngcontent-serverapp-c170="" class="bg-white md:rounded-md">
+                    <ul _ngcontent-serverapp-c170=""
+                        class="flex overflow-y-auto hide-scroll-bar md:py-4 md:flex-col">
+                        <li _ngcontent-serverapp-c170=""><a _ngcontent-serverapp-c161="" class="menu-item"
+                               asp-action="Appointment" asp-controller="Profile">Lịch khám</a></li>
+                        @*<li _ngcontent-serverapp-c161=""><a _ngcontent-serverapp-c161="" class="menu-item"
+                                href="/thanh-toan">Lịch sử thanh toán</a></li>*@
+                        <li _ngcontent-serverapp-c170=""><a _ngcontent-serverapp-c161=""
+                                class="menu-item item-active" asp-action="Index" asp-controller="Profile">Hồ sơ</a></li>
+                        <li _ngcontent-serverapp-c170=""><a _ngcontent-serverapp-c161="" asp-action="Account" class="menu-item"
+                               >Tài khoản</a></li>
+                        <li _ngcontent-serverapp-c170=""><a _ngcontent-serverapp-c161="" class="menu-item"
+                                asp-action="Logout" asp-controller="Login">Đăng xuất</a></li>
+                </div>
+            </div>
+            <div _ngcontent-serverapp-c170="" class="md:col-span-9">
+                <h1 _ngcontent-serverapp-c170="" class="text-xl mb-2 p-4 md:px-0">Tài khoản</h1>
+                <app-list _ngcontent-serverapp-c170="" _nghost-serverapp-c169="">
+                    <div _ngcontent-serverapp-c169="" class="grid gap-4 md:grid-cols-2">
+                        <div _ngcontent-serverapp-c169="" class="bg-white md:rounded-lg p-4 lg:p-6">
+                            <h3 _ngcontent-serverapp-c169="" class="text-base font-medium mb-4">Thông tin
+                                tài khoản</h3>
+                            <div _ngcontent-serverapp-c169="">
+                                <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
+                                        _ngcontent-serverapp-c169="">Họ và tên</label>
+                                    <p _ngcontent-serverapp-c169="" class="font-medium">@patient.Name</p>
+                                </div>
+                                <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
+                                        _ngcontent-serverapp-c169="">Số điện thoại</label>
+                                    <p _ngcontent-serverapp-c169="" class="font-medium">@patient.RelativePhone</p>
+                                </div>
+                                <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
+                                        _ngcontent-serverapp-c169="">Ngày sinh</label>
+                                    <p _ngcontent-serverapp-c169="" class="font-medium">@patient.Dob.ToShortDateString()</p>
+                                </div>
+                                <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
+                                        _ngcontent-serverapp-c169="">Địa chỉ</label>
+                                    <p _ngcontent-serverapp-c169="" class="font-medium">@patient.FullAddress</p>
+                                </div>
+                                <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
+                                        _ngcontent-serverapp-c169="">CMND/CCCD</label>
+                                    <p _ngcontent-serverapp-c169="" class="font-medium">@patient.Identitycard</p>
+                                </div>
+                                <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
+                                        _ngcontent-serverapp-c169="">Mã BHYT</label>
+                                    <p _ngcontent-serverapp-c169="" class="font-medium">---</p>
+                                </div>
+                                <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><a
+                                        _ngcontent-serverapp-c169="" routerlink="/ho-so"
+                                        class="text-primary" href="/ho-so">Thay đổi thông tin</a></div>
+                            </div>
+                        </div>
+                        <div _ngcontent-serverapp-c169="" class="bg-white md:rounded-lg p-4 lg:p-6">
+                            <h3 _ngcontent-serverapp-c169="" class="text-base font-medium mb-4">Thay đổi mật
+                                khẩu</h3>
+                            <form _ngcontent-serverapp-c169="" 
+                                class="grid grid-cols-1 gap-4 ant-form ng-untouched ng-pristine ng-invalid ant-form-horizontal">
+                                <nz-form-control _ngcontent-serverapp-c169=""
+                                    class="ng-tns-c166-63 ant-form-item-control ant-col ng-star-inserted">
+                                    <div class="ant-form-item-control-input ng-tns-c166-63">
+                                        <div class="ant-form-item-control-input-content ng-tns-c166-63">
+                                            <label _ngcontent-serverapp-c169="" for="currentPassword"
+                                                class="form-label ng-tns-c166-63">Mật khẩu hiện tại <span
+                                                    _ngcontent-serverapp-c169=""
+                                                    class="text-red-500">*</span></label>
+                                            <div _ngcontent-serverapp-c169=""
+                                                class="relative flex items-center ng-tns-c166-63"><input
+                                                    _ngcontent-serverapp-c169="" type="password" nz-input=""
+                                                    formcontrolname="currentPassword"
+                                                    placeholder="Mật khẩu hiện tại của bạn"
+                                                    inputmode="numeric" pattern="[0-9]*" digitonly=""
+                                                    class="form-control ng-untouched ng-pristine ng-invalid"
+                                                    maxlength="6"><img _ngcontent-serverapp-c169=""
+                                                    width="20" height="20"
+                                                    class="absolute bottom-1/2 translate-y-1/2 right-2"
+                                                    src="../assets/img/booking/svg/Hide.svg"></div>
+                                            
+                                        </div><span class="ant-form-item-children-icon ng-tns-c166-63">
+                                            
+                                        </span>
+                                    </div>
+                                    
+                                    
+                                </nz-form-control>
+                                <nz-form-control _ngcontent-serverapp-c169=""
+                                    class="ng-tns-c166-64 ant-form-item-control ant-col ng-star-inserted">
+                                    <div class="ant-form-item-control-input ng-tns-c166-64">
+                                        <div class="ant-form-item-control-input-content ng-tns-c166-64">
+                                            <label _ngcontent-serverapp-c169="" for="newPassword"
+                                                class="form-label ng-tns-c166-64">Mật khẩu mới <span
+                                                    _ngcontent-serverapp-c169=""
+                                                    class="text-red-500">*</span></label>
+                                            <div _ngcontent-serverapp-c169=""
+                                                class="relative flex items-center ng-tns-c166-64"><input
+                                                    _ngcontent-serverapp-c169="" type="password" nz-input=""
+                                                    formcontrolname="newPassword"
+                                                    placeholder="Nhập mật khẩu mới" inputmode="numeric"
+                                                    pattern="[0-9]*" digitonly=""
+                                                    class="form-control ng-untouched ng-pristine ng-invalid"
+                                                    maxlength="6"><img _ngcontent-serverapp-c169=""
+                                                    width="20" height="20"
+                                                    class="absolute bottom-1/2 translate-y-1/2 right-2"
+                                                    src="../assets/img/booking/svg/Hide.svg"></div>
+                                            
+                                        </div><span class="ant-form-item-children-icon ng-tns-c166-64">
+                                            
+                                        </span>
+                                    </div>
+                                    
+                                    
+                                </nz-form-control>
+                                <div _ngcontent-serverapp-c169="" class="mt-4 flex justify-end"><button
+                                        _ngcontent-serverapp-c169="" type="submit" appsingleclick=""
+                                        class="btn-primary bg-gray-300 hover:bg-gray-300 cursor-not-allowed"
+                                        disabled="">Thay đổi</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </app-list>
+            </div>
+        </div>
+    </section>
+</app-account>

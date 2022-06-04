@@ -38,7 +38,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 Email = MasterDatas.Email,
                 FullAddress = MasterDatas.FullAddress,
                 Hotline = MasterDatas.Hotline,
-                Image = MasterDatas.Image,
+                Image = MASTERDATA_CONTENT_FOLDER_NAME +"/"+ MasterDatas.Image,
                 TimeWorking = MasterDatas.TimeWorking,
             };
 
@@ -89,7 +89,9 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 IsDeleted = false,
                 Type = request.Type=="0"? "MenuHeader": request.Type == "2" ? "MenuPanner":"MenuHeaderDrop",
                 ParentId = request.ParentId.Value==null ? Guid.NewGuid() : request.ParentId.Value,
-                Image = "default"
+                Image = "default",
+                Title = request.Title,
+                Description = request.Description,
             };
             if(request.Image!= null)
             {
@@ -131,6 +133,8 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 CratedAt = x.CratedAt,
                 ParentId = x.ParentId,
                 Type = x.Type,
+                Title = x.Title,
+                Description = x.Description,
             }).ToListAsync();
             return new ApiSuccessResult<List<MainMenuVm>>(rs);
         }
@@ -164,6 +168,8 @@ namespace DoctorManagement.Application.Catalog.MasterData
                     CratedAt = x.CratedAt,
                     ParentId = x.ParentId,
                     Type = x.Type,
+                    Title = x.Title,
+                    Description = x.Description,
                 }).ToListAsync();
 
             var pagedResult = new PagedResult<MainMenuVm>()
@@ -196,7 +202,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 Type = MainMenu.Type,
                 Description = MainMenu.Description,
                 Title = MainMenu.Title,
-                ParentName = menuparent.Name
+                ParentName = menuparent.Name,
             };
             return new ApiSuccessResult<MainMenuVm>(rs);
         }
@@ -206,6 +212,8 @@ namespace DoctorManagement.Application.Catalog.MasterData
             var MainMenu = await _context.MainMenus.FindAsync(request.Id);
             if (MainMenu == null) return new ApiErrorResult<bool>("menu không tồn tại!");
             MainMenu.Name = request.Name;
+            MainMenu.Title = request.Title;
+            MainMenu.Description = request.Description;
             MainMenu.SortOrder = request.SortOrder;
             MainMenu.Controller = request.Controller;
             MainMenu.IsDeleted = request.IsDeleted;

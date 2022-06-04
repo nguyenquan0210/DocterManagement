@@ -114,8 +114,37 @@ namespace DoctorManagement.WebApp.Controllers
             return RedirectToAction("BookingDoctorSetPatient",new { doctorid = request.doctorid, scheduleid = request.scheduleid });
           
         }
+        [HttpPost]
+        public async Task<IActionResult> AddInfoParentBookingClinic(AddPatientInfoParentRequest request)
+        {
+            if (!ModelState.IsValid) return Json(null);
+            var add = new AddPatientInfoRequest()
+            {
+                Address = request.Address,
+                DistrictId = request.DistrictId,
+                Dob = request.Dob,
+                EthnicId = request.EthnicId,
+                Gender = request.Gender,
+                Identitycard = request.Identitycard,
+                LocationId = request.LocationId,
+                Name = request.Name,
+                ProvinceId = request.ProvinceId,
+                RelativeEmail = request.RelativeEmail,
+                RelativeName = request.RelativeName,
+                RelativePhone = request.RelativePhone,
+                UserName = request.UserName,
+            };
+            await _doctorApiClient.AddInfo(add);
+            var patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
+            return Json(patient);
+
+        }
         public async Task<IActionResult> BookingClinicSetDoctor(Guid clinicId)
         {
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
             ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(clinicId)).Data;
 
@@ -124,6 +153,10 @@ namespace DoctorManagement.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> BookingClinicSetDoctor(AppointmentCreateRequest request)
         {
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
             request.IsDoctor = false;
             ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(request.ClinicId.Value)).Data;

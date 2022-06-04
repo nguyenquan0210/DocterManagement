@@ -23,17 +23,19 @@ namespace DoctorManagement.Application.System.Doctor
     public class DoctorService : IDoctorService
     {
         private readonly UserManager<AppUsers> _userManager;
+        private readonly RoleManager<AppRoles> _roleManager;
         private readonly DoctorManageDbContext _context;
         private readonly IConfiguration _config;
         private const string GALLERY_CONTENT_FOLDER_NAME = "gallery-content";
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
         public DoctorService(UserManager<AppUsers> userManager,
             IConfiguration config,
-            DoctorManageDbContext context)
+            DoctorManageDbContext context, RoleManager<AppRoles> roleManager)
         {
             _config = config;
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<ApiResult<List<DoctorVm>>> GetTopFavouriteDoctors()
@@ -154,6 +156,8 @@ namespace DoctorManagement.Application.System.Doctor
                 IsPrimary = patient.IsPrimary,
                 RelativePhone = patient.RelativePhone,
                 RelativeName = patient.RelativeName,
+                RelativeEmail = patient.RelativeEmail,
+                EthnicId = patient.EthnicId,
                 Id = patient.PatientId,
                 Identitycard = patient.Identitycard,
                 Ethnics = new EthnicVm()
@@ -182,6 +186,10 @@ namespace DoctorManagement.Application.System.Doctor
                 Id = x.p.PatientId,
                 UserId = x.p.UserId,
                 Img = x.p.Img,
+                Text = "Bn",
+                DobText = x.p.Dob.ToShortDateString(),
+                GenderText = x.p.Gender == Data.Enums.Gender.Male?"Nam":"Nữ",
+                RelativeName = x.p.RelativeName,
                 Name = x.p.Name,
                 Address = x.p.Address,
                 FullAddress = x.p.Address + ", " + x.sd.Name+", " + x.d.Name + ", " + x.pro.Name ,
@@ -203,12 +211,24 @@ namespace DoctorManagement.Application.System.Doctor
         public async Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request)
         {
             var patient = await _context.Patients.FindAsync(request.Id);
+            var role = await _roleManager.FindByNameAsync("patient");
             var location = await _context.Locations.FindAsync(request.LocationId);
             var district = await _context.Locations.FindAsync(location.ParentId);
             var province = await _context.Locations.FindAsync(district.ParentId);
             var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
-            if (patient == null) return new ApiErrorResult<bool>("");
-
+            if (patient == null) return new ApiErrorResult<bool>("Tài khoản này không xác thực!");
+            var user = await _userManager.FindByIdAsync(patient.UserId.ToString());
+            var check = await _context.AppUsers.Where(x => x.Email == request.RelativeEmail && x.Id != patient.UserId && x.RoleId == role.Id).ToListAsync();
+            if (check.FirstOrDefault() != null)
+            {
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
+            }
+            if (patient.IsPrimary && request.RelativeEmail != patient.RelativeEmail)
+            {
+                
+                await _userManager.ChangeEmailAsync(user,request.RelativeEmail, await _userManager.GenerateChangeEmailTokenAsync(user, request.RelativeEmail));
+                patient.RelativeEmail = request.RelativeEmail;
+            }
             patient.LocationId = request.LocationId;
             patient.Name = request.Name;
             patient.FullAddress = fullAddress;
@@ -219,10 +239,10 @@ namespace DoctorManagement.Application.System.Doctor
             patient.EthnicId = request.EthnicId;
             patient.RelativeName = request.RelativeName;
             patient.RelativePhone = request.RelativePhone;
-            patient.RelativeEmail = request.RelativeEmail;
+          
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Thông tin của bạn không thay đổi?");
         }
 
         public async Task<ApiResult<Guid>> AddInfo(AddPatientInfoRequest request)

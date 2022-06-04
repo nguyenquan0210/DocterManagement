@@ -12,6 +12,9 @@ namespace DoctorManagement.WebApp.Controllers.Components
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            var mainMenus = (await _masterDataApiClient.GetAllMainMenu()).Data;
+            ViewBag.Menus = mainMenus.Where(x => x.Type == "MenuHeader").ToList();
+            ViewBag.Menusdrops = mainMenus.Where(x=>x.Type== "MenuHeaderDrop").ToList();
             var information = (await _masterDataApiClient.GetById()).Data;
             ViewBag.Information = information;
             return View();

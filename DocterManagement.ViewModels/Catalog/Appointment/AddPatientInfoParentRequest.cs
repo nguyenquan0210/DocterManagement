@@ -21,8 +21,8 @@ namespace DoctorManagement.ViewModels.Catalog.Appointment
         public Guid DistrictId { get; set; }
         public Guid ProvinceId { get; set; }
         public Guid EthnicId { get; set; }
-        public Guid doctorid { get; set; }
-        public Guid scheduleid { get; set; }
+        public Guid? doctorid { get; set; }
+        public Guid? scheduleid { get; set; }
         public string RelativeEmail { get; set; }
     }
 }

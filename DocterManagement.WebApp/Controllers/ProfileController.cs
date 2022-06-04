@@ -33,6 +33,12 @@ namespace DoctorManagement.WebApp.Controllers
         
             return View();
         }
+        public async Task<IActionResult> Account()
+        {
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data.FirstOrDefault(x=>x.IsPrimary);
+
+            return View();
+        }
         public async Task<IActionResult> UpdateInfo(Guid Id)
         {
             ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;

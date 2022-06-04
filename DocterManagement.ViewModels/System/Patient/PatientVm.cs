@@ -16,9 +16,12 @@ namespace DoctorManagement.ViewModels.System.Patient
         public Guid UserId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+        public string Text { get; set; }
         public string Img { get; set; }
         public string No { get; set; }
         public Gender Gender { get; set; }
+        public string GenderText { get; set; }
+        public string DobText { get; set; }
         public DateTime Dob { get; set; }
         public bool IsPrimary { get; set; }
         public string RelativeName { get; set; }
