@@ -46,7 +46,7 @@ namespace DoctorManagement.Application.Catalog.Medicine
             {
                 return new ApiSuccessResult<bool>();
             }
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Tạo đơn thuốc không thành công!");
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
         {
@@ -136,7 +136,7 @@ namespace DoctorManagement.Application.Catalog.Medicine
         public async Task<ApiResult<MedicineVm>> GetById(Guid Id)
         {
             var x = await _context.Medicines.FindAsync(Id);
-            if (x == null) return new ApiErrorResult<MedicineVm>("null");
+            if (x == null) return new ApiErrorResult<MedicineVm>("Đơn thuốc không được xác nhận!");
             var rs = new MedicineVm()
             {
                 Id = x.Id,
@@ -155,7 +155,7 @@ namespace DoctorManagement.Application.Catalog.Medicine
         public async Task<ApiResult<bool>> Update(MedicineUpdateRequest request)
         {
             var medicines = await _context.Medicines.FindAsync(request.Id);
-            if (medicines == null) return new ApiErrorResult<bool>("");
+            if (medicines == null) return new ApiErrorResult<bool>("Đơn thuốc không được xác nhận!");
 
             medicines.Description = request.Description;
             medicines.Name = request.Name;
@@ -170,7 +170,7 @@ namespace DoctorManagement.Application.Catalog.Medicine
 
             var rs = await _context.SaveChangesAsync();
             if(rs!= 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Cập nhật đơn thuốc không thành công!");
         }
     }
 }

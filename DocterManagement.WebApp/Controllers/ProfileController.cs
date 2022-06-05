@@ -1,11 +1,14 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DoctorManagement.WebApp.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly IUserApiClient _userApiClient;
@@ -29,19 +32,40 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
         
             return View();
         }
         public async Task<IActionResult> Account()
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data.FirstOrDefault(x=>x.IsPrimary);
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data.FirstOrDefault(x=>x.IsPrimary);
 
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Account(ChangePasswordRequest request)
+        {
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data.FirstOrDefault(x => x.IsPrimary);
+
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _userApiClient.ChangePassword(request);
+            if (result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = "Thay đổi thông tin thành công";
+                TempData["AlertType"] = "success";
+                TempData["AlertId"] = "successToast";
+                return RedirectToAction("Index");
+            }
+            
+            TempData["AlertMessage"] = result.ValidationErrors[1];
+            TempData["AlertType"] = "error";
+            TempData["AlertId"] = "errorToast";
+            return View(request);
+        }
         public async Task<IActionResult> UpdateInfo(Guid Id)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             
@@ -75,7 +99,7 @@ namespace DoctorManagement.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInfo(UpdatePatientInfoRequest request)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             ViewBag.District = await _locationApiClient.CityGetAllDistrict(new Guid(), request.ProvinceId);
@@ -96,7 +120,7 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> AddInfo()
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             ViewBag.District = new List<SelectListItem>();
@@ -107,14 +131,28 @@ namespace DoctorManagement.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddInfo(AddPatientInfoRequest request)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             ViewBag.District = await _locationApiClient.CityGetAllDistrict(new Guid(),request.ProvinceId);
             ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(new Guid(),request.DistrictId);
             if (!ModelState.IsValid) return View(request);
             var result = await _doctorApiClient.AddInfo(request);
-            if(!result.IsSuccessed) return View(request);
+            if (!result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return View(request);
+            }
+            else
+            {
+                TempData["AlertMessage"] = "Hủy lịch khám thành công.";
+                TempData["AlertType"] = "success";
+                TempData["AlertId"] = "successToast";
+
+            }
+            
             return RedirectToAction("Index");
         }
         
@@ -163,6 +201,31 @@ namespace DoctorManagement.WebApp.Controllers
 
            
             return View(appointment);
+        }
+        [HttpGet]
+        public async Task<IActionResult> CanceledAppointment(Guid Id)
+        {
+            var cancelRequest = new AppointmentCancelRequest()
+            {
+                Id = Id,
+                CancelReason = "Bận đột xuất",
+                Checked = "pantient"
+            };
+            var result = await _appointmentApiClient.CanceledAppointment(cancelRequest);
+            if (!result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+            }
+            else
+            {
+                TempData["AlertMessage"] = "Hủy lịch khám thành công.";
+                TempData["AlertType"] = "success";
+                TempData["AlertId"] = "successToast";
+
+            }
+            return RedirectToAction("Appointment");
         }
     }
 }

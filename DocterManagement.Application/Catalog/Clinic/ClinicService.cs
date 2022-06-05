@@ -241,7 +241,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                        join dt in _context.Doctors on u.Id equals dt.UserId
                        where r.Name.ToUpper() == "DOCTOR" && dt.ClinicId == Id
                        select dt;
-            if (clinics == null) return new ApiErrorResult<ClinicVm>("null");
+            if (clinics == null) return new ApiErrorResult<ClinicVm>("Phòng khám không được xác nhận!");
             var rs = new ClinicVm()
             {
                 Id = clinics.Id,
@@ -338,7 +338,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
         {
             var i = _context.ImageClinics.Where(x=> x.ClinicId == request.Id).Count();
             var clinics = await _context.Clinics.FindAsync(request.Id);
-            if (clinics == null) return new ApiErrorResult<bool>("null");
+            if (clinics == null) return new ApiErrorResult<bool>("Phòng khám không được xác nhận!");
             clinics.Address = request.Address;
             clinics.Name = request.Name;
             clinics.Description = request.Description;

@@ -170,6 +170,16 @@ Validator.isEmail = (selector, message="Trường này phải là email") => {
 	}
 }
 
+Validator.isPhone = (selector, message="Vui lòng nhập đúng số điện thoại") => {
+	return {
+		selector,
+		test: function (value) {
+			const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
+			return regex.test(value.toUpperCase().trim()) ? undefined : message
+		}
+	}
+}
+
 Validator.minNumber = (selector, message="Nhập tối tiểu một số ") => {
 	return {
 		selector,

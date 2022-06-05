@@ -1,0 +1,1071 @@
+﻿@using DoctorManagement.ViewModels.Catalog.Speciality
+@using DoctorManagement.ViewModels.Common
+@model PagedResult<DoctorManagement.ViewModels.System.Users.UserVm>
+
+@{
+    ViewData["Title"] = "DoctorSpeciality";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<SpecialityVm> specialities = (List<SpecialityVm>)ViewBag.GetAllSpeciality;
+    var i = 1;
+}
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@section Stylesheet{
+    <style>
+        .root-layout[_ngcontent-serverApp-c55] {
+            background-color: #f6f6f6
+        }
+    </style>
+    <style>
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @@media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @@media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c54] .ant-collapse-content-box {
+            padding: 0 !important
+        }
+
+        nz-collapse-panel[_ngcontent-serverApp-c54] {
+            padding: 0 !important
+        }
+
+        [_nghost-serverApp-c54] .ant-collapse-header {
+            cursor: pointer !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 600 !important;
+            color: currentColor !important
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c54] .ant-collapse-header {
+                cursor: auto !important
+            }
+
+            nz-collapse-panel[_ngcontent-serverApp-c54] {
+                border-style: none !important
+            }
+        }
+
+        a[_ngcontent-serverApp-c54]:hover {
+            color: currentColor
+        }
+    </style>
+    <style>
+        .wrapper-main[_ngcontent-serverApp-c73] {
+            background: linear-gradient(90deg, #00c6fb 0%, #0758d8 98.74%)
+        }
+
+        @@media only screen and (max-width: 767px) {
+            .banner-navigation[_ngcontent-serverApp-c73] {
+                background: white
+            }
+        }
+
+        .selected[_ngcontent-serverApp-c73] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [nz-carousel-content][_ngcontent-serverApp-c74] {
+            overflow: hidden
+        }
+    </style>
+    <style>
+        .main-search[_ngcontent-serverApp-c69] {
+            margin: 0;
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: .5rem;
+            border-color: transparent;
+            padding: .75rem 2.25rem .75rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+
+        .main-search[_ngcontent-serverApp-c69]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .main-search[_ngcontent-serverApp-c69]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            outline: 2px solid transparent;
+            outline-offset: 2px
+        }
+
+        @@media (min-width: 782px) {
+            .main-search[_ngcontent-serverApp-c69] {
+                padding-right: .75rem;
+                padding-left: 3rem
+            }
+        }
+
+        .main-search[_ngcontent-serverApp-c69]::-webkit-calendar-picker-indicator {
+            display: none !important
+        }
+    </style>
+    <style>
+        .bookmark_hospital[_ngcontent-serverApp-c72]::-webkit-scrollbar {
+            background: transparent;
+            width: 0px
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c131] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c131]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c131]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c131]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c131] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c131]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c130] div.ant-modal-body {
+            padding: 0 !important
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c143] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c143]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c143]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c143]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c143] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c143]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c142] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c142]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c142]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-label[_ngcontent-serverApp-c142] {
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        .typical-doctor-card[_ngcontent-serverApp-c213] {
+            box-shadow: 0 1px 2px #0000001a, 0 1px 1px #0000000f
+        }
+
+        .btn-booking-primary[_ngcontent-serverApp-c213] {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            width: 124px;
+            height: 41px;
+            left: 0px;
+            top: 0px;
+            background: #eff6ff;
+            border: 1px solid #eff6ff;
+            box-sizing: border-box;
+            box-shadow: 0 1px 1px #0000000d;
+            border-radius: 4px;
+            flex: none;
+            order: 0;
+            align-self: stretch;
+            flex-grow: 0
+        }
+
+        .limit-line-break[_ngcontent-serverApp-c213] {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            line-height: 16px;
+            max-height: 32px;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c229] .ant-tabs-nav-operations {
+            display: none !important
+        }
+
+        [_nghost-serverApp-c229] .ant-tabs-tab {
+            padding: 0
+        }
+
+        [_nghost-serverApp-c229] .ant-tabs-tab-active {
+            border: 1px solid #1A76E3;
+            background: #eff6ff
+        }
+
+        .active[_ngcontent-serverApp-c229] {
+            border-top: 1px solid #1A76E3;
+            border-bottom: 1px solid #1A76E3
+        }
+
+        [_nghost-serverApp-c229] .ant-tabs-tabpane {
+            min-height: 200px
+        }
+    </style>
+    <style>
+        .ant-radio-group[_ngcontent-serverApp-c226] {
+            display: flex;
+            height: 10rem;
+            flex-direction: column;
+            gap: 1rem;
+            font-weight: 500;
+            line-height: 17px;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            .ant-radio-group[_ngcontent-serverApp-c226] {
+                height: 20rem
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c237] .ant-tabs-tab-btn {
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            line-height: 17px;
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c237] .ant-tabs-tab-active>.ant-tabs-tab-btn {
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 500 !important;
+            line-height: 17px !important;
+            --tw-text-opacity: 1 !important;
+            color: rgb(31 41 55 / var(--tw-text-opacity)) !important
+        }
+
+        [_nghost-serverApp-c237] .ant-tabs-nav {
+            margin: 0 !important;
+            border-style: none !important;
+            --tw-bg-opacity: 1 !important;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity)) !important
+        }
+
+        [_nghost-serverApp-c237] .ant-tabs-nav .ant-tabs-nav-wrap {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 64rem;
+            padding-left: 1rem;
+            padding-right: 1rem
+        }
+    </style>
+    <style>
+        .wrapper-main[_ngcontent-serverApp-c230] {
+            background: linear-gradient(90deg, #FFFFFF, #FFFFFF)
+        }
+
+        @@media only screen and (max-width: 767px) {
+            .banner-navigation[_ngcontent-serverApp-c230] {
+                background: white
+            }
+        }
+
+        .selected[_ngcontent-serverApp-c230] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c233] .ant-tabs-nav-operations {
+            display: none !important
+        }
+
+        [_nghost-serverApp-c233] .ant-tabs-tab {
+            padding: 0
+        }
+
+        [_nghost-serverApp-c233] .ant-tabs-tab-active {
+            border: 1px solid #1A76E3;
+            background: #eff6ff
+        }
+
+        .active[_ngcontent-serverApp-c233] {
+            border-top: 1px solid #1A76E3;
+            border-bottom: 1px solid #1A76E3
+        }
+
+        [_nghost-serverApp-c233] .ant-tabs-tabpane {
+            min-height: 200px
+        }
+
+        .item[_ngcontent-serverApp-c233] {
+            padding: 0;
+            width: 100%;
+            height: 46px;
+            color: #000;
+            font-size: 20px;
+            line-height: 46px;
+            text-align: center
+        }
+
+        .selected[_ngcontent-serverApp-c233] {
+            border: 1px solid #1a76e3;
+            background: #eff6ff
+        }
+
+        .selected[_ngcontent-serverApp-c233] .text[_ngcontent-serverApp-c233] {
+            text-shadow: 0 0 .25px currentcolor
+        }
+    </style>
+}
+<app-search-result-doctor _nghost-serverapp-c229="" class="ng-star-inserted">
+    <app-banner-search-service _ngcontent-serverapp-c229="" _nghost-serverapp-c225=""
+        class="ng-tns-c225-58 ng-star-inserted">
+        <div _ngcontent-serverapp-c225="" class="bg-white lg:border-b ng-tns-c225-58">
+            <div _ngcontent-serverapp-c225="" class="max-w-4xl mx-auto px-4 py-8 ng-tns-c225-58">
+                <div _ngcontent-serverapp-c225="" class="ng-tns-c225-58">
+                    <form _ngcontent-serverapp-c225="" novalidate="" asp-action="DoctorSpeciality" method="get"
+                        class="relative ng-tns-c225-58 ng-untouched ng-pristine ng-valid"><img
+                            _ngcontent-serverapp-c225=""
+                            src="~/img/booking/svg/search-normal-blue.svg"
+                            class="cursor-pointer absolute left-4 bottom-1/2 translate-y-1/2 object-cover ng-tns-c225-58"><input  value="@ViewBag.SearchSpeciality"
+                            _ngcontent-serverapp-c225="" type="search" name="searchSpeciality"
+                            placeholder="Tìm theo triệu chứng, bác sĩ, bệnh viện..."
+                            class="form-control block w-full h-[50px] px-4 pl-9 py-1.5 text-left text-sm font-normal leading-17 text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none ng-tns-c225-58 ng-untouched ng-pristine ng-valid">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </app-banner-search-service>
+    <section _ngcontent-serverapp-c229="" class="bg-gray-50">
+        <div _ngcontent-serverapp-c229="" class="max-w-7xl mx-auto md:px-4 md:pb-10">
+            <nz-breadcrumb _ngcontent-serverapp-c229="" nzseparator="/"
+                class="hidden md:block ant-breadcrumb py-4 text-sm">
+                <nz-breadcrumb-item _ngcontent-serverapp-c229=""><span
+                        class="ant-breadcrumb-link ng-star-inserted"><span _ngcontent-serverapp-c229=""
+                            class="ant-breadcrumb-link"><a _ngcontent-serverapp-c229="" routerlink="/"
+                                href="/">Trang chủ</a></span></span>
+                    
+                    <span class="ant-breadcrumb-separator ng-star-inserted"> /
+                        
+                        
+                    </span>
+                    
+                </nz-breadcrumb-item>
+                <nz-breadcrumb-item _ngcontent-serverapp-c229=""><span
+                        class="ant-breadcrumb-link ng-star-inserted"><span _ngcontent-serverapp-c229=""
+                            class="ant-breadcrumb-link"><a _ngcontent-serverapp-c229="" routerlink="/bac-si"
+                                href="/bac-si">Bác sĩ</a></span></span>
+                    
+                    <span class="ant-breadcrumb-separator ng-star-inserted"> /
+                        
+                        
+                    </span>
+                    
+                </nz-breadcrumb-item>
+                
+            </nz-breadcrumb>
+            <div _ngcontent-serverapp-c229="" class="grid grid-cols-1 md:grid-cols-12 md:gap-4">
+                <div _ngcontent-serverapp-c229="" class="md:col-span-4 lg:col-span-3">
+                    <app-speciality-list _ngcontent-serverapp-c229="" _nghost-serverapp-c226="">
+                        <div _ngcontent-serverapp-c226="" class="gap-6 md:grid">
+                            <nz-collapse _ngcontent-serverapp-c226="" nzghost="true"
+                                class="ant-collapse bg-white md:rounded-lg md:shadow md:ring-1 md:ring-slate-100 ant-collapse-icon-position-left ant-collapse-ghost">
+                                <nz-collapse-panel _ngcontent-serverapp-c226="" nzshowarrow="false"
+                                    nzactive=""
+                                    class="ant-collapse-item ng-tns-c53-59 ant-collapse-no-arrow ant-collapse-item-active ng-star-inserted">
+                                    <div role="button" class="ant-collapse-header ng-tns-c53-59"
+                                        aria-expanded="true">
+                                        
+                                        <div _ngcontent-serverapp-c226=""
+                                            class="flex flex-1 items-center justify-between pl-1 ng-star-inserted">
+                                            <h2 _ngcontent-serverapp-c226="" class="font-medium">Chuyên khoa
+                                                <span _ngcontent-serverapp-c226="" class="md:hidden">Tiêu
+                                                    hoá</span></h2><svg _ngcontent-serverApp-c226=""
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                                class="h-5 w-5 text-gray-500 transition flex-none rotate-180">
+                                                <path _ngcontent-serverApp-c226="" fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <div
+                                        class="ant-collapse-content ng-tns-c53-59 ant-collapse-content-active ng-trigger ng-trigger-collapseMotion">
+                                        <div class="ant-collapse-content-box ng-tns-c53-59">
+                                            
+                                            <div _ngcontent-serverapp-c226="" class="ng-tns-c53-59">
+                                                <form _ngcontent-serverapp-c226="" novalidate="" 
+                                                    class="relative ng-untouched ng-pristine ng-valid"><img
+                                                        _ngcontent-serverapp-c226="" width="18" height="18"
+                                                        src="~/img/booking/svg/search-normal.svg"
+                                                        class="cursor-pointer absolute left-3 bottom-1/2 translate-y-1/2 object-cover">
+                                                        <input id="myInput" onkeyup="myFunction()"
+                                                        _ngcontent-serverapp-c226="" type="search"
+                                                        placeholder="Tìm nhanh chuyên khoa"
+                                                        class="form-control block w-full px-4 pl-9 py-3 text-left text-sm font-normal leading-17 text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none ng-untouched ng-pristine ng-valid">
+                                                </form>
+                                                <div _ngcontent-serverapp-c226=""
+                                                    class="my-4 overflow-x-auto">
+                                                    <nz-radio-group _ngcontent-serverapp-c226="" id="search-table"
+                                                        class="ant-radio-group ng-untouched ng-valid ng-dirty">
+                                                        <a _ngcontent-serverapp-c226=""  asp-action="DoctorSpeciality" asp-controller="Doctor" asp-route-id="" data-value="Tất cả"
+                                                            nz-radio=""
+                                                            class="ant-radio-wrapper ng-star-inserted @((Guid)ViewBag.SpecialityId == new Guid()?"ant-radio-wrapper-checked" :"")"><span style="display:none;">Tất cả</span>
+                                                            <span class="ant-radio @((Guid)ViewBag.SpecialityId == new Guid()?"ant-radio-checked" :"")">
+                                                                <input id="specality-0" value="" type="radio" class="ant-radio-input">
+                                                                <span class="ant-radio-inner"></span></span><span>Tất cả</span></a>
+                                                        @{
+                                                            i = 1;
+                                                            var specialityId = ViewBag.SpecialityId==null? new Guid():(Guid)ViewBag.SpecialityId;
+                                                        }
+                                                        @foreach(var item in specialities)
+                                                        {
+                                                            <a _ngcontent-serverapp-c226="" nz-radio=""  asp-action="DoctorSpeciality" asp-controller="Doctor" asp-route-id="@item.Id" data-value="@item.Title"
+                                                                class="ant-radio-wrapper ng-star-inserted @(item.Id == specialityId?"ant-radio-wrapper-checked":"")"><span style="display:none;">@item.Title</span><span
+                                                                    class="ant-radio @(item.Id == specialityId?"ant-radio-checked" :"") "><input type="radio" id="specality-0" value="@item.Id"
+                                                                        class="ant-radio-input"><span
+                                                                        class="ant-radio-inner"></span></span><span>@item.Title</span></a>
+                                                            i++;
+                                                        }
+                                                        
+                                                        
+                                                        
+                                                    </nz-radio-group>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nz-collapse-panel>
+                            </nz-collapse>
+                            <div _ngcontent-serverapp-c226="" class="hidden md:block"><a
+                                    _ngcontent-serverapp-c226="" href="tel:19002805" class="block"><img
+                                        _ngcontent-serverapp-c226=""
+                                        src="~/img/booking/png/Doctor/HelpDesk.png" alt="Help"
+                                        class="object-cover"></a></div>
+                        </div>
+                    </app-speciality-list>
+                </div>
+                <div _ngcontent-serverapp-c229=""
+                    class="bg-white md:col-span-8 lg:col-span-9 md:rounded-lg md:shadow md:ring-1 md:ring-slate-100 divide-y divide-gray-100">
+                    <nz-spin _ngcontent-serverapp-c229="" class="ant-spin-nested-loading ng-star-inserted">
+                        
+                        
+                        <div class="ant-spin-container ng-star-inserted">
+                            <div _ngcontent-serverapp-c229="" infinite-scroll=""
+                                class="min-h-[140px] divide-y divide-gray-100">
+                                <p _ngcontent-serverapp-c229="" class="hidden ng-star-inserted"> Chuyên
+                                    khoa: tieu-hoa </p>
+                                
+                                <div _ngcontent-serverapp-c229="" class="p-4 lg:p-6 ng-star-inserted">
+                                    <h1 _ngcontent-serverapp-c229="" class="text-xl font-medium"> @Model.Items.Count() kết quả
+                                        được tìm thấy @(ViewBag.SearchSpeciality!=null?"với từ khóa: ''"+ViewBag.SearchSpeciality+"''":"")
+                                        
+                                    </h1>
+                                </div>
+                                @foreach(var item in Model.Items)
+                                {
+                                    
+                                    <div _ngcontent-serverapp-c229="" class="ng-star-inserted">
+                                        <app-doctor-card _ngcontent-serverapp-c229="" _nghost-serverapp-c227="">
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex flex-col lg:flex-row ng-star-inserted">
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 p-4 lg:p-6 gap-4"><img
+                                                        _ngcontent-serverapp-c227="" width="100" height="100"
+                                                        defaultimage="~/img/placeholder.svg"
+                                                        class="cursor-pointer w-[100px] h-[100px] shrink-0 rounded-full object-cover  ng-star-inserted ng-lazyloaded"
+                                                        src="@(Configuration["BaseAddress"]+"/img/"+ @item.DoctorVm.Img)">
+                                                
+                                                
+                                                    <div _ngcontent-serverapp-c227="">
+                                                        <p _ngcontent-serverapp-c227=""
+                                                            class="font-medium text-sm text-gray-800 ng-star-inserted">
+                                                            @item.DoctorVm.Prefix</p>
+                                                    
+                                                        <h2 _ngcontent-serverapp-c227=""
+                                                            class="cursor-pointer text-lg text-primary ng-star-inserted">
+                                                            @(item.DoctorVm.LastName + " "+ item.DoctorVm.FirstName)</h2>
+                                                    
+                                                        <p _ngcontent-serverapp-c227="" class="text-sm"><span
+                                                                _ngcontent-serverapp-c227=""
+                                                                class="text-gray-600 ng-star-inserted"> 
+                                                                @foreach(var spe in item.DoctorVm.GetSpecialities)
+                                                                {
+                                                                    if (spe.Title == item.DoctorVm.GetSpecialities[item.DoctorVm.GetSpecialities.Count - 1].Title)@(spe.Title)else @(spe.Title+", ")
+                                                                }
+                                                            </span>
+                                                            <span _ngcontent-serverapp-c227=""
+                                                                class="text-gray-800 font-medium ng-star-inserted">
+                                                                · @item.DoctorVm.GetClinic.Name </span>
+                                                        
+                                                        </p>
+                                                        <p _ngcontent-serverapp-c227=""
+                                                            class="text-sm text-gray-600 mt-1">@item.DoctorVm.FullAddress</p>
+                                                    </div>
+                                                </div>
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex lg:flex-col gap-4 px-4 pb-4 lg:pb-0">
+                                                    <div _ngcontent-serverapp-c227=""
+                                                        class="flex flex-1 items-start lg:items-end">
+                                                    
+                                                    </div>
+                                                    <div _ngcontent-serverapp-c227=""
+                                                        class="flex flex-1 flex-col"><a asp-action="BookingDoctorSetPatient" asp-controller="Booking"  asp-route-doctorid="@item.Id" asp-route-scheduleid="@(new Guid())"
+                                                            _ngcontent-serverapp-c227="" appsingleclick=""
+                                                            class="bg-primary hover:bg-primary/90 flex flex-1 lg:flex-none justify-center p-3 lg:px-6 rounded font-medium text-white">
+                                                            Đặt lịch khám </a></div>
+                                                </div>
+                                            </div>
+                                        
+                                        </app-doctor-card>
+                                    
+                                    </div>
+                                }
+                               @* <div _ngcontent-serverapp-c229="" class="ng-star-inserted">
+                                    <app-doctor-card _ngcontent-serverapp-c229="" _nghost-serverapp-c227="">
+                                        <div _ngcontent-serverapp-c227=""
+                                            class="flex flex-col lg:flex-row ng-star-inserted">
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex flex-1 p-4 lg:p-6 gap-4"><img
+                                                    _ngcontent-serverapp-c227="" width="100" height="100"
+                                                    defaultimage="~/img/placeholder.svg"
+                                                    class="cursor-pointer w-[100px] h-[100px] shrink-0 rounded-full object-cover  ng-star-inserted ng-lazyloaded"
+                                                    src="https://youmed.vn/photos/49bdbe79-70cd-4786-9c3c-2ea66a6a13c4.png">
+                                                
+                                                
+                                                <div _ngcontent-serverapp-c227="">
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="font-medium text-sm text-gray-800 ng-star-inserted">
+                                                        ThS.BS</p>
+                                                    
+                                                    <h2 _ngcontent-serverapp-c227=""
+                                                        class="cursor-pointer text-lg text-primary ng-star-inserted">
+                                                        Bùi Văn Chinh</h2>
+                                                    
+                                                    <p _ngcontent-serverapp-c227="" class="text-sm"><span
+                                                            _ngcontent-serverapp-c227=""
+                                                            class="text-gray-600 ng-star-inserted"> Tiêu hoá
+                                                            - Gan mật </span>
+                                                        <span _ngcontent-serverapp-c227=""
+                                                            class="text-gray-800 font-medium ng-star-inserted">
+                                                            · Bệnh viện An Sinh </span>
+                                                        
+                                                    </p>
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="text-sm text-gray-600 mt-1">2972 Phạm Thế
+                                                        Hiển, P.7, Q.8, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex lg:flex-col gap-4 px-4 pb-4 lg:pb-0">
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 items-start lg:items-end">
+                                                    
+                                                </div>
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 flex-col"><button
+                                                        _ngcontent-serverapp-c227="" appsingleclick=""
+                                                        class="bg-primary hover:bg-primary/90 flex flex-1 lg:flex-none justify-center p-3 lg:px-6 rounded font-medium text-white">
+                                                        Đặt lịch khám </button><span
+                                                        _ngcontent-serverapp-c227=""
+                                                        class="hidden font-normal text-xs text-green-500 mt-2 text-center">Miễn
+                                                        phí đặt lịch</span></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </app-doctor-card>
+                                    
+                                </div>
+                                <div _ngcontent-serverapp-c229="" class="ng-star-inserted">
+                                    <app-doctor-card _ngcontent-serverapp-c229="" _nghost-serverapp-c227="">
+                                        <div _ngcontent-serverapp-c227=""
+                                            class="flex flex-col lg:flex-row ng-star-inserted">
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex flex-1 p-4 lg:p-6 gap-4"><img
+                                                    _ngcontent-serverapp-c227="" width="100" height="100"
+                                                    defaultimage="~/img/placeholder.svg"
+                                                    class="cursor-pointer w-[100px] h-[100px] shrink-0 rounded-full object-cover  ng-star-inserted ng-lazyloaded"
+                                                    src="https://youmed.vn/photos/7ca5d2d0-3db1-47da-888e-42dab2e6c2c6.jpg">
+                                                
+                                                
+                                                <div _ngcontent-serverapp-c227="">
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="font-medium text-sm text-gray-800 ng-star-inserted">
+                                                        BS.CK2</p>
+                                                    
+                                                    <h2 _ngcontent-serverapp-c227=""
+                                                        class="cursor-pointer text-lg text-primary ng-star-inserted">
+                                                        Nguyễn Phú Hữu</h2>
+                                                    
+                                                    <p _ngcontent-serverapp-c227="" class="text-sm"><span
+                                                            _ngcontent-serverapp-c227=""
+                                                            class="text-gray-600 ng-star-inserted"> Tiêu hoá
+                                                            - Gan mật </span>
+                                                        <span _ngcontent-serverapp-c227=""
+                                                            class="text-gray-800 font-medium ng-star-inserted">
+                                                            · Bệnh viện Bình Dân </span>
+                                                        
+                                                    </p>
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="text-sm text-gray-600 mt-1">108 Đường số 1,
+                                                        Cư xá Lữ Gia, P.15, Q.11, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex lg:flex-col gap-4 px-4 pb-4 lg:pb-0">
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 items-start lg:items-end">
+                                                    
+                                                </div>
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 flex-col"><button
+                                                        _ngcontent-serverapp-c227="" appsingleclick=""
+                                                        class="bg-primary hover:bg-primary/90 flex flex-1 lg:flex-none justify-center p-3 lg:px-6 rounded font-medium text-white">
+                                                        Đặt lịch khám </button><span
+                                                        _ngcontent-serverapp-c227=""
+                                                        class="hidden font-normal text-xs text-green-500 mt-2 text-center">Miễn
+                                                        phí đặt lịch</span></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </app-doctor-card>
+                                    
+                                </div>
+                                <div _ngcontent-serverapp-c229="" class="ng-star-inserted">
+                                    <app-doctor-card _ngcontent-serverapp-c229="" _nghost-serverapp-c227="">
+                                        <div _ngcontent-serverapp-c227=""
+                                            class="flex flex-col lg:flex-row ng-star-inserted">
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex flex-1 p-4 lg:p-6 gap-4"><img
+                                                    _ngcontent-serverapp-c227="" width="100" height="100"
+                                                    defaultimage="~/img/placeholder.svg"
+                                                    class="cursor-pointer w-[100px] h-[100px] shrink-0 rounded-full object-cover  ng-star-inserted ng-lazyloaded"
+                                                    src="https://youmed.vn/photos/f0c2d826-2952-4532-af2f-9bf194a8a0a4.jpg">
+                                                
+                                                
+                                                <div _ngcontent-serverapp-c227="">
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="font-medium text-sm text-gray-800 ng-star-inserted">
+                                                        BS.CK2</p>
+                                                    
+                                                    <h2 _ngcontent-serverapp-c227=""
+                                                        class="cursor-pointer text-lg text-primary ng-star-inserted">
+                                                        Trần Ngọc Lưu Phương</h2>
+                                                    
+                                                    <p _ngcontent-serverapp-c227="" class="text-sm"><span
+                                                            _ngcontent-serverapp-c227=""
+                                                            class="text-gray-600 ng-star-inserted"> Tiêu hoá
+                                                            - Gan mật </span>
+                                                        <span _ngcontent-serverapp-c227=""
+                                                            class="text-gray-800 font-medium ng-star-inserted">
+                                                            · - </span>
+                                                        
+                                                    </p>
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="text-sm text-gray-600 mt-1">164 Ngô Quyền,
+                                                        P.5, Q.10, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex lg:flex-col gap-4 px-4 pb-4 lg:pb-0">
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 items-start lg:items-end">
+                                                    
+                                                </div>
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 flex-col"><button
+                                                        _ngcontent-serverapp-c227="" appsingleclick=""
+                                                        class="bg-primary hover:bg-primary/90 flex flex-1 lg:flex-none justify-center p-3 lg:px-6 rounded font-medium text-white">
+                                                        Đặt lịch khám </button><span
+                                                        _ngcontent-serverapp-c227=""
+                                                        class="hidden font-normal text-xs text-green-500 mt-2 text-center">Miễn
+                                                        phí đặt lịch</span></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </app-doctor-card>
+                                    
+                                </div>
+                                <div _ngcontent-serverapp-c229="" class="ng-star-inserted">
+                                    <app-doctor-card _ngcontent-serverapp-c229="" _nghost-serverapp-c227="">
+                                        <div _ngcontent-serverapp-c227=""
+                                            class="flex flex-col lg:flex-row ng-star-inserted">
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex flex-1 p-4 lg:p-6 gap-4"><img
+                                                    _ngcontent-serverapp-c227="" width="100" height="100"
+                                                    defaultimage="~/img/placeholder.svg"
+                                                    class="cursor-pointer w-[100px] h-[100px] shrink-0 rounded-full object-cover  ng-star-inserted ng-lazyloaded"
+                                                    src="https://youmed.vn/photos/a7a7a2a8-b58a-4c78-9a8e-d1adb86a71dd.jpg">
+                                                
+                                                
+                                                <div _ngcontent-serverapp-c227="">
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="font-medium text-sm text-gray-800 ng-star-inserted">
+                                                        BS.CK1</p>
+                                                    
+                                                    <h2 _ngcontent-serverapp-c227=""
+                                                        class="cursor-pointer text-lg text-primary ng-star-inserted">
+                                                        Nguyễn Phước Thịnh</h2>
+                                                    
+                                                    <p _ngcontent-serverapp-c227="" class="text-sm"><span
+                                                            _ngcontent-serverapp-c227=""
+                                                            class="text-gray-600 ng-star-inserted"> Nhi
+                                                            khoa, Tiêu hoá - Gan mật </span>
+                                                        <span _ngcontent-serverapp-c227=""
+                                                            class="text-gray-800 font-medium ng-star-inserted">
+                                                            · Bệnh viện Nhi Đồng 1 Tp.HCM </span>
+                                                        
+                                                    </p>
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="text-sm text-gray-600 mt-1">654 Lạc Long Quân
+                                                        , P.9, Q.Tân Bình, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex lg:flex-col gap-4 px-4 pb-4 lg:pb-0">
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 items-start lg:items-end">
+                                                    
+                                                </div>
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 flex-col"><button
+                                                        _ngcontent-serverapp-c227="" appsingleclick=""
+                                                        class="bg-primary hover:bg-primary/90 flex flex-1 lg:flex-none justify-center p-3 lg:px-6 rounded font-medium text-white">
+                                                        Đặt lịch khám </button><span
+                                                        _ngcontent-serverapp-c227=""
+                                                        class="hidden font-normal text-xs text-green-500 mt-2 text-center">Miễn
+                                                        phí đặt lịch</span></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </app-doctor-card>
+                                    
+                                </div>
+                                <div _ngcontent-serverapp-c229="" class="ng-star-inserted">
+                                    <app-doctor-card _ngcontent-serverapp-c229="" _nghost-serverapp-c227="">
+                                        <div _ngcontent-serverapp-c227=""
+                                            class="flex flex-col lg:flex-row ng-star-inserted">
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex flex-1 p-4 lg:p-6 gap-4"><img
+                                                    _ngcontent-serverapp-c227="" width="100" height="100"
+                                                    defaultimage="~/img/placeholder.svg"
+                                                    class="cursor-pointer w-[100px] h-[100px] shrink-0 rounded-full object-cover  ng-star-inserted ng-lazyloaded"
+                                                    src="https://youmed.vn/photos/cb34a0aa-8823-408b-9289-855bf6260460.png">
+                                                
+                                                
+                                                <div _ngcontent-serverapp-c227="">
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="font-medium text-sm text-gray-800 ng-star-inserted">
+                                                        Bác sĩ</p>
+                                                    
+                                                    <h2 _ngcontent-serverapp-c227=""
+                                                        class="cursor-pointer text-lg text-primary ng-star-inserted">
+                                                        Dương Công Lộc</h2>
+                                                    
+                                                    <p _ngcontent-serverapp-c227="" class="text-sm"><span
+                                                            _ngcontent-serverapp-c227=""
+                                                            class="text-gray-600 ng-star-inserted"> Tiêu hóa
+                                                            - Gan mật, Nhi khoa </span>
+                                                        <span _ngcontent-serverapp-c227=""
+                                                            class="text-gray-800 font-medium ng-star-inserted">
+                                                            · Bệnh viện Nhi Đồng 1 </span>
+                                                        
+                                                    </p>
+                                                    <p _ngcontent-serverapp-c227=""
+                                                        class="text-sm text-gray-600 mt-1">52 Thạch Lam, P.
+                                                        Phú Thạnh, Q. Tân Phú, TP.HCM</p>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c227=""
+                                                class="flex lg:flex-col gap-4 px-4 pb-4 lg:pb-0">
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 items-start lg:items-end">
+                                                    
+                                                </div>
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-1 flex-col"><button
+                                                        _ngcontent-serverapp-c227="" appsingleclick=""
+                                                        class="bg-primary hover:bg-primary/90 flex flex-1 lg:flex-none justify-center p-3 lg:px-6 rounded font-medium text-white">
+                                                        Đặt lịch khám </button><span
+                                                        _ngcontent-serverapp-c227=""
+                                                        class="hidden font-normal text-xs text-green-500 mt-2 text-center">Miễn
+                                                        phí đặt lịch</span></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </app-doctor-card>
+                                    
+                                </div>*@
+                                
+                            </div>
+                        </div>
+                        
+                    </nz-spin>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    
+</app-search-result-doctor>
+<script>
+    function myFunction() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("search-table");
+      tr = table.getElementsByTagName("a");
+
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("span")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+</script>

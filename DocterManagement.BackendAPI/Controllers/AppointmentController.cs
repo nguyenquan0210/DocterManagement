@@ -74,7 +74,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPut("cancel-appointment")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<ApiResult<bool>>> CanceledAppointment([FromBody] AppointmentCancelRequest request)
         {
             if (!ModelState.IsValid)

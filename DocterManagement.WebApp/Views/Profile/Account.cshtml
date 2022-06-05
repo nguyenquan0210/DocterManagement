@@ -8,6 +8,18 @@
 }
 @section Stylesheet{
     <style>
+        .form-section__form-group-icon .icon-hide{
+            display:none;
+        }
+        .form-section__form-group-icon .icon-show{
+            display:block;
+        }
+         .hiden .icon-show{
+            display:none;
+        }
+         .hiden .icon-hide{
+            display:block;
+        }
         .root-layout[_ngcontent-serverApp-c55] {
             background-color: #f6f6f6
         }
@@ -668,7 +680,7 @@
                                 </div>
                                 <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
                                         _ngcontent-serverapp-c169="">Địa chỉ</label>
-                                    <p _ngcontent-serverapp-c169="" class="font-medium">@patient.FullAddress</p>
+                                    <p _ngcontent-serverapp-c169="" class="font-medium">@patient.Address</p>
                                 </div>
                                 <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
                                         _ngcontent-serverapp-c169="">CMND/CCCD</label>
@@ -679,17 +691,17 @@
                                     <p _ngcontent-serverapp-c169="" class="font-medium">---</p>
                                 </div>
                                 <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><a
-                                        _ngcontent-serverapp-c169="" routerlink="/ho-so"
-                                        class="text-primary" href="/ho-so">Thay đổi thông tin</a></div>
+                                        _ngcontent-serverapp-c169=""asp-action="UpdateInfo" asp-route-id="@patient.Id" 
+                                        class="text-primary" >Thay đổi thông tin</a></div>
                             </div>
                         </div>
                         <div _ngcontent-serverapp-c169="" class="bg-white md:rounded-lg p-4 lg:p-6">
                             <h3 _ngcontent-serverapp-c169="" class="text-base font-medium mb-4">Thay đổi mật
                                 khẩu</h3>
-                            <form _ngcontent-serverapp-c169="" 
+                            <form _ngcontent-serverapp-c169=""  id="change-password"
                                 class="grid grid-cols-1 gap-4 ant-form ng-untouched ng-pristine ng-invalid ant-form-horizontal">
                                 <nz-form-control _ngcontent-serverapp-c169=""
-                                    class="ng-tns-c166-63 ant-form-item-control ant-col ng-star-inserted">
+                                    class="ng-tns-c166-63 ant-form-item-control ant-col ng-star-inserted form-section__form-group">
                                     <div class="ant-form-item-control-input ng-tns-c166-63">
                                         <div class="ant-form-item-control-input-content ng-tns-c166-63">
                                             <label _ngcontent-serverapp-c169="" for="currentPassword"
@@ -698,25 +710,24 @@
                                                     class="text-red-500">*</span></label>
                                             <div _ngcontent-serverapp-c169=""
                                                 class="relative flex items-center ng-tns-c166-63"><input
-                                                    _ngcontent-serverapp-c169="" type="password" nz-input=""
-                                                    formcontrolname="currentPassword"
+                                                    _ngcontent-serverapp-c169="" asp-for="CurrentPassword"
                                                     placeholder="Mật khẩu hiện tại của bạn"
-                                                    inputmode="numeric" pattern="[0-9]*" digitonly=""
-                                                    class="form-control ng-untouched ng-pristine ng-invalid"
-                                                    maxlength="6"><img _ngcontent-serverapp-c169=""
-                                                    width="20" height="20"
-                                                    class="absolute bottom-1/2 translate-y-1/2 right-2"
-                                                    src="../assets/img/booking/svg/Hide.svg"></div>
+                                                    class="form-control ng-untouched ng-pristine ng-invalid">
+                                                     <div class="form-section__form-group-icon hiden">
+                                                        <img _ngcontent-serverapp-c169=""width="20" height="20" class="icon-hide absolute bottom-1/2 translate-y-1/2 right-2" src="~/img/booking/svg/Hide.svg">
+                                                        <img _ngcontent-serverapp-c142="" width="20" height="20" class="icon-show absolute bottom-1/2 translate-y-1/2 right-2" src="~/img/booking/svg/Show.svg">
+                                                    </div>
+                                                </div>
                                             
                                         </div><span class="ant-form-item-children-icon ng-tns-c166-63">
                                             
                                         </span>
                                     </div>
-                                    
+                                    <div _ngcontent-serverapp-c169="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
                                     
                                 </nz-form-control>
                                 <nz-form-control _ngcontent-serverapp-c169=""
-                                    class="ng-tns-c166-64 ant-form-item-control ant-col ng-star-inserted">
+                                    class="ng-tns-c166-64 ant-form-item-control ant-col ng-star-inserted form-section__form-group">
                                     <div class="ant-form-item-control-input ng-tns-c166-64">
                                         <div class="ant-form-item-control-input-content ng-tns-c166-64">
                                             <label _ngcontent-serverapp-c169="" for="newPassword"
@@ -725,27 +736,69 @@
                                                     class="text-red-500">*</span></label>
                                             <div _ngcontent-serverapp-c169=""
                                                 class="relative flex items-center ng-tns-c166-64"><input
-                                                    _ngcontent-serverapp-c169="" type="password" nz-input=""
-                                                    formcontrolname="newPassword"
-                                                    placeholder="Nhập mật khẩu mới" inputmode="numeric"
-                                                    pattern="[0-9]*" digitonly=""
-                                                    class="form-control ng-untouched ng-pristine ng-invalid"
-                                                    maxlength="6"><img _ngcontent-serverapp-c169=""
-                                                    width="20" height="20"
-                                                    class="absolute bottom-1/2 translate-y-1/2 right-2"
-                                                    src="../assets/img/booking/svg/Hide.svg"></div>
+                                                    _ngcontent-serverapp-c169="" 
+                                                    placeholder="Nhập mật khẩu mới" asp-for="NewPassword"
+                                                    class="form-control ng-untouched ng-pristine ng-invalid">
+                                                    <div class="form-section__form-group-icon hiden">
+
+                                                        <img _ngcontent-serverapp-c169=""width="20" height="20" class="icon-hide absolute bottom-1/2 translate-y-1/2 right-2" src="~/img/booking/svg/Hide.svg">
+                                                        <img _ngcontent-serverapp-c142="" width="20" height="20" class="icon-show absolute bottom-1/2 translate-y-1/2 right-2" src="~/img/booking/svg/Show.svg">
+                                                    </div>
+                                                </div>
                                             
                                         </div><span class="ant-form-item-children-icon ng-tns-c166-64">
                                             
                                         </span>
                                     </div>
-                                    
+                                    <div _ngcontent-serverapp-c169="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
                                     
                                 </nz-form-control>
+                                <nz-form-control _ngcontent-serverapp-c169=""
+                                    class="ng-tns-c166-64 ant-form-item-control ant-col ng-star-inserted form-section__form-group">
+                                    <div class="ant-form-item-control-input ng-tns-c166-64">
+                                        <div class="ant-form-item-control-input-content ng-tns-c166-64">
+                                            <label _ngcontent-serverapp-c169="" for="newPassword"
+                                                class="form-label ng-tns-c166-64">Nhập lại mật khẩu mới <span
+                                                    _ngcontent-serverapp-c169=""
+                                                    class="text-red-500">*</span></label>
+                                            <div _ngcontent-serverapp-c169=""
+                                                class="relative flex items-center ng-tns-c166-64"><input
+                                                    _ngcontent-serverapp-c169="" asp-for="ConfirmPassword"
+                                                    placeholder="Nhập lại mật khẩu mới" 
+                                                    class="form-control ng-untouched ng-pristine ng-invalid">
+                                                    <div class="form-section__form-group-icon hiden">
+
+                                                        <img _ngcontent-serverapp-c169=""width="20" height="20" class="icon-hide absolute bottom-1/2 translate-y-1/2 right-2" src="~/img/booking/svg/Hide.svg">
+                                                        <img _ngcontent-serverapp-c142="" width="20" height="20" class="icon-show absolute bottom-1/2 translate-y-1/2 right-2" src="~/img/booking/svg/Show.svg">
+                                                    </div>
+                                                </div>
+                                            
+                                        </div><span class="ant-form-item-children-icon ng-tns-c166-64">
+                                            
+                                        </span>
+                                    </div>
+                                    <div _ngcontent-serverapp-c169="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                                    
+                                </nz-form-control>
+                                <label class=" mt-4 " style=" display: block; font-size: .875rem;line-height: 1.25rem; font-weight: 500;--tw-text-opacity: 1;color: rgb(55 65 81 / var(--tw-text-opacity));">Yêu cầu mật khẩu</label>
+							<p class="text-muted mb-2">
+								Vui lòng làm theo hướng dẫn này để có một mật khẩu mạnh:
+							</p>
+							<ul class="text-muted ps-4 mb-0 float-start">
+								<li>
+									<span class="text-sm">Một chữ cái viết hoa, viết thường, ký tự số từ, kí tự đặt biệt</span>
+								</li>
+								<li>
+									<span class="text-sm">Tối thiểu 8 ký tự</span>
+								</li>
+								<li>
+									<span class="text-sm">Thay đổi mật khẩu thường xuyên</span>
+								</li>
+							</ul>
+                                    <input type="hidden" asp-for="Id" value = "@patient.UserId" />
                                 <div _ngcontent-serverapp-c169="" class="mt-4 flex justify-end"><button
                                         _ngcontent-serverapp-c169="" type="submit" appsingleclick=""
-                                        class="btn-primary bg-gray-300 hover:bg-gray-300 cursor-not-allowed"
-                                        disabled="">Thay đổi</button></div>
+                                        class="btn-primary ">Thay đổi</button></div>
                             </form>
                         </div>
                     </div>
@@ -754,3 +807,107 @@
         </div>
     </section>
 </app-account>
+@section Alert{
+    <div class="cdk-global-overlay-wrapper" dir="ltr">
+      @if (TempData["AlertMessage"] != null)
+      {
+          <div id="cdk-overlay-9" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
+            <nz-message-container>
+              <div class="ant-message" style="top: 24px;">
+                <nz-message class="ng-tns-c43-75 ng-star-inserted">
+                  <div class="ant-message-notice ng-tns-c43-75 ng-trigger ng-trigger-moveUpMotion">
+                    <div class="ant-message-notice-content ng-tns-c43-75">
+                      <div class="ant-message-custom-content ng-tns-c43-75 ant-message-@TempData["AlertType"]">
+                          @if(TempData["AlertType"]=="success"){
+
+                              <i nz-icon="" nztype="check-circle" class="anticon ng-tns-c43-75 anticon-check-circle ng-star-inserted" style="">
+                                <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                                    class="ng-tns-c43-75" data-icon="check-circle" aria-hidden="true">
+                                    <path
+                                      d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z">
+                                    </path>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                              </i>
+                          }else{
+                             <i nz-icon="" nztype="close-circle"
+                                class="anticon ng-tns-c43-5 anticon-close-circle ng-star-inserted" style=""><svg
+                                    viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em"
+                                    height="1em" class="ng-tns-c43-5" data-icon="close-circle"
+                                    aria-hidden="true">
+                                    <path
+                                        d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 .3L512 465.6l-99.3-118.4-66.1-.3c-4.4 0-8 3.5-8 8 0 1.9.7 3.7 1.9 5.2l130.1 155L340.5 670a8.32 8.32 0 00-1.9 5.2c0 4.4 3.6 8 8 8l66.1-.3L512 564.4l99.3 118.4 66 .3c4.4 0 8-3.5 8-8 0-1.9-.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z">
+                                    </path>
+                                    <path
+                                        d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                             </i>
+
+                          }
+                        <span class="ng-tns-c43-75 ng-star-inserted" style="">@TempData["AlertMessage"]</span>
+                      </div>
+                    </div>
+                  </div>
+                </nz-message>
+              </div>
+            </nz-message-container>
+          </div>
+            
+      } 
+    </div>
+    
+}
+@section JavaScript{
+    <script src="~/js/Validator2.js"></script>
+    <script>
+        const formElement = document.querySelector('#change-password') ;
+        const passwordInputs = formElement.querySelectorAll('[type=password]');
+        const toggleShowPasswordBtn = formElement.querySelectorAll('.form-section__form-group-icon');
+        const passwordInput = formElement.querySelector('[name=NewPassword]')
+        const currentPasswordInput = formElement.querySelector('[name=CurrentPassword]')
+        document.addEventListener("DOMContentLoaded", () => {
+            // show / hidden password
+	        Array.from(passwordInputs).forEach((element, index) => {
+		        toggleShowPasswordBtn[index].onclick = () => {
+			        if(toggleShowPasswordBtn[index].classList.contains('hiden')) {
+				        toggleShowPasswordBtn[index].classList.remove('hiden')
+				        element.type = "text"
+			        }
+			        else {
+				        toggleShowPasswordBtn[index].classList.add('hiden')
+				        element.type = "password"
+			        }
+		        }
+	        })
+            // Validate password
+	        
+            // Validate form register
+	        Validator({
+		        form: "#change-password",
+		        formGroup: ".form-section__form-group",
+		        errorMessage: ".text-error",
+		        rules: [
+			        
+			        Validator.isRequired('#CurrentPassword', 'Vui lòng nhập mật khẩu cũ'),
+			        Validator.isRequired('#NewPassword', 'Vui lòng nhập mật khẩu mới'),
+			        Validator.isOther('#NewPassword', () => {
+				        return currentPasswordInput.value
+			        }, "Mật khẩu mới phải khác mật khẩu cũ."),
+			        Validator.minLength('#NewPassword', 8),
+			        Validator.minCharAlpha('#NewPassword', 1),
+			        Validator.minCharAlphaUpcase('#NewPassword', 1),
+			        Validator.minNumber('#NewPassword'),
+			        Validator.minCharSpecial('#NewPassword'),
+			        Validator.isRequired('#ConfirmPassword', 'Vui lòng nhập lại mật khẩu'),
+			        Validator.isConfirmed('#ConfirmPassword', () => {
+				        return passwordInput.value
+			        }, "Mật khẩu nhập lại không chính xác"),
+			      
+		        ]
+	        })
+        })
+    </script>
+}

@@ -211,7 +211,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
         {
             var service = await _context.AnnualServiceFees.FindAsync(request.Id);
             var information = await _context.Informations.FirstOrDefaultAsync();
-            if (service == null) return new ApiErrorResult<bool>("null");
+            if (service == null) return new ApiErrorResult<bool>("Dịch vụ nộp phí không được xác nhận!");
             service.Status = StatusAppointment.cancel;
             service.CancelReason = request.CancelReason;
             string day = DateTime.Now.ToString("dd") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("YY");
@@ -240,13 +240,13 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             await _context.AnnualServiceFees.AddAsync(serviceFees);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Hủy dịch vụ đóng phí không thành công!");
         }
 
         public async Task<ApiResult<bool>> ApprovedServiceFee(Guid Id)
         {
             var service = await _context.AnnualServiceFees.FindAsync(Id);
-            if (service == null) return new ApiErrorResult<bool>("null");
+            if (service == null) return new ApiErrorResult<bool>("Dịch cụ nộp phí không được xác nhận!");
             var serviceFees = await _context.AnnualServiceFees.Where(x => x.DoctorId == service.DoctorId && x.CreatedAt > service.CreatedAt).OrderByDescending(x => x.CreatedAt).ToListAsync();
             foreach(var remove in serviceFees)
             {
@@ -257,13 +257,13 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             service.Status = StatusAppointment.complete;
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Duyệt dịch vụ nộp phí không thành công!");
         }
 
         public async Task<ApiResult<bool>> PaymentServiceFee(AnnualServiceFeePaymentRequest request)
         {
             var service = await _context.AnnualServiceFees.FindAsync(request.Id);
-            if (service == null) return new ApiErrorResult<bool>("null");
+            if (service == null) return new ApiErrorResult<bool>("Dịch cụ nộp phí không được xác nhận!");
             service.Status = StatusAppointment.complete;
             service.Note = request.Note;
             service.PaidDate = DateTime.Now;
@@ -274,12 +274,12 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             service.NeedToPay = request.TuitionPaidFreeNumBer > service.NeedToPay ? 0 : (service.NeedToPay - request.TuitionPaidFreeNumBer);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Nộp phí dịch vụ không thành công!");
         }
         public async Task<ApiResult<bool>> PaymentServiceFeeDoctor(AnnualServiceFeePaymentDoctorRequest request)
         {
             var service = await _context.AnnualServiceFees.FindAsync(request.Id);
-            if (service == null) return new ApiErrorResult<bool>("null");
+            if (service == null) return new ApiErrorResult<bool>("Dịch cụ nộp phí không được xác nhận!");
             service.Status = StatusAppointment.approved;
             service.Note = request.Note;
             service.PaidDate = DateTime.Now;
@@ -293,7 +293,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             service.Contingency = service.Contingency + (request.TuitionPaidFreeNumBer - service.NeedToPay);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Nộp phí dịch vụ không thành công!");
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
         {

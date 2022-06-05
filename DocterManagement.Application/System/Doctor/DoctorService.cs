@@ -37,7 +37,7 @@ namespace DoctorManagement.Application.System.Doctor
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
+       
         public async Task<ApiResult<List<DoctorVm>>> GetTopFavouriteDoctors()
         {
             var query = from d in _context.Doctors
@@ -121,7 +121,7 @@ namespace DoctorManagement.Application.System.Doctor
                 View = doctor.View,
                 TimeWorking = doctor.TimeWorking,
                 Location = new LocationVm() { Id = location.Id, Name = location.Name, District = new DistrictVm() { Id = district.Id, Name = district.Name, Province = new ProvinceVm() { Id = province.Id, Name = province.Name } } },
-                GetClinic = new GetClinicVm() { Id = clinic.Id, Name = clinic.Name },
+                GetClinic = clinic == null? new GetClinicVm(): new GetClinicVm() { Id = clinic.Id, Name = clinic.Name },
                 GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.spe.Id, Title = x.spe.Title }).ToList(),
                 Rates = rates.Select(x => new RateVm() { Id = x.r.Id, Rating = x.r.Rating }).ToList(),
                 Galleries = galleries.Select(x => new GalleryVm() { Id = x.Id, Name = GALLERY_CONTENT_FOLDER_NAME + "/" + x.Img }).ToList(),
@@ -249,7 +249,7 @@ namespace DoctorManagement.Application.System.Doctor
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             var patiens = _context.Patients.Where(x => x.IsPrimary && x.UserId == user.Id);
-            if (user == null) return new ApiErrorResult<Guid>("Tài khoản tạo hồ sơ không được phép!");
+            if (user == null) return new ApiErrorResult<Guid>("Tài khoản không được phép tạo hồ sơ !");
             string year = DateTime.Now.ToString("yy");
             string month = DateTime.Now.ToString("MM");
             int count = await _context.Patients.Where(x => x.No.Contains("DMP" + year + month)).CountAsync();

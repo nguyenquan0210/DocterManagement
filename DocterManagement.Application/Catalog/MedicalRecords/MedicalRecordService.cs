@@ -68,7 +68,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 await _context.SaveChangesAsync();
                 return new ApiSuccessResult<bool>();
             }
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Tạo hồ sơ bệnh không thành công!");
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -144,7 +144,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
         public async Task<ApiResult<MedicalRecordVm>> GetById(Guid Id)
         {
             var medicalRecords = await _context.MedicalRecords.FindAsync(Id);
-            if (medicalRecords == null) throw new DoctorManageException($"Cannot find a MedicalRecord with id: { Id}");
+            if (medicalRecords == null) new ApiErrorResult<MedicalRecordVm>("Hồ sơ bệnh không được xác nhận!");
             var rs = new MedicalRecordVm()
             {
                 Id = medicalRecords.Id,
@@ -161,7 +161,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
         public async Task<ApiResult<bool>> Update(MedicalRecordUpdateRequest request)
         {
             var medical = await _context.MedicalRecords.FindAsync(request.Id);
-            if (medical == null) return new ApiSuccessResult<bool>(false);
+            if (medical == null) return new ApiErrorResult<bool>("Hồ sơ bệnh không được xác nhận!");
 
             medical.Status = request.Status;
             medical.Diagnose = request.Diagnose;
@@ -169,7 +169,7 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             medical.Note = request.Note;
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Cập nhật hồ sơ bệnh không thành công!");
         }
     }
 }

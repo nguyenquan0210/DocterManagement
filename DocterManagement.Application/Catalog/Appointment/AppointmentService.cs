@@ -421,7 +421,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
         public async Task<ApiResult<bool>> CanceledAppointment(AppointmentCancelRequest request)
         {
             var appointments = await _context.Appointments.FindAsync(request.Id);
-            if (appointments == null) return new ApiErrorResult<bool>("null");
+            if (appointments == null) return new ApiErrorResult<bool>("Hủy lịch khám không thành công!");
             appointments.Status = StatusAppointment.cancel;
             appointments.CancelReason = request.CancelReason;
             appointments.CancelDate = DateTime.Now;
@@ -444,7 +444,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 if (user != null && patient != null) await SendEmailCancelAppoitment(user, userpatient, patient, schedule, slot, appointments);
                 return new ApiSuccessResult<bool>();
             }
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Hủy lịch khám không thành công!");
         }
         private async Task SendEmailCancelAppoitment(AppUsers user, AppUsers userpatient, Patients patients, Schedules schedules, SchedulesSlots schedulesSlots, Appointments appointment)
         {

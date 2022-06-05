@@ -12,6 +12,7 @@ namespace DoctorManagement.Application.System.Doctor
 {
     public interface IDoctorService
     {
+       
         Task<ApiResult<List<DoctorVm>>> GetTopFavouriteDoctors();
         Task<ApiResult<DoctorVm>> GetById(Guid id);
         Task<ApiResult<PatientVm>> GetByPatientId(Guid id);

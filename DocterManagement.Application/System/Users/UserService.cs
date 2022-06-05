@@ -562,6 +562,53 @@ namespace DoctorManagement.Application.System.Users
             {
                 query = query.Where(x => x.AppRoles.Name.Contains(request.RoleName));
             }
+            var checkdocter = await _context.Doctors.ToListAsync();
+            if (request.SpecialityId!= new Guid())
+            {
+                foreach (var item in checkdocter)
+                {
+                    var checkspe = from  sd in _context.ServicesSpecialities 
+                                   join s in _context.Specialities on sd.SpecialityId equals s.Id
+                                   where sd.DoctorId == item.UserId
+                                   select new { sd, s };
+                    var i = 0;
+                    foreach (var spe in checkspe)
+                    {
+
+                        if (spe.s.Id == request.SpecialityId)
+                        {
+                            i++;
+                        }
+                    }
+                    if (i == 0)
+                    {
+                        query = query.Where(x => x.Id != item.UserId);
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(request.searchSpeciality))
+            {
+                foreach (var item in checkdocter)
+                {
+                    var checkspe = from sd in _context.ServicesSpecialities
+                                   join s in _context.Specialities on sd.SpecialityId equals s.Id
+                                   where sd.DoctorId == item.UserId
+                                   select new { sd, s };
+                    var i = 0;
+                    foreach (var spe in checkspe)
+                    {
+
+                        if (spe.s.Title.ToLower().Contains(request.searchSpeciality.ToLower()))
+                        {
+                            i++;
+                        }
+                    }
+                    if (i == 0)
+                    {
+                        query = query.Where(x => x.Id != item.UserId);
+                    }
+                }
+            }
 
             //3. Paging
             int totalRow = await query.CountAsync();
@@ -588,11 +635,26 @@ namespace DoctorManagement.Application.System.Users
                         UserId = x.Doctors.UserId,
                         Intro = x.Doctors.Intro,
                         Address = x.Doctors.Address,
-                        Img = x.Doctors.Img,
+                        Img = USER_CONTENT_FOLDER_NAME+"/"+ x.Doctors.Img,
                         No = x.Doctors.No,
-                        //GetSpecialities = x new GetSpecialityVm() { Id = x.Doctors.Specialities.Id , Title = x.Doctors.Specialities.Title },
-                        //GetClinic = new GetClinicVm() { Id= x.Doctors.Clinics.Id , Name = x.Doctors.Clinics.Name }
-                    }: new DoctorVm(),
+                        FirstName = x.Doctors.FirstName,
+                        LastName = x.Doctors.LastName,
+                        Prefix = x.Doctors.Prefix,
+                        Booking = x.Doctors.Booking,
+                        FullAddress = x.Doctors.FullAddress,
+                        Dob = x.Doctors.Dob,
+                        IsPrimary = x.Doctors.IsPrimary,
+                        Slug = x.Doctors.Slug,
+                        BeforeBookingDay = x.Doctors.BeforeBookingDay,
+                        Gender = x.Doctors.Gender,
+                        Note = x.Doctors.Note,
+                        GetSpecialities = x.Doctors.ServicesSpecialities.Select(x => new GetSpecialityVm()
+                        {
+                            Id = x.SpecialityId,
+                            Title = x.Specialities.Title
+                        }).ToList(),
+                        GetClinic = x.Doctors.Clinics == null? new GetClinicVm(): new GetClinicVm() { Id= x.Doctors.Clinics.Id , Name = x.Doctors.Clinics.Name }
+                    } : new DoctorVm(),
                     PatientVm = x.AppRoles.Name == "PATIENT" ? new PatientVm()
                     {
                         UserId = x.Id,

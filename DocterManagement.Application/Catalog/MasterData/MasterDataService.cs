@@ -29,7 +29,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             var MasterDatas =  _context.Informations.FirstOrDefault();
           
            
-            if (MasterDatas == null) return new ApiErrorResult<InformationVm>("");
+            if (MasterDatas == null) return new ApiErrorResult<InformationVm>("Thông tin không được xác nhân!");
             var rs = new InformationVm()
             {
                 Id = MasterDatas.Id,
@@ -51,7 +51,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
         {
             
             var informations = await _context.Informations.FindAsync(request.Id);
-            if (informations == null) return new ApiErrorResult<bool>("Null");
+            if (informations == null) return new ApiErrorResult<bool>("Thông tin không được xác nhân!");
             informations.Hotline = request.Hotline;
             informations.TimeWorking = request.TimeWorking;
             informations.FullAddress = request.FullAddress;
@@ -78,7 +78,6 @@ namespace DoctorManagement.Application.Catalog.MasterData
         }
         public async Task<ApiResult<bool>> CreateMainMenu(MainMenuCreateRequest request)
         {
-           
             var mainMenu = new MainMenus()
             {
                 Name = request.Name,
@@ -100,7 +99,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             _context.MainMenus.Add(mainMenu);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Tạo menu không thành công!");
         }
        
         public async Task<ApiResult<int>> DeleteMainMenu(Guid Id)
@@ -185,7 +184,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
         public async Task<ApiResult<MainMenuVm>> GetByIdMainMenu(Guid Id)
         {
             var MainMenu = await _context.MainMenus.FindAsync(Id);
-            if (MainMenu == null) return new ApiErrorResult<MainMenuVm>("Null");
+            if (MainMenu == null) return new ApiErrorResult<MainMenuVm>("Menu không được xác nhân!");
             var menuparent = new MainMenus();
             if(MainMenu.ParentId != Guid.Empty) menuparent = await _context.MainMenus.FindAsync(MainMenu.ParentId);
             var rs = new MainMenuVm()
@@ -210,7 +209,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
         public async Task<ApiResult<bool>> UpdateMainMenu(MainMenuUpdateRequest request)
         {
             var MainMenu = await _context.MainMenus.FindAsync(request.Id);
-            if (MainMenu == null) return new ApiErrorResult<bool>("menu không tồn tại!");
+            if (MainMenu == null) return new ApiErrorResult<bool>("Menu không được xác nhân!");
             MainMenu.Name = request.Name;
             MainMenu.Title = request.Title;
             MainMenu.Description = request.Description;
@@ -322,7 +321,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
         public async Task<ApiResult<EthnicsVm>> GetByIdEthnic(Guid Id)
         {
             var MainMenu = await _context.Ethnics.FindAsync(Id);
-            if (MainMenu == null) return new ApiErrorResult<EthnicsVm>("Null");
+            if (MainMenu == null) return new ApiErrorResult<EthnicsVm>("Dân tộc không được xác nhân!");
             var rs = new EthnicsVm()
             {
                 Id = MainMenu.Id,

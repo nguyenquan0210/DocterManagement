@@ -46,7 +46,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
             _context.Specialities.Add(specialities);
             var rs = await _context.SaveChangesAsync();
             if(rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Tạo chuyên khoa không thành công!");
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
         {
@@ -129,7 +129,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
         public async Task<ApiResult<SpecialityVm>> GetById(Guid Id)
         {
             var speciality = await _context.Specialities.FindAsync(Id);
-            if (speciality == null) return new ApiErrorResult<SpecialityVm>("null");
+            if (speciality == null) return new ApiErrorResult<SpecialityVm>("Chuyên khoa không được xác nhận!");
             var rs = new SpecialityVm()
             {
                 Id = speciality.Id,
@@ -157,8 +157,9 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 speciality.Img = await SaveFile(request.Img, SPECIALITY_CONTENT_FOLDER_NAME);
             }
 
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool>(true);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiErrorResult<bool>("Cập nhật chuyên khoa không thành công!");
         }
     }
 }

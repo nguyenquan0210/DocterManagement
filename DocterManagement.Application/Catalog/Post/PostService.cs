@@ -74,8 +74,8 @@ namespace DoctorManagement.Application.Catalog.Post
             };
             _context.Posts.Add(posts);
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            if (rs != 0) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Tạo bài viết không thành công!");
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -149,7 +149,7 @@ namespace DoctorManagement.Application.Catalog.Post
         public async Task<ApiResult<PostVm>> GetById(Guid Id)
         {
             var post = await _context.Posts.FindAsync(Id);
-            if (post == null) throw new DoctorManageException($"Cannot find a Post with id: { Id}");
+            if (post == null) return new ApiErrorResult<PostVm>("Bài viết không được xác nhân!");
             var rs = new PostVm()
             {
                 Id = post.Id,
@@ -166,7 +166,7 @@ namespace DoctorManagement.Application.Catalog.Post
         public async Task<ApiResult<bool>> Update(PostUpdateRequest request)
         {
             var posts = await _context.Posts.FindAsync(request.Id);
-            if (posts == null) return new ApiSuccessResult<bool>(false);
+            if (posts == null) return new ApiErrorResult<bool>("Bài viết không được xác nhân!");
             posts.Title = request.Title;
             posts.DoctorId = request.DoctorId;
             posts.Description = request.Description;
@@ -174,7 +174,7 @@ namespace DoctorManagement.Application.Catalog.Post
 
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Cập nhật bài viết không thành công!");
         }
     }
 }

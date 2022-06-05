@@ -37,7 +37,7 @@ namespace DoctorManagement.Application.Catalog.Servicce
             {
                 return new ApiSuccessResult<bool>();
             }
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Tạo dịch vụ khám bệnh không thành công!");
         }
        
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -113,7 +113,7 @@ namespace DoctorManagement.Application.Catalog.Servicce
         public async Task<ApiResult<ServiceVm>> GetById(Guid Id)
         {
             var x = await _context.Services.FindAsync(Id);
-            if (x == null) return new ApiErrorResult<ServiceVm>("null");
+            if (x == null) return new ApiErrorResult<ServiceVm>("Dịch vụ khám bệnh không tồn tại!");
             var rs = new ServiceVm()
             {
                 Id = x.Id,
@@ -131,7 +131,7 @@ namespace DoctorManagement.Application.Catalog.Servicce
         public async Task<ApiResult<bool>> Update(ServiceUpdateRequest request)
         {
             var Services = await _context.Services.FindAsync(request.Id);
-            if (Services == null) return new ApiErrorResult<bool>("");
+            if (Services == null) return new ApiErrorResult<bool>("Dịch vụ khám bệnh không tồn tại!");
 
             Services.Description = request.Description;
             Services.ServiceName = request.ServiceName;
@@ -140,7 +140,7 @@ namespace DoctorManagement.Application.Catalog.Servicce
             Services.Unit = request.Unit;
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Cập nhật dịch vụ khám bệnh không thành công!");
         }
     }
 }

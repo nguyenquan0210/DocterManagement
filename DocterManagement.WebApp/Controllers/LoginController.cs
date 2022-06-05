@@ -39,14 +39,22 @@ namespace DoctorManagement.WebApp.Controllers
         public async Task<IActionResult> Index(LoginRequest request)
         {
             if (!ModelState.IsValid)
-                return View(ModelState);
+                return View(request);
             request.Check = "patient";
             var result = await _userApiClient.Authenticate(request);
-            if (result.Data == null)
+            if (!result.IsSuccessed)
             {
-                ModelState.AddModelError("", result.Message);
-                return View();
+                TempData["AlertMessage"] = result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return View(request);
             }
+            
+                TempData["AlertMessage"] = "Đăng nhập thành công.";
+                TempData["AlertType"] = "success";
+                TempData["AlertId"] = "successToast";
+
+            
             var userPrincipal = ValidateToken(result.Data);
             var authProperties = new AuthenticationProperties
             {
@@ -76,7 +84,6 @@ namespace DoctorManagement.WebApp.Controllers
             var result = await _userApiClient.CheckPhone(request);
             if (result.Data == null)
             {
-                ModelState.AddModelError("", result.Message);
                 return View();
             }
             var registerPatientSession = new RegisterPatientSession()
