@@ -31,5 +31,6 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         public Status Status { get; set; }
 
         public List<ImageClinicVm>? Images { get; set; }
+        public string? Note { get; set; }
     }
 }

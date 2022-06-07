@@ -1051,162 +1051,184 @@
         </div>
     </section>
 </app-search-result-doctor>
+@section JavaScript{
+    <script>
+        function myFunction() {
+          // Declare variables
+          var input, filter, table, tr, td, i, txtValue;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("search-table");
+          tr = table.getElementsByTagName("a");
 
-<script>
-    (function () {
-
-        const quotesEl = document.querySelector('.quotes');
-        const loaderEl = document.querySelector('.loader');
-
-        // get the quotes from API
-        const getQuotes = async (page, limit) => {
-            const API_URL = `@(Configuration["Base"])/Doctor/DoctorSpecialityJson?pageIndex=${page}&pageSize=${limit}&specialityid=@(ViewBag.SpecialityId)&searchSpeciality=@(ViewBag.SearchSpeciality)`;
-            const response = await fetch(API_URL);
-            // handle 404
-            if (!response.ok) {
-                throw new Error(`An error occurred: ${response.status}`);
+          // Loop through all table rows, and hide those who don't match the search query
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("span")[0];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
             }
-            return await response.json();
+          }
         }
+        (function () {
 
-        // show the quotes
-        const showQuotes = (quotes) => {
-            quotes.forEach(quote => {
-                const quoteEl = document.createElement('blockquote');
-                quoteEl.classList.add('quote');
-                var speciality = "";
-                quote.doctorVm.getSpecialities.forEach(spe=>{
-                    if (spe.title == quote.doctorVm.getSpecialities[quote.doctorVm.getSpecialities.length - 1].title)
-                    speciality = speciality + spe.title;
-                    else speciality = speciality + spe.title+ ", ";
-                })
-                var clinic = quote.doctorVm.getClinic.name==null?"":quote.doctorVm.getClinic.name;
-                quoteEl.innerHTML = `
-                
-                 <div _ngcontent-serverapp-c229="" class="ng-star-inserted">
-                                        <app-doctor-card _ngcontent-serverapp-c229="" _nghost-serverapp-c227="">
-                                            <div _ngcontent-serverapp-c227=""
-                                                class="flex flex-col lg:flex-row ng-star-inserted">
-                                                <div _ngcontent-serverapp-c227=""
-                                                    class="flex flex-1 p-4 lg:p-6 gap-4"><img
-                                                        _ngcontent-serverapp-c227="" width="100" height="100"
-                                                        defaultimage="~/img/placeholder.svg"
-                                                        class="cursor-pointer w-[100px] h-[100px] shrink-0 rounded-full object-cover  ng-star-inserted ng-lazyloaded"
-                                                        src="@(Configuration["BaseAddress"]+"/img/")${quote.doctorVm.img}">
-                                                
-                                                
-                                                    <div _ngcontent-serverapp-c227="">
-                                                        <p _ngcontent-serverapp-c227=""
-                                                            class="font-medium text-sm text-gray-800 ng-star-inserted">
-                                                            ${quote.doctorVm.prefix}</p>
-                                                    
-                                                        <h2 _ngcontent-serverapp-c227=""
-                                                            class="cursor-pointer text-lg text-primary ng-star-inserted">
-                                                             ${quote.doctorVm.lastName + " "+ quote.doctorVm.firstName}</h2>
-                                                    
-                                                        <p _ngcontent-serverapp-c227="" class="text-sm"><span
-                                                                _ngcontent-serverapp-c227=""
-                                                                class="text-gray-600 ng-star-inserted"> 
-                                                               ${speciality}
-                                                            </span>
-                                                            <span _ngcontent-serverapp-c227=""
-                                                                class="text-gray-800 font-medium ng-star-inserted">
-                                                                · ${clinic} </span>
-                                                        
-                                                        </p>
-                                                        <p _ngcontent-serverapp-c227=""
-                                                            class="text-sm text-gray-600 mt-1">${quote.doctorVm.fullAddress}</p>
-                                                    </div>
-                                                </div>
-                                                <div _ngcontent-serverapp-c227=""
-                                                    class="flex lg:flex-col gap-4 px-4 pb-4 lg:pb-0">
-                                                    <div _ngcontent-serverapp-c227=""
-                                                        class="flex flex-1 items-start lg:items-end">
-                                                    
-                                                    </div>
-                                                    <div _ngcontent-serverapp-c227=""
-                                                        class="flex flex-1 flex-col"><a asp-action="BookingDoctorSetPatient" asp-controller="Booking"  asp-route-doctorid="${quote.id}" asp-route-scheduleid="@(new Guid())"
-                                                            _ngcontent-serverapp-c227="" appsingleclick=""
-                                                            class="bg-primary hover:bg-primary/90 flex flex-1 lg:flex-none justify-center p-3 lg:px-6 rounded font-medium text-white">
-                                                            Đặt lịch khám </a></div>
-                                                </div>
-                                            </div>
-                                        
-                                        </app-doctor-card>
-                                    
-                                    </div>
+            const quotesEl = document.querySelector('.quotes');
+            const loaderEl = document.querySelector('.loader');
 
-            `;
-
-                quotesEl.appendChild(quoteEl);
-            });
-        };
-
-        const hideLoader = () => {
-            loaderEl.classList.remove('show');
-        };
-
-        const showLoader = () => {
-            loaderEl.classList.add('show');
-        };
-
-        const hasMoreQuotes = (page, limit, total) => {
-            const startIndex = (page - 1) * limit + 1;
-            return total === 0 || startIndex <= total;
-        };
-
-        // load quotes
-        const loadQuotes = async (page, limit) => {
-
-            // show the loader
-            showLoader();
-
-            // 0.5 second later
-            setTimeout(async () => {
-                try {
-                    // if having more quotes to fetch
-                    if (hasMoreQuotes(page, limit, total)) {
-                        // call the API to get quotes
-                        const response = await getQuotes(page, limit);
-                        // show quotes
-                        showQuotes(response.data.items);
-                        // update the total
-                        total = response.data.totalRecords;
-                    }
-                } catch (error) {
-                    console.log(error.message);
-                } finally {
-                    hideLoader();
+            // get the quotes from API
+            const getQuotes = async (page, limit) => {
+                const API_URL = `@(Configuration["Base"])/Doctor/DoctorSpecialityJson?pageIndex=${page}&pageSize=${limit}&specialityid=@(ViewBag.SpecialityId)&searchSpeciality=@(ViewBag.SearchSpeciality)`;
+                const response = await fetch(API_URL);
+                // handle 404
+                if (!response.ok) {
+                    throw new Error(`An error occurred: ${response.status}`);
                 }
-            }, 500);
-
-        };
-
-        // control variables
-        let currentPage = 1;
-        const limit = 20;
-        let total = 0;
-
-
-        window.addEventListener('scroll', () => {
-            const {
-                scrollTop,
-                scrollHeight,
-                clientHeight
-            } = document.documentElement;
-
-            if (scrollTop + clientHeight >= (scrollHeight - 500) &&
-                hasMoreQuotes(currentPage, limit, total)) {
-                currentPage++;
-                loadQuotes(currentPage, limit);
+                return await response.json();
             }
-        }, {
-            passive: true
-        });
 
-        // initialize
-        loadQuotes(currentPage, limit);
+            // show the quotes
+            const showQuotes = (quotes) => {
+                quotes.forEach(quote => {
+                    const quoteEl = document.createElement('blockquote');
+                    quoteEl.classList.add('quote');
+                    var speciality = "";
+                    quote.doctorVm.getSpecialities.forEach(spe=>{
+                        if (spe.title == quote.doctorVm.getSpecialities[quote.doctorVm.getSpecialities.length - 1].title)
+                        speciality = speciality + spe.title;
+                        else speciality = speciality + spe.title+ ", ";
+                    })
+                    var clinic = quote.doctorVm.getClinic.name==null?"":quote.doctorVm.getClinic.name;
+                    quoteEl.innerHTML = `
+                
+                     <div _ngcontent-serverapp-c229="" class="ng-star-inserted">
+                                            <app-doctor-card _ngcontent-serverapp-c229="" _nghost-serverapp-c227="">
+                                                <div _ngcontent-serverapp-c227=""
+                                                    class="flex flex-col lg:flex-row ng-star-inserted">
+                                                    <div _ngcontent-serverapp-c227=""
+                                                        class="flex flex-1 p-4 lg:p-6 gap-4"><img
+                                                            _ngcontent-serverapp-c227="" width="100" height="100"
+                                                            defaultimage="~/img/placeholder.svg"
+                                                            class="cursor-pointer w-[100px] h-[100px] shrink-0 rounded-full object-cover  ng-star-inserted ng-lazyloaded"
+                                                            src="@(Configuration["BaseAddress"]+"/img/")${quote.doctorVm.img}">
+                                                
+                                                
+                                                        <div _ngcontent-serverapp-c227="">
+                                                            <p _ngcontent-serverapp-c227=""
+                                                                class="font-medium text-sm text-gray-800 ng-star-inserted">
+                                                                ${quote.doctorVm.prefix}</p>
+                                                    
+                                                            <a _ngcontent-serverapp-c227="" href="/Doctor/Index/${quote.doctorVm.userId}"
+                                                                class="cursor-pointer text-lg text-primary ng-star-inserted">
+                                                                 ${quote.doctorVm.lastName + " "+ quote.doctorVm.firstName}</a>
+                                                    
+                                                            <p _ngcontent-serverapp-c227="" class="text-sm"><span
+                                                                    _ngcontent-serverapp-c227=""
+                                                                    class="text-gray-600 ng-star-inserted"> 
+                                                                   ${speciality}
+                                                                </span>
+                                                                <span _ngcontent-serverapp-c227=""
+                                                                    class="text-gray-800 font-medium ng-star-inserted">
+                                                                    · ${clinic} </span>
+                                                        
+                                                            </p>
+                                                            <p _ngcontent-serverapp-c227=""
+                                                                class="text-sm text-gray-600 mt-1">${quote.doctorVm.fullAddress}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div _ngcontent-serverapp-c227=""
+                                                        class="flex lg:flex-col gap-4 px-4 pb-4 lg:pb-0">
+                                                        <div _ngcontent-serverapp-c227=""
+                                                            class="flex flex-1 items-start lg:items-end">
+                                                    
+                                                        </div>
+                                                        <div _ngcontent-serverapp-c227=""
+                                                            class="flex flex-1 flex-col"><a href="/Booking/BookingDoctorSetPatient?doctorid=${quote.id}&scheduleid=@(new Guid())"  
+                                                                _ngcontent-serverapp-c227="" appsingleclick=""
+                                                                class="bg-primary hover:bg-primary/90 flex flex-1 lg:flex-none justify-center p-3 lg:px-6 rounded font-medium text-white">
+                                                                Đặt lịch khám </a></div>
+                                                    </div>
+                                                </div>
+                                        
+                                            </app-doctor-card>
+                                    
+                                        </div>
 
-    })();
-</script>
+                `;
+
+                    quotesEl.appendChild(quoteEl);
+                });
+            };
+
+            const hideLoader = () => {
+                loaderEl.classList.remove('show');
+            };
+
+            const showLoader = () => {
+                loaderEl.classList.add('show');
+            };
+
+            const hasMoreQuotes = (page, limit, total) => {
+                const startIndex = (page - 1) * limit + 1;
+                return total === 0 || startIndex <= total;
+            };
+
+            // load quotes
+            const loadQuotes = async (page, limit) => {
+
+                // show the loader
+                showLoader();
+
+                // 0.5 second later
+                setTimeout(async () => {
+                    try {
+                        // if having more quotes to fetch
+                        if (hasMoreQuotes(page, limit, total)) {
+                            // call the API to get quotes
+                            const response = await getQuotes(page, limit);
+                            // show quotes
+                            showQuotes(response.data.items);
+                            // update the total
+                            total = response.data.totalRecords;
+                        }
+                    } catch (error) {
+                        console.log(error.message);
+                    } finally {
+                        hideLoader();
+                    }
+                }, 500);
+
+            };
+
+            // control variables
+            let currentPage = 1;
+            const limit = 20;
+            let total = 0;
+
+
+            window.addEventListener('scroll', () => {
+                const {
+                    scrollTop,
+                    scrollHeight,
+                    clientHeight
+                } = document.documentElement;
+
+                if (scrollTop + clientHeight >= (scrollHeight - 500) &&
+                    hasMoreQuotes(currentPage, limit, total)) {
+                    currentPage++;
+                    loadQuotes(currentPage, limit);
+                }
+            }, {
+                passive: true
+            });
+
+            // initialize
+            loadQuotes(currentPage, limit);
+
+        })();
+    </script>
+}
 

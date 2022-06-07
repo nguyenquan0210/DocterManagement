@@ -20,6 +20,7 @@ namespace DoctorManagement.Application.Catalog.Post
     {
         private readonly DoctorManageDbContext _context;
         private readonly IStorageService _storageService;
+        private const string POSTS_CONTENT_FOLDER_NAME = "posts-content";
         public PostService(DoctorManageDbContext context,
             IStorageService storageService)
         {
@@ -27,19 +28,19 @@ namespace DoctorManagement.Application.Catalog.Post
             _storageService = storageService;
         }
 
-        public async Task<ApiResult<ImagesVm>> AddImage(ImageCreateRequest request)
+        public async Task<ApiResult<string>> AddImage(ImageCreateRequest request)
         {
-            var img = new ImagesVm();
+            
             if (request.File != null)
             {
-                img = await this.SaveFile(request.File);
-                //var dt = request.File.Length;
+                var img = POSTS_CONTENT_FOLDER_NAME +"/"+ await this.SaveFile(request.File);
+                return new ApiSuccessResult<string>(img);
             }
-            
-            //await _context.SaveChangesAsync();
-            return new ApiSuccessResult<ImagesVm>(img);
+
+            await _context.SaveChangesAsync();
+            return new ApiErrorResult<string>();
         }
-        private async Task<ImagesVm> SaveFile(IFormFile? file)
+        private async Task<string> SaveFile(IFormFile? file)
         {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
@@ -47,16 +48,8 @@ namespace DoctorManagement.Application.Catalog.Post
             var orgFileExtension = Path.GetExtension(originalFileName);
             var guid = Guid.NewGuid();
             var fileName = $"{guid}{orgFileExtension}";
-            var fileRequest = await _storageService.SaveFileImgAsync(file.OpenReadStream(), fileName);
-            return new ImagesVm()
-            {
-                Id = guid,
-                FileName = fileName,
-                OrgFileName = originalFileName,
-                OrgFileExtension = orgFileExtension,
-                FileUrl = fileRequest.FileUrl,
-                Container = fileRequest.Container
-            };
+            await _storageService.SaveFileImgAsync(file.OpenReadStream(), fileName, POSTS_CONTENT_FOLDER_NAME);
+            return fileName;
         }
         public async Task<ApiResult<bool>> Create(PostCreateRequest request)
         {
@@ -66,11 +59,7 @@ namespace DoctorManagement.Application.Catalog.Post
                 CreatedAt = DateTime.Now,
                 Description = request.Description,
                 Status = Data.Enums.Status.Active,
-                DoctorId = request.DoctorId,
-                ImagePosts = new List<ImagePost>()
-                {
-
-                }
+                DoctorId = request.DoctorId
             };
             _context.Posts.Add(posts);
             var rs = await _context.SaveChangesAsync();

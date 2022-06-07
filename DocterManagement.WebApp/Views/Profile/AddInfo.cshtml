@@ -948,7 +948,7 @@
 	        padding-bottom: 0;
         }
 
-        .form-section__form-input {
+       /* .form-section__form-input {
 	        height: 40px;
 	        max-width: 100%;
 	        width: 100%;
@@ -975,7 +975,7 @@
         }
         .form-section__form-input::placeholder {
 	        color: #b7b7b7;
-        }
+        }*/
 
         .form-section__form-error-icon {
 	        display: none;
@@ -1170,6 +1170,7 @@
         }
     </style>
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 <app-patient-record _nghost-serverapp-c161="" class="ng-star-inserted">
     <section _ngcontent-serverapp-c161="" class="bg-gray-100">
         <div _ngcontent-serverapp-c161=""
@@ -1327,7 +1328,7 @@
                                                     <span class="checkmark">Nữ</span>
                                                 </label>
                                             </div>
-                                            <div _ngcontent-serverapp-c159="" class="grid lg:grid-cols-3 gap-4">
+                                            <div _ngcontent-serverapp-c159="" class="grid lg:grid-cols-2 gap-4">
                                                 <div _ngcontent-serverapp-c159="" class="form-section__form-group"><label style="margin-bottom: 5px" _ngcontent-serverapp-c159="" asp-for="ProvinceId" class="form-label">Tỉnh / Thành
                                                         phố</label>
                                                         <select class=" select form-section__form-input" asp-for="ProvinceId" asp-items="ViewBag.Province">
@@ -1337,23 +1338,23 @@
                                                 </div>
                                                 <div _ngcontent-serverapp-c159="" class="form-section__form-group"><label  style="margin-bottom: 5px" _ngcontent-serverapp-c159="" asp-for="DistrictId" class="form-label">Quận /
                                                         Huyện</label>
-                                                        <select class=" select form-section__form-input" asp-for="DistrictId" asp-items="ViewBag.District">
+                                                        <select class="  form-section__form-input" asp-for="DistrictId" asp-items="ViewBag.District">
                                                             <option value="">- Quận/Huyện -</option>
                                                         </select>
                                                         <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
                                                 </div>
                                                 <div _ngcontent-serverapp-c159="" class="form-section__form-group"><label  style="margin-bottom: 5px" _ngcontent-serverapp-c159="" asp-for="LocationId" class="form-label">Phường /
                                                         Xã</label>
-                                                        <select class=" select form-section__form-input" asp-for="LocationId" asp-items="ViewBag.SubDistrict">
+                                                        <select class="  form-section__form-input" asp-for="LocationId" asp-items="ViewBag.SubDistrict">
                                                             <option value="">- Phường/Xã -</option>
                                                         </select>
                                                          <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
                                                 </div>
-                                            </div>
-                                            <div _ngcontent-serverapp-c159="" class="form-section__form-group"><label _ngcontent-serverapp-c159="" asp-for="Address" class="form-label">Địa chỉ cụ
-                                                    thể</label><input _ngcontent-serverapp-c159="" asp-for="Address" nz-input="" type="text"
-                                                    placeholder="Số nhà, tên đường" class="form-control ng-untouched ng-pristine ng-valid form-section__form-input">
-                                                     <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                                                <div _ngcontent-serverapp-c159="" class="form-section__form-group"><label _ngcontent-serverapp-c159="" asp-for="Address" class="form-label">Địa chỉ cụ
+                                                        thể</label><input _ngcontent-serverapp-c159="" asp-for="Address" nz-input="" type="text"
+                                                        placeholder="Số nhà, tên đường" class="form-control ng-untouched ng-pristine ng-valid form-section__form-input">
+                                                         <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                                                </div>
                                             </div>
                                             <div _ngcontent-serverapp-c159="" class="grid lg:grid-cols-2 gap-4">
                                                 <div _ngcontent-serverapp-c159="" class="form-section__form-group"><label _ngcontent-serverapp-c159="" asp-for="Identitycard" class="form-label">Số
@@ -1548,7 +1549,7 @@
             })
         });
     </script>
-    <script src="~/js/Validator2.js"></script>
+    <script src="~/js/Validator1.js"></script>
     <script>
         Validator({
 	        form: "#form-register",
@@ -1568,6 +1569,14 @@
                 Validator.isEmail('#RelativeEmail'),
 	        ]
         })
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <script>
+         $(document).ready(function () {
+              $('.select').selectize({
+                  sortField: 'text'
+              });
+          });
     </script>
 }
 

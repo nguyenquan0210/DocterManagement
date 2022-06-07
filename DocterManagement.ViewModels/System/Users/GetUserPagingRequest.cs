@@ -14,5 +14,6 @@ namespace DoctorManagement.ViewModels.System.Users
 
         public string? RoleName { get; set; }
         public Guid? SpecialityId { get; set; }
+        public bool checkclient { get; set; } = false;
     }
 }

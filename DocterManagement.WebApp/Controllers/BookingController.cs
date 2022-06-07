@@ -203,7 +203,7 @@ namespace DoctorManagement.WebApp.Controllers
                     {
                         DateTime = dateTo.ToShortDateString(),
                         day = dateTo.Day,
-                        DateNow = dateTo.ToShortDateString() == dateNow.ToShortDateString() ? true : false,
+                        DateNow = dateTo.ToShortDateString() == DateTime.Now.ToShortDateString() ? true : false,
                         IsActive = schedule == null ? false : true
                     };
                     dateTo = dateTo.AddDays(1);

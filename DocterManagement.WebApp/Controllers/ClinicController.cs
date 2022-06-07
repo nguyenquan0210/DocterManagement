@@ -11,22 +11,17 @@ namespace DoctorManagement.WebApp.Controllers
         {
             _clinicApiClient = clinicApiClient;
         }
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 15)
+        public async Task<IActionResult> Index(Guid Id)
         {
-            var request = new GetClinicPagingRequest()
+            var result = await _clinicApiClient.GetById(Id);
+            if (!result.IsSuccessed)
             {
-                Keyword = keyword,
-                PageIndex = pageIndex,
-                PageSize = pageSize
-            };
-            var data = await _clinicApiClient.GetClinicPagings(request);
-            ViewBag.Keyword = keyword;
-
-            if (TempData["result"] != null)
-            {
-                ViewBag.SuccessMsg = TempData["result"];
+                TempData["AlertMessage"] = result.Message==null? result.ValidationErrors[1] : result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return RedirectToAction("Index", "Home");
             }
-            return View(data.Data);
+            return View(result.Data);
         }
     }
 }

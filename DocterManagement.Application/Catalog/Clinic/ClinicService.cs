@@ -162,11 +162,50 @@ namespace DoctorManagement.Application.Catalog.Clinic
                         join p in _context.Locations on d.ParentId equals p.Id
                         select new { c, sd, d, p};
             var img = from i in _context.ImageClinics select i;
-           
+            var checkdocter = await _context.Doctors.ToListAsync();
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.c.Name.Contains(request.Keyword));
+                foreach (var item in checkdocter)
+                {
+                    var checkspe = from d in _context.Doctors
+                                   join sd in _context.ServicesSpecialities on d.UserId equals sd.DoctorId
+                                   join s in _context.Specialities on sd.SpecialityId equals s.Id
+                                   where d.UserId == item.UserId
+                                   select new { sd, s, d };
+                    var i = 0;
+                    foreach (var spe in checkspe)
+                    {
+
+                        if (spe.s.Title.ToLower().Contains(request.Keyword.ToLower()) )
+                        {
+                            i++;
+                        }
+                    }
+                    if (i == 0)
+                    {
+                        checkdocter = checkdocter.Where(x => x.UserId != item.UserId).ToList();
+                    }
+                }
+                foreach (var clinic in query)
+                {
+                    var i = 0;
+                    foreach (var d in clinic.c.Doctors)
+                    {
+
+                        var cd = checkdocter.FirstOrDefault(x => x.UserId== d.UserId);
+                        if (cd != null || clinic.c.Name.Contains(request.Keyword))
+                        {
+                            i++;
+                        }
+                    }
+                    if (i == 0)
+                    {
+                        query = query.Where(x => x.c.Id != clinic.c.Id);
+                    }
+                }
+                
+                
             }
             int totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
@@ -232,16 +271,14 @@ namespace DoctorManagement.Application.Catalog.Clinic
         public async Task<ApiResult<ClinicVm>> GetById(Guid Id)
         {
             var clinics = await _context.Clinics.FindAsync(Id);
-            var sd = await _context.Locations.FindAsync(clinics.LocationId);
-            var d = await _context.Locations.FindAsync(sd.ParentId);
-            var p = await _context.Locations.FindAsync(d.ParentId);
+            if (clinics == null) return new ApiErrorResult<ClinicVm>("Phòng khám không được xác nhận!");
+          
             var img = from i in _context.ImageClinics select i;
             var user = from u in _context.Users
                        join r in _context.Roles on u.RoleId equals r.Id
                        join dt in _context.Doctors on u.Id equals dt.UserId
                        where r.Name.ToUpper() == "DOCTOR" && dt.ClinicId == Id
                        select dt;
-            if (clinics == null) return new ApiErrorResult<ClinicVm>("Phòng khám không được xác nhận!");
             var rs = new ClinicVm()
             {
                 Id = clinics.Id,
@@ -253,38 +290,8 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 ImgLogo = CLINIC_CONTENT_FOLDER_NAME + "/" + clinics.ImgLogo,
                 Note = clinics.Note,
                 CreatedAt = clinics.CreatedAt,
-                FullAddress = clinics.Address +", " + sd.Name + ", " + d.Name + ", " + p.Name,
+                FullAddress = clinics.FullAddress ,
                 MapUrl = clinics.MapUrl,
-                LocationVm = new LocationVm()
-                {
-                    Id = sd.Id,
-                    Name = sd.Name,
-                    Code = sd.Code,
-                    IsDeleted = sd.IsDeleted,
-                    SortOrder = sd.SortOrder,
-                    ParentId = sd.ParentId,
-                    Type = sd.Type,
-                    District = new DistrictVm()
-                    {
-                        Id = d.Id,
-                        Name = d.Name,
-                        Code = d.Code,
-                        IsDeleted = d.IsDeleted,
-                        SortOrder = d.SortOrder,
-                        ParentId = d.ParentId,
-                        Type = d.Type,
-                        Province = new ProvinceVm()
-                        {
-                            Id = p.Id,
-                            Name = p.Name,
-                            Code = p.Code,
-                            IsDeleted = p.IsDeleted,
-                            SortOrder = p.SortOrder,
-                            ParentId = p.ParentId,
-                            Type = p.Type,
-                        }
-                    }
-                },
                 Images = img.Where(i => i.ClinicId == clinics.Id).Select(i => new ImageClinicVm()
                 {
                     Id = i.Id,
@@ -307,12 +314,18 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     MapUrl = u.MapUrl,
                     Prefix = u.Prefix,
                     Note = u.Note,
+                    IsPrimary = u.IsPrimary,
                     Services = u.Services.Select(s => new ServiceVm()
                     {
                         Id = s.Id,
                         Description = s.Description,
                         ServiceName = s.ServiceName,
                         Price = s.Price,
+                    }).ToList(),
+                    GetSpecialities = u.ServicesSpecialities.Select(x=>new GetSpecialityVm()
+                    {
+                        Id= x.Specialities.Id,
+                        Title = x.Specialities.Title
                     }).ToList(),
                     User = new UserVm()
 					{
@@ -339,6 +352,15 @@ namespace DoctorManagement.Application.Catalog.Clinic
             var i = _context.ImageClinics.Where(x=> x.ClinicId == request.Id).Count();
             var clinics = await _context.Clinics.FindAsync(request.Id);
             if (clinics == null) return new ApiErrorResult<bool>("Phòng khám không được xác nhận!");
+            if(clinics.Address == request.Address)
+            {
+                var location = await _context.Locations.FindAsync(request.LocationId);
+                var district = await _context.Locations.FindAsync(location.ParentId);
+                var province = await _context.Locations.FindAsync(district.ParentId);
+                var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
+                clinics.FullAddress = fullAddress;
+            }
+            clinics.Note = request.Note;
             clinics.Address = request.Address;
             clinics.Name = request.Name;
             clinics.Description = request.Description;

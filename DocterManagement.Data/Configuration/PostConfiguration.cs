@@ -20,6 +20,7 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Description).IsRequired().HasMaxLength(100);
 
             builder.HasOne(x => x.Doctors).WithMany(x => x.Posts).HasForeignKey(x => x.DoctorId);
+            builder.HasOne(x => x.Topics).WithMany(x => x.Posts).HasForeignKey(x => x.TopicId);
 
         }
     }

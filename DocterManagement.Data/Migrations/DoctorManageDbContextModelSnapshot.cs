@@ -178,7 +178,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "5f5a33eb-6daf-4dab-996a-bc6e15b5eefb",
+                            ConcurrencyStamp = "379a530e-90de-428c-baf5-71e8103825e1",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -186,7 +186,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"),
-                            ConcurrencyStamp = "d60e71f9-b82f-487f-829f-6a23e76609d6",
+                            ConcurrencyStamp = "c146a93e-9bcd-4a01-a682-8a805e5462b5",
                             Description = "doctor role",
                             Name = "doctor",
                             NormalizedName = "doctor"
@@ -194,7 +194,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("50fe257e-6475-41f0-93f7-f530d622362b"),
-                            ConcurrencyStamp = "027a8f67-46c0-47e3-ad28-3df0b7b742d7",
+                            ConcurrencyStamp = "114d568f-9d41-4807-9669-70b59ae1cf5b",
                             Description = "patient role",
                             Name = "patient",
                             NormalizedName = "patient"
@@ -275,14 +275,14 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eac4cd1f-e05f-4e00-b0e0-40d3f3a2bc8b",
+                            ConcurrencyStamp = "9d54bcf8-0eb8-4b54-8c05-1573cbb7b89a",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nguyenquan52000@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyenquan52000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOGWTteOCOF3B91BrMkLDHF1SEpVyGTgOuhVyKOMFv//47SlBID19mtGXM8+DDxppg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMS3MczQt0fLRXsuuzZLpJR4+TsEUjkpAkERyh6Lus+iQc46JopbjbMX6HUqQqYlmA==",
                             PhoneNumber = "0373951042",
                             PhoneNumberConfirmed = false,
                             RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
@@ -713,15 +713,10 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PostId");
 
                     b.ToTable("ImagePost", (string)null);
                 });
@@ -934,7 +929,6 @@ namespace DoctorManagement.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -1196,9 +1190,17 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<Guid>("TopicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Views")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
+
+                    b.HasIndex("TopicId");
 
                     b.ToTable("Posts", (string)null);
                 });
@@ -1440,6 +1442,35 @@ namespace DoctorManagement.Data.Migrations
                             SortOrder = 1,
                             Title = "Tiêu hóa"
                         });
+                });
+
+            modelBuilder.Entity("DoctorManagement.Data.Entities.Topics", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Titile")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Topics", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1694,17 +1725,6 @@ namespace DoctorManagement.Data.Migrations
                     b.Navigation("Clinics");
                 });
 
-            modelBuilder.Entity("DoctorManagement.Data.Entities.ImagePost", b =>
-                {
-                    b.HasOne("DoctorManagement.Data.Entities.Posts", "Posts")
-                        .WithMany("ImagePosts")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Posts");
-                });
-
             modelBuilder.Entity("DoctorManagement.Data.Entities.MedicalRecord", b =>
                 {
                     b.HasOne("DoctorManagement.Data.Entities.Appointments", "Appointments")
@@ -1777,7 +1797,15 @@ namespace DoctorManagement.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DoctorManagement.Data.Entities.Topics", "Topics")
+                        .WithMany("Posts")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Doctors");
+
+                    b.Navigation("Topics");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Rates", b =>
@@ -1962,8 +1990,6 @@ namespace DoctorManagement.Data.Migrations
             modelBuilder.Entity("DoctorManagement.Data.Entities.Posts", b =>
                 {
                     b.Navigation("CommentsPosts");
-
-                    b.Navigation("ImagePosts");
                 });
 
             modelBuilder.Entity("DoctorManagement.Data.Entities.Schedules", b =>
@@ -1984,6 +2010,11 @@ namespace DoctorManagement.Data.Migrations
             modelBuilder.Entity("DoctorManagement.Data.Entities.Specialities", b =>
                 {
                     b.Navigation("ServicesSpecialities");
+                });
+
+            modelBuilder.Entity("DoctorManagement.Data.Entities.Topics", b =>
+                {
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

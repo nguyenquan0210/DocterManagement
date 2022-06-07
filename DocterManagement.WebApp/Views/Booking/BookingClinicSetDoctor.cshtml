@@ -13,7 +13,7 @@
 @section Stylesheet{
     
 
-    <link rel="stylesheet" href="~/css/BookingClinic.css" >
+    <link rel="stylesheet" href="~/css/BookingClinic1.css" >
     <style>
         .ant-steps-item-wait>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-description, .ant-steps-item-wait>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title {
     color: #000000d9;}
@@ -2285,7 +2285,7 @@
 	        padding-bottom: 0;
         }
 
-        .form-section__form-input {
+        /*.form-section__form-input {
 	        height: 40px;
 	        max-width: 100%;
 	        width: 100%;
@@ -2323,7 +2323,7 @@
 	        align-items: center;
 	        transform-origin: 50% 0;
 	        transition: transform .3s linear 1s;
-        }
+        }*/
 
         @@keyframes bellAni {
 	        0% {
@@ -2676,18 +2676,18 @@
                                                                             style="height: 400px;">
                                                                             <div
                                                                                 class="fc-header-toolbar fc-toolbar fc-toolbar-ltr">
-                                                                                <div class="fc-toolbar-chunk"><button onclick="nextmonth(0)"
+                                                                                <div class="fc-toolbar-chunk"><button onclick="nextmonth(0)" id="prev"
                                                                                         type="button" title="Trước"
                                                                                         aria-pressed="false"
                                                                                         class="fc-next-button fc-button fc-button-primary hiden"><span
                                                                                             class="fc-icon fc-icon-chevron-left"></span></button>
                                                                                 </div>
                                                                                 <div class="fc-toolbar-chunk">
-                                                                                    <h2 class="fc-toolbar-title"
+                                                                                    <h2 class="fc-toolbar-title" data-id ="0"
                                                                                         id="month-year">tháng 5 năm 2022
                                                                                     </h2>
                                                                                 </div>
-                                                                                <div class="fc-toolbar-chunk"><button onclick="nextmonth(1)"
+                                                                                <div class="fc-toolbar-chunk"><button onclick="nextmonth(1)" id="next"
                                                                                         type="button" title="Tiếp"
                                                                                         aria-pressed="false"
                                                                                         class="fc-next-button fc-button fc-button-primary"><span
@@ -3400,6 +3400,7 @@
             
       } 
     </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
     <div  class="cdk-global-overlay-wrapper  "  dir="ltr">
       <div id="cdk-overlay-form" class="cdk-overlay-pane hiden-btn" style="position: static;">
         <div tabindex="0" class="cdk-visually-hidden cdk-focus-trap-anchor" aria-hidden="true"></div>
@@ -3496,7 +3497,7 @@
                         <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label  style="margin-bottom: 5px" _ngcontent-serverapp-c188="" for="DistrictId" class="form-label">Quận /
                           Huyện<span _ngcontent-serverapp-c188=""
                             class="text-red-500">*</span></label>
-                          <select class=" select form-section__form-input" name="DistrictId" id="DistrictId" asp-items="ViewBag.District">
+                          <select class="  form-section__form-input" name="DistrictId" id="DistrictId" asp-items="ViewBag.District">
                               <option value="">- Quận/Huyện -</option>
                           </select>
                           <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
@@ -3504,7 +3505,7 @@
                         <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label  style="margin-bottom: 5px" _ngcontent-serverapp-c188="" for="LocationId" class="form-label">Phường /
                           Xã<span _ngcontent-serverapp-c188=""
                             class="text-red-500">*</span></label>
-                          <select class=" select form-section__form-input" name="LocationId" id="LocationId" asp-items="ViewBag.SubDistrict">
+                          <select class="  form-section__form-input" name="LocationId" id="LocationId" asp-items="ViewBag.SubDistrict">
                               <option value="">- Phường/Xã -</option>
                           </select>
                           <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
@@ -3529,7 +3530,7 @@
                         <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label style="margin-bottom: 5px" _ngcontent-serverapp-c188="" for="ethnicGroupId"
                             class="form-label">Dân tộc<span _ngcontent-serverapp-c188=""
                             class="text-red-500">*</span></label>
-                          <select class=" select form-section__form-input" name="EthnicId" id="EthnicId" asp-items="ViewBag.Ethnics">
+                          <select class="select form-section__form-input" name="EthnicId" id="EthnicId" asp-items="ViewBag.Ethnics">
                                  <option value="">- Dân tộc -</option>
                           </select>
                           <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
@@ -3737,8 +3738,21 @@
             $('#btn-submit .rounded').addClass('hiden-btn');
         }
         function nextmonth(intMonth){
-            $('.fc-next-button').toggleClass('hiden');
-            GetDoctorScheduleDate(intMonth);
+            var month =  parseInt($('#month-year').attr("data-id"));
+            if(intMonth == "0"){
+                month = month - 1 ;
+                $('#month-year').attr("data-id", month);
+                if(month == 0){
+                     $('#prev').addClass('hiden');
+                }
+            }else{
+                month = month + 1 ;
+                $('#month-year').attr("data-id", month);
+                $('#prev').removeClass('hiden');
+
+            }
+
+            GetDoctorScheduleDate(month);
         }
         function GetDoctorScheduleDate(intMonth){
             var doctorId = $("#DoctorId").val();
@@ -3854,11 +3868,9 @@
             })
         });
     </script>
-    <script src="~/js/Validator2.js"></script>
+    <script src="~/js/Validator1.js"></script>
     <script>
-        function Submit(){
-            
-            Validator({
+         Validator({
 	            form: "#form-register",
 	            formGroup: ".form-section__form-group",
 	            errorMessage: ".text-error ",
@@ -3874,7 +3886,13 @@
 		            Validator.isRequired('#Address', 'Vui lòng nhập địa chỉ cụ thể!'),
 		            Validator.isRequired('#RelativeEmail', 'Vui lòng nhập địa chỉ e-mail!'),
                     Validator.isEmail('#RelativeEmail'),
-	            ],
+	            ]})
+        function Submit(){
+            
+            Validator({
+	            form: "#form-register",
+	            formGroup: ".form-section__form-group",
+	            errorMessage: ".text-error ",
                 onSubmit: data => {
                    let  dataUser = Object.assign({}, data);
 
@@ -3911,5 +3929,13 @@
                 }
             })
         }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <script>
+         $(document).ready(function () {
+              $('.select').selectize({
+                  sortField: 'text'
+              });
+          });
     </script>
 }

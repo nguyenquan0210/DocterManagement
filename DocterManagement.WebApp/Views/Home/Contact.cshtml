@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+  <link rel="stylesheet" id="theme-css" href="https://youmed.vn/wp-content/themes/youmed/css/app.css?ver=3.0.0"
+        type="text/css" media="all">
+    <link rel="stylesheet" id="form-css-css" href="https://youmed.vn/wp-content/themes/youmed/css/form.css?ver=3.0.0"
+        type="text/css" media="all">
+  <style>
+      .ant-collapse .ant-collapse-item-disabled>.ant-collapse-header {
+            color: #000000;
+            cursor: pointer;
+        }
+  </style>
+<div id="content" class="site-content flex-grow">
+    <section>
+        <div class="section-wrapper">
+            <div class="my-8">
+                <h1 class="text-center text-2xl md:text-4xl font-extrabold leading-tight mb-1">Liên hệ</h1>
+                <p></p>
+            </div>
+            <div class="grid md:grid-cols-6 gap-6">
+                <div class="relative overflow-hidden md:col-span-3 bg-gray-100 p-2 rounded-lg min-h-[500px]">
+                    <div class="absolute inset-0 ">
+                        <div class="gmap_canvas">
+                            <iframe width="100%" height="100%" id="gmap_canvas" class="absolute"
+                                src="https://maps.google.com/maps?q=523%20T%C3%B4%20Hi%E1%BA%BFn%20Th%C3%A0nh,%20P.%2014,%20Q.%2010,%20Tp.%20HCM&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
+                                loading="lazy" frameborder="0" scrolling="no" marginheight="0"
+                                marginwidth="0"></iframe>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow relative">
+                        <h3></h3>
+                        <p class="font-medium">Công ty TNHH YouMed Việt Nam</p>
+                        <p class="text-sm">523 Tô Hiến Thành, P.14, Q.10, TP. HCM</p>
+                        <p class="text-sm"><a href="mailto:cskh@youmed.vn">cskh@youmed.vn</a> - <a
+                                href="tel:19002805">1900-2805</a></p>
+                    </div>
+                </div>
+                <div class="contact-form md:col-span-3">
+                    <div class="overflow-hidden p-4 md:p-6 rounded-lg shadow-lg ring-1 ring-slate-100">
+                        <div role="form" class="wpcf7" id="wpcf7-f318-o1" lang="en-US" dir="ltr">
+                            <div class="screen-reader-response">
+                                <p role="status" aria-live="polite" aria-atomic="true"></p>
+                                <ul></ul>
+                            </div>
+                            <form action="/lien-he/#wpcf7-f318-o1" method="post" class="wpcf7-form init"
+                                novalidate="novalidate" data-status="init">
+                                <div style="display: none;">
+                                    <input type="hidden" name="_wpcf7" value="318">
+                                    <input type="hidden" name="_wpcf7_version" value="5.5.6">
+                                    <input type="hidden" name="_wpcf7_locale" value="en_US">
+                                    <input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f318-o1">
+                                    <input type="hidden" name="_wpcf7_container_post" value="0">
+                                    <input type="hidden" name="_wpcf7_posted_data_hash" value="">
+                                    <input type="hidden" name="_wpcf7_recaptcha_response" value="">
+                                </div>
+                                <div class="my-2 text-sm">
+                                    <div class="wpcf7-response-output" aria-hidden="true"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="nf-field-label">
+                                        <label for="name">Họ và tên <span
+                                                class="text-orange-600">*</span></label>
+                                    </div>
+                                    <span class="wpcf7-form-control-wrap your-name"><input type="text"
+                                            name="your-name" value="" size="40"
+                                            class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
+                                            id="name" aria-required="true" aria-invalid="false"></span>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="nf-field-label">
+                                        <label for="phone">Số điện thoại <span
+                                                class="text-orange-600">*</span></label>
+                                    </div>
+                                    <span class="wpcf7-form-control-wrap your-phone"><input type="tel"
+                                            name="your-phone" value="" size="40"
+                                            class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel"
+                                            id="phone" aria-required="true" aria-invalid="false"></span>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="nf-field-label">
+                                        <label for="email">Địa chỉ email</label>
+                                    </div>
+                                    <span class="wpcf7-form-control-wrap your-email"><input type="email"
+                                            name="your-email" value="" size="40"
+                                            class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-email"
+                                            id="email" aria-invalid="false"></span>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="nf-field-label">
+                                        <label for="message">Thông tin <span
+                                                class="text-orange-600">*</span></label>
+                                    </div>
+                                    <span class="wpcf7-form-control-wrap your-message"><textarea
+                                            name="your-message" cols="40" rows="10"
+                                            class="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required"
+                                            id="message" aria-required="true"
+                                            aria-invalid="false"></textarea></span>
+                                </div>
+                                <input type="submit" value="Gửi"
+                                    class="wpcf7-form-control has-spinner wpcf7-submit btn-primary cursor-pointer"><span
+                                    class="wpcf7-spinner"></span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+

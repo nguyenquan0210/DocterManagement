@@ -173,13 +173,15 @@
 			</div>
 		</div>
 	</div>
-
+	<script src="~/js/plugins/jquery.js"></script>
+	<script src="~/js/plugins/jquery.min.js"></script>
 	<script src="~/js/core/popper.min.js"></script>
 	<script src="~/js/core/bootstrap.min.js"></script>
 	<script src="~/js/plugins/perfect-scrollbar.min.js"></script>
 	<script src="~/js/plugins/smooth-scrollbar.min.js"></script>
 	<script src="~/js/plugins/multistep-form.js"></script>
 	<script src="~/js/plugins/choices.min.js"></script>
+	<script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
 	@RenderSection("jsFooter", required: false)
 
 	<script>
@@ -191,8 +193,7 @@
 			Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
 		}
 	</script>
-	<script src="~/js/plugins/jquery.js"></script>
-	<script src="~/js/plugins/jquery.min.js"></script>
+	
 	<script>
 		$(function () {
 		   @* $('#AlertBox').removeClass('hide1');*@

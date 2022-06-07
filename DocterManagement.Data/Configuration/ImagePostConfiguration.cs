@@ -19,8 +19,6 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.Img).IsRequired().HasMaxLength(100);
 
 
-            builder.HasOne(x => x.Posts).WithMany(x => x.ImagePosts).HasForeignKey(x => x.PostId);
-
         }
     }
 }

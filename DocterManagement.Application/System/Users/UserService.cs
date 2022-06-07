@@ -536,34 +536,42 @@ namespace DoctorManagement.Application.System.Users
         {
             var query = from u in _context.AppUsers
                         select u;
-            /* join d in _context.Doctors on u.Id equals d.UserId into dt
-                        from d in dt.DefaultIfEmpty()
-                        join s in _context.ServicesSpecialities on d.UserId equals s.DoctorId into ss
-                        from s in ss.DefaultIfEmpty()
-                        join sp in _context.Specialities on s.SpecialityId equals sp.Id into spe
-                        from sp in spe.DefaultIfEmpty()*/
-            /*join r in _context.Roles on u.RoleId equals r.Id
-
-            join s in _context.Specialities on d.SpecialityId equals s.Id into spe
-            from s in spe.DefaultIfEmpty()
-            join c in _context.Clinics on d.ClinicId equals c.Id into cli
-            from c in cli.DefaultIfEmpty()
-            join p in _context.Patients on u.Id equals p.UserId into pt
-            from p in pt.DefaultIfEmpty()*/
-
-            //var patient = _context.Patients;
-
-            if (!string.IsNullOrEmpty(request.Keyword))
+           
+            if (!string.IsNullOrEmpty(request.Keyword) && request.checkclient==false)
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword)
                  || x.PhoneNumber.Contains(request.Keyword));
             }
+            var checkdocter = await _context.Doctors.ToListAsync();
             if (!string.IsNullOrEmpty(request.RoleName))
             {
                 query = query.Where(x => x.AppRoles.Name.Contains(request.RoleName));
+                if (!string.IsNullOrEmpty(request.Keyword) && request.RoleName =="doctor")
+                {
+                    foreach (var item in checkdocter)
+                    {
+                        var checkspe = from d in _context.Doctors
+                                       join sd in _context.ServicesSpecialities on d.UserId equals sd.DoctorId
+                                       join s in _context.Specialities on sd.SpecialityId equals s.Id
+                                       where d.UserId == item.UserId
+                                       select new { sd, s ,d};
+                        var i = 0;
+                        foreach (var spe in checkspe)
+                        {
+
+                            if (spe.s.Title.ToLower().Contains(request.Keyword.ToLower())|| spe.d.FirstName.ToLower().Contains(request.Keyword.ToLower()) || spe.d.LastName.ToLower().Contains(request.Keyword.ToLower()))
+                            {
+                                i++;
+                            }
+                        }
+                        if (i == 0)
+                        {
+                            query = query.Where(x => x.Id != item.UserId);
+                        }
+                    }
+                }
             }
-            var checkdocter = await _context.Doctors.ToListAsync();
-            if (request.SpecialityId!= new Guid())
+            if (request.SpecialityId!= new Guid()&& request.SpecialityId != null)
             {
                 foreach (var item in checkdocter)
                 {

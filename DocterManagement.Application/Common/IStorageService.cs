@@ -12,7 +12,7 @@ namespace DoctorManagement.Application.Common
         string GetFileUrl(string fileName);
 
         Task SaveFileAsync(Stream mediaBinaryStream, string fileName);
-        Task<ImagesVm> SaveFileImgAsync(Stream mediaBinaryStream, string fileName);
+        Task SaveFileImgAsync(Stream mediaBinaryStream, string fileName, string folderName);
 
         Task DeleteFileAsync(string fileName);
 

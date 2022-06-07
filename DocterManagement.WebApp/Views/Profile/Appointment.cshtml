@@ -927,7 +927,11 @@
                                             </div>
                                             <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Tình trạng bệnh</span><span _ngcontent-serverapp-c254=""
-                                                class="font-medium text-right">@Model.MedicalRecord.StatusIllness</span>
+                                                class="font-medium text-right">
+                                                 @(Model.MedicalRecord.StatusIllness==StatusIllness.central?"Trung bình":
+                                                                Model.MedicalRecord.StatusIllness==StatusIllness.light?"Nhẹ":
+                                                                Model.MedicalRecord.StatusIllness==StatusIllness.heavy?"Nặng":"Khác")
+                                                </span>
                                             </div>
                                             <div _ngcontent-serverapp-c254="" class="flex justify-between"><span
                                                 _ngcontent-serverapp-c254="" class="whitespace-nowrap mr-2">Chú ý</span><span _ngcontent-serverapp-c254=""
@@ -968,7 +972,7 @@
                                             _ngcontent-serverapp-c256="" href="tel:0373951042"
                                             class="text-primary">0373951042</a></p>
                                 </div>
-                                @if(Model.Status == StatusAppointment.pending)
+                                @if(Model.Status == StatusAppointment.approved)
                                 {
                                     <div _ngcontent-serverapp-c256=""
                                         class="p-4 lg:p-6 flex justify-between items-center gap-6 mt-auto">

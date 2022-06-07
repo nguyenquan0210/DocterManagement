@@ -2,6 +2,7 @@
 using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Users;
 using DoctorManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -61,6 +62,57 @@ namespace DoctorManagement.WebApp.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> FilterDoctorHome(string keyword, string searchspeciality, int pageIndex = 1, int pageSize = 20)
+        {
+            //ViewBag.GetAllSpeciality = (await _specialityApiClient.GetAllSpeciality()).Data.ToList();
+            ViewBag.SearchSpeciality = searchspeciality;
+            var request = new GetUserPagingRequest()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                RoleName = "doctor",
+                searchSpeciality = searchspeciality,
+                checkclient = true,
+            };
+            ViewBag.Keyword = keyword;
+            var doctor = await _userApiClient.GetUsersPagings(request);
+            var requestClinic = new GetClinicPagingRequest()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = 100
+            };
+            ViewBag.Clinics = (await _clinicApiClient.GetClinicPagings(requestClinic)).Data.Items;
+            ViewBag.Keyword = keyword;
+
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            
+            return View(doctor.Data);
+        }
+        public async Task<IActionResult> FilterDoctorHomeJson(string keyword, string searchSpeciality, int pageIndex = 1, int pageSize = 20)
+        {
+            var request = new GetUserPagingRequest()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                RoleName = "doctor",
+                searchSpeciality = searchSpeciality,
+                checkclient = true
+            };
+
+            var doctor = await _userApiClient.GetUsersPagings(request);
+            return Json(doctor);
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

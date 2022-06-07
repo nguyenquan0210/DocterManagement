@@ -18,16 +18,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Thêm ảnh
         /// </summary>
         /// 
-        [HttpPost("images")]
-        public async Task<ActionResult<ApiResult<bool>>> Create([FromForm] ImageCreateRequest request)
+        [HttpPost("post")]
+        public async Task<ActionResult<ApiResult<ImagesVm>>> Create([FromForm] ImageCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(request);
             }
             var result = await _postService.AddImage(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }

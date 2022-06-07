@@ -89,5 +89,6 @@ namespace DoctorManagement.WebApp.Controllers
             var doctor = await _userApiClient.GetUsersPagings(request);
             return View(doctor.Data);
         }
+       
     }
 }

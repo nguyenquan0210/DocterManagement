@@ -33,6 +33,8 @@ builder.Services.AddTransient<IMasterDataApiClient, MasterDataApiClient>();
 builder.Services.AddTransient<IContactApiClient, ContactApiClient>();
 builder.Services.AddTransient<IStatisticApiClient, StatisticApiClient>();
 builder.Services.AddTransient<IDoctorApiClient, DoctorApiClient>();
+builder.Services.AddTransient<IPostApiClient, PostApiClient>();
+builder.Services.AddTransient<ITopicApiClient, TopicApiClient>();
 builder.Services.AddTransient<IAnnualServiceFeeApiClient, AnnualServiceFeeApiClient>();
 
 IMvcBuilder builde = builder.Services.AddRazorPages();

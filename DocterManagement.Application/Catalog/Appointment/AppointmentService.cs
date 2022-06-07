@@ -279,6 +279,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                         FullName = x.d.Prefix+" "+ x.d.LastName + " " + x.d.FirstName,
                         FullAddress = x.d.FullAddress,
                         Img = "user-content/"+ x.d.Img,
+                        Booking = x.d.Booking,
                     },
                     MedicalRecord = x.m !=null ? new MedicalRecordVm()
                     {

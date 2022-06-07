@@ -146,7 +146,8 @@ namespace DoctorManagement.ApiIntegration
                 $"&keyword={request.Keyword}" +
                 $"&rolename={request.RoleName}" +
                 $"&specialityId={request.SpecialityId}" +
-                $"&searchSpeciality={request.searchSpeciality}");
+                $"&searchSpeciality={request.searchSpeciality}" +
+                $"&checkclient={request.checkclient}");
             var body = await response.Content.ReadAsStringAsync();
             var users = JsonConvert.DeserializeObject<ApiSuccessResult<PagedResult<UserVm>>>(body);
             return users;
