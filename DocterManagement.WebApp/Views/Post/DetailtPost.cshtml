@@ -1,0 +1,403 @@
+﻿@model DoctorManagement.ViewModels.Catalog.Post.PostVm
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<link rel="stylesheet" id="medamp-front-page-css"
+        href="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/dist/css/front-page.min.css" media="all">
+        <link rel="stylesheet" id="medamp-article-css"
+        href="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/dist/css/article.min.css" media="all">
+ <link rel="stylesheet" id="theme-css" href="https://youmed.vn/wp-content/themes/youmed/css/app.css?ver=3.0.0"
+        type="text/css" media="all">
+    <link rel="stylesheet" id="form-css-css" href="https://youmed.vn/wp-content/themes/youmed/css/form.css?ver=3.0.0"
+        type="text/css" media="all">
+  <style>
+      .ant-collapse .ant-collapse-item-disabled>.ant-collapse-header {
+            color: #000000;
+            cursor: pointer;
+        }
+  </style>
+<main id="main" role="main">
+    
+    <div class="site-breadcrumb max-w-7xl mx-auto">
+        <div class="wrapper"><span><span><a asp-controller="Home" asp-action="Post" data-wpel-link="internal">Trang
+                        chủ</a> / <a hasp-action="Topic" asp-controller="Post"  asp-route-id="@Model.Topic.Id"
+                                data-wpel-link="internal">Chăm sóc da mụn</a></span></span></span></span></div>
+    </div>
+    <section class="single-article max-w-7xl mx-auto">
+        <article id="post-197359" style="width:100%"
+            class=" mx-auto post-197359 post type-post status-publish format-standard has-post-thumbnail hentry category-cham-soc-da-mun">
+            <div class="content-header">
+                <h1 class="article-heading font-serif">Mụn viêm: Điều trị như thế nào là hợp lý?</h1>
+                <div class="article-btns">
+                    <div class="content-author">
+                        <div class="article-author"><a
+                                href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                title="Bác sĩ NGUYỄN THỊ THẢO" data-wpel-link="internal">
+                                <picture class="author-image wp-post-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-150x150.jpg.webp 150w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-300x300.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-1024x1024.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1.jpg.webp 1360w"
+                                        sizes="(max-width: 150px) 100vw, 150px">
+                                    <img width="150" height="150"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-150x150.jpg"
+                                        alt="bác sĩ Nguyễn Thị Thảo"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-150x150.jpg 150w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-300x300.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-1024x1024.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-768x768.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1.jpg 1360w"
+                                        sizes="(max-width: 150px) 100vw, 150px">
+                                </picture>
+                            </a>
+                            <div class="author vcard  flex-col">Tác giả:&nbsp;<a
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal">Bác sĩ NGUYỄN THỊ THẢO</a>Chuyên khoa: Da liễu <time
+                                    class="entry-date updated" datetime="2021-12-27T13:13:30+07:00">Cập nhật: 27
+                                    Th12, 2021</time> </div>
+                        </div>
+                    </div>
+                    <div class="content-btns hidden md:flex">
+                        <div class="font-setting-btns">
+                            <button class="fontsize-toggle fontsize-set">Aa</button>
+                            <ul class="fontsize-options">
+                                <li><button class="fontsize-set" data-size="normal">Aa</button></li>
+                                <li><button class="fontsize-set" data-size="lager">Aa+</button></li>
+                                <li><button class="fontsize-set" data-size="extra-lager">Aa++</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="with-toc-wrapper">
+                <div class="content-body prose">
+                    <p>@Html.Raw(Model.Content)</p>
+                   
+                    <!-- AI CONTENT STAR 1 -->
+                    @Html.Raw(Model.Description)
+                    <!-- AI CONTENT END 1 -->
+                </div>
+            </div>
+            
+            <div class="article-bottom-nav">
+                <div class="share-wapper">
+                    <p class="font-medium hidden md:block">Chia sẻ thông tin hữu ích này cho mọi người trên:</p>
+                    <ul class="share-list">
+                        <li>
+                            <a class="share-icon share-facebook" type="facebook"
+                                href="https://www.facebook.com/sharer.php?u=https://youmed.vn/tin-tuc/mun-viem-dieu-tri-nhu-the-nao-la-hop-ly/"
+                                target="_blank" rel="noopener noreferrer" data-wpel-link="exclude">
+                                <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                                    focusable="false" viewBox="0 0 24 24" fill="currentColor" version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <path
+                                        d="M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z">
+                                    </path>
+                                </svg> <span class="screen-reader-text">Share to Facebook</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="share-icon share-facebookmessenger" type="facebookmessenger"
+                                href="fb-messenger://share?u=Mụn viêm: Điều trị như thế nào là hợp lý?https://youmed.vn/tin-tuc/mun-viem-dieu-tri-nhu-the-nao-la-hop-ly/"
+                                target="_blank" rel="noopener" data-wpel-link="internal">
+                                <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                                    focusable="false" viewBox="0 0 1024 1024" version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <g id="logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <g id="logo">
+                                            <path
+                                                d="M512,122 C286.668,122 112,287.056 112,510 C112,626.6144 159.792,727.3824 237.6224,796.984 C244.156,802.832 248.1,811.024 248.368,819.792 L250.5464,890.944 C251.2424,913.64 274.6856,928.408 295.4536,919.24 L374.848,884.192 C381.5784,881.224 389.12,880.672 396.212,882.624 C432.696,892.656 471.5264,898 512,898 C737.332,898 912,732.944 912,510 C912,287.056 737.332,122 512,122 Z"
+                                                id="Path" fill="currentColor"></path>
+                                            <path
+                                                d="M271.8016,623.4688 L389.3016,437.0528 C407.992,407.3968 448.016,400.0128 476.06,421.0448 L569.5136,491.1352 C578.088,497.5672 589.8856,497.5328 598.424,491.0528 L724.6376,395.2648 C741.484,382.4808 763.4736,402.6408 752.2,420.5312 L634.7,606.9488 C616.008,636.6032 575.984,643.9888 547.9416,622.9552 L454.4856,552.8632 C445.912,546.4328 434.1136,546.4672 425.576,552.9472 L299.3616,648.7352 C282.516,661.5184 260.5256,641.3584 271.8016,623.4688 Z"
+                                                id="Path" fill="#FFFFFF"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <span class="screen-reader-text">Share on Facebook Messenger</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="share-icon share-zalo" type="zalo"
+                                href="https://sp.zalo.me/share?href=https://youmed.vn/tin-tuc/mun-viem-dieu-tri-nhu-the-nao-la-hop-ly/"
+                                target="_blank" rel="noopener noreferrer" data-wpel-link="exclude">
+                                <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                                    focusable="false" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <mask id="mask0" maskUnits="userSpaceOnUse" x="2" y="2" width="20" height="20">
+                                        <path
+                                            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                            fill="currentColor"></path>
+                                    </mask>
+                                    <g mask="url(#mask0)">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M9.0003 2.16578C9.03534 2.14935 8.98496 2.04051 9 2H19.1293C20.6656 2 21.9979 3.40417 21.9979 5.02344V16.168C21.9979 16.168 21.8197 16.3687 21.7887 16.408C21.779 16.4205 21.7693 16.4328 21.7588 16.4438C20.9156 17.3371 19.9203 18.0517 18.8294 18.5602C16.152 19.7971 13.4311 19.8887 10.6755 18.89C10.4364 18.7984 10.1756 18.7847 9.92788 18.8534C9.5628 18.9496 9.20207 19.0641 8.84133 19.1786C7.77646 19.5222 6.69414 19.678 5.5858 19.4489C5.60318 19.4901 5.62492 19.5268 5.65099 19.5634C5.94626 19.8395 6.23243 20.1267 6.51845 20.4137C6.71662 20.6126 6.91472 20.8114 7.11574 21.0064C7.3461 21.2309 7.57646 21.46 7.79813 21.6982C7.81718 21.7182 7.83889 21.7353 7.86151 21.7513C7.83889 21.7365 7.81719 21.7209 7.79813 21.7027C7.57646 21.4691 7.3461 21.2355 7.11574 21.011C6.91478 20.8161 6.71673 20.6173 6.51862 20.4185C6.2326 20.1314 5.94625 19.844 5.651 19.568C5.62492 19.5314 5.60319 19.4947 5.5858 19.4535C5.50756 19.4168 5.45106 19.3756 5.54234 19.2932C5.56261 19.2794 5.58289 19.2652 5.60317 19.2509C5.64374 19.2224 5.68432 19.1939 5.72489 19.1695C6.29427 18.7801 6.82888 18.3541 7.18094 17.7265C7.47215 17.2042 7.42434 16.9019 7.05924 16.5125C5.00338 14.3411 4.09498 11.7391 4.547 8.67447C4.80344 6.93828 5.55972 5.44489 6.65067 4.14389C7.31133 3.35597 8.09803 2.71921 8.95863 2.18782C8.97105 2.17949 8.98552 2.1727 9.0003 2.16578ZM8.06326 21.9822C7.68219 21.9822 7.30066 21.9864 6.91898 21.9907C6.11236 21.9997 5.30453 22.0087 4.49919 21.9776C3.12471 21.9193 2.06687 20.7281 2.02314 19.2896C2.00787 19.1633 2 19.0345 2 18.9038V5.02344C2 4.85262 2.01344 4.68511 2.03926 4.52202C2.17043 3.27944 3.0223 2.37633 4.07738 2.11647C4.32871 2.04062 4.59417 2 4.86864 2H19.1293C20.7136 2 21.9979 3.35357 21.9979 5.02344V18.9038C21.9979 19.2091 21.955 19.5039 21.8751 19.7817C21.6319 21.037 20.585 21.984 19.3205 21.9959H19.2988C18.2556 22.002 17.2125 22 16.1693 21.998C15.6478 21.9969 15.1262 21.9959 14.6046 21.9959H8.32405C8.23712 21.9868 8.15019 21.9822 8.06326 21.9822Z"
+                                            fill="currentColor"></path>
+                                        <path
+                                            d="M8.74124 11.73C9.39755 11.73 10.0147 11.7254 10.6276 11.73C10.971 11.7345 11.1579 11.8857 11.1926 12.1743C11.2317 12.5362 11.0318 12.779 10.658 12.7836C9.95389 12.7927 9.25412 12.7882 8.55 12.7882C8.34572 12.7882 8.14578 12.7973 7.9415 12.7836C7.68941 12.7698 7.44166 12.7149 7.31996 12.44C7.19826 12.1651 7.28519 11.9178 7.45036 11.6933C8.1197 10.7954 8.7934 9.89298 9.46709 8.99511C9.50621 8.94014 9.54533 8.88517 9.58445 8.83478C9.54098 8.7569 9.48013 8.79355 9.42798 8.78897C8.95856 8.78439 8.4848 8.78897 8.01539 8.78439C7.90673 8.78439 7.79807 8.77064 7.69376 8.74774C7.44601 8.68819 7.29389 8.42707 7.35039 8.17054C7.38951 7.99646 7.5199 7.85445 7.68506 7.81322C7.78938 7.78573 7.89804 7.77199 8.0067 7.77199C8.78036 7.76741 9.55837 7.76741 10.332 7.77199C10.4711 7.76741 10.6059 7.78573 10.7406 7.82238C11.0362 7.92774 11.1622 8.21635 11.0448 8.51869C10.9405 8.7798 10.7754 9.00427 10.6102 9.22874C10.0408 9.99376 9.47144 10.7542 8.90206 11.5101C8.85425 11.5696 8.81079 11.6292 8.74124 11.73Z"
+                                            fill="currentColor"></path>
+                                        <path
+                                            d="M13.783 9.32034C13.8873 9.17833 13.996 9.04548 14.1742 9.00883C14.5176 8.93553 14.8392 9.16916 14.8435 9.53564C14.8566 10.4518 14.8522 11.368 14.8435 12.2842C14.8435 12.5224 14.6958 12.7332 14.4828 12.8019C14.2655 12.8889 14.0177 12.8202 13.8743 12.6232C13.8004 12.527 13.77 12.5087 13.6657 12.5957C13.2701 12.9347 12.8225 12.9943 12.34 12.8294C11.5663 12.5637 11.249 11.9269 11.1621 11.1527C11.0708 10.3144 11.336 9.59977 12.0488 9.16C12.6399 8.78894 13.2397 8.82101 13.783 9.32034ZM12.2444 10.9924C12.2531 11.194 12.3139 11.3864 12.4269 11.5467C12.6616 11.8765 13.1093 11.9452 13.4266 11.6979C13.4788 11.6566 13.5266 11.6062 13.57 11.5467C13.8134 11.1985 13.8134 10.6259 13.57 10.2778C13.4483 10.0991 13.2571 9.99374 13.0528 9.98916C12.5747 9.95709 12.24 10.3465 12.2444 10.9924ZM16.7951 11.0199C16.7603 9.84257 17.4949 8.96302 18.538 8.93095C19.6463 8.89431 20.4548 9.67765 20.4895 10.8229C20.5243 11.9819 19.8506 12.8019 18.8118 12.9118C17.6774 13.0309 16.7777 12.1651 16.7951 11.0199ZM17.886 10.9099C17.8773 11.139 17.9425 11.3634 18.0729 11.5513C18.312 11.8811 18.7597 11.9452 19.0726 11.6887C19.1204 11.652 19.1595 11.6062 19.1986 11.5604C19.4507 11.2123 19.4507 10.6259 19.203 10.2778C19.0813 10.1037 18.8901 9.99374 18.6858 9.98916C18.2164 9.96167 17.886 10.3373 17.886 10.9099ZM16.4126 10.1083C16.4126 10.8183 16.4169 11.5284 16.4126 12.2384C16.4169 12.5637 16.1735 12.8339 15.8649 12.8431C15.8128 12.8431 15.7563 12.8385 15.7041 12.8248C15.4868 12.7652 15.3216 12.5224 15.3216 12.2338V8.59196C15.3216 8.37666 15.3173 8.16593 15.3216 7.95063C15.326 7.59789 15.539 7.36884 15.8606 7.36884C16.1909 7.36426 16.4126 7.59331 16.4126 7.95979C16.4169 8.67442 16.4126 9.39363 16.4126 10.1083Z"
+                                            fill="currentColor"></path>
+                                    </g>
+                                </svg>
+                                <span class="screen-reader-text">Share to Zalo</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="share-icon share-viber" type="viber"
+                                href="viber://forward?text=Mụn viêm: Điều trị như thế nào là hợp lý?https://youmed.vn/tin-tuc/mun-viem-dieu-tri-nhu-the-nao-la-hop-ly/"
+                                target="_blank" rel="noopener" data-wpel-link="internal">
+                                <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                                    focusable="false" viewBox="0 0 1024 1024" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M812.883 181.848C792.546 163.112 710.236 103.381 526.72 102.58C526.72 102.58 310.376 89.6091 205.006 186.331C146.397 244.941 125.739 330.934 123.497 437.425C121.255 543.915 118.533 743.445 310.856 797.571H311.016L310.856 880.201C310.856 880.201 309.575 913.67 331.674 920.395C358.257 928.722 373.95 903.261 399.412 875.877C413.343 860.825 432.56 838.726 447.132 821.912C578.764 832.961 679.81 807.66 691.34 803.976C717.922 795.329 868.29 776.113 892.631 576.583C917.932 370.648 880.461 240.618 812.883 181.848V181.848ZM835.142 561.53C814.484 728.072 692.621 738.641 670.202 745.847C660.594 748.89 571.718 770.988 460.103 763.782C460.103 763.782 376.832 864.188 350.89 890.29C342.403 898.777 333.115 897.976 333.275 881.162C333.275 870.113 333.916 743.925 333.916 743.925C333.756 743.925 333.756 743.925 333.916 743.925C170.897 698.767 180.506 528.863 182.267 439.987C184.028 351.111 200.843 278.249 250.485 229.248C339.681 148.379 523.357 160.389 523.357 160.389C678.529 161.03 752.832 207.79 770.127 223.483C827.295 272.485 856.44 389.704 835.142 561.53V561.53ZM612.553 432.14C613.193 445.912 592.536 446.873 591.895 433.101C590.134 397.871 573.64 380.737 539.691 378.815C525.919 378.014 527.2 357.357 540.812 358.157C585.49 360.559 610.311 386.181 612.553 432.14ZM645.06 450.236C646.662 382.338 604.226 329.173 523.677 323.248C510.066 322.287 511.507 301.629 525.118 302.59C617.997 309.316 667.48 373.21 665.718 450.716C665.558 464.488 644.74 463.847 645.06 450.236V450.236ZM720.324 471.694C720.485 485.466 699.667 485.626 699.667 471.854C698.706 341.343 611.752 270.243 506.222 269.442C492.611 269.282 492.611 248.784 506.222 248.784C624.243 249.585 719.204 331.094 720.324 471.694V471.694ZM702.229 628.787V629.108C684.934 659.534 652.587 693.162 619.279 682.433L618.958 681.953C585.17 672.505 505.582 631.51 455.299 591.476C429.357 570.978 405.657 546.798 387.401 523.578C370.907 502.92 354.253 478.42 338.079 448.955C303.97 387.302 296.444 359.759 296.444 359.759C285.715 326.45 319.183 294.103 349.769 276.808H350.09C364.822 269.122 378.914 271.684 388.362 283.054C388.362 283.054 408.219 306.754 416.706 318.444C424.713 329.333 435.442 346.788 441.047 356.556C450.815 374.011 444.73 391.786 435.122 399.152L415.906 414.525C406.137 422.372 407.418 436.944 407.418 436.944C407.418 436.944 435.923 544.716 542.413 571.939C542.413 571.939 556.986 573.22 564.832 563.452L580.205 544.236C587.572 534.627 605.347 528.542 622.802 538.311C646.342 551.602 676.287 572.259 696.144 590.995C707.353 600.123 709.916 614.055 702.229 628.787Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                                <span class="screen-reader-text">Share to Viber</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="share-icon share-linkedin" type="linkedin"
+                                href="https://www.linkedin.com/sharing/share-offsite/?url=https://youmed.vn/tin-tuc/mun-viem-dieu-tri-nhu-the-nao-la-hop-ly/&amp;titleMụn viêm: Điều trị như thế nào là hợp lý?&amp;source=YouMed"
+                                target="_blank" rel="noopener noreferrer" data-wpel-link="exclude">
+                                <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                                    focusable="false" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12 21.999C17.5228 21.999 22 17.5219 22 11.999C22 6.47618 17.5228 1.99902 12 1.99902C6.47715 1.99902 2 6.47618 2 11.999C2 17.5219 6.47715 21.999 12 21.999Z"
+                                        fill="currentColor"></path>
+                                    <path
+                                        d="M17.975 12.8045V16.9273H15.5847V13.0808C15.5847 12.115 15.2396 11.4554 14.3741 11.4554C13.7137 11.4554 13.3213 11.8995 13.1481 12.3294C13.0851 12.4831 13.0689 12.6965 13.0689 12.912V16.9271H10.6785C10.6785 16.9271 10.7105 10.4124 10.6785 9.73807H13.0691V10.7568C13.0643 10.7648 13.0575 10.7727 13.0532 10.7804H13.0691V10.7568C13.3867 10.268 13.9533 9.56926 15.2234 9.56926C16.796 9.56926 17.975 10.5967 17.975 12.8045V12.8045ZM8.17783 6.27271C7.36015 6.27271 6.8252 6.80944 6.8252 7.51464C6.8252 8.20486 7.34464 8.75711 8.14645 8.75711H8.16196C8.99568 8.75711 9.51406 8.20486 9.51406 7.51464C9.4982 6.80944 8.99568 6.27271 8.17783 6.27271ZM6.96727 16.9273H9.35684V9.73807H6.96727V16.9273Z"
+                                        fill="white"></path>
+                                </svg>
+                                <span class="screen-reader-text">Share to Linkedin</span>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="share-icon share-system" type="system"
+                                data-title="Mụn viêm: Điều trị như thế nào là hợp lý?"
+                                data-url="https://youmed.vn/tin-tuc/mun-viem-dieu-tri-nhu-the-nao-la-hop-ly/">
+                                <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                                    focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path
+                                        d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </li>
+                        <li class="md:hidden ml-auto">
+                            <div class="font-setting-btns">
+                                <button class="fontsize-toggle fontsize-set">Aa</button>
+                                <ul class="fontsize-options">
+                                    <li><button class="fontsize-set" data-size="normal">Aa</button></li>
+                                    <li><button class="fontsize-set" data-size="lager">Aa+</button></li>
+                                    <li><button class="fontsize-set" data-size="extra-lager">Aa++</button></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="related-post">
+                <h3 class="related-post-title font-serif">Có thể bạn quan tâm</h3>
+                <div class="grid">
+                    <div class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/bao-hiem-phi-nhan-tho/"
+                            title="Bảo hiểm phi nhân thọ là gì? Các lợi ích mang lại cho người tham gia"
+                            data-wpel-link="internal">
+                            <picture class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+                                loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-768x401.jpg.webp 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho.jpg"
+                                    alt="Bảo hiểm phi nhân thọ" loading="lazy"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-768x401.jpg 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                            </picture>
+                        </a>
+                        <div class="block-card-body">
+                            <h4 class="post-title">
+                                <a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/bao-hiem-phi-nhan-tho/"
+                                    title="Bảo hiểm phi nhân thọ là gì? Các lợi ích mang lại cho người tham gia"
+                                    data-wpel-link="internal">
+                                    Bảo hiểm phi nhân thọ là gì? Các lợi ích mang lại cho người tham gia </a>
+                            </h4>
+                            <div class="article-author">
+                                <a href="https://youmed.vn/tin-tuc/bac-si/youmed/" data-wpel-link="internal"><span
+                                        class="author vcard">YouMed</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/dia-chi-7-phong-kham-nhi-tot-chat-luong-tai-khu-vuc-quan-1-tphcm/"
+                            title="Địa chỉ 7 phòng khám nhi tốt, chất lượng tại khu vực quận 1 TPHCM"
+                            data-wpel-link="internal">
+                            <picture class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+                                loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1-768x401.jpg.webp 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1.jpg"
+                                    alt="Địa chỉnh phòng khám nhi tốt quận 1" loading="lazy"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-nhi-tot-quan-1-768x401.jpg 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                            </picture>
+                        </a>
+                        <div class="block-card-body">
+                            <h4 class="post-title">
+                                <a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/dia-chi-7-phong-kham-nhi-tot-chat-luong-tai-khu-vuc-quan-1-tphcm/"
+                                    title="Địa chỉ 7 phòng khám nhi tốt, chất lượng tại khu vực quận 1 TPHCM"
+                                    data-wpel-link="internal">
+                                    Địa chỉ 7 phòng khám nhi tốt, chất lượng tại khu vực quận 1 TPHCM </a>
+                            </h4>
+                            <div class="article-author">
+                                <a href="https://youmed.vn/tin-tuc/bac-si/youmed/" data-wpel-link="internal"><span
+                                        class="author vcard">YouMed</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/mua-bao-hiem-nhan-tho/"
+                            title="6 tiêu chí để chọn mua bảo hiểm nhân thọ phù hợp" data-wpel-link="internal">
+                            <picture class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+                                loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2-768x401.jpg.webp 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2.jpg"
+                                    alt="Mua bảo hiểm nhân thọ" loading="lazy"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/mua-bao-hiem-nhan-tho-2-768x401.jpg 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                            </picture>
+                        </a>
+                        <div class="block-card-body">
+                            <h4 class="post-title">
+                                <a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/mua-bao-hiem-nhan-tho/"
+                                    title="6 tiêu chí để chọn mua bảo hiểm nhân thọ phù hợp"
+                                    data-wpel-link="internal">
+                                    6 tiêu chí để chọn mua bảo hiểm nhân thọ phù hợp </a>
+                            </h4>
+                            <div class="article-author">
+                                <a href="https://youmed.vn/tin-tuc/bac-si/youmed/" data-wpel-link="internal"><span
+                                        class="author vcard">YouMed</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/co-so-xet-nghiem-diag-trien-khai-dat-kham-qua-ung-dung-youmed/"
+                            title="Cơ sở xét nghiệm Diag triển khai đặt khám qua ứng dụng YouMed"
+                            data-wpel-link="internal">
+                            <picture class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+                                loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed.png.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed-300x157.png.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed-1024x535.png.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed-768x401.png.webp 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed.png"
+                                    alt="" loading="lazy"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed.png 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed-300x157.png 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed-1024x535.png 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/DiagxYouMed-768x401.png 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                            </picture>
+                        </a>
+                        <div class="block-card-body">
+                            <h4 class="post-title">
+                                <a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/co-so-xet-nghiem-diag-trien-khai-dat-kham-qua-ung-dung-youmed/"
+                                    title="Cơ sở xét nghiệm Diag triển khai đặt khám qua ứng dụng YouMed"
+                                    data-wpel-link="internal">
+                                    Cơ sở xét nghiệm Diag triển khai đặt khám qua ứng dụng YouMed </a>
+                            </h4>
+                            <div class="article-author">
+                                <a href="https://youmed.vn/tin-tuc/bac-si/youmed/" data-wpel-link="internal"><span
+                                        class="author vcard">YouMed</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/he-thong-phong-kham-nhi-dong-315-trien-khai-dat-kham-qua-ung-dung-youmed/"
+                            title="Hệ thống phòng khám Nhi đồng 315 triển khai đặt khám qua ứng dụng YouMed"
+                            data-wpel-link="internal">
+                            <picture class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+                                loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-768x401.jpg.webp 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed.jpg"
+                                    alt="Phòng khám Nhi Đồng 315 kết nối YouMed" loading="lazy"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-768x401.jpg 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                            </picture>
+                        </a>
+                        <div class="block-card-body">
+                            <h4 class="post-title">
+                                <a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/he-thong-phong-kham-nhi-dong-315-trien-khai-dat-kham-qua-ung-dung-youmed/"
+                                    title="Hệ thống phòng khám Nhi đồng 315 triển khai đặt khám qua ứng dụng YouMed"
+                                    data-wpel-link="internal">
+                                    Hệ thống phòng khám Nhi đồng 315 triển khai đặt khám qua ứng dụng YouMed </a>
+                            </h4>
+                            <div class="article-author">
+                                <a href="https://youmed.vn/tin-tuc/bac-si/youmed/" data-wpel-link="internal"><span
+                                        class="author vcard">YouMed</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/hoi-chung-fomo/"
+                            title="Hội chứng FOMO và những thông tin bạn cần biết" data-wpel-link="internal">
+                            <img width="1200" height="627"
+                                src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/hoi-chung-fomo-2.jpg"
+                                class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+                                alt="Hội chứng FOMO" loading="lazy"
+                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/hoi-chung-fomo-2.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/hoi-chung-fomo-2-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/hoi-chung-fomo-2-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/hoi-chung-fomo-2-768x401.jpg 768w"
+                                sizes="(max-width: 1200px) 100vw, 1200px"> </a>
+                        <div class="block-card-body">
+                            <h4 class="post-title">
+                                <a class="line-clamp-2 font-serif" href="https://youmed.vn/tin-tuc/hoi-chung-fomo/"
+                                    title="Hội chứng FOMO và những thông tin bạn cần biết"
+                                    data-wpel-link="internal">
+                                    Hội chứng FOMO và những thông tin bạn cần biết </a>
+                            </h4>
+                            <div class="article-author">
+                                <a href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-hong-tu/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN HỒNG
+                                        TÚ</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <aside id="sidebar" class="widget-area hidden lg:flex">
+        </aside><!-- #secondary -->
+    </section>
+    <div class="max-w-7xl mx-auto mw-90">
+        <div class="hon-code">
+            <p class="font-serif font-bold">YouMed - Tin Y Tế duy nhất tại Việt Nam đạt chứng chỉ HONcode - 100%
+                biên soạn bởi Bác sĩ, Dược sĩ</p>
+            <p>Health on the Net (HON) là một tổ chức y khoa quốc tế được thành lập vào năm 1995 tại Geneva, Thụy
+                Sĩ. Từ đó đến nay, HON đã thực hiện chứng nhận cho các trang web y tế uy tín hàng đầu thế giới như
+                WebMD, Mayo Clinic… <strong>Thư viện Y khoa Quốc gia Hoa Kỳ</strong> (US National Library of
+                Medicine – NLM) gợi ý chứng nhận “HONcode” là một trong những cơ sở để xác định sự tin cậy của một
+                trang tin chuyên về y tế.</p>
+            <p class="link-underline">YouMed đã phải tuân thủ nghiêm ngặt <a
+                    href="https://youmed.vn/tin-tuc/de-dat-duoc-chung-chi-quoc-te-hon-health-on-the-net-youmed-da-vuot-qua-8-dieu-kien-gi/"
+                    data-wpel-link="internal">8 tiêu chí để có thể được HON chứng nhận</a>. 2 tiêu chí nổi bật nhất
+                là tất cả bài viết đều được dẫn nguồn chính thống và được viết bởi 100% Bác sĩ, Dược sĩ. Chính đều
+                này tạo nên điểm khác biệt giữa YouMed và các trang web khác.</p>
+        </div>
+    </div>
+</main>
+
+    <script src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/js/post.js?ver=1.6.2"
+        id="medamp-post-js"></script>

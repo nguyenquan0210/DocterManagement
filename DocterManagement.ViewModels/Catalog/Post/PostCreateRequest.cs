@@ -11,8 +11,10 @@ namespace DoctorManagement.ViewModels.Catalog.Post
     {
         public string Title { get; set; }
         public string Description { get; set; }
+        public Guid TopicId { get; set; }
         public Guid DoctorId { get; set; }
 
         public IFormFile ImageFile { get; set; }
+        public string Content { get; set; }
     }
 }

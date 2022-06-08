@@ -1,6 +1,8 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.Catalog.Contact;
+using DoctorManagement.ViewModels.Catalog.Post;
 using DoctorManagement.ViewModels.System.Patient;
 using DoctorManagement.ViewModels.System.Users;
 using DoctorManagement.WebApp.Models;
@@ -17,15 +19,20 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly IDoctorApiClient _doctorApiClient;
         private readonly ISpecialityApiClient _specialityApiClient;
         private readonly IClinicApiClient _clinicApiClient;
+        private readonly IContactApiClient _contactApiClient;
+        private readonly IPostApiClient _postApiClient;
 
         public HomeController(ILogger<HomeController> logger, IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
-            ISpecialityApiClient specialityApiClient, IClinicApiClient clinicApiClient)
+            ISpecialityApiClient specialityApiClient, IClinicApiClient clinicApiClient, IContactApiClient contactApiClient,
+            IPostApiClient postApiClient)
         {
             _logger = logger;
             _userApiClient = userApiClient;
             _doctorApiClient = doctorApiClient;
             _specialityApiClient = specialityApiClient;
             _clinicApiClient = clinicApiClient;
+            _contactApiClient = contactApiClient;
+            _postApiClient = postApiClient;
         }
         
         public IActionResult Index()
@@ -108,11 +115,67 @@ namespace DoctorManagement.WebApp.Controllers
             var doctor = await _userApiClient.GetUsersPagings(request);
             return Json(doctor);
         }
+        public async Task<IActionResult> Post()
+        {
+            var request = new GetPostPagingRequest()
+            {
+                PageIndex = 1,
+                PageSize = 10,
+            };
+
+            var data = await _postApiClient.GetAllPaging(request);
+
+            return View(data.Data);
+        }
         public IActionResult Contact()
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Contact(ContactCreateRequest request)
+        {
+            if(!ModelState.IsValid) return View(request);
+            var session = HttpContext.Session.GetString(SystemConstants.Contact);
+            var currentContact = session==null?new ContactCreateRequest(): JsonConvert.DeserializeObject<ContactCreateRequest>(session);
+            currentContact.container_post = currentContact.container_post + 1;
+            if (currentContact.PhoneNumber != null && currentContact.container_post>2)
+            {
+                if(currentContact.YourMessage == request.YourMessage)
+                {
+                    TempData["AlertMessage"] = "Bạn đã gửi nội dung này lần 2 rồi!!!";
+                    
+                }else
+                {
+                        TempData["AlertMessage"] = "Xin lỗi bạn không thể gửi liên hệ quá 2 lần trong khoảng thời gian ngắn!!!";
+                   
+                }
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+            }
+            else
+            {
 
+                var result = await _contactApiClient.CreateContact(request);
+                if (result.IsSuccessed)
+                {
+                    TempData["AlertMessage"] = "Bạn đã gửi liên hệ thành công.";
+                    TempData["AlertType"] = "success";
+                    TempData["AlertId"] = "successToast";
+                    request.container_post = currentContact.container_post ;
+                    HttpContext.Session.SetString(SystemConstants.Contact, JsonConvert.SerializeObject(request));
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["AlertMessage"] = "" /*result.Message*/;
+                    TempData["AlertType"] = "error";
+                    TempData["AlertId"] = "errorToast";
+                }
+            }
+
+            
+            return View(request);
+        }
         public IActionResult Privacy()
         {
             return View();

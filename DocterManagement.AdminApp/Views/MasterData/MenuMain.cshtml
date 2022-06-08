@@ -53,10 +53,14 @@
                                Quản lý tất cả phòng khám.
                             </p>
                         </div>
-                        <div class="ms-auto my-auto mt-lg-0 mt-4">
+                        <div class="ms-auto my-auto mt-lg-0 mt-4 col-6">
                            
                             <div class="ms-auto my-auto">
-                                
+                                 <form  asp-action="MenuMain" method="get"
+                                      class="m-4 col-7 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
+                                    <select id ="type" name="type" oninvalid="@ViewBag.Type" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.Types" >
+                                    </select>
+                                </form>
                                 <a asp-action="CreateMainMenu" asp-controller="MasterData"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm menu</a>
                                 
                             </div>
@@ -205,7 +209,12 @@
 
 @section jsFooter{
     <script>
-    
+        if (document.getElementById('type')) {
+            var type = document.getElementById('type');
+            const example = new Choices(type,{
+                searchEnabled: false
+            });
+        }
       
     </script>
     <script src="~/js/plugins/datatables.js"></script>

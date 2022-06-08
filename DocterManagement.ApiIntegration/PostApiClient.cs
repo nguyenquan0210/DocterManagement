@@ -52,6 +52,8 @@ namespace DoctorManagement.ApiIntegration
 
             requestContent.Add(new StringContent(request.Title.ToString()), "title");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            requestContent.Add(new StringContent(request.Content.ToString()), "content");
+            requestContent.Add(new StringContent(request.TopicId.ToString()), "topicId");
             requestContent.Add(new StringContent(request.DoctorId.ToString()), "doctorId");
 
             var response = await client.PostAsync($"/api/post", requestContent);
@@ -79,18 +81,19 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<PostVm>($"/api/post/{Id}");
         }
 
-        public async Task<ApiResult<List<PostVm>>> GetMenu()
+        public async Task<ApiResult<List<PostVm>>> GetAll()
         {
             var data = await GetListAsync<PostVm>($"/api/post/all");
             return data;
         }
 
-        public async Task<ApiResult<PagedResult<PostVm>>> GetPostPagings(GetPostPagingRequest request)
+        public async Task<ApiResult<PagedResult<PostVm>>> GetAllPaging(GetPostPagingRequest request)
         {
             return await GetAsync<PagedResult<PostVm>>(
                $"/api/post/paging?pageIndex={request.PageIndex}" +
                $"&pageSize={request.PageSize}" +
-               $"&keyword={request.Keyword}");
+               $"&keyword={request.Keyword}" +
+               $"&usename={request.Usename}");
         }
 
         public async Task<ApiResult<bool>> Update(PostUpdateRequest request)
@@ -116,6 +119,8 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Id.ToString()), "id");
             requestContent.Add(new StringContent(request.Title.ToString()), "title");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            requestContent.Add(new StringContent(request.Content.ToString()), "content");
+            requestContent.Add(new StringContent(request.TopicId.ToString()), "topicId");
             requestContent.Add(new StringContent(request.DoctorId.ToString()), "doctorId");
             requestContent.Add(new StringContent(request.Status.ToString()), "status");
 
@@ -126,16 +131,6 @@ namespace DoctorManagement.ApiIntegration
 
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
 
-        }
-
-        public Task<ApiResult<PagedResult<PostVm>>> GetAllPaging(GetPostPagingRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ApiResult<List<PostVm>>> GetAll()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ApiResult<string>> AddImage(ImageCreateRequest request)

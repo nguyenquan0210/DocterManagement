@@ -21,7 +21,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] PostCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromForm] PostCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -29,7 +29,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _postService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }
@@ -56,7 +56,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] PostUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromForm] PostUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -64,8 +64,8 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _postService.Update(request);
             if (!result.IsSuccessed)
-                return BadRequest();
-            return Ok();
+                return BadRequest(result);
+            return Ok(result);
         }
         /// <summary>
         /// Lấy danh sách phân trang bài viết
@@ -86,7 +86,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _postService.GetById(Id);
             if (!result.IsSuccessed)
-                return BadRequest("Cannot find post");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>

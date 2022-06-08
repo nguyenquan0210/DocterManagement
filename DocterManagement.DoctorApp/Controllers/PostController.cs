@@ -1,6 +1,8 @@
 ﻿using DoctorManagement.ApiIntegration;
+using DoctorManagement.Data.Enums;
 using DoctorManagement.ViewModels.Catalog.Post;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DoctorManagement.DoctorApp.Controllers
 {
@@ -8,23 +10,45 @@ namespace DoctorManagement.DoctorApp.Controllers
     {
         private readonly IPostApiClient _postApiClient;
         private readonly IConfiguration _configuration;
-        public PostController(IPostApiClient postApiClient,IConfiguration configuration)
+        private readonly IUserApiClient _userApiClient;
+        private readonly IMasterDataApiClient _masterDataApiClient;
+        public PostController(IPostApiClient postApiClient, IUserApiClient userApiClient, IConfiguration configuration,
+            IMasterDataApiClient masterDataApiClient)
         {
             _postApiClient = postApiClient;
             _configuration = configuration;
+            _userApiClient = userApiClient;
+            _masterDataApiClient = masterDataApiClient;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string keyword,  int pageIndex = 1, int pageSize = 10)
         {
-            return View();
+            var request = new GetPostPagingRequest()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Usename = User.Identity.Name
+            };
+           
+            var data = await _postApiClient.GetAllPaging(request);
+            ViewBag.Keyword = keyword;
+
+            return View(data.Data);
+
         }
-        public IActionResult CreatePost()
+        public async Task<IActionResult> CreatePost()
         {
+            var result = await _userApiClient.GetByUserName(User.Identity.Name);
+            if(!result.IsSuccessed) return RedirectToAction("Index");
+            ViewBag.DoctorId = result.Data.Id;
+            ViewBag.Menus = await SeletectTypeMenu(new Guid());
             return View();
         }
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreatePost(PostCreateRequest request)
+        public async Task<IActionResult> CreatePost([FromForm] PostCreateRequest request)
         {
+            ViewBag.Menus = await SeletectTypeMenu(request.TopicId);
             if (!ModelState.IsValid) return View(request);
             var rs = await _postApiClient.Create(request);
             if (rs.IsSuccessed)
@@ -32,6 +56,20 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return RedirectToAction("Index");
             }
             return View(request);
+        }
+
+        public async Task<List<SelectListItem>> SeletectTypeMenu(Guid? id)
+        {
+            var rs = (await _masterDataApiClient.GetAllMainMenu()).Data.Where(x => x.Type == "Topic"|| x.Type == "Category" || x.Type == "Categoryfeature");
+            var select = rs.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = id == x.Id
+            }).ToList();
+            
+            return select;
+           
         }
         [HttpPost]
         [Consumes("multipart/form-data")]
@@ -48,6 +86,67 @@ namespace DoctorManagement.DoctorApp.Controllers
                 fileurl = _configuration["BaseAddress"] + "/img/" + rs.Data;
             }
             return Json(new {url = fileurl });
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var result = await _postApiClient.GetById(id);
+
+            if (result.IsSuccessed)
+            {
+                var Post = result.Data;
+
+                ViewBag.Image = Post.Image;
+                ViewBag.Menus = await SeletectTypeMenu(Post.Topic.Id);
+
+                var updateRequest = new PostUpdateRequest()
+                {
+                    Title = Post.Title,
+                    Id = id,
+                    DoctorId = Post.Doctors.UserId,
+                    Description = Post.Description,
+                    Content = Post.Content,
+                    Status = Post.Status == Status.Active?true:false,
+                    TopicId = Post.Topic.Id,
+                    ImageText = Post.Image,
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] PostUpdateRequest request)
+        {
+            ViewBag.Menus = await SeletectTypeMenu(request.TopicId);
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _postApiClient.Update(request);
+            if (result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = "Thay đổi thông tin phòng khám " + request.Title + " thành công.";
+                TempData["AlertType"] = "alert-success";
+                return RedirectToAction("Index");
+            }
+            return View(request);
+        }
+
+        public async Task<IActionResult> DetailtPost(Guid id)
+        {
+            var result = await _postApiClient.GetById(id);
+            if (result.IsSuccessed)
+            {
+                return View(result.Data);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+            var result = await _postApiClient.Delete(Id);
+            return Json(new { response = result });
         }
     }
 }

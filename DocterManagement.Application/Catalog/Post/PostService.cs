@@ -3,13 +3,17 @@ using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Exceptions;
+using DoctorManagement.ViewModels.Catalog.MasterData;
 using DoctorManagement.ViewModels.Catalog.Post;
+using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Doctors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +24,9 @@ namespace DoctorManagement.Application.Catalog.Post
     {
         private readonly DoctorManageDbContext _context;
         private readonly IStorageService _storageService;
+        private const string POSTS_FEATURE_CONTENT_FOLDER_NAME = "posts-feature-content";
         private const string POSTS_CONTENT_FOLDER_NAME = "posts-content";
+        private const string MASTERDATA_CONTENT_FOLDER_NAME = "masterData-content";
         public PostService(DoctorManageDbContext context,
             IStorageService storageService)
         {
@@ -33,7 +39,7 @@ namespace DoctorManagement.Application.Catalog.Post
             
             if (request.File != null)
             {
-                var img = POSTS_CONTENT_FOLDER_NAME +"/"+ await this.SaveFile(request.File);
+                var img = POSTS_FEATURE_CONTENT_FOLDER_NAME + "/"+ await this.SaveFileFearure(request.File);
                 return new ApiSuccessResult<string>(img);
             }
 
@@ -51,15 +57,30 @@ namespace DoctorManagement.Application.Catalog.Post
             await _storageService.SaveFileImgAsync(file.OpenReadStream(), fileName, POSTS_CONTENT_FOLDER_NAME);
             return fileName;
         }
+        private async Task<string> SaveFileFearure(IFormFile? file)
+        {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var orgFileExtension = Path.GetExtension(originalFileName);
+            var guid = Guid.NewGuid();
+            var fileName = $"{guid}{orgFileExtension}";
+            await _storageService.SaveFileAsyncs(file.OpenReadStream(), fileName, POSTS_FEATURE_CONTENT_FOLDER_NAME);
+            return fileName;
+        }
         public async Task<ApiResult<bool>> Create(PostCreateRequest request)
         {
             var posts = new Posts()
             {
                 Title = request.Title,
                 CreatedAt = DateTime.Now,
-                Description = request.Description,
-                Status = Data.Enums.Status.Active,
-                DoctorId = request.DoctorId
+                Description = WebUtility.HtmlDecode(request.Description),
+                Status = Status.Active,
+                DoctorId = request.DoctorId,
+                Image = await this.SaveFile(request.ImageFile),
+                TopicId = request.TopicId,
+                Content = WebUtility.HtmlDecode(request.Content),
+                Views = 0,
             };
             _context.Posts.Add(posts);
             var rs = await _context.SaveChangesAsync();
@@ -79,7 +100,7 @@ namespace DoctorManagement.Application.Catalog.Post
             }
             else
             {
-                _context.Posts.Remove(posts);
+                posts.Status = Status.NotActivate;
                 check = 2;
             }
             await _context.SaveChangesAsync();
@@ -96,8 +117,7 @@ namespace DoctorManagement.Application.Catalog.Post
                 Title = x.Title,
                 Description = x.Description,
                 Status = x.Status,
-                Date = x.CreatedAt,
-                DoctorId = x.DoctorId
+                CreatedAt = x.CreatedAt,
             }).ToListAsync();
             return new ApiSuccessResult<List<PostVm>>(rs);
         }
@@ -110,6 +130,10 @@ namespace DoctorManagement.Application.Catalog.Post
             {
                 query = query.Where(x => x.Title.Contains(request.Keyword));
             }
+            if (!string.IsNullOrEmpty(request.Usename))
+            {
+                query = query.Where(x => x.Doctors.AppUsers.UserName == request.Usename);
+            }
             int totalRow = await query.CountAsync();
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
@@ -118,10 +142,36 @@ namespace DoctorManagement.Application.Catalog.Post
                 {
                     Title = x.Title,
                     Description = x.Description,
+                    Content = x.Content,
+                    Views = x.Views,
                     Id = x.Id,
                     Status = x.Status,
-                    DoctorId = x.DoctorId,
-                    Date = x.CreatedAt
+                    Image = POSTS_CONTENT_FOLDER_NAME + "/" + x.Image,
+                    Topic = new MainMenuVm()
+                    {
+                        Id = x.TopicId,
+                        Description = x.MainMenus.Description,
+                        Title = x.MainMenus.Title,
+                        Type = x.MainMenus.Type,
+                        Image = MASTERDATA_CONTENT_FOLDER_NAME + "/"+ x.MainMenus.Image,
+                        Name = x.MainMenus.Name,
+
+                    },
+                    Doctors = new DoctorVm()
+                    {
+                        UserId = x.DoctorId,
+                        FirstName = x.Doctors.FirstName,
+                        LastName = x.Doctors.LastName,
+                        Img = x.Doctors.Img,
+                        GetSpecialities = x.Doctors.ServicesSpecialities.Select(x=> new GetSpecialityVm()
+                        {
+                            Id = x.Specialities.Id,
+                            Title = x.Specialities.Title,
+                        }).ToList()
+                        
+                    },
+                    CreatedAt = x.CreatedAt,
+                    
 
                 }).ToListAsync();
 
@@ -137,16 +187,44 @@ namespace DoctorManagement.Application.Catalog.Post
 
         public async Task<ApiResult<PostVm>> GetById(Guid Id)
         {
-            var post = await _context.Posts.FindAsync(Id);
-            if (post == null) return new ApiErrorResult<PostVm>("Bài viết không được xác nhân!");
+            var x = await _context.Posts.FindAsync(Id);
+            if (x == null) return new ApiErrorResult<PostVm>("Bài viết không được xác nhân!");
+            var menus = await _context.MainMenus.FindAsync(x.TopicId);
+            var doctors = await _context.Doctors.FindAsync(x.DoctorId);
+            var GetSpecialities =  _context.ServicesSpecialities;
             var rs = new PostVm()
             {
-                Id = post.Id,
-                Title = post.Title,
-                Description = post.Description,
-                Date = post.CreatedAt,
-                DoctorId = post.DoctorId,
-                Status = post.Status
+                Title = x.Title,
+                Description = x.Description,
+                Content = x.Content,
+                Views = x.Views,
+                Id = x.Id,
+                Status = x.Status,
+                Image = POSTS_CONTENT_FOLDER_NAME + "/" + x.Image,
+                Topic = new MainMenuVm()
+                {
+                    Id = menus.Id,
+                    Description = menus.Description,
+                    Title = menus.Title,
+                    Type = menus.Type,
+                    Image = menus.Image,
+                    Name = menus.Name,
+
+                },
+                Doctors = new DoctorVm()
+                {
+                    UserId = doctors.UserId,
+                    FirstName = doctors.FirstName,
+                    LastName = doctors.LastName,
+                    Img = doctors.Img,
+                    GetSpecialities = GetSpecialities.Where(x=>x.DoctorId == doctors.UserId).Select(x => new GetSpecialityVm()
+                    {
+                        Id = x.Specialities.Id,
+                        Title = x.Specialities.Title,
+                    }).ToList()
+
+                },
+                CreatedAt = x.CreatedAt,
             };
 
             return new ApiSuccessResult<PostVm>(rs);
@@ -157,10 +235,17 @@ namespace DoctorManagement.Application.Catalog.Post
             var posts = await _context.Posts.FindAsync(request.Id);
             if (posts == null) return new ApiErrorResult<bool>("Bài viết không được xác nhân!");
             posts.Title = request.Title;
-            posts.DoctorId = request.DoctorId;
-            posts.Description = request.Description;
+            posts.Description = WebUtility.HtmlDecode(request.Description);
+            posts.Content = WebUtility.HtmlDecode(request.Content);
+            posts.TopicId = request.TopicId;
             posts.Status = request.Status ? Status.Active : Status.InActive;
+            if (request.ImageFile != null)
+            {
+                if (posts.Image != null && posts.Image != "default") await _storageService.DeleteFileAsyncs(posts.Image, POSTS_CONTENT_FOLDER_NAME);
+                posts.Image = await SaveFile(request.ImageFile);
+            }
 
+          
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
             return new ApiErrorResult<bool>("Cập nhật bài viết không thành công!");

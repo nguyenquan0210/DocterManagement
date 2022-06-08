@@ -75,8 +75,10 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Controller.ToString()), "controller");
             requestContent.Add(new StringContent(request.ParentId.ToString()), "parentId");
             requestContent.Add(new StringContent(request.Type.ToString()), "type");
-            requestContent.Add(new StringContent(request.Title.ToString()), "title");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if (request.Title != null)
+                requestContent.Add(new StringContent(request.Title.ToString()), "title");
+            if (request.Description != null)
+                requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
             var response = await client.PostAsync($"/api/masterData/create-mainmenu", requestContent);
             var result = await response.Content.ReadAsStringAsync();
@@ -120,7 +122,8 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<PagedResult<MainMenuVm>>(
               $"/api/masterData/get-paging-mainmenu?pageIndex={request.PageIndex}" +
               $"&pageSize={request.PageSize}" +
-              $"&keyword={request.Keyword}");
+              $"&keyword={request.Keyword}" +
+              $"&type={request.Type}");
         }
 
         public async Task<ApiResult<InformationVm>> GetById()
@@ -222,8 +225,10 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.ParentId.ToString()), "parentId");
             requestContent.Add(new StringContent(request.Type.ToString()), "type");
             requestContent.Add(new StringContent(request.IsDeleted.ToString()), "isDeleted");
-            requestContent.Add(new StringContent(request.Title.ToString()), "title");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if (request.Title != null)
+                requestContent.Add(new StringContent(request.Title.ToString()), "title");
+            if (request.Description != null)
+                requestContent.Add(new StringContent(request.Description.ToString()), "description");
             var response = await client.PutAsync($"/api/masterData/update-mainmenu", requestContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

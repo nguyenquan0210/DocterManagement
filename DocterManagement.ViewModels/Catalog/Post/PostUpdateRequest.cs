@@ -17,5 +17,7 @@ namespace DoctorManagement.ViewModels.Catalog.Post
         public bool Status { get; set; }
         public Guid DoctorId { get; set; }
         public IFormFile? ImageFile { get; set; }
+        public string Content { get; set; }
+        public Guid TopicId { get; set; }
     }
 }

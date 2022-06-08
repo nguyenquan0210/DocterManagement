@@ -12,5 +12,6 @@ namespace DoctorManagement.ViewModels.Catalog.Contact
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string YourMessage { get; set; }
+        public int container_post { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿@model DoctorManagement.ViewModels.Catalog.Contact.ContactCreateRequest
 @{
     ViewData["Title"] = "Contact";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -46,7 +46,7 @@
                                 <p role="status" aria-live="polite" aria-atomic="true"></p>
                                 <ul></ul>
                             </div>
-                            <form action="/lien-he/#wpcf7-f318-o1" method="post" class="wpcf7-form init"
+                            <form asp-action="Contact" method="post" class="wpcf7-form init"
                                 novalidate="novalidate" data-status="init">
                                 <div style="display: none;">
                                     <input type="hidden" name="_wpcf7" value="318">
@@ -65,8 +65,7 @@
                                         <label for="name">Họ và tên <span
                                                 class="text-orange-600">*</span></label>
                                     </div>
-                                    <span class="wpcf7-form-control-wrap your-name"><input type="text"
-                                            name="your-name" value="" size="40"
+                                    <span class="wpcf7-form-control-wrap your-name"><input asp-for="Name"  size="40"
                                             class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
                                             id="name" aria-required="true" aria-invalid="false"></span>
                                 </div>
@@ -75,8 +74,7 @@
                                         <label for="phone">Số điện thoại <span
                                                 class="text-orange-600">*</span></label>
                                     </div>
-                                    <span class="wpcf7-form-control-wrap your-phone"><input type="tel"
-                                            name="your-phone" value="" size="40"
+                                    <span class="wpcf7-form-control-wrap your-phone"><input type="tel" asp-for="PhoneNumber" size="40"
                                             class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel"
                                             id="phone" aria-required="true" aria-invalid="false"></span>
                                 </div>
@@ -84,8 +82,7 @@
                                     <div class="nf-field-label">
                                         <label for="email">Địa chỉ email</label>
                                     </div>
-                                    <span class="wpcf7-form-control-wrap your-email"><input type="email"
-                                            name="your-email" value="" size="40"
+                                    <span class="wpcf7-form-control-wrap your-email"><input type="email"asp-for="Email" size="40"
                                             class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-email"
                                             id="email" aria-invalid="false"></span>
                                 </div>
@@ -94,8 +91,7 @@
                                         <label for="message">Thông tin <span
                                                 class="text-orange-600">*</span></label>
                                     </div>
-                                    <span class="wpcf7-form-control-wrap your-message"><textarea
-                                            name="your-message" cols="40" rows="10"
+                                    <span class="wpcf7-form-control-wrap your-message"><textarea asp-for="YourMessage"cols="40" rows="10"
                                             class="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required"
                                             id="message" aria-required="true"
                                             aria-invalid="false"></textarea></span>

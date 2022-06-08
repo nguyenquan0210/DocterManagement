@@ -76,23 +76,42 @@ namespace DoctorManagement.AdminApp.Controllers
             return RedirectToAction("Error", "Home");
         }
 
-        public async Task<IActionResult> MenuMain(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> MenuMain(string keyword, string type, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetMainMenuPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
-                PageSize = pageSize
+                PageSize = pageSize,
+                Type = type
             };
+            ViewBag.Type = request.Type==null?"": request.Type;
+            ViewBag.Types = SeletectType(request.Type == null ? "" : request.Type);
             var data = await _masterDataApiClient.GetAllPagingMainMenu(request);
             ViewBag.Keyword = keyword;
 
-            if (TempData["result"] != null)
-            {
-                ViewBag.SuccessMsg = TempData["result"];
-            }
             return View(data.Data);
             
+        }
+        public List<SelectListItem> SeletectType(string? str)
+        {
+            List<SelectListItem> type = new List<SelectListItem>()
+            {
+                new SelectListItem(text: "Phân nhánh menu tiêu đề", value: "MenuHeaderDrop"),
+                new SelectListItem(text: "Menu tiêu đề", value: "MenuHeader"),
+                new SelectListItem(text: "Menu biểu ngữ", value: "MenuPanner"),
+                new SelectListItem(text: "Chủ đề y tế", value: "Topic"),
+                new SelectListItem(text: "Chủ đề y tế quan tâm", value: "Category"),
+                new SelectListItem(text: "Phân nhánh chủ đề y tế", value: "Categoryfeature"),
+                new SelectListItem(text: "Tất cả", value: ""),
+            };
+            var rs = type.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Value,
+                Selected = str == x.Value
+            }).ToList();
+            return rs;
         }
         public  IActionResult CreateMainMenu()
         {
@@ -117,7 +136,8 @@ namespace DoctorManagement.AdminApp.Controllers
             else ViewBag.ParentMenu = new List<SelectListItem>();
             if (!ModelState.IsValid)
                 return View(request);
-
+            request.Controller = request.Controller == null ? "Home" : request.Controller;
+            request.Action = request.Action == null ? "Index" : request.Action;
             var result = await _masterDataApiClient.CreateMainMenu(request);
 
             if (result.IsSuccessed)
@@ -198,9 +218,12 @@ namespace DoctorManagement.AdminApp.Controllers
         {
             List<SelectListItem> type = new List<SelectListItem>()
             {
-                new SelectListItem(text: "menu tiêu đề thả xuống", value: "1"),
-                new SelectListItem(text: "menu tiêu đề", value: "0"),
-                new SelectListItem(text: "menu biểu ngữ", value: "2")
+                new SelectListItem(text: "Phân nhánh menu tiêu đề", value: "1"),
+                new SelectListItem(text: "Menu tiêu đề", value: "0"),
+                new SelectListItem(text: "Menu biểu ngữ", value: "2"),
+                new SelectListItem(text: "Chủ đề y tế", value: "3"),
+                new SelectListItem(text: "Chủ đề y tế quan tâm", value: "4"),
+                new SelectListItem(text: "Phân nhánh chủ đề y tế", value: "5"),
             };
             var rs = type.Select(x => new SelectListItem()
             {
@@ -215,8 +238,8 @@ namespace DoctorManagement.AdminApp.Controllers
             var select = new List<SelectListItem>();
             if (!string.IsNullOrWhiteSpace(type.ToString()))
             {
-                if(type != 1) return Json(select);
-                var menu = (await _masterDataApiClient.GetAllMainMenu()).Data.Where(x=>x.Type == "MenuHeader");
+                var typetext = type == 1 || type == 3 || type == 4 ? "MenuHeader" : type == 5 ? "Category" : "null";
+                var menu = (await _masterDataApiClient.GetAllMainMenu()).Data.Where(x=>x.Type == typetext);
                 select = menu.Select(x => new SelectListItem()
                 {
                     Text = x.Name,

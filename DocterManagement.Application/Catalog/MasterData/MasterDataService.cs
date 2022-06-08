@@ -86,7 +86,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 Controller = request.Controller,
                 CratedAt = DateTime.Now,
                 IsDeleted = false,
-                Type = request.Type=="0"? "MenuHeader": request.Type == "2" ? "MenuPanner":"MenuHeaderDrop",
+                Type = request.Type == "0" ? "MenuHeader" : request.Type == "2" ? "MenuPanner" : request.Type == "1" ? "MenuHeaderDrop" : request.Type == "3" ? "Topic" : request.Type == "4" ? "Category" : "Categoryfeature",
                 ParentId = request.ParentId.Value==null ? Guid.NewGuid() : request.ParentId.Value,
                 Image = "default",
                 Title = request.Title,
@@ -149,7 +149,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             }
             if (!string.IsNullOrEmpty(request.Type))
             {
-                query = query.Where(x => x.Type.Contains(request.Type));
+                query = query.Where(x => x.Type == request.Type);
             }
             int totalRow = await query.CountAsync();
            

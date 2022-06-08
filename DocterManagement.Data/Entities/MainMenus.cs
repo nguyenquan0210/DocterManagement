@@ -20,5 +20,7 @@ namespace DoctorManagement.Data.Entities
         public string Description { get; set; }
         public Guid ParentId { get; set; }
         public DateTime CratedAt { get; set; }
+
+        public List<Posts> Posts { get; set; }
     }
 }

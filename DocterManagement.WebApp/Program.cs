@@ -31,6 +31,8 @@ builder.Services.AddTransient<IScheduleApiClient, ScheduleApiClient>();
 builder.Services.AddTransient<IDoctorApiClient, DoctorApiClient>();
 builder.Services.AddTransient<IMasterDataApiClient, MasterDataApiClient>();
 builder.Services.AddTransient<IAppointmentApiClient, AppointmentApiClient>();
+builder.Services.AddTransient<IContactApiClient, ContactApiClient>();
+builder.Services.AddTransient<IPostApiClient, PostApiClient>();
 
 IMvcBuilder builde = builder.Services.AddRazorPages();
 
