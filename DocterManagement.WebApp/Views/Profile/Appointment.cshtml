@@ -776,7 +776,7 @@
                                     class="px-4 lg:px-6 flex gap-4 flex-wrap justify-center items-center"><img
                                         _ngcontent-serverapp-c256="" width="64" height="64"
                                         class="bg-gray-50 w-16 h-16  ng-star-inserted ng-lazyloaded"
-                                        alt="ThS.BS Bùi Văn Chinh"
+                                        alt="@Model.Doctor.FullName"
                                         src="@(Configuration["BaseAddress"]+"/img/"+ Model.Doctor.Img)">
                                 
                                     <div _ngcontent-serverapp-c256="" class="flex-1">
@@ -784,8 +784,13 @@
                                         <p _ngcontent-serverapp-c256="" class="text-gray-500 text-sm">@Model.Doctor.FullAddress</p>
                                     </div>
                                     <qrcode _ngcontent-serverapp-c256="" class="ng-star-inserted">
-                                        <div class="qrcode"><canvas height="130" width="130"
-                                                style="height: 130px; width: 130px;"></canvas></div>
+                                        <div class="qrcode">
+                                            @if (Model.Status == StatusAppointment.complete)
+                                            {
+                                                <button onclick="ShowForm()" _ngcontent-serverapp-c188=""class="btn-primary self-end ">Đánh giá</button>
+                                                
+                                            }
+                                        </div>
                                     </qrcode>
                                 
                                 
@@ -1181,9 +1186,368 @@
             
       } 
     </div>
-    
+    <style>
+        .rating-modal-handler__rating-stars-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.625rem 0 1.25rem;
+    position: relative;
+    font-size: 2.25rem;
+    letter-spacing: .25rem;
+}
+.rating-stars__container {
+    display: flex;
+}
+.rating-modal-handler__rating-stars-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.625rem 0 1.25rem;
+    position: relative;
+    font-size: 2.25rem;
+    letter-spacing: .25rem;
+}
+.rating-stars__star {
+    stroke: currentColor;
+}
+.rating-stars__star--clickable {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+.ytO7le {
+    position: relative;
+}
+.rating-stars__container>div {
+    margin: 0 0.125rem;
+}
+._9MGQf1 {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+svg:not(:root) {
+    overflow: hidden;
+}
+.leE1Gj {
+    text-align: center;
+}
+.HsTsuw {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(0,0,0,.09);
+    color: #222;
+    border-radius: 1rem;
+    margin: 0 0.25rem 1.125rem;
+    font-weight: 500;
+    transition: color .1s cubic-bezier(.4,0,.6,1),border-color .1s cubic-bezier(.4,0,.6,1);
+    word-break: break-word;
+}
+.SXHCxt {
+    border-color: #2196f3;
+    color: #03a9f4;
+}
+    </style>
+    <div  class="cdk-global-overlay-wrapper  "  dir="ltr">
+      <div id="cdk-overlay-form" class="cdk-overlay-pane hiden-btn" style="position: static;">
+        <div tabindex="0" class="cdk-visually-hidden cdk-focus-trap-anchor" aria-hidden="true"></div>
+        <nz-modal-container tabindex="-1" role="dialog"
+          class="ng-tns-c149-18 ng-trigger ng-trigger-modalContainer ant-modal-wrap ant-modal-centered ng-star-inserted"
+          style="z-index: 1000;">
+          <div role="document" class="ant-modal ng-tns-c149-18"
+            style="width: 800px; transform-origin: 399.6px -107.2px 0px;">
+            <div class="ant-modal-content ng-tns-c149-18"><button aria-label="Close" onclick="CloseForm()"
+                class="ant-modal-close ng-tns-c149-18 ng-star-inserted" style=""><span class="ant-modal-close-x"><i
+                    nz-icon="" class="anticon ant-modal-close-icon anticon-close ng-star-inserted"><svg
+                      viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                      data-icon="close" aria-hidden="true">
+                      <path
+                        d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z">
+                      </path>
+                    </svg></i>
+                </span></button>
+          
+              <div nz-modal-title="" class="ant-modal-header ng-tns-c149-18 ng-star-inserted" style="">
+                <div class="ant-modal-title">
+                  <div class="ng-star-inserted">Đánh giá bác sĩ</div>
+                </div>
+              </div>
+          
+              <div class="ant-modal-body ng-tns-c149-18">
+                <app-add-patient-modal _nghost-serverapp-c188="" class="ng-star-inserted" style="">
+                  <div _ngcontent-serverapp-c188="">
+                    <form _ngcontent-serverapp-c188="" novalidate="" asp-action="AddInfoParent" id="form-register"  
+                      class=" grid-cols-1 md:grid-cols-2 lg:p-6 gap-4 ng-invalid ng-touched ng-dirty">
+                      <div _ngcontent-serverapp-c188="" class="form-section__form-group">
+                            <div _ngcontent-serverapp-c256="" class="flex justify-between items-center px-4 pt-4 lg:px-6 font-semibold">
+                                <div _ngcontent-serverapp-c256="" class="text-green-500">
+                                    <p _ngcontent-serverapp-c256="">STT: @Model.Stt</p><span _ngcontent-serverapp-c256=""
+                                        class="text-sm font-normal text-gray-700"></span>
+                                </div>
+                                <div _ngcontent-serverapp-c256="" class="flex items-center" style="color: rgb(52, 180, 31);"><svg
+                                        _ngcontent-serverApp-c256="" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path _ngcontent-serverApp-c256=""
+                                            d="M10.75 2.45007C11.45 1.86007 12.58 1.86007 13.26 2.45007L14.84 3.80007C15.14 4.05007 15.71 4.26007 16.11 4.26007H17.81C18.87 4.26007 19.74 5.13007 19.74 6.19007V7.89007C19.74 8.29007 19.95 8.85007 20.2 9.15007L21.55 10.7301C22.14 11.4301 22.14 12.5601 21.55 13.2401L20.2 14.8201C19.95 15.1201 19.74 15.6801 19.74 16.0801V17.7801C19.74 18.8401 18.87 19.7101 17.81 19.7101H16.11C15.71 19.7101 15.15 19.9201 14.85 20.1701L13.27 21.5201C12.57 22.1101 11.44 22.1101 10.76 21.5201L9.18001 20.1701C8.88001 19.9201 8.31 19.7101 7.92 19.7101H6.17C5.11 19.7101 4.24 18.8401 4.24 17.7801V16.0701C4.24 15.6801 4.04 15.1101 3.79 14.8201L2.44 13.2301C1.86 12.5401 1.86 11.4201 2.44 10.7301L3.79 9.14007C4.04 8.84007 4.24 8.28007 4.24 7.89007V6.20007C4.24 5.14007 5.11 4.27007 6.17 4.27007H7.9C8.3 4.27007 8.86 4.06007 9.16 3.81007L10.75 2.45007Z"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path _ngcontent-serverApp-c256="" d="M12 8.12988V12.9599" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path _ngcontent-serverApp-c256="" d="M11.9945 16H12.0035" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                    <p _ngcontent-serverapp-c256="" class="ml-1">@(Model.Status==StatusAppointment.approved?"Đã đặt khám":
+                                        Model.Status==StatusAppointment.cancel?"Đã hủy":
+                                        Model.Status==StatusAppointment.complete?"Đã khám bệnh":"Đã quá hạn")</p>
+                                </div>
+                            </div>
+                            <div _ngcontent-serverapp-c256="" class="px-4 lg:px-6 flex gap-4 flex-wrap justify-center items-center">
+                                <img  _ngcontent-serverapp-c256="" width="64" height="64" class="bg-gray-50 w-16 h-16  ng-star-inserted ng-lazyloaded"
+                                    alt="ThS.BS Bùi Văn Chinh" src="@(Configuration["BaseAddress"]+"/img/"+ Model.Doctor.Img)">
+
+                                <div _ngcontent-serverapp-c256="" class="flex-1">
+                                    <h3 _ngcontent-serverapp-c256="" class="text-base font-medium">@Model.Doctor.FullName</h3>
+                                    <p _ngcontent-serverapp-c256="" class="text-gray-500 text-sm">@Model.Doctor.FullAddress</p>
+                                </div>
+                                <qrcode _ngcontent-serverapp-c256="" class="ng-star-inserted">
+                                    
+                                </qrcode>
+                            </div>
+                            <div _ngcontent-serverapp-c253="" class="p-4 lg:p-6 space-y-3 ng-star-inserted">
+                                <h4 _ngcontent-serverapp-c253="" class="font-medium">Thông tin đặt khám
+                                </h4>
+                                <div _ngcontent-serverapp-c253="" class="flex justify-between"><span _ngcontent-serverapp-c253=""
+                                        class="whitespace-nowrap mr-2">Mã
+                                        phiếu khám</span><span _ngcontent-serverapp-c253="" class="font-medium text-right">@Model.No</span></div>
+                                <div _ngcontent-serverapp-c253="" class="flex justify-between"><span _ngcontent-serverapp-c253=""
+                                        class="whitespace-nowrap mr-2">Ngày
+                                        khám</span><span _ngcontent-serverapp-c253="" class="font-medium text-right">@(Model.SlotSchedule.FromTime +
+                                        " - "+Model.Schedule.CheckInDate.ToShortDateString())</span></div>
+                            </div>
+                      </div>
+                      <div _ngcontent-serverapp-c188="" class="form-section__form-group">
+                    
+                      </div>
+                       
+                      <div _ngcontent-serverapp-c188="" class="md:col-span-1  lg:grid-cols-4 gap-4">
+                        <div class="rating-modal-handler__rating-stars-wrapper shopee-rating__stars">
+                            <div class="rating-stars__container" id="rate">
+                                <div onclick="myFunction(0)" class="rating-stars__star rating-stars__star--clickable ytO7le" style="width: 36px; height: 36px;"><svg
+                                        viewBox="0 0 30 30" class="_9MGQf1">
+                                        <defs>
+                                            <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
+                                                <stop offset="0%" stop-color="#FFD211"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
+                                            d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
+                                        </path>
+                                        </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width:0">
+                                        <defs>
+                                            <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#FFCA11"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="url(#star__solid)" fill-rule="evenodd"
+                                            d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
+                                        </path>
+                                    </svg></div>
+                                <div onclick="myFunction(1)" class="rating-stars__star rating-stars__star--clickable ytO7le" style="width: 36px; height: 36px;"><svg
+                                        viewBox="0 0 30 30" class="_9MGQf1">
+                                        <defs>
+                                            <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
+                                                <stop offset="0%" stop-color="#FFD211"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
+                                            d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
+                                        </path>
+                                        </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width:0">
+                                        <defs>
+                                            <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#FFCA11"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="url(#star__solid)" fill-rule="evenodd"
+                                            d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
+                                        </path>
+                                    </svg></div>
+                                <div onclick="myFunction(2)" class="rating-stars__star rating-stars__star--clickable ytO7le" style="width: 36px; height: 36px;"><svg
+                                        viewBox="0 0 30 30" class="_9MGQf1">
+                                        <defs>
+                                            <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
+                                                <stop offset="0%" stop-color="#FFD211"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
+                                            d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
+                                        </path>
+                                        </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width:0">
+                                        <defs>
+                                            <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#FFCA11"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="url(#star__solid)" fill-rule="evenodd"
+                                            d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
+                                        </path>
+                                    </svg></div>
+                                <div onclick="myFunction(3)" class="rating-stars__star rating-stars__star--clickable ytO7le" style="width: 36px; height: 36px;"><svg
+                                        viewBox="0 0 30 30" class="_9MGQf1">
+                                        <defs>
+                                            <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
+                                                <stop offset="0%" stop-color="#FFD211"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
+                                            d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
+                                        </path>
+                                        </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width:0">
+                                        <defs>
+                                            <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#FFCA11"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="url(#star__solid)" fill-rule="evenodd"
+                                            d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
+                                        </path>
+                                    </svg></div>
+                                <div onclick="myFunction(4)" class="rating-stars__star rating-stars__star--clickable ytO7le" style="width: 36px; height: 36px;"><svg
+                                        viewBox="0 0 30 30" class="_9MGQf1">
+                                        <defs>
+                                            <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
+                                                <stop offset="0%" stop-color="#FFD211"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
+                                            d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
+                                        </path>
+                                        </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width:0">
+                                        <defs>
+                                            <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#FFCA11"></stop>
+                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="url(#star__solid)" fill-rule="evenodd"
+                                            d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
+                                        </path>
+                                    </svg></div>
+                            </div>
+                        </div>
+                        <div class="leE1Gj" id="rateTitle" style="display:none;">
+                            <div onclick="getRateTitle(0)" class="HsTsuw"></div>
+                            <div onclick="getRateTitle(1)" class="HsTsuw "></div>
+                            <div onclick="getRateTitle(2)" class="HsTsuw "></div>
+                            <div onclick="getRateTitle(3)" class="HsTsuw"></div>
+                            <div onclick="getRateTitle(4)" class="HsTsuw"></div>
+                        </div>
+                      </div>
+                     
+                           <input type="hidden" name="rating" id="rating" />
+                           <input type="hidden" name="ratingtitle" id="ratingtitle" />
+                           <input type="hidden" name="doctorid" id="doctorid" />
+                      <div _ngcontent-serverapp-c188="">
+                    
+                      </div>
+                      <div _ngcontent-serverapp-c188="" class="flex justify-end">
+                          <button _ngcontent-serverapp-c188="" type="button" style="margin-right:30px;background-color:#ffffff00;color:#000000" class="btn-primary self-end ">Hủy</button>
+                          <button _ngcontent-serverapp-c188="" class="btn-primary self-end ">Hoàn thành</button>
+                      </div>
+                    </form>
+                  </div>
+                </app-add-patient-modal>
+              </div>
+          
+            </div>
+          </div>
+        </nz-modal-container>
+        <div tabindex="0" class="cdk-visually-hidden cdk-focus-trap-anchor" aria-hidden="true"></div>
+      </div>
+    </div>
 }
 @section JavaScript{
+    <script>
+        function myFunction(r) {
+          // Declare variables
+          var rating = r+1;
+          $("#rating").val(rating);
+          $("#ratingtitle").val("");
+          document.getElementById("rateTitle").style.display = "block";
+          var input, filter, table, star, svg, i, txtValue, titles,title;
+         
+          contain = document.getElementById("rate");
+          star = contain.getElementsByClassName("ytO7le");
+
+          // Loop through all table rows, and hide those who don't match the search query
+          for (i = 0; i < star.length; i++) {
+            svg = star[i].getElementsByClassName("_9MGQf1")[1];
+            if (svg) {
+              if (i<=r) {
+                svg.style.width = "";
+              } else {
+                svg.style.width = "0";
+              }
+            }
+          }
+          titles = document.getElementById("rateTitle");
+          title = titles.getElementsByClassName("HsTsuw");
+          $.ajax({
+                type: 'GET',
+                url: '/Profile/RatingTitle?rating= ' + r,
+                success: function (result) {
+                    for (var i = 0; i < result.length; i++) { 
+                       title[i].textContent = result[i].text;
+                    }
+                
+                }
+          })
+        }
+        function getRateTitle(r) {
+          // Declare variables
+          var input, filter, table, star, svg, i, txtValue, titles,title,ratingtitle="",titleactive;
+         
+          titles = document.getElementById("rateTitle");
+          title = titles.getElementsByClassName("HsTsuw");
+          title[r].classList.toggle('SXHCxt');
+          titleactive = titles.getElementsByClassName("SXHCxt");
+
+          // Loop through all table rows, and hide those who don't match the search query
+          
+          for (i = 0; i < titleactive.length; i++) {
+            ratingtitle += titleactive[i].innerHTML ;
+            if(i!=titleactive.length-1) ratingtitle += "-";
+          }
+          $("#ratingtitle").val(ratingtitle);
+        }
+        function ShowForm(){
+            $('#cdk-overlay-form').removeClass('hiden-btn');
+        }
+        function ShowBotton(){
+            $('#cdk-overlay-btn').removeClass('hiden-btn');
+        }
+         function CloseForm(){
+             $('#cdk-overlay-form').addClass('hiden-btn');
+        }
+    </script>
     <script>
         function showappoi(i){
             //$('#list-info').removeAttr("hidden");

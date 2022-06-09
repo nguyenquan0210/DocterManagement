@@ -21,10 +21,11 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly IClinicApiClient _clinicApiClient;
         private readonly IContactApiClient _contactApiClient;
         private readonly IPostApiClient _postApiClient;
+        private readonly IMasterDataApiClient _masterDataApiClient;
 
         public HomeController(ILogger<HomeController> logger, IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
             ISpecialityApiClient specialityApiClient, IClinicApiClient clinicApiClient, IContactApiClient contactApiClient,
-            IPostApiClient postApiClient)
+            IPostApiClient postApiClient, IMasterDataApiClient masterDataApiClient)
         {
             _logger = logger;
             _userApiClient = userApiClient;
@@ -33,6 +34,7 @@ namespace DoctorManagement.WebApp.Controllers
             _clinicApiClient = clinicApiClient;
             _contactApiClient = contactApiClient;
             _postApiClient = postApiClient;
+            _masterDataApiClient = masterDataApiClient;
         }
         
         public IActionResult Index()
@@ -120,9 +122,9 @@ namespace DoctorManagement.WebApp.Controllers
             var request = new GetPostPagingRequest()
             {
                 PageIndex = 1,
-                PageSize = 10,
+                PageSize = 12,
             };
-
+            ViewBag.Menus = (await _masterDataApiClient.GetAllMainMenu()).Data.Where(x => x.Type == "Category").ToList();
             var data = await _postApiClient.GetAllPaging(request);
 
             return View(data.Data);

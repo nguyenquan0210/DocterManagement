@@ -203,6 +203,44 @@ namespace DoctorManagement.WebApp.Controllers
             return View(appointment);
         }
         [HttpGet]
+        public IActionResult RatingTitle(int rating)
+        {
+            var ratings = ListRatingTitle().Where(x=>x.Value == rating.ToString());
+            return Json(ratings);
+        }
+        public List<SelectListItem> ListRatingTitle()
+        {
+            var ratings = new List<SelectListItem>()
+            {
+                new SelectListItem() { Text = "Chất lượng khám rất kém", Value="0" },
+                new SelectListItem() { Text = "Độ thân thiện rất kém", Value="0" },
+                new SelectListItem() { Text = "Phục vụ bệnh nhân rất kém", Value="0" },
+                new SelectListItem() { Text = "Rất không đáng tiền", Value="0" },
+                new SelectListItem() { Text = "Thời gian làm việc rất chậm", Value="0" },
+                new SelectListItem() { Text = "Chất lượng khám kém", Value="1" },
+                new SelectListItem() { Text = "Độ thân thiện kém", Value="1" },
+                new SelectListItem() { Text = "Phục vụ bệnh nhân kém", Value="1" },
+                new SelectListItem() { Text = "Không đáng tiền", Value="1" },
+                new SelectListItem() { Text = "Thời gian làm việc chậm", Value="1" },
+                new SelectListItem() { Text = "Chất lượng khám tạm được", Value="2" },
+                new SelectListItem() { Text = "Độ thân thiện tạm được", Value="2" },
+                new SelectListItem() { Text = "Phục vụ bệnh nhân tạm được", Value="2" },
+                new SelectListItem() { Text = "Tạm chấp nhận đồng tiền", Value="2" },
+                new SelectListItem() { Text = "Thời gian làm việc tạm được", Value="2" },
+                new SelectListItem() { Text = "Chất lượng khám tốt", Value="3" },
+                new SelectListItem() { Text = "Bác sĩ thân thiện", Value="3" },
+                new SelectListItem() { Text = "Phục vụ bệnh nhân tốt", Value="3" },
+                new SelectListItem() { Text = "Đáng đồng tiền", Value="3" },
+                new SelectListItem() { Text = "Thời gian làm việc nhanh", Value="3" },
+                new SelectListItem() { Text = "Chất lượng khám tuyệt vời", Value="4" },
+                new SelectListItem() { Text = "Bác sĩ rất thân thiện", Value="4" },
+                new SelectListItem() { Text = "Phục vụ bệnh nhân rất tốt", Value="4" },
+                new SelectListItem() { Text = "Rất đáng tiền", Value="4" },
+                new SelectListItem() { Text = "Thời gian làm việc rất nhanh", Value="4" },
+            };
+            return ratings;
+        }
+        [HttpGet]
         public async Task<IActionResult> CanceledAppointment(Guid Id)
         {
             var cancelRequest = new AppointmentCancelRequest()

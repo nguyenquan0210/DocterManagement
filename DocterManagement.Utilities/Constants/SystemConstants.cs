@@ -17,6 +17,7 @@ namespace DoctorManagement.Utilities.Constants
         public const string Medicine = "Medicine";
         public const string Service = "Service";
         public const string Contact = "Contact";
+        public const string CheckPostInfo = "false";
         public class AppSettings
         {
             public const string Token = "Token";

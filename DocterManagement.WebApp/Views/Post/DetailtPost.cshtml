@@ -1,7 +1,9 @@
-﻿@model DoctorManagement.ViewModels.Catalog.Post.PostVm
+﻿@using DoctorManagement.ViewModels.Catalog.Post
+@model DoctorManagement.ViewModels.Catalog.Post.PostVm
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var posts = (List<PostVm>)ViewBag.Posts;
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 <link rel="stylesheet" id="medamp-front-page-css"
@@ -12,45 +14,106 @@
         type="text/css" media="all">
     <link rel="stylesheet" id="form-css-css" href="https://youmed.vn/wp-content/themes/youmed/css/form.css?ver=3.0.0"
         type="text/css" media="all">
-  <style>
+ <style>
       .ant-collapse .ant-collapse-item-disabled>.ant-collapse-header {
             color: #000000;
             cursor: pointer;
         }
+        h2 {
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+        h3 {
+            display: block;
+            font-size: 1.17em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }    
+}
+
+        
+         .entry-content strong{
+                font-weight: normal;
+        }
   </style>
+@section Searchpost{
+    <div class="site-search" style="margin:0 5px;">
+        <button class="search-menu-toggle icon-rounded inline-flex items-center justify-center md:hidden"  tabindex="0">
+            <span class="screen-reader-text">Open search</span>
+            <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img" focusable="false" fill="none">
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg> </button>
+        <div class="header-search hidden md:flex">
+
+            <form role="search" method="get" class="search-form" asp-action="SearchPost"  asp-controller="Post" >
+                <label for="search-form-1">
+                    <span class="screen-reader-text">Search for:</span>
+                </label>
+                <input type="search" id="search-form-1" class="search-field"
+                    placeholder="Tìm kiếm bài viết" value="@ViewBag.Keyword" name="keyword">
+                <button type="submit" class="search-submit">
+                    <svg width="24" height="24" fill="none" class="search-icon">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="screen-reader-text">
+                        Search </span>
+                </button>
+            </form>
+        </div>
+    </div>
+}
 <main id="main" role="main">
     
     <div class="site-breadcrumb max-w-7xl mx-auto">
-        <div class="wrapper"><span><span><a asp-controller="Home" asp-action="Post" data-wpel-link="internal">Trang
-                        chủ</a> / <a hasp-action="Topic" asp-controller="Post"  asp-route-id="@Model.Topic.Id"
-                                data-wpel-link="internal">Chăm sóc da mụn</a></span></span></span></span></div>
+        <div class="wrapper" style="margin-left: auto;    margin-right: auto;    max-width: 1024px;">
+            <span>
+                <span><a asp-controller="Home" asp-action="Post" data-wpel-link="internal">Trang
+                        chủ</a> / <a asp-action="Topic" asp-controller="Post"  asp-route-id="@Model.Topic.Id"
+                                data-wpel-link="internal">Chăm sóc da mụn</a>
+                </span>
+            </span>
+        </div>
     </div>
     <section class="single-article max-w-7xl mx-auto">
         <article id="post-197359" style="width:100%"
             class=" mx-auto post-197359 post type-post status-publish format-standard has-post-thumbnail hentry category-cham-soc-da-mun">
             <div class="content-header">
-                <h1 class="article-heading font-serif">Mụn viêm: Điều trị như thế nào là hợp lý?</h1>
+                <h1 class="article-heading font-serif">@Model.Title</h1>
                 <div class="article-btns">
                     <div class="content-author">
                         <div class="article-author"><a
-                                href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
-                                title="Bác sĩ NGUYỄN THỊ THẢO" data-wpel-link="internal">
+                                 asp-action="Index" asp-controller="Doctor" asp-route-id="@Model.Doctors.UserId"
+                                title="@(Model.Doctors.LastName+" "+Model.Doctors.FirstName)" data-wpel-link="internal">
                                 <picture class="author-image wp-post-image">
                                     <source type="image/webp"
-                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-150x150.jpg.webp 150w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-300x300.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-1024x1024.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1.jpg.webp 1360w"
+                                        srcset="@(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 150w, @(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 300w, @(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 1024w, @(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 1360w"
                                         sizes="(max-width: 150px) 100vw, 150px">
                                     <img width="150" height="150"
-                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-150x150.jpg"
+                                        src="@(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img)"
                                         alt="bác sĩ Nguyễn Thị Thảo"
-                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-150x150.jpg 150w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-300x300.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-1024x1024.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1-768x768.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/10/Bac-si-NGUYEN-THI-THAO-1.jpg 1360w"
+                                        srcset="@(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 150w, @(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 300w, @(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 1024w,@(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 768w, @(Configuration["BaseAddress"] + "/img/user-content/" + @Model.Doctors.Img) 1360w"
                                         sizes="(max-width: 150px) 100vw, 150px">
                                 </picture>
                             </a>
                             <div class="author vcard  flex-col">Tác giả:&nbsp;<a
-                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
-                                    data-wpel-link="internal">Bác sĩ NGUYỄN THỊ THẢO</a>Chuyên khoa: Da liễu <time
-                                    class="entry-date updated" datetime="2021-12-27T13:13:30+07:00">Cập nhật: 27
-                                    Th12, 2021</time> </div>
+                                    asp-action="Index" asp-controller="Doctor" asp-route-id="@Model.Doctors.UserId"
+                                    data-wpel-link="internal">@(Model.Doctors.LastName+" "+Model.Doctors.FirstName)</a>Chuyên khoa: @foreach(var item in Model.Doctors.GetSpecialities)
+                                                {
+                                                    if (item.Title == Model.Doctors.GetSpecialities[Model.Doctors.GetSpecialities.Count - 1].Title)@(item.Title)else @(item.Title+", ")
+                                                } <time
+                                    class="entry-date updated" datetime="2021-12-27T13:13:30+07:00">Cập nhật: @(Model.CreatedAt.Day+" Th"+ Model.CreatedAt.Month+", "+ Model.CreatedAt.Year) </time> </div>
                         </div>
                     </div>
                     <div class="content-btns hidden md:flex">
@@ -76,13 +139,13 @@
                 </div>
             </div>
             
-            <div class="article-bottom-nav">
+           @* <div class="article-bottom-nav">
                 <div class="share-wapper">
                     <p class="font-medium hidden md:block">Chia sẻ thông tin hữu ích này cho mọi người trên:</p>
                     <ul class="share-list">
                         <li>
                             <a class="share-icon share-facebook" type="facebook"
-                                href="https://www.facebook.com/sharer.php?u=https://youmed.vn/tin-tuc/mun-viem-dieu-tri-nhu-the-nao-la-hop-ly/"
+                                href="@("https://www.facebook.com/sharer.php?u="+Configuration["Base"] + "/Post/DetailtPost/" + @Model.Id)"
                                 target="_blank" rel="noopener noreferrer" data-wpel-link="exclude">
                                 <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
                                     focusable="false" viewBox="0 0 24 24" fill="currentColor" version="1.1"
@@ -197,42 +260,44 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div>*@
             
             <div class="related-post">
                 <h3 class="related-post-title font-serif">Có thể bạn quan tâm</h3>
                 <div class="grid">
-                    <div class="block-card">
-                        <a href="https://youmed.vn/tin-tuc/bao-hiem-phi-nhan-tho/"
-                            title="Bảo hiểm phi nhân thọ là gì? Các lợi ích mang lại cho người tham gia"
-                            data-wpel-link="internal">
-                            <picture class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
-                                loading="lazy">
-                                <source type="image/webp"
-                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-768x401.jpg.webp 768w"
-                                    sizes="(max-width: 1200px) 100vw, 1200px">
-                                <img width="1200" height="627"
-                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho.jpg"
-                                    alt="Bảo hiểm phi nhân thọ" loading="lazy"
-                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/bao-hiem-phi-nhan-tho-768x401.jpg 768w"
-                                    sizes="(max-width: 1200px) 100vw, 1200px">
-                            </picture>
-                        </a>
-                        <div class="block-card-body">
-                            <h4 class="post-title">
-                                <a class="line-clamp-2 font-serif"
-                                    href="https://youmed.vn/tin-tuc/bao-hiem-phi-nhan-tho/"
-                                    title="Bảo hiểm phi nhân thọ là gì? Các lợi ích mang lại cho người tham gia"
-                                    data-wpel-link="internal">
-                                    Bảo hiểm phi nhân thọ là gì? Các lợi ích mang lại cho người tham gia </a>
-                            </h4>
-                            <div class="article-author">
-                                <a href="https://youmed.vn/tin-tuc/bac-si/youmed/" data-wpel-link="internal"><span
-                                        class="author vcard">YouMed</span></a>
+                    @foreach(var item in posts.Take(6))
+                    {
+                        <div class="block-card">
+                            <a asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                title="@item.Title"
+                                data-wpel-link="internal">
+                                <picture class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+                                    loading="lazy">
+                                   
+                                    <img width="1200" height="627"
+                                        src="@(Configuration["BaseAddress"] + "/img/" + @item.Image)"
+                                        alt="Bảo hiểm phi nhân thọ" loading="lazy"
+                                        
+                                        sizes="(max-width: 1200px) 100vw, 1200px">
+                                </picture>
+                            </a>
+                            <div class="block-card-body">
+                                <h4 class="post-title">
+                                    <a class="line-clamp-2 font-serif"
+                                        asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                        title="@item.Title"
+                                        data-wpel-link="internal">
+                                        @item.Title </a>
+                                </h4>
+                                <div class="article-author">
+                                    <a asp-action="Index" asp-controller="Doctor" asp-route-id="@item.Doctors.UserId" data-wpel-link="internal"><span
+                                            class="author vcard">@(item.Doctors.LastName+" "+item.Doctors.FirstName)</span></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="block-card">
+                        
+                    }
+                   @* <div class="block-card">
                         <a href="https://youmed.vn/tin-tuc/dia-chi-7-phong-kham-nhi-tot-chat-luong-tai-khu-vuc-quan-1-tphcm/"
                             title="Địa chỉ 7 phòng khám nhi tốt, chất lượng tại khu vực quận 1 TPHCM"
                             data-wpel-link="internal">
@@ -373,7 +438,7 @@
                                         TÚ</span></a>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </article>
@@ -381,7 +446,7 @@
         <aside id="sidebar" class="widget-area hidden lg:flex">
         </aside><!-- #secondary -->
     </section>
-    <div class="max-w-7xl mx-auto mw-90">
+   @* <div class="max-w-7xl mx-auto mw-90">
         <div class="hon-code">
             <p class="font-serif font-bold">YouMed - Tin Y Tế duy nhất tại Việt Nam đạt chứng chỉ HONcode - 100%
                 biên soạn bởi Bác sĩ, Dược sĩ</p>
@@ -396,7 +461,7 @@
                 là tất cả bài viết đều được dẫn nguồn chính thống và được viết bởi 100% Bác sĩ, Dược sĩ. Chính đều
                 này tạo nên điểm khác biệt giữa YouMed và các trang web khác.</p>
         </div>
-    </div>
+    </div>*@
 </main>
 
     <script src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/js/post.js?ver=1.6.2"

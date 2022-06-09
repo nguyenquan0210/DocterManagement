@@ -93,7 +93,8 @@ namespace DoctorManagement.ApiIntegration
                $"/api/post/paging?pageIndex={request.PageIndex}" +
                $"&pageSize={request.PageSize}" +
                $"&keyword={request.Keyword}" +
-               $"&usename={request.Usename}");
+               $"&usename={request.Usename}" +
+               $"&topicId={request.TopicId}");
         }
 
         public async Task<ApiResult<bool>> Update(PostUpdateRequest request)

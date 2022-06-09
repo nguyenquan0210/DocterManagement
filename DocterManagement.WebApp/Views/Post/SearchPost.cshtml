@@ -1,0 +1,149 @@
+﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.Catalog.MasterData
+@using DoctorManagement.ViewModels.Common;
+@model PagedResult<DoctorManagement.ViewModels.Catalog.Post.PostVm>
+@{
+    ViewData["Title"] = "SearchPost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<link rel="stylesheet" id="medamp-search-css"
+        href="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/dist/css/search.min.css?ver=1.6.2" media="all">
+ <link rel="stylesheet" id="theme-css" href="https://youmed.vn/wp-content/themes/youmed/css/app.css?ver=3.0.0"
+        type="text/css" media="all">
+    <link rel="stylesheet" id="form-css-css" href="https://youmed.vn/wp-content/themes/youmed/css/form.css?ver=3.0.0"
+        type="text/css" media="all">
+  <style>
+      .ant-collapse .ant-collapse-item-disabled>.ant-collapse-header {
+            color: #000000;
+            cursor: pointer;
+        }
+        h1 {
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }h2 {
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+        h3 {
+            display: block;
+            font-size: 1.17em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+        article > *:not(.entry-content), .entry-content > * {
+            margin-left: 0;
+            margin-right: 0;
+            max-width: 1024px;
+
+        }
+        .entry-content strong{
+                font-weight: normal;
+        }
+  </style>
+@section Searchpost{
+    <div class="site-search" style="margin:0 5px;">
+        <button class="search-menu-toggle icon-rounded inline-flex items-center justify-center md:hidden"  tabindex="0">
+            <span class="screen-reader-text">Open search</span>
+            <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img" focusable="false" fill="none">
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg> </button>
+        <div class="header-search hidden md:flex">
+
+            <form role="search" method="get" class="search-form" asp-action="SearchPost"  >
+                <label for="search-form-1">
+                    <span class="screen-reader-text">Search for:</span>
+                </label>
+                <input type="search" id="search-form-1" class="search-field"
+                    placeholder="Tìm kiếm bài viết" value="@ViewBag.Keyword" name="keyword">
+                <button type="submit" class="search-submit">
+                    <svg width="24" height="24" fill="none" class="search-icon">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="screen-reader-text">
+                        Search </span>
+                </button>
+            </form>
+        </div>
+    </div>
+}
+<main id="main" role="main">
+    <section class="search-page max-w-3xl mx-auto">
+        <h1 class="page-title font-serif">
+            Kết quả tìm kiếm cho: <span>@ViewBag.Keyword</span> </h1>
+        <div class="search-form">
+
+            <form role="search" method="get" class="search-form"  asp-action="SearchPost"  >
+                <label for="search-form-2">
+                    <span class="screen-reader-text">Search for:</span>
+                </label>
+                <input type="search" id="search-form-2" class="search-field"
+                    placeholder="Tìm kiếm bài viết" value="@ViewBag.Keyword" name="keyword">
+                <button type="submit" class="search-submit">
+                    <svg width="24" height="24" fill="none" class="search-icon">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="screen-reader-text">
+                        Search </span>
+                </button>
+            </form>
+        </div>
+
+        <div class="grid">
+            @foreach (var item in Model.Items)
+            {
+                <article id="post-225534" class="card card-search">
+                    <a asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                        title="@item.Title" class="card-image block"
+                        data-wpel-link="internal">
+                        <picture class="attachment-thumbnail size-thumbnail wp-post-image">
+                            <source type="image/webp"
+                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image)">
+                            <img width="150" height="150" style="width: 100%;  height: 80%; object-fit:cover;"
+                                src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                alt="@item.Title">
+                        </picture>
+                    </a>
+                    <div class="card-body">
+                        <h2 class="entry-title"><a class="line-clamp-2"
+                                asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id" data-wpel-link="internal">@item.Title</a></h2>
+                        <div class="entry-content card-description line-clamp-2">
+                            @Html.Raw(item.Content);
+                        </div><!-- .entry-content -->
+                        @{
+                            var m = (int) (DateTime.Now - item.CreatedAt).TotalMinutes;
+                            var text = m > (60*24*30*12) ? (item.CreatedAt.Day+" Thg"+item.CreatedAt.Month+", "+item.CreatedAt.Year) :m > (60*24*30) ? (m / (60*24*30)) + " tháng trước" :m > (60*24) ? (m / (60*24)) + " ngày trước" : m > 60 ? (m / 60) + " giờ trước" : "";
+                        }
+                        <div class="content-author">
+                            <div class="article-author"><a class="url fn n" asp-action="Index" asp-controller="Doctor" asp-route-id="@item.Doctors.UserId"
+                                    data-wpel-link="internal"><span class="author vcard">@(item.Doctors.LastName+" "+item.Doctors.FirstName)</span></a></div><time
+                                class="published-date" >Ngày đăng: @text </time>
+                        </div>
+                    </div>
+                </article>
+                
+            }
+        </div>
+
+         @await Component.InvokeAsync("Pager", Model)
+    </section>
+</main>

@@ -1,7 +1,10 @@
 ﻿using DoctorManagement.ApiIntegration;
+using DoctorManagement.Utilities.Constants;
+using DoctorManagement.ViewModels.Catalog.Post;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.WebApp.Controllers
 {
@@ -12,25 +15,48 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly IDoctorApiClient _doctorApiClient;
         private readonly ISpecialityApiClient _specialityApiClient;
         private readonly IScheduleApiClient _scheduleApiClient;
+        private readonly IPostApiClient _postApiClient;
 
         public DoctorController(ILogger<HomeController> logger, IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
-            ISpecialityApiClient specialityApiClient, IScheduleApiClient scheduleApiClient)
+            ISpecialityApiClient specialityApiClient, IPostApiClient postApiClient, IScheduleApiClient scheduleApiClient)
         {
             _logger = logger;
             _userApiClient = userApiClient;
             _doctorApiClient = doctorApiClient;
             _specialityApiClient = specialityApiClient;
             _scheduleApiClient = scheduleApiClient;
+            _postApiClient = postApiClient;
         }
-        public async Task<IActionResult> Index(Guid Id)
+        public async Task<IActionResult> Index(Guid Id, int pageIndex = 1, int pageSize = 10)
         {
             var doctor = await _doctorApiClient.GetById(Id);
+            
+            var session = HttpContext.Session.GetString(SystemConstants.CheckPostInfo);
+            var currentContact =  session==null?false:JsonConvert.DeserializeObject<bool>(session);
+            ViewBag.CheckPostInfo = currentContact;
             ViewBag.GetScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(Id)).Data.ToList();
             if (!doctor.IsSuccessed)
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            var request = new GetPostPagingRequest()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TopicId = Id
+            };
+             
+            ViewBag.Posts = (await _postApiClient.GetAllPaging(request)).Data;
+            if (pageIndex > 1 )
+            {
+                ViewBag.CheckPostInfo = true;
+                HttpContext.Session.SetString(SystemConstants.CheckPostInfo, JsonConvert.SerializeObject(true));
+            }
+            else if (session == "null")
+            {
+                ViewBag.CheckPostInfo = false;
+                HttpContext.Session.SetString(SystemConstants.CheckPostInfo, JsonConvert.SerializeObject(false));
+            }
             return View(doctor.Data);
         }
         public async Task<IActionResult> DoctorSpeciality(Guid Id, string keyword, string searchSpeciality, int pageIndex = 1, int pageSize = 20)

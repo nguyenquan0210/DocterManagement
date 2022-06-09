@@ -109,15 +109,42 @@ namespace DoctorManagement.Application.Catalog.Post
 
         public async Task<ApiResult<List<PostVm>>> GetAll()
         {
-            var query = _context.Posts.Where(x => x.Status == Status.Active);
+            var query = from c in _context.Posts select c;
 
             var rs = await query.Select(x => new PostVm()
             {
-                Id = x.Id,
                 Title = x.Title,
                 Description = x.Description,
+                Content = x.Content,
+                Views = x.Views,
+                Id = x.Id,
                 Status = x.Status,
+                Image = POSTS_CONTENT_FOLDER_NAME + "/" + x.Image,
+                Topic = new MainMenuVm()
+                {
+                    Id = x.TopicId,
+                    Description = x.MainMenus.Description,
+                    Title = x.MainMenus.Title,
+                    Type = x.MainMenus.Type,
+                    Image = MASTERDATA_CONTENT_FOLDER_NAME + "/" + x.MainMenus.Image,
+                    Name = x.MainMenus.Name,
+
+                },
+                Doctors = new DoctorVm()
+                {
+                    UserId = x.DoctorId,
+                    FirstName = x.Doctors.FirstName,
+                    LastName = x.Doctors.LastName,
+                    Img = x.Doctors.Img,
+                    GetSpecialities = x.Doctors.ServicesSpecialities.Select(x => new GetSpecialityVm()
+                    {
+                        Id = x.Specialities.Id,
+                        Title = x.Specialities.Title,
+                    }).ToList()
+
+                },
                 CreatedAt = x.CreatedAt,
+
             }).ToListAsync();
             return new ApiSuccessResult<List<PostVm>>(rs);
         }
@@ -128,15 +155,19 @@ namespace DoctorManagement.Application.Catalog.Post
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.Title.Contains(request.Keyword));
+                query = query.Where(x => x.Title.Contains(request.Keyword)|| x.Doctors.FirstName.Contains(request.Keyword));
             }
             if (!string.IsNullOrEmpty(request.Usename))
             {
                 query = query.Where(x => x.Doctors.AppUsers.UserName == request.Usename);
             }
+            if (request.TopicId != null)
+            {
+                query = query.Where(x => x.TopicId == request.TopicId|| x.DoctorId == request.TopicId);
+            }
             int totalRow = await query.CountAsync();
 
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+            var data = await query.OrderByDescending(x=>x.CreatedAt).Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new PostVm()
                 {
