@@ -18,13 +18,13 @@ namespace DoctorManagement.WebApp.Controllers.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var appointments = new List<AppointmentVm>();
-            if (User.Identity.Name == null)
+            if (User.Identity.Name != null)
             {
                 var request = new GetAppointmentPagingRequest()
                 {
                     PageIndex = 1,
                     PageSize = 100,
-                    UserName = "0373951042",
+                    UserName = User.Identity.Name,
                     status = Data.Enums.StatusAppointment.complete
                 };
                 appointments = (await _appointmentApiClient.GetAppointmentPagings(request)).Data.Items.Where(x=>x.Doctor.Booking == true).ToList();

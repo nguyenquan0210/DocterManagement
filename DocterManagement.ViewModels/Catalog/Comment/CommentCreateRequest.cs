@@ -10,7 +10,7 @@ namespace DoctorManagement.ViewModels.Catalog.Comment
     {
         public string Description { get; set; }
         public bool CheckLevel { get; set; }
-        public string? CheckComentId { get; set; }
+        public Guid? CheckComentId { get; set; }
         public Guid UserId { get; set; }
         public Guid PostId { get; set; }
     }

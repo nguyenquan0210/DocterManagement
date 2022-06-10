@@ -186,14 +186,71 @@ namespace DoctorManagement.Application.Catalog.Appointment
         public async Task<ApiResult<List<AppointmentVm>>> GetAll()
         {
             var query = _context.Appointments;
-
+            
             var rs = await query.Select(x => new AppointmentVm()
             {
                 Id = x.Id,
                 CreatedAt = x.CreatedAt,
-              /*  SchedulesDetailId = x.SchedulesSlotId,
-                PatientId = x.PatientId,*/
-                Status = x.Status
+                Status = x.Status,
+                No = x.No,
+                Stt = x.Stt,
+                IsDoctor = x.IsDoctor,
+                Note = x.Note,
+                Rate = x.Rates == null ? new RateVm() : new RateVm()
+                {
+                    Id = x.Rates.Id,
+                    Rating = x.Rates.Rating,
+                    Title = x.Rates.Title,
+                    Description = x.Rates.Description
+                },
+                Patient = new PatientVm()
+                {
+                    Id = x.Patients.PatientId,
+                    Name = x.Patients.Name,
+                    No = x.Patients.No,
+                    Address = x.Patients.Address,
+                    Dob = x.Patients.Dob,
+                    FullAddress = x.Patients.FullAddress,
+                    Gender = x.Patients.Gender,
+                    Identitycard = x.Patients.Identitycard,
+                    RelativeName = x.Patients.RelativeName,
+                    RelativePhone = x.Patients.RelativePhone,
+                },
+                Schedule = new ScheduleVm()
+                {
+                    Id = x.SchedulesSlots.Schedules.Id,
+                    CheckInDate = x.SchedulesSlots.Schedules.CheckInDate,
+                    FromTime = x.SchedulesSlots.Schedules.FromTime,
+                    ToTime = x.SchedulesSlots.Schedules.ToTime,
+                },
+                SlotSchedule = new SlotScheduleVm()
+                {
+                    Id = x.SchedulesSlots.Id,
+                    FromTime = x.SchedulesSlots.FromTime,
+                    ToTime = x.SchedulesSlots.ToTime,
+                },
+                Doctor = new DoctorVm()
+                {
+                    UserId = x.Doctors.UserId,
+                    FirstName = x.Doctors.FirstName,
+                    LastName = x.Doctors.LastName,
+                    Address = x.Doctors.Address,
+                    Prefix = x.Doctors.Prefix,
+                    FullName = x.Doctors.Prefix + " " + x.Doctors.LastName + " " + x.Doctors.FirstName,
+                    FullAddress = x.Doctors.FullAddress,
+                    Img = "user-content/" + x.Doctors.Img,
+                    Booking = x.Doctors.Booking,
+                },
+                MedicalRecord = x.MedicalRecords != null ? new MedicalRecordVm()
+                {
+                    Id = x.MedicalRecords.Id,
+                    Status = x.MedicalRecords.Status,
+                    StatusIllness = x.MedicalRecords.StatusIllness,
+                    CreateAt = x.MedicalRecords.CreatedAt,
+                    Diagnose = x.MedicalRecords.Diagnose,
+                    Note = x.MedicalRecords.Note,
+                } : new MedicalRecordVm()
+
             }).ToListAsync();
             return new ApiSuccessResult<List<AppointmentVm>> (rs);
         }
@@ -202,6 +259,8 @@ namespace DoctorManagement.Application.Catalog.Appointment
         {
             
             var query = from a in _context.Appointments
+                        join r in _context.Rates on a.Id equals r.AppointmentId into rt
+                        from r in rt.DefaultIfEmpty()
                         join d in _context.Doctors on a.DoctorId equals d.UserId
                         join ud in _context.AppUsers on d.UserId equals ud.Id
                         join p in _context.Patients on a.PatientId equals p.PatientId
@@ -210,7 +269,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                         join sche in _context.Schedules on slot.ScheduleId equals sche.Id
                         join m in _context.MedicalRecords on a.Id equals m.AppointmentId into me
                         from m in me.DefaultIfEmpty()
-                        select new {a,d,p,slot,sche,u,m,ud};
+                        select new {a,d,p,slot,sche,u,m,ud,r};
 
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -243,6 +302,13 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     Stt = x.a.Stt,
                     IsDoctor = x.a.IsDoctor,
                     Note = x.a.Note,
+                    Rate = x.r == null? new RateVm():new RateVm()
+                    {
+                        Id = x.r.Id,
+                        Rating = x.r.Rating,
+                        Title = x.r.Title,
+                        Description = x.r.Description
+                    },
                     Patient = new PatientVm()
                     {
                         Id = x.p.PatientId,
@@ -303,10 +369,124 @@ namespace DoctorManagement.Application.Catalog.Appointment
             return new ApiSuccessResult<PagedResult<AppointmentVm>> (pagedResult);
         }
 
+        public async Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPagingRating(GetAppointmentPagingRequest request)
+        {
+
+            var query = from a in _context.Appointments
+                        join r in _context.Rates on a.Id equals r.AppointmentId 
+                        join d in _context.Doctors on a.DoctorId equals d.UserId
+                        join ud in _context.AppUsers on d.UserId equals ud.Id
+                        join p in _context.Patients on a.PatientId equals p.PatientId
+                        join u in _context.AppUsers on p.UserId equals u.Id
+                        join slot in _context.schedulesSlots on a.SchedulesSlotId equals slot.Id
+                        join sche in _context.Schedules on slot.ScheduleId equals sche.Id
+                        join m in _context.MedicalRecords on a.Id equals m.AppointmentId into me
+                        from m in me.DefaultIfEmpty()
+                        select new { a, d, p, slot, sche, u, m, ud, r };
+
+            //2. filter
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.a.No.Contains(request.Keyword) || x.p.Name.Contains(request.Keyword) || x.p.RelativePhone.Contains(request.Keyword) ||
+                x.d.FirstName.Contains(request.Keyword) || x.d.LastName.Contains(request.Keyword));
+            }
+            if (!string.IsNullOrEmpty(request.UserName))
+            {
+                query = query.Where(x => x.u.UserName == request.UserName);
+            }
+            if (!string.IsNullOrEmpty(request.UserNameDoctor))
+            {
+                query = query.Where(x => x.ud.UserName == request.UserNameDoctor);
+            }
+            if (request.status != null)
+            {
+                query = query.Where(x => x.a.Status == request.status);
+            }
+            int totalRow = await query.CountAsync();
+            query = query.OrderByDescending(x => x.a.Status).ThenBy(x => x.sche.CheckInDate);
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new AppointmentVm()
+                {
+                    Id = x.a.Id,
+                    CreatedAt = x.a.CreatedAt,
+                    Status = x.a.Status,
+                    No = x.a.No,
+                    Stt = x.a.Stt,
+                    IsDoctor = x.a.IsDoctor,
+                    Note = x.a.Note,
+                    Rate = x.r == null ? new RateVm() : new RateVm()
+                    {
+                        Id = x.r.Id,
+                        Rating = x.r.Rating,
+                        Title = x.r.Title,
+                        Description = x.r.Description
+                    },
+                    Patient = new PatientVm()
+                    {
+                        Id = x.p.PatientId,
+                        Name = x.p.Name,
+                        No = x.p.No,
+                        Address = x.p.Address,
+                        Dob = x.p.Dob,
+                        FullAddress = x.p.FullAddress,
+                        Gender = x.p.Gender,
+                        Identitycard = x.p.Identitycard,
+                        RelativeName = x.p.RelativeName,
+                        RelativePhone = x.p.RelativePhone,
+                    },
+                    Schedule = new ScheduleVm()
+                    {
+                        Id = x.sche.Id,
+                        CheckInDate = x.sche.CheckInDate,
+                        FromTime = x.sche.FromTime,
+                        ToTime = x.sche.ToTime,
+                    },
+                    SlotSchedule = new SlotScheduleVm()
+                    {
+                        Id = x.slot.Id,
+                        FromTime = x.slot.FromTime,
+                        ToTime = x.slot.ToTime,
+                    },
+                    Doctor = new DoctorVm()
+                    {
+                        UserId = x.d.UserId,
+                        FirstName = x.d.FirstName,
+                        LastName = x.d.LastName,
+                        Address = x.d.Address,
+                        Prefix = x.d.Prefix,
+                        FullName = x.d.Prefix + " " + x.d.LastName + " " + x.d.FirstName,
+                        FullAddress = x.d.FullAddress,
+                        Img = "user-content/" + x.d.Img,
+                        Booking = x.d.Booking,
+                    },
+                    MedicalRecord = x.m != null ? new MedicalRecordVm()
+                    {
+                        Id = x.m.Id,
+                        Status = x.m.Status,
+                        StatusIllness = x.m.StatusIllness,
+                        CreateAt = x.m.CreatedAt,
+                        Diagnose = x.m.Diagnose,
+                        Note = x.m.Note,
+                    } : new MedicalRecordVm()
+
+                }).ToListAsync();
+
+            var pagedResult = new PagedResult<AppointmentVm>()
+            {
+                TotalRecords = totalRow,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex,
+                Items = data
+            };
+            return new ApiSuccessResult<PagedResult<AppointmentVm>>(pagedResult);
+        }
+
         public async Task<ApiResult<AppointmentVm>> GetById(Guid Id)
         {
             var appointments = await _context.Appointments.FindAsync(Id);
             if (appointments == null) return new ApiErrorResult<AppointmentVm>("phiếu đăng ký lịch khám không tồn tại!");
+            var rating = await _context.Rates.FirstOrDefaultAsync(x=>x.AppointmentId == appointments.Id);
             var doctor = await _context.Doctors.FindAsync(appointments.DoctorId);
             var userdoctor = await _context.AppUsers.FindAsync(appointments.DoctorId);
             var patient = await _context.Patients.FindAsync(appointments.PatientId);
@@ -325,6 +505,15 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 No = appointments.No,
                 Note = appointments.Note,
                 CancelReason = appointments.CancelReason,
+                Rate = rating == null ? new RateVm() : new RateVm()
+                {
+                    Id = rating.Id,
+                    Rating = rating.Rating,
+                    Title = rating.Title,
+                    CreatedAt = rating.CreatedAt,
+                    Description = rating.Description,
+
+                },
                 Schedule = new ScheduleVm()
                 {
                     Id = schedule.Id,

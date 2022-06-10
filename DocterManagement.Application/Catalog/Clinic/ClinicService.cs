@@ -332,13 +332,13 @@ namespace DoctorManagement.Application.Catalog.Clinic
                         Email = u.AppUsers.Email,
                         PhoneNumber = u.AppUsers.PhoneNumber,
 					},
-                    Rates = u.Rates.Select(r => new RateVm()
+                   /* Rates = u.Rates.Select(r => new RateVm()
 					{
                         Id = r.Id,
                         Description = r.Description,
                         Rating = r.Rating,
                         Title = r.Title,
-					}).ToList()
+					}).ToList()*/
 				}).ToList()
             };
 

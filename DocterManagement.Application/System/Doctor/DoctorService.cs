@@ -71,6 +71,7 @@ namespace DoctorManagement.Application.System.Doctor
             {
                 return new ApiErrorResult<DoctorVm>("User không tồn tại");
             }
+            var users = await _context.AppUsers.FindAsync(id);
             var clinic = await _context.Clinics.FindAsync(doctor != null ? doctor.ClinicId : new Guid());
             var specialities = from s in _context.ServicesSpecialities
                                join spe in _context.Specialities on s.SpecialityId equals spe.Id
@@ -99,6 +100,12 @@ namespace DoctorManagement.Application.System.Doctor
                 FullAddress = fulladdreess,
                 Img = USER_CONTENT_FOLDER_NAME + "/" + doctor.Img,
                 No = doctor.No,
+                User = new UserVm()
+                {
+                    PhoneNumber = users.PhoneNumber,
+                    Email = users.Email,
+                    UserName = users.UserName,
+                },
                 Services = service.Select(s => new ServiceVm()
                 {
                     Id = s.Id,

@@ -24,10 +24,10 @@ namespace DoctorManagement.Application.Catalog.Comment
         {
             var comments = new CommentsPost()
             {
-                CheckComentId = request.CheckComentId,
                 CreatedAt = DateTime.Now,
                 Description = request.Description,
-                CheckLevel = request.CheckLevel,
+                Type = request.CheckLevel,
+                ParentId = request.CheckComentId.Value,
                 UserId = request.UserId,
                 PostId = request.PostId
             };
@@ -59,8 +59,8 @@ namespace DoctorManagement.Application.Catalog.Comment
                 Description = x.Description,
                 UserId = x.UserId,
                 PostId = x.PostId,
-                CheckLevel = x.CheckLevel,
-                CheckComentId = x.CheckComentId
+                CheckLevel = x.Type,
+                CheckComentId = x.ParentId
             }).ToListAsync();
 
             return new ApiSuccessResult<List<CommentVm>>(rs); ;
@@ -107,8 +107,8 @@ namespace DoctorManagement.Application.Catalog.Comment
                 Id = comments.Id,
                 Date = comments.CreatedAt,
                 Description = comments.Description,
-                CheckLevel = comments.CheckLevel,
-                CheckComentId = comments.CheckComentId,
+                CheckLevel = comments.Type,
+                CheckComentId = comments.ParentId,
                 UserId= comments.UserId,
                 PostId = comments.PostId
             };

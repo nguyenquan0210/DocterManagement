@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Catalog.MedicalRecords;
+using DoctorManagement.ViewModels.Catalog.Rate;
 using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -91,6 +92,16 @@ namespace DoctorManagement.ApiIntegration
                $"&userNameDoctor={request.UserNameDoctor}" +
                $"&status={request.status}");
         }
+        public async Task<ApiResult<PagedResult<AppointmentVm>>> GetAppointmentPagingRating(GetAppointmentPagingRequest request)
+        {
+            return await GetAsync<PagedResult<AppointmentVm>>(
+               $"/api/appointment/paging-rating?pageIndex={request.PageIndex}" +
+               $"&pageSize={request.PageSize}" +
+               $"&keyword={request.Keyword}" +
+               $"&userName={request.UserName}" +
+               $"&userNameDoctor={request.UserNameDoctor}" +
+               $"&status={request.status}");
+        }
 
         public async Task<ApiResult<bool>> Update(AppointmentUpdateRequest request)
         {
@@ -123,6 +134,25 @@ namespace DoctorManagement.ApiIntegration
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await client.PutAsync($"/api/appointment/cancel-appointment", httpContent);
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+        }
+
+        public async Task<ApiResult<bool>> AddRate(RateCreateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/rate/", httpContent);
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);

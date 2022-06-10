@@ -1,5 +1,6 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.ViewModels.Catalog.Appointment;
+using DoctorManagement.ViewModels.Catalog.Rate;
 using DoctorManagement.ViewModels.System.Patient;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -198,8 +199,6 @@ namespace DoctorManagement.WebApp.Controllers
                  appointment = (await _appointmentApiClient.GetById(first.Id)).Data;
             }
             ViewBag.Keyword = keyword;
-
-           
             return View(appointment);
         }
         [HttpGet]
@@ -264,6 +263,26 @@ namespace DoctorManagement.WebApp.Controllers
 
             }
             return RedirectToAction("Appointment");
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddRate(RateCreateRequest request)
+        {
+            if (!ModelState.IsValid) { return RedirectToAction("Appointment", new {id=request.AppointmentId}); }
+            var result = await _appointmentApiClient.AddRate(request);
+            if (!result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+            }
+            else
+            {
+                TempData["AlertMessage"] = "Đáng giá thành công.";
+                TempData["AlertType"] = "success";
+                TempData["AlertId"] = "successToast";
+
+            }
+            return RedirectToAction("Appointment", new { id = request.AppointmentId });
         }
     }
 }

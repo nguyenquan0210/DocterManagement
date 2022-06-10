@@ -90,42 +90,46 @@
                             </div>
                         </div>
                     </app-popular-keyword>
-                    <app-bookmark-services _ngcontent-serverapp-c67="" class="ng-tns-c73-15" _nghost-serverapp-c72="">
-                        <div _nghost-serverapp-c66="" class="hidden md:block max-w-4xl md:my-1 ng-star-inserted">
-                            <div _nghost-serverapp-c66="" class="w-full ng-star-inserted">
-                                <p _nghost-serverapp-c66="" class="text-xs-w500-white mb-3 ng-star-inserted"> Bác sĩ của bạn </p>
-                                <div _nghost-serverapp-c66="" class="hide-scroll-bar overflow-x-scroll">
-                                    <div _nghost-serverapp-c66="" class="flex flex-row flex-nowrap gap-4">
-                                        @foreach(var item in doctors)
-                                        {
-                                            <div _nghost-serverapp-c66=""
-                                                class="max-w-fit bg-white rounded p-2 flex flex-1 items-center font-medium ng-star-inserted">
-                                                <div _nghost-serverapp-c66="" class="shrink-0 ng-star-inserted"><img
-                                                        _nghost-serverapp-c66="" defaultimage="./assets/img/placeholder.svg"
-                                                        class="w-12 h-12 rounded-full object-cover lazyLoad cursor-pointer  ng-lazyloaded"
-                                                        alt="@(item.Prefix + " " +item.LastName + " " + item.FirstName)"
-                                                        src="@(Configuration["BaseAddress"]+"/img/" + item.Img)"
-                                                        style="pointer-events: auto;"></div>
+                    @if(doctors.Count > 0)
+                    {
+                        <app-bookmark-services _ngcontent-serverapp-c67="" class="ng-tns-c73-15" _nghost-serverapp-c72="">
+                            <div _nghost-serverapp-c66="" class="hidden md:block max-w-4xl md:my-1 ng-star-inserted">
+                                <div _nghost-serverapp-c66="" class="w-full ng-star-inserted">
+                                    <p _nghost-serverapp-c66="" class="text-xs-w500-white mb-3 ng-star-inserted"> Bác sĩ của bạn </p>
+                                    <div _nghost-serverapp-c66="" class="hide-scroll-bar overflow-x-scroll">
+                                        <div _nghost-serverapp-c66="" class="flex flex-row flex-nowrap gap-4">
+                                            @foreach(var item in doctors)
+                                            {
+                                                <div _nghost-serverapp-c66=""
+                                                    class="max-w-fit bg-white rounded p-2 flex flex-1 items-center font-medium ng-star-inserted">
+                                                    <div _nghost-serverapp-c66="" class="shrink-0 ng-star-inserted"><img
+                                                            _nghost-serverapp-c66="" defaultimage="./assets/img/placeholder.svg"
+                                                            class="w-12 h-12 rounded-full object-cover lazyLoad cursor-pointer  ng-lazyloaded"
+                                                            alt="@(item.Prefix + " " +item.LastName + " " + item.FirstName)"
+                                                            src="@(Configuration["BaseAddress"]+"/img/" + item.Img)"
+                                                            style="pointer-events: auto;"></div>
                         
-                                                <a _nghost-serverapp-c66="" class="ml-2 line-clamp-2 ng-star-inserted"
-                                                    asp-action="Index" asp-controller="Doctor" asp-route-id="@item.UserId" style="pointer-events: auto;">@(item.LastName + " " + item.FirstName)</a>
+                                                    <a _nghost-serverapp-c66="" class="ml-2 line-clamp-2 ng-star-inserted"
+                                                        asp-action="Index" asp-controller="Doctor" asp-route-id="@item.UserId" style="pointer-events: auto;">@(item.LastName + " " + item.FirstName)</a>
                         
                         
-                                                <a _nghost-serverapp-c66=""
-                                                    class="text-primary whitespace-nowrap p-2 block hover:underline"
-                                                    asp-action="BookingDoctorSetPatient" asp-controller="Booking"  asp-route-doctorid="@item.UserId" asp-route-scheduleid="@(new Guid())" style="pointer-events: auto;"> Đặt lịch </a>
-                                            </div>
+                                                    <a _nghost-serverapp-c66=""
+                                                        class="text-primary whitespace-nowrap p-2 block hover:underline"
+                                                        asp-action="BookingDoctorSetPatient" asp-controller="Booking"  asp-route-doctorid="@item.UserId" asp-route-scheduleid="@(new Guid())" style="pointer-events: auto;"> Đặt lịch </a>
+                                                </div>
                                             
-                                        }
+                                            }
                                        
 
-                                    </div>
+                                        </div>
 
-                                </div>
+                                    </div>
                                 
+                                </div>
                             </div>
-                        </div>
-                    </app-bookmark-services>
+                        </app-bookmark-services>
+                        
+                    }
                   
                 </div>
                 <div _ngcontent-serverapp-c67=""

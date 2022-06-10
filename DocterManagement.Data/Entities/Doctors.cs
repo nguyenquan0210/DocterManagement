@@ -42,7 +42,6 @@ namespace DoctorManagement.Data.Entities
         public List<Posts> Posts { get; set; }
         public List<Schedules> Schedules { get; set; }
         public List<MedicalRecord> MedicalRecords { get; set; }
-        public List<Rates> Rates { get; set; }
         public List<Galleries> Galleries { get; set; }
 
         public List<ServicesSpecialities> ServicesSpecialities { get; set; }

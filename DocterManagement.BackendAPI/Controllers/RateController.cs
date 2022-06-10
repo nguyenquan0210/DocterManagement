@@ -22,7 +22,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] RateCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create(RateCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -30,7 +30,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _rateService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(request);
 
             return Ok(result);
         }
@@ -43,11 +43,6 @@ namespace DoctorManagement.BackendAPI.Controllers
         [Authorize]
         public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var result = await _rateService.Delete(Id);
 
             return Ok(result);
@@ -66,7 +61,7 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _rateService.Update(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>
@@ -88,7 +83,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _rateService.GetById(Id);
             if (!result.IsSuccessed)
-                return BadRequest("Cannot find rate");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>

@@ -22,7 +22,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<ApiResult<Guid>>> Create([FromBody] AppointmentCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -95,6 +95,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             await _appointmentService.AddExpired(request);
             var user = await _appointmentService.GetAllPaging(request);
+            return Ok(user);
+        }
+        /// <summary>
+        /// Lấy danh sách đặt khám phân trang
+        /// </summary>
+        /// 
+        [HttpGet("paging-rating")]
+        public async Task<ActionResult<ApiResult<PagedResult<AppointmentVm>>>> GetAllPagingRating([FromQuery] GetAppointmentPagingRequest request)
+        {
+            var user = await _appointmentService.GetAllPagingRating(request);
             return Ok(user);
         }
         /// <summary>

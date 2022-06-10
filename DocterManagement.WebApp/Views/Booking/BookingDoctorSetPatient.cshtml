@@ -1248,11 +1248,15 @@
                             <div _ngcontent-serverapp-c260="" class="grid grid-cols-12 gap-4">
                                 <div _ngcontent-serverapp-c260=""
                                     class="col-span-12 md:col-span-7 lg:col-span-8 space-y-4">
-                                    <div _ngcontent-serverapp-c260="" class="flex bg-orange-50 p-2 rounded-lg"><img
-                                            _ngcontent-serverapp-c260="" width="16" height="16"
-                                            src="~/img/booking/svg/boldWarning2.svg"
-                                            class="w-4 h-4 leading-5 object-cover mr-1">
-                                    </div>
+                                    @if(doctor.Note!=null){
+                                        <div _ngcontent-serverapp-c260="" class="flex bg-orange-50 p-2 rounded-lg"><img
+                                                _ngcontent-serverapp-c260="" width="16" height="16"
+                                                src="~/img/booking/svg/boldWarning2.svg"
+                                                class="w-4 h-4 leading-5 object-cover mr-1">
+                                                @Html.Raw(doctor.Note)
+                                        </div>
+
+                                    }
                                     <nz-steps _ngcontent-serverapp-c260="" nzsize="small" nzdirection="vertical">
                                         <div class="ant-steps ant-steps-vertical ant-steps-small">
                                             <nz-step _ngcontent-serverapp-c260=""
