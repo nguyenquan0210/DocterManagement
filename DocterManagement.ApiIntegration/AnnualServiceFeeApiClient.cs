@@ -85,7 +85,7 @@ namespace DoctorManagement.ApiIntegration
         {
             var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
                 $"/api/annualServiceFee/paging?pageIndex={1}" +
-                $"&pageSize={10000}" +
+                $"&pageSize={1000000000}" +
                 $"&keyword={request.Keyword}" +
                 $"&day={request.day}" +
                 $"&month={request.month}" +
@@ -100,7 +100,7 @@ namespace DoctorManagement.ApiIntegration
                 model.Add(new StatisticNews
                 {
                     date = i == 1 ? "thg " + fromdate.ToString("MM/yyyy") : "thg " + fromdate.ToString("MM") ,
-                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy")).Sum(x=>x.TuitionPaidFreeNumBer))/1000000 ,
+                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy")).Sum(x=>x.TuitionPaidFreeNumBer))/10000000 ,
                     count = data.Data.Items.Count(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy"))
                 });
                 fromdate = fromdate.AddMonths(1);
@@ -111,7 +111,7 @@ namespace DoctorManagement.ApiIntegration
         {
             var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
                 $"/api/annualServiceFee/paging?pageIndex={1}" +
-                $"&pageSize={10000}" +
+                $"&pageSize={1000000000}" +
                 $"&keyword={request.Keyword}" +
                 $"&day={request.day}" +
                 $"&month={request.month}" +
@@ -128,7 +128,7 @@ namespace DoctorManagement.ApiIntegration
                 model.Add(new StatisticNews
                 {
                     date = i==1 ? fromdate.ToString("HH dd/MM/yyyy ") : fromdate.ToString("HH") + "h",
-                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH")).Sum(x => x.TuitionPaidFreeNumBer)) / 1000000,
+                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH")).Sum(x => x.TuitionPaidFreeNumBer)) / 10000000,
                     count = data.Data.Items.Count(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH"))
                 });
                 fromdate = fromdate.AddHours(1);
@@ -139,7 +139,7 @@ namespace DoctorManagement.ApiIntegration
         {
             var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
                 $"/api/annualServiceFee/paging?pageIndex={1}" +
-                $"&pageSize={10000}" +
+                $"&pageSize={1000000000}" +
                 $"&keyword={request.Keyword}" +
                 $"&day={request.day}" +
                 $"&month={request.month}" +
@@ -157,7 +157,7 @@ namespace DoctorManagement.ApiIntegration
                     model.Add(new StatisticNews
                     {
                         date = i == 1 ? "Ng " + fromdate.ToString("dd/MM/yyyy") : "Ng "+ fromdate.ToString("dd"),
-                        amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")).Sum(x => x.TuitionPaidFreeNumBer)) / 1000000,
+                        amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")).Sum(x => x.TuitionPaidFreeNumBer)) / 10000000,
                         count = data.Data.Items.Count(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy"))
                     });
 

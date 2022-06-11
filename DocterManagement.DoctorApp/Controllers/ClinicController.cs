@@ -45,7 +45,8 @@ namespace DoctorManagement.DoctorApp.Controllers
                     Status = clinic.Status,
                     Description = clinic.Description,
                     LocationId = clinic.LocationVm.Id,
-                    DistrictId = clinic.LocationVm.District.Id
+                    DistrictId = clinic.LocationVm.District.Id,
+                    Images = clinic.Images,
                 };
                 return View(updateRequest);
             }
@@ -79,16 +80,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin phòng khám " + request.Name + " thành công.";
                 TempData["AlertType"] = "alert-success";
-                return RedirectToAction("Update");
+                return RedirectToAction("Detailt");
             }
-
-            ModelState.AddModelError("", result.Message);
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> Detailt(string userName)
+        public async Task<IActionResult> Detailt()
         {
-            var user = await _userApiClient.GetByUserName(userName);
+            var user = await _userApiClient.GetByUserName(User.Identity.Name);
             var result = await _clinicApiClient.GetById(user.Data.DoctorVm.GetClinic.Id);
             if (result.IsSuccessed)
             {
@@ -96,27 +95,23 @@ namespace DoctorManagement.DoctorApp.Controllers
                 ViewBag.Img = clinicdata.ImgLogo;
                 ViewBag.Imgs = clinicdata.Images;
                 ViewBag.Status = clinicdata.Status == Status.NotActivate ? "Ngừng hoạt động" : clinicdata.Status == Status.Active ? "Hoạt động" : "không hoạt động";
-                var clinic = new ClinicVm()/*_mapper.Map<ClinicVm>(clinicdata);*/
-                {
-                    Name = clinicdata.Name,
-                    Id = clinicdata.Id,
-                    Description = clinicdata.Description,
-                    Address = clinicdata.Address,
-                    Status = clinicdata.Status, //== Status.Active ? true : false
-                    DoctorVms = clinicdata.DoctorVms,
-                    LocationVm = clinicdata.LocationVm,
-                    No = clinicdata.No,
-                };
-                return View(clinic);
+               
+                return View(clinicdata);
             }
             return RedirectToAction("Error", "Home");
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteImg(Guid imgId)
         {
             var result = await _clinicApiClient.DeleteImg(imgId);
             return Json(new { response = result });
         }
-       
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllImg(Guid clinicId)
+        {
+            var result = await _clinicApiClient.DeleteAllImg(clinicId);
+            return Json(new { response = result });
+        }
     }
 }

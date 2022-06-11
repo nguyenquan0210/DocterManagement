@@ -49,9 +49,9 @@ namespace DoctorManagement.ApiIntegration
         {
            return  await GetListAsync<PatientVm>($"/api/client/get-patient-profile/{username}");
         }
-        public async Task<ApiResult<List<UserVm>>> GetAllUser(string role)
+        public async Task<ApiResult<List<UserVm>>> GetAllUser(string? role)
         {
-            return await GetListAsync<UserVm>($"/api/client/get-all-user/{role}");
+            return await GetListAsync<UserVm>($"/api/client/get-all-user?role="+role);
         }
 
         public async Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request)

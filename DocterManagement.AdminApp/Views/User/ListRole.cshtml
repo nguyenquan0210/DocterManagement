@@ -36,7 +36,7 @@
 
 @section Search{
 
-	<form asp-controller="Category" asp-action="Index"  method="get">
+	<form asp-action="ListRole"  method="get">
 		<div class="input-group">
 			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
 			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
@@ -58,12 +58,12 @@
 								vai trò người dùng.
 							</p>
 						</div>
-						<div class="ms-auto my-auto mt-lg-0 mt-4">
+						@*<div class="ms-auto my-auto mt-lg-0 mt-4">
 							<div class="ms-auto my-auto">
 								<a asp-action="Create" asp-controller="Category" class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm vai trò</a>
 
 							</div>
-						</div>
+						</div>*@
 					</div>
 				</div>
 				@if (TempData["AlertMessage"] != null)
@@ -89,7 +89,6 @@
 									<th>STT</th>
 									<th>Tên vai trò</th>
 									<th>Mô tả</th>
-									<th>Thao tác</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -99,18 +98,7 @@
 										<td class="text-sm"><h6 class="ms-3 my-auto">@i</h6></td>
 										<td class="text-sm"><h6 class="ms-3 my-auto">@item.Name</h6></td>
 										<td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>
-										@*<td>
-											<span class="badge @(item.Status == Status.Active ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.Status == Status.Active? "Hiển thị" : "Ẩn")</span>
-										</td>*@
-
-										<td class="text-sm">
-											<a asp-controller="Category" asp-action="Update" asp-route-id="@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Thay đổi vai trò người dùng">
-												<i class="fas fa-user-edit text-secondary"></i>
-											</a>
-											@*<a onclick="@(item.Status == Status.Active? "ConfirmStatus("+@item.Id+")": "ConfirmDelete("+@item.Id+")" )" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa vai trò người dùng">
-												<i class="fas fa-trash text-secondary"></i>
-											</a>*@
-										</td>
+										
 									</tr>
 									i++;
 								}
@@ -121,7 +109,7 @@
 									<th>Mã vai trò</th>
 									<th>Tên vai trò</th>
 									<th>Mô tả</th>
-									<th>Thao tác</th>
+									
 								</tr>
 							</tfoot>
 						</table>

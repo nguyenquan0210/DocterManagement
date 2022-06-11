@@ -40,6 +40,10 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 Hotline = MasterDatas.Hotline,
                 Image = MASTERDATA_CONTENT_FOLDER_NAME +"/"+ MasterDatas.Image,
                 TimeWorking = MasterDatas.TimeWorking,
+                AccountBank = MasterDatas.AccountBank,
+                AccountBankName = MasterDatas.AccountBankName,
+                ServiceFee = MasterDatas.ServiceFee,
+                Content = MasterDatas.Content,
             };
 
             return new ApiSuccessResult<InformationVm>(rs);
@@ -58,6 +62,10 @@ namespace DoctorManagement.Application.Catalog.MasterData
             informations.IsDeleted = request.IsDeleted;
             informations.Company = request.Company;
             informations.Email = request.Email;
+            informations.Content = request.Content;
+            informations.AccountBank = request.AccountBank;
+            informations.AccountBankName = request.AccountBankName;
+            informations.ServiceFee = request.ServiceFee;
             if (request.Image != null)
             {
                 if (informations.Image != null && informations.Image != "default") await _storageService.DeleteFileAsyncs(informations.Image, MASTERDATA_CONTENT_FOLDER_NAME);

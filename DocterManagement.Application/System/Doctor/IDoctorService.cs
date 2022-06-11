@@ -19,6 +19,6 @@ namespace DoctorManagement.Application.System.Doctor
         Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request);
         Task<ApiResult<Guid>> AddInfo(AddPatientInfoRequest request);
         Task<ApiResult<List<PatientVm>>> GetPatientProfile(string username);
-        Task<ApiResult<List<UserVm>>> GetAllUser(string role);
+        Task<ApiResult<List<UserVm>>> GetAllUser(string? role);
     }
 }

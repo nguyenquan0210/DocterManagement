@@ -1,4 +1,5 @@
 ﻿using DoctorManagement.Application.Common;
+using DoctorManagement.Application.System.Users;
 using DoctorManagement.Data.EF;
 using DoctorManagement.Data.Entities;
 using DoctorManagement.Data.Enums;
@@ -6,6 +7,7 @@ using DoctorManagement.ViewModels.Catalog.MasterData;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.AnnualServiceFee;
 using DoctorManagement.ViewModels.System.Doctors;
+using DoctorManagement.ViewModels.System.Models;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +24,14 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
     {
         private readonly DoctorManageDbContext _context;
         private readonly IStorageService _storageService;
+        private readonly IEmailService _emailService;
         private const string ANNUALSERVICEFEE_CONTENT_FOLDER_NAME = "annualservicefee-content";
-        public AnnualServiceFeeService(DoctorManageDbContext context, IStorageService storageService)
+        public AnnualServiceFeeService(DoctorManageDbContext context, IStorageService storageService,
+            IEmailService emailService)
         {
             _context = context;
             _storageService = storageService;
+            _emailService = emailService;
         }
         public async Task<ApiResult<PagedResult<AnnualServiceFeeVm>>> GetAllPaging(GetAnnualServiceFeePagingRequest request)
         {
@@ -38,7 +43,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             string day = DateTime.Now.ToString("dd") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("YY");
             int count = await _context.AnnualServiceFees.Where(x => x.No.Contains("DMPM" + day)).CountAsync();
             string str = "";
-                
+            var users = new List<AppUsers>();    
             foreach (var item in list)
             {
                 if (!check.Contains(item.DoctorId.ToString()))
@@ -66,14 +71,23 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                         };
                         annualServiceFees.Add(a);
                         count++;
+                        var adduser = await _context.AppUsers.FindAsync(item.DoctorId);
+                        users.Add(adduser);
+                        if (item.CreatedAt.AddDays(365) < DateTime.Now.AddMonths(-3))
+                        {
+                            adduser.Status = Status.InActive;
+                        }
                     }
                     check = check+ item.DoctorId.ToString()+",";
                 }
                 
             }
             await _context.AnnualServiceFees.AddRangeAsync(annualServiceFees);
-            await _context.SaveChangesAsync();
-
+            var rs = await _context.SaveChangesAsync();
+            if(rs != 0)
+            { var msg = "Nộp phí trễ quá 3 tháng tài khoản của bạn sẽ bị khóa!";
+                await SendEmailServiceFee(users, msg, annualServiceFees.FirstOrDefault(),information);
+            }
             var query = from c in _context.AnnualServiceFees 
                         join d in _context.Doctors on c.DoctorId equals d.UserId
                         select new {c,d};
@@ -239,7 +253,14 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             };
             await _context.AnnualServiceFees.AddAsync(serviceFees);
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>();
+            if (rs != 0)
+            {
+                var users = new List<AppUsers>();
+                users.Add(await _context.AppUsers.FindAsync(service.DoctorId));
+                var msg = "Nộp phí của bạn có sai sốt yêu cầu điền lại đầy đủ thông tin";
+                await SendEmailServiceFee(users, msg, serviceFees, information);
+                return new ApiSuccessResult<bool>();
+            }
             return new ApiErrorResult<bool>("Hủy dịch vụ đóng phí không thành công!");
         }
 
@@ -253,10 +274,17 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                 var removeservice = await _context.AnnualServiceFees.FindAsync(remove.Id);
                 _context.AnnualServiceFees.Remove(removeservice);
             }
-            
             service.Status = StatusAppointment.complete;
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>();
+            if (rs != 0)
+            {
+                var information = await _context.Informations.FirstOrDefaultAsync();
+                var users = new List<AppUsers>();
+                users.Add(await _context.AppUsers.FindAsync(service.DoctorId));
+                var msg = "Nộp phí của bạn đã được người quản trị duyệt";
+                await SendEmailServiceFee(users, msg, service, information);
+                return new ApiSuccessResult<bool>();
+            }
             return new ApiErrorResult<bool>("Duyệt dịch vụ nộp phí không thành công!");
         }
 
@@ -273,7 +301,15 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             service.Contingency =  service.Contingency  +  (request.TuitionPaidFreeNumBer > service.NeedToPay?(request.TuitionPaidFreeNumBer - service.NeedToPay):0) ;
             service.NeedToPay = request.TuitionPaidFreeNumBer > service.NeedToPay ? 0 : (service.NeedToPay - request.TuitionPaidFreeNumBer);
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>();
+            if (rs != 0)
+            {
+                var information = await _context.Informations.FirstOrDefaultAsync();
+                var users = new List<AppUsers>();
+                users.Add(await _context.AppUsers.FindAsync(service.DoctorId));
+                var msg = "Nộp phí thành công tại cơ sở";
+                await SendEmailServiceFee(users, msg, service, information);
+                return new ApiSuccessResult<bool>();
+            }
             return new ApiErrorResult<bool>("Nộp phí dịch vụ không thành công!");
         }
         public async Task<ApiResult<bool>> PaymentServiceFeeDoctor(AnnualServiceFeePaymentDoctorRequest request)
@@ -292,7 +328,15 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             service.NeedToPay = service.NeedToPay + (request.TuitionPaidFreeNumBer - service.NeedToPay);
             service.Contingency = service.Contingency + (request.TuitionPaidFreeNumBer - service.NeedToPay);
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>();
+            if (rs != 0)
+            {
+                var information = await _context.Informations.FirstOrDefaultAsync();
+                var users = new List<AppUsers>();
+                users.Add(await _context.AppUsers.FindAsync(service.DoctorId));
+                var msg = "Nộp phí chuyển khoản và đợi người quản trị duyệt";
+                await SendEmailServiceFee(users, msg, service, information);
+                return new ApiSuccessResult<bool>();
+            }
             return new ApiErrorResult<bool>("Nộp phí dịch vụ không thành công!");
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
@@ -303,6 +347,24 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsyncs(file.OpenReadStream(), fileName, folderName);
             return fileName;
+        }
+
+        private async Task SendEmailServiceFee(List<AppUsers> users, string messenger, AnnualServiceFees serviceFee, Informations informations)
+        {
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = users.Select(x=>  x.Email ).ToList(),
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{NeedToPay}}", serviceFee.InitialAmount.ToString("#,###,###,### vnđ")),
+                    new KeyValuePair<string, string>("{{Messenger}}", messenger),
+                    new KeyValuePair<string, string>("{{Hotline}}", informations.Hotline),
+                    new KeyValuePair<string, string>("{{AccountBank}}", informations.AccountBank),
+                    new KeyValuePair<string, string>("{{AccountBankName}}", informations.AccountBankName),
+                    new KeyValuePair<string, string>("{{FullAddress}}", informations.FullAddress),
+                }
+            };
+            await _emailService.SendEmailServiceFee(options);
         }
     }
 }

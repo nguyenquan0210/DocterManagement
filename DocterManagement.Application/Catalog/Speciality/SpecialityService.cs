@@ -62,16 +62,12 @@ namespace DoctorManagement.Application.Catalog.Speciality
             var speciality = await _context.Specialities.FindAsync(Id);
             int check = 0;
             if (speciality == null) return new ApiSuccessResult<int>(check);
-            if (speciality.IsDeleted = false)
+            if (speciality.IsDeleted == false)
             {
                 speciality.IsDeleted = true;
                 check = 1;
             }
-            else
-            {
-                _context.Specialities.Remove(speciality);
-                check = 2;
-            }
+          
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check);
         }

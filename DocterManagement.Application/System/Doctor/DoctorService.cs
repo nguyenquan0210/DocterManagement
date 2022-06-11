@@ -328,6 +328,7 @@ namespace DoctorManagement.Application.System.Doctor
                         Address = x.Doctors.Address,
                         Img = x.Doctors.Img,
                         No = x.Doctors.No,
+                        Dob = x.Doctors.Dob
                         //GetSpecialities = x new GetSpecialityVm() { Id = x.Doctors.Specialities.Id , Title = x.Doctors.Specialities.Title },
                         //GetClinic = new GetClinicVm() { Id= x.Doctors.Clinics.Id , Name = x.Doctors.Clinics.Name }
                     } : new DoctorVm(),

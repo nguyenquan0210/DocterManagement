@@ -26,6 +26,6 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         public DateTime CreatedAt { get; set; }
         public string MapUrl { get; set; }
         public string Note { get; set; }
-      
+        public int Rating { get; set; }
     }
 }

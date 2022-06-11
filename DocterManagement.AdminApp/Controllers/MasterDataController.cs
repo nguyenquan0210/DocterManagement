@@ -38,6 +38,10 @@ namespace DoctorManagement.AdminApp.Controllers
                     FullAddress = information.FullAddress,
                     Hotline = information.Hotline,
                     TimeWorking = information.TimeWorking,
+                    ServiceFee = information.ServiceFee,
+                    AccountBank = information.AccountBank,
+                    AccountBankName = information.AccountBankName,
+                    Content = information.Content,
                 };
                 return View(updateRequest);
             }

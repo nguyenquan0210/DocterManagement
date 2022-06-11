@@ -189,9 +189,19 @@ namespace DoctorManagement.Application.Catalog.Schedule
             {
                 query = query.Where(x => x.CheckInDate.ToShortDateString().Contains(request.Keyword));
             }
+            foreach(var item in query)
+            {
+                if(item.CheckInDate < DateTime.Now.AddHours(-1))
+                {
+                    var addstatus = await _context.Schedules.FindAsync(item.Id);
+                    addstatus.IsDeleted = true;
+                    
+                }
+            }
+            await _context.SaveChangesAsync();
             int totalRow = await query.CountAsync();
 
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+            var data = await query.OrderByDescending(x=>x.CheckInDate).Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new ScheduleVm()
                 {

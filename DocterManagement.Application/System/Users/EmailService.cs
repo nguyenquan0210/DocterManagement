@@ -57,6 +57,14 @@ namespace DoctorManagement.Application.System.Users
 
             await SendEmail(userEmailOptions);
         }
+        public async Task SendEmailServiceFee(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolders("Thông báo nộp phí dịch vụ.", userEmailOptions.PlaceHolders);
+
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("ServiceFee"), userEmailOptions.PlaceHolders);
+
+            await SendEmail(userEmailOptions);
+        }
         public async Task SendEmailCancelAppoitment(UserEmailOptions userEmailOptions)
         {
             userEmailOptions.Subject = UpdatePlaceHolders("Hủy lịch khám #{{No}}", userEmailOptions.PlaceHolders);
@@ -122,6 +130,6 @@ namespace DoctorManagement.Application.System.Users
             }
 
             return text;
-        }
+         }
     }
 }

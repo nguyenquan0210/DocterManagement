@@ -55,15 +55,15 @@
                                 Chỉ có người quảng trị mới quản lý tất cả tài khoản.
                             </p>
                         </div>
-                        <div class="ms-auto my-auto mt-lg-0 mt-4 col-5">
+                        <div class="ms-auto my-auto mt-lg-0 mt-4 col-4">
                            
                             <div class="ms-auto my-auto">
                                  <form  action="/Location/Index" method="get"
-                                      class="m-4 col-6 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
+                                      class="m-4 col-11 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
                                     <select id ="Type" name="Type" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.Types" >
                                     </select>
                                 </form>
-                                <a asp-action="Create" asp-controller="Location"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm Nhân viên</a>
+                               @* <a asp-action="Create" asp-controller="Location"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm Nhân viên</a>*@
                                 
                             </div>
                         </div>

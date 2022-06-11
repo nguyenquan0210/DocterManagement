@@ -234,7 +234,7 @@
                                 <div class="@(Model.Status == StatusAppointment.pending||Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.cancel?"col-10":"col-12")">
                                     @if(Model.Status == StatusAppointment.complete)
                                     {
-                                        <a style="margin:0 20px" asp-action="PaymentServiceFeePDF" asp-route-id="@Model.Id"  class="btn bg-gradient-info btn-sm mt-6 mb-0">In phiếu</a>
+                                        <a target="_blank" style="margin:0 20px" asp-action="PaymentServiceFeePDF" asp-route-id="@Model.Id"  class="btn bg-gradient-info btn-sm mt-6 mb-0">In phiếu</a>
                                     }
                                     @if(Model.Type != "trực tiếp")
                                     {
@@ -335,8 +335,16 @@
         })
     </script>
     <script>
-        var menu_bd = document.getElementById("menu-contact");
+        var menu_bd = document.getElementById("menu_acc");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
+        var a_xbd = document.getElementById("a_acc");
+        a_xbd.classList.add("active");
+        var a_acc = document.getElementById("a_service");
+        a_acc.classList.add("active");
+        var dashboardsExamples = document.getElementById("QUANLYTAIKHOAN");
+        dashboardsExamples.classList.add("show");
+        var usersExample = document.getElementById("quanlynhanvien");
+        usersExample.classList.add("show");
     </script>
 }

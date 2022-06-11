@@ -120,7 +120,7 @@
                                             <a  asp-action = "Update" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
                                                 <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
-                                            <a id = "Speciality_@i" onclick="ConfirmDelete("@i")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
+                                            <a id = "Speciality_@i" onclick="ConfirmStatus(@i)" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
                                                 <i class="fas fa-trash text-secondary"></i>
                                             </a>
                                         </td>
@@ -211,23 +211,6 @@
                 fixedHeight: false,
                 paging: false
             });
-
-            document.querySelectorAll(".export").forEach(function (el) {
-                el.addEventListener("click", function (e) {
-                    var type = el.dataset.type;
-
-                    var data = {
-                        type: type,
-                        filename: "soft-ui-" + type,
-                    };
-
-                    if (type === "csv") {
-                        data.columnDelimiter = "|";
-                    }
-
-                    dataTableSearch.export(data);
-                });
-            });
         };
     </script>
     <script>
@@ -259,7 +242,7 @@
             $("#hiddenEmployeeId").val(SpecialityId);
             document.getElementById("myModel").classList.toggle('delete_none');
             document.getElementById("myModel").classList.toggle('delete_block');
-            $("#quesion").html("Bạn có muốn tạm dừng hoạt động tài khoản này?");
+            $("#quesion").html("Bạn có muốn tạm ẩn chuyên khoa này?");
             $("#okok").html("Có, ẩn nó!");
         }
 

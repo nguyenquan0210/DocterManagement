@@ -38,28 +38,8 @@ namespace DoctorManagement.AdminApp.Controllers
                 year = year,
                 status = status
             };
-            if (check == "year"|| check==null)
-            {
-                request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
-                request.month = null;
-                request.day = null;
-                
-                ViewBag.Statitic = JsonConvert.SerializeObject(await _annualServiceFeeApiClient.GetServiceFeeStatiticYear(request));
-            }
-            else if(check == "month")
-            {
-                request.day = null;
-                request.month = month == null ? DateTime.Now.ToString("MM") : month;
-                request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
-                ViewBag.Statitic = JsonConvert.SerializeObject(await _annualServiceFeeApiClient.GetServiceFeeStatiticMonth(request));
-            }
-            else
-            {
-                request.day = day == null ? DateTime.Now.ToString("dd") : day;
-                request.month = month == null ? DateTime.Now.ToString("MM") : month;
-                request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
-                ViewBag.Statitic = JsonConvert.SerializeObject(await _annualServiceFeeApiClient.GetServiceFeeStatiticDay(request));
-            }
+            var statistic = await Statistic(request,day,month,year,check);
+            ViewBag.Statitic = JsonConvert.SerializeObject(statistic);
             var data = await _annualServiceFeeApiClient.GetAllPaging(request);
             ViewBag.Keyword = keyword;
             ViewBag.Day = request.day == null ? DateTime.Now.ToString("dd") : request.day;
@@ -71,7 +51,75 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.Days = SeletectDay(request.day == null ? DateTime.Now.ToString("dd") : request.day);
             ViewBag.Months = SeletectMonth(request.month == null ? DateTime.Now.ToString("MM") : request.month);
             ViewBag.Years = SeletectYear(request.year);
+            ViewBag.StatisticPie = JsonConvert.SerializeObject(await StatisticPie(request));
+            var count = (await StatisticPie(request)).Sum(x => int.Parse(x.Value));
+            switch (count)
+            {
+                case >= 1000 and < 1000000:
+                    ViewBag.Count = count / 1000 + "K";
+                    break;
+                case >= 1000000 and < 1000000000:
+                    ViewBag.Count = count / 1000000 + "M";
+                    break;
+                case >= 1000000000:
+                    ViewBag.Count = count / 1000000000 + "B";
+                    break;
+                default:
+                    ViewBag.Count = count;
+                    break;
+            }
             return View(data.Data);
+        }
+        public async Task<List<SelectListItem>> StatisticPie(GetAnnualServiceFeePagingRequest request)
+        {
+            //pending, approved, complete,cancel
+            request.status = null;
+            request.PageSize = 1000000000;
+            var data = (await _annualServiceFeeApiClient.GetAllPaging(request)).Data.Items;
+            List<SelectListItem> status = new List<SelectListItem>()
+            {
+               new SelectListItem(){ Text = "đã nộp", Value="2"},
+               new SelectListItem(){ Text = "chưa nộp", Value="0"},
+               new SelectListItem(){ Text = "đã hủy", Value="3"},
+               new SelectListItem(){ Text = "chờ duyệt", Value="1"},
+            };
+            List<SelectListItem> model = new List<SelectListItem>();
+            var roles = await _userApiClient.GetAllRole();
+            foreach (var item in status)
+            {
+                var parsestatus = (StatusAppointment)int.Parse(item.Value);
+                var statistic = new SelectListItem()
+                {
+                    Text = item.Text,
+                    Value = data.Count(x => x.Status == parsestatus).ToString(),
+                };
+                model.Add(statistic);
+            }
+            return model;
+        }
+        public async Task<List<StatisticNews>> Statistic(GetAnnualServiceFeePagingRequest request, string? day, string? month, string? year, string? check)
+        {
+            switch (check)
+            {
+                case "year" or null:
+                    request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    request.month = null;
+                    request.day = null;
+                    return await _annualServiceFeeApiClient.GetServiceFeeStatiticYear(request);
+                    
+                case "month":
+                    request.day = null;
+                    request.month = month == null ? DateTime.Now.ToString("MM") : month;
+                    request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    return await _annualServiceFeeApiClient.GetServiceFeeStatiticMonth(request);
+                    
+                default:
+                    request.day = day == null ? DateTime.Now.ToString("dd") : day;
+                    request.month = month == null ? DateTime.Now.ToString("MM") : month;
+                    request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    return await _annualServiceFeeApiClient.GetServiceFeeStatiticDay(request);
+                   
+            }
         }
         public List<SelectListItem> SeletectStatus(string? id)
         {

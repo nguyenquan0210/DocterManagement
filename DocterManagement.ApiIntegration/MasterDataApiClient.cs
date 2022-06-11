@@ -167,7 +167,10 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Company.ToString()), "company");
             requestContent.Add(new StringContent(request.FullAddress.ToString()), "fullAddress");
             requestContent.Add(new StringContent(request.Email.ToString()), "email");
-            requestContent.Add(new StringContent(request.IsDeleted.ToString()), "isDeleted");
+            requestContent.Add(new StringContent(request.AccountBankName.ToString()), "accountBankName");
+            requestContent.Add(new StringContent(request.AccountBank.ToString()), "accountBank");
+            requestContent.Add(new StringContent(request.Content.ToString()), "content");
+            requestContent.Add(new StringContent(request.ServiceFee.ToString()), "serviceFee");
 
             var response = await client.PutAsync($"/api/masterData", requestContent);
             var result = await response.Content.ReadAsStringAsync();

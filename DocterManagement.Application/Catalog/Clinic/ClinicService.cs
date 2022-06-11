@@ -272,13 +272,30 @@ namespace DoctorManagement.Application.Catalog.Clinic
         {
             var clinics = await _context.Clinics.FindAsync(Id);
             if (clinics == null) return new ApiErrorResult<ClinicVm>("Phòng khám không được xác nhận!");
-          
+            var subdistrict = await _context.Locations.FindAsync(clinics.LocationId);
+            var district = await _context.Locations.FindAsync(subdistrict.ParentId);
+
             var img = from i in _context.ImageClinics select i;
-            var user = from u in _context.Users
-                       join r in _context.Roles on u.RoleId equals r.Id
-                       join dt in _context.Doctors on u.Id equals dt.UserId
-                       where r.Name.ToUpper() == "DOCTOR" && dt.ClinicId == Id
+            var user = from dt in _context.Doctors
+                       where dt.ClinicId == Id
                        select dt;
+
+            var ratings = from r in _context.Rates select r;
+            var appointments = _context.Appointments;
+            var rating = 0;
+            var icount = 0;
+            foreach (var item in user.ToList())
+            {
+                var ratingdoctor = ratings.Where(x => x.Appointments.DoctorId == item.UserId);
+
+                if (ratingdoctor.Count() != 0)
+                {
+                    rating = rating + (await ratingdoctor.SumAsync(x => x.Rating));
+                    icount++;
+                }
+            }
+            rating = rating / icount;
+
             var rs = new ClinicVm()
             {
                 Id = clinics.Id,
@@ -292,6 +309,17 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 CreatedAt = clinics.CreatedAt,
                 FullAddress = clinics.FullAddress ,
                 MapUrl = clinics.MapUrl,
+                Rating = rating,
+                LocationVm= new LocationVm()
+                {
+                    Id = subdistrict.Id,
+                    Name = subdistrict.Name,
+                    District = new DistrictVm()
+                    {
+                        Id = district.Id,
+                        Name = district.Name
+                    }
+                },
                 Images = img.Where(i => i.ClinicId == clinics.Id).Select(i => new ImageClinicVm()
                 {
                     Id = i.Id,
@@ -332,14 +360,14 @@ namespace DoctorManagement.Application.Catalog.Clinic
                         Email = u.AppUsers.Email,
                         PhoneNumber = u.AppUsers.PhoneNumber,
 					},
-                   /* Rates = u.Rates.Select(r => new RateVm()
-					{
+                    Rates = ratings.Where(x=>x.Appointments.DoctorId==u.UserId).Select(r => new RateVm()
+                    {
                         Id = r.Id,
                         Description = r.Description,
                         Rating = r.Rating,
                         Title = r.Title,
-					}).ToList()*/
-				}).ToList()
+                    }).ToList()
+                }).ToList()
             };
 
             return new ApiSuccessResult<ClinicVm>(rs);
