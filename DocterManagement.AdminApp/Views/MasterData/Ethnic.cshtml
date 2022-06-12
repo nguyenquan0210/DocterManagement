@@ -23,10 +23,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý phòng khám</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách phòng khám</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Ethnic">Quản lý dân tộc</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách dân tộc</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Danh sách phòng khám</h6>
+    <h6 class="font-weight-bolder mb-0">Danh sách tất cả các dân tộc</h6>
 }
 @section Search{
 	<form asp-controller="MasterData" asp-action="MenuMain"  method="get">
@@ -44,9 +44,9 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả phòng khám</h5>
+                            <h5 class="mb-0">Danh sách dân tộc</h5>
                             <p class="text-sm mb-0">
-                               Quản lý tất cả phòng khám.
+                               Danh sách thông tin tất cả các dân tộc.
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">

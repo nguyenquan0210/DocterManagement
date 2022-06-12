@@ -50,5 +50,6 @@ namespace DoctorManagement.ViewModels.System.Doctors
         public string TimeWorking { get; set; }
         public string FullName { get; set; }
         public int BeforeBookingDay { get; set; }
+        public double Rating { get; set; }
     }
 }

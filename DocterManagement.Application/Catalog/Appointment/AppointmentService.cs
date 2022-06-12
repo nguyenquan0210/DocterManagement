@@ -39,11 +39,13 @@ namespace DoctorManagement.Application.Catalog.Appointment
                              where slot.Id == request.SchedulesSlotId 
                              select sche;
             var slotsche = await _context.schedulesSlots.FindAsync(request.SchedulesSlotId);
+            var schedule = await _context.Schedules.FindAsync(slotsche.ScheduleId);
+            var doctor = await _context.Doctors.FindAsync(request.DoctorId);
             var datecheck = new DateTime();
             var fromtime = new TimeSpan();
             var totime = new TimeSpan();
             var stt = 0;
-            var scheduleId = slots.FirstOrDefault().Id;
+            var scheduleId = slots.FirstOrDefault().Id ;
             if (slots != null)
             {
                 datecheck = DateTime.Parse(slots.FirstOrDefault().CheckInDate.ToString("dd/MM/yyyy") + " 00:00:00.0000000");
@@ -69,7 +71,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     i++;
                 }
             }
-            string day = slots.FirstOrDefault().CheckInDate.ToString("dd") + request.DoctorId.ToString().Substring(0,1) + request.DoctorId.ToString().Substring(17, 18) + request.DoctorId.ToString().Substring(32, 33);
+            string day = schedule.CheckInDate.ToString("ddyy") + doctor.No;
             int count = await _context.Doctors.Where(x => x.No.Contains("DMDK" + day)).CountAsync();
             string str = "";
             if (count < 9) str = "DMDK" + day + "0000" + (count + 1);
@@ -107,14 +109,11 @@ namespace DoctorManagement.Application.Catalog.Appointment
             var rs = await _context.SaveChangesAsync();
             if (rs != 0)
             {
-                
                 slotsche.IsBooked = true;
-                var schedule = await _context.Schedules.FindAsync(slots.FirstOrDefault().Id);
                 schedule.AvailableQty = schedule.AvailableQty -1;
                 schedule.BookedQty = schedule.BookedQty +1;
                 _context.SaveChanges();
                 var user = await _context.Users.FindAsync(request.DoctorId);
-                var doctor = await _context.Doctors.FindAsync(request.DoctorId);
                 var clinic = await _context.Clinics.FindAsync(doctor.ClinicId);
                 var subdistrict = await _context.Locations.FindAsync(clinic.LocationId);
                 var district = await _context.Locations.FindAsync(subdistrict.ParentId);
@@ -290,7 +289,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 query = query.Where(x => x.a.Status == request.status);
             }
             int totalRow = await query.CountAsync();
-            query = query.OrderByDescending(x=>x.a.Status).ThenBy(x => x.sche.CheckInDate);
+            query = query.OrderByDescending(x => x.sche.CheckInDate).ThenBy(x=>x.a.Status);
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new AppointmentVm()
@@ -664,7 +663,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                           join u in _context.AppUsers on p.UserId equals u.Id
                           join slot in _context.schedulesSlots on a.SchedulesSlotId equals slot.Id
                           join sche in _context.Schedules on slot.ScheduleId equals sche.Id
-                          where sche.CreatedAt <= DateTime.Now.AddHours(-12) && a.Status == StatusAppointment.approved
+                          where sche.CheckInDate >= DateTime.Now.AddHours(12) && a.Status == StatusAppointment.approved
                           select new { a, u, ud};
             if (!string.IsNullOrEmpty(request.UserName))
             {

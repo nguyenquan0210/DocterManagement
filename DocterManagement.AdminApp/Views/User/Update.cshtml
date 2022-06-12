@@ -42,10 +42,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý tài khoản</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cập nhật tài khoản</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Chỉnh sửa tài khoản bác sĩ</h6>
 }
 @section Search{
 	<form  asp-action="Index"  method="get">
@@ -63,9 +63,9 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Cập nhật tài khoản</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            Chỉnh sửa tài khoản bác sĩ.
                         </p>
                     </div>
 

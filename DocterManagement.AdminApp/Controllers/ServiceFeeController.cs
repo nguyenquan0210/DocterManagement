@@ -53,21 +53,7 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.Years = SeletectYear(request.year);
             ViewBag.StatisticPie = JsonConvert.SerializeObject(await StatisticPie(request));
             var count = (await StatisticPie(request)).Sum(x => int.Parse(x.Value));
-            switch (count)
-            {
-                case >= 1000 and < 1000000:
-                    ViewBag.Count = count / 1000 + "K";
-                    break;
-                case >= 1000000 and < 1000000000:
-                    ViewBag.Count = count / 1000000 + "M";
-                    break;
-                case >= 1000000000:
-                    ViewBag.Count = count / 1000000000 + "B";
-                    break;
-                default:
-                    ViewBag.Count = count;
-                    break;
-            }
+            ViewBag.Count = SetCount(count);
             return View(data.Data);
         }
         public async Task<List<SelectListItem>> StatisticPie(GetAnnualServiceFeePagingRequest request)

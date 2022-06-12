@@ -42,25 +42,45 @@ namespace DoctorManagement.Application.System.Doctor
         {
             var query = from d in _context.Doctors
                         select d;
-            var doctors = await query.Select(x => new DoctorVm()
+            var doctors = new List<DoctorVm>();
+            var ratings = from r in _context.Rates select r;
+            var specialities = from s in _context.ServicesSpecialities select s;
+            foreach (var item in query.ToList())
             {
-                UserId = x.UserId,
-                Img = x.Img,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Prefix = x.Prefix,
-                GetSpecialities= x.ServicesSpecialities.Select(x=> new GetSpecialityVm()
+                var ratingdoctor = ratings.Where(x => x.Appointments.DoctorId == item.UserId);
+                var count = await ratingdoctor.CountAsync();
+                double rating = count == 0 ? 0 :(await ratingdoctor.SumAsync(x => x.Rating)) / count;
+                var clinic = await _context.Clinics.FindAsync(item.ClinicId);
+                var user = await _context.AppUsers.FindAsync(item.UserId);
+                var doctor = new DoctorVm()
                 {
-                    Id = x.SpecialityId,
-                    Title = x.Specialities.Title
-                }).ToList(),
-                GetClinic = x.ClinicId==null? new GetClinicVm() : new GetClinicVm()
-                {
-                    Id = x.ClinicId.Value,
-                    Name = x.Clinics.Name
-                }
-               
-            }).ToListAsync();
+                    UserId = item.UserId,
+                    Img = USER_CONTENT_FOLDER_NAME + "/" +  item.Img,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    Prefix = item.Prefix,
+                    Rating = rating,
+                    No = item.No,
+                    User = new UserVm()
+                    {
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber
+                    },
+                    GetSpecialities = specialities.Where(x=>x.DoctorId == item.UserId).Select(x => new GetSpecialityVm()
+                    {
+                        Id = x.SpecialityId,
+                        Title = x.Specialities.Title
+                    }).ToList(),
+                    GetClinic = clinic == null ? new GetClinicVm() : new GetClinicVm()
+                    {
+                        Id = clinic.Id,
+                        Name = clinic.Name
+                    }
+                };
+                doctors.Add(doctor);
+            }
+           
             return new ApiSuccessResult<List<DoctorVm>>(doctors);
         }
         public async Task<ApiResult<DoctorVm>> GetById(Guid id)

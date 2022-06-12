@@ -1,5 +1,7 @@
 ﻿using DoctorManagement.AdminApp.Models;
 using DoctorManagement.ApiIntegration;
+using DoctorManagement.ViewModels.System.ActiveUsers;
+using DoctorManagement.ViewModels.System.AnnualServiceFee;
 using DoctorManagement.ViewModels.System.Statistic;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +15,20 @@ namespace DoctorManagement.AdminApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IDoctorApiClient _doctorApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly IAnnualServiceFeeApiClient _annualServiceFeeApiClient;
         private readonly IUserApiClient _userApiClient;
 
 
         public HomeController(ILogger<HomeController> logger,
-            IDoctorApiClient doctorApiClient, IUserApiClient userApiClient)
+            IDoctorApiClient doctorApiClient, IUserApiClient userApiClient,
+            IStatisticApiClient statisticApiClient, IAnnualServiceFeeApiClient annualServiceFeeApiClient)
         {
             _logger = logger;
             _doctorApiClient = doctorApiClient;
             _userApiClient = userApiClient;
+            _statisticApiClient = statisticApiClient;
+            _annualServiceFeeApiClient = annualServiceFeeApiClient;
         }
 
         public async Task<IActionResult> Index()
@@ -29,22 +36,74 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.Age = JsonConvert.SerializeObject(await Statistic("doctor"));
             ViewBag.User = JsonConvert.SerializeObject(await StatisticUser());
             var count = (await _doctorApiClient.GetAllUser("")).Data.Count();
-             switch (count)
-            {
-                case >= 1000 and < 1000000:
-                    ViewBag.Count = count / 1000 + "K";
-                    break;
-                case >= 1000000 and < 1000000000:
-                    ViewBag.Count = count / 1000000 + "M";
-                    break;
-                case >= 1000000000:
-                    ViewBag.Count = count / 1000000000 + "B";
-                    break;
-                default:
-                    ViewBag.Count = count;
-                    break;
-            }
+            ViewBag.Count = SetCount(count);
+            ViewBag.ActiveUserRoleDoctor = await StatisticActiveUser("doctor");
+            ViewBag.ActiveUserRolePatient = await StatisticActiveUser("patient");
+            ViewBag.StatisticServiceFee = await StatisticServiceFee();
+            ViewBag.TopRateDoctor = (await _doctorApiClient.GetTopFavouriteDoctors()).Data.OrderByDescending(x=>x.Rating).ToList();
             return View();
+        }
+        public async Task<StatisticCountActiveUser> StatisticServiceFee()
+        {
+            var date = DateTime.Now;
+            var requeststatictic = new GetAnnualServiceFeePagingRequest()
+            {
+                month = date.ToString("MM"),
+                year = date.ToString("yyyy"),
+                status = Data.Enums.StatusAppointment.complete,
+            };
+            var userMonthNow = (await _annualServiceFeeApiClient.GetServiceFeeStatiticMonth(requeststatictic)).Sum(x => x.amount * 1000000);
+            requeststatictic.month = date.AddMonths(-1).ToString("MM");
+            var userMonthBefor = (await _annualServiceFeeApiClient.GetServiceFeeStatiticMonth(requeststatictic)).Sum(x => x.amount * 1000000);
+            var percent = 0;
+            var change = "text-danger";
+            
+            if (userMonthNow >= userMonthBefor)
+            {
+                percent = (int) ((userMonthNow - userMonthBefor) * 100 / (userMonthBefor == 0 ? 1 : userMonthBefor));
+                change = "text-success";
+            }
+            else
+            {
+                percent = (int)((userMonthBefor - userMonthNow) * 100 / (userMonthBefor == 0 ? 1 : userMonthBefor));
+            }
+            return new StatisticCountActiveUser()
+            {
+                countuserMonthNow = userMonthNow,
+                countuserMonthBefor = userMonthBefor,
+                percent = percent,
+                change = change
+            };
+        }
+        public async Task<StatisticCountActiveUser> StatisticActiveUser(string role)
+        {
+            var date = DateTime.Now;
+            var requeststatictic = new GetHistoryActivePagingRequest()
+            {
+                month = date.ToString("MM"),
+                year = date.ToString("yyyy"),
+                role = role
+            };
+            var userMonthNow = (await _statisticApiClient.GetServiceFeeStatiticMonth(requeststatictic)).Sum(x=>x.count);
+            requeststatictic.month = date.AddMonths(-1).ToString("MM");
+            var userMonthBefor = (await _statisticApiClient.GetServiceFeeStatiticMonth(requeststatictic)).Sum(x => x.count);
+            var percent = 0;
+            var change = "text-danger";
+            if(userMonthNow >= userMonthBefor)
+            {
+                percent = (userMonthNow - userMonthBefor)*100 / (userMonthBefor==0?1: userMonthBefor) ;
+                change = "text-success";
+            }
+            else
+            {
+                percent = (userMonthBefor - userMonthNow) * 100 / (userMonthBefor == 0 ? 1 : userMonthBefor);
+            }
+            return new StatisticCountActiveUser() {
+                countuserMonthNow = userMonthNow,
+                countuserMonthBefor = userMonthBefor,
+                percent = percent,
+                change = change
+            };
         }
         public async Task<List<StatisticActive>> Statistic(string role)
         {

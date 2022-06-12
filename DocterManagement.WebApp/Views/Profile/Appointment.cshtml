@@ -715,7 +715,10 @@
                                                         <div _ngcontent-serverapp-c256="" class="mt-1">
                                                             <p _ngcontent-serverapp-c256=""
                                                                 class="bg-green-50 px-2 py-1 inline-block rounded-full text-xs"
-                                                                style="color: rgb(52, 180, 31);"> @(item.Status==StatusAppointment.approved?"Đã đặt khám":
+                                                                style=" @(item.Status==StatusAppointment.approved?"color: rgb(31 85 180);":
+                                                                item.Status==StatusAppointment.cancel?"rgb(247 47 47)":
+                                                                item.Status==StatusAppointment.complete?"color: rgb(52, 180, 31);":"rgb(236 156 31)")"> 
+                                                                @(item.Status==StatusAppointment.approved?"Đã đặt khám":
                                                                 item.Status==StatusAppointment.cancel?"Đã hủy":
                                                                 item.Status==StatusAppointment.complete?"Đã khám bệnh":"Đã quá hạn")</p>
                                                         </div>
@@ -753,7 +756,9 @@
                                             class="text-sm font-normal text-gray-700"></span>
                                     </div>
                                     <div _ngcontent-serverapp-c256="" class="flex items-center"
-                                        style="color: rgb(52, 180, 31);"><svg _ngcontent-serverApp-c256=""
+                                        style="@(Model.Status==StatusAppointment.approved?"color: rgb(31 85 180);":
+                                                                Model.Status==StatusAppointment.cancel?"rgb(247 47 47)":
+                                                                Model.Status==StatusAppointment.complete?"color: rgb(52, 180, 31);":"rgb(236 156 31)")"><svg _ngcontent-serverApp-c256=""
                                             width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path _ngcontent-serverApp-c256=""
@@ -767,7 +772,9 @@
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                 stroke-linejoin="round"></path>
                                         </svg>
-                                        <p _ngcontent-serverapp-c256="" class="ml-1">@(Model.Status==StatusAppointment.approved?"Đã đặt khám":
+                                        <p _ngcontent-serverapp-c256="" class="ml-1" style="@(Model.Status==StatusAppointment.approved?"color: rgb(31 85 180);":
+                                                                Model.Status==StatusAppointment.cancel?"rgb(247 47 47)":
+                                                                Model.Status==StatusAppointment.complete?"color: rgb(52, 180, 31);":"rgb(236 156 31)")">@(Model.Status==StatusAppointment.approved?"Đã đặt khám":
                                             Model.Status==StatusAppointment.cancel?"Đã hủy":
                                             Model.Status==StatusAppointment.complete?"Đã khám bệnh":"Đã quá hạn")</p>
                                     </div>
@@ -1263,104 +1270,104 @@
             border-color: #2196f3;
             color: #03a9f4;
         }
- .tRi-ot {
-    display: flex;
-    margin: 1.75rem 0 0.625rem 1rem;
-}       
-.r6FH3x {
-    width: 2.5rem;
-    text-align: center;
-    margin-right: 0.625rem;
-    padding-top: 1.375rem;
-}
-.shopee-avatar {
-    display: inline-block;
-    width: 1.875rem;
-    height: 1.875rem;
-    position: relative;
-    border-radius: 50%;
-    border: 0.0625rem solid rgba(0,0,0,.09);
-    box-sizing: border-box;
-}
+         .tRi-ot {
+            display: flex;
+            margin: 1.75rem 0 0.625rem 1rem;
+        }       
+        .r6FH3x {
+            width: 2.5rem;
+            text-align: center;
+            margin-right: 0.625rem;
+            padding-top: 1.375rem;
+        }
+        .shopee-avatar {
+            display: inline-block;
+            width: 1.875rem;
+            height: 1.875rem;
+            position: relative;
+            border-radius: 50%;
+            border: 0.0625rem solid rgba(0,0,0,.09);
+            box-sizing: border-box;
+        }
 
-.shopee-avatar__placeholder {
-    width: 100%;
-    position: relative;
-    padding-top: 100%;
-    background-color: #f5f5f5;
-    border-radius: 50%;
-    overflow: hidden;
-}
-.shopee-avatar__img, .shopee-avatar__img-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-}
+        .shopee-avatar__placeholder {
+            width: 100%;
+            position: relative;
+            padding-top: 100%;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .shopee-avatar__img, .shopee-avatar__img-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
 
-.DfB\+wQ {
-    flex: 1;
-    border-top: 1px solid rgba(0,0,0,.05);
-    padding-top: 1.375rem;
-}
-.wPeQVR {
-    font-size: .75rem;
-    line-height: .875rem;
-    color: #222;
-    margin-bottom: 0.375rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-decoration: none;
-}
-.rating-stars__container {
-    display: flex;
-}
-.rating-stars__star {
-    stroke: currentColor;
-}
-.ytO7le {
-    position: relative;
-}
-.rating-stars__container>div {
-    margin: 0 0.125rem;
-}
-.DfB\+wQ .rating-stars__container>div {
-    margin: 0 0.125rem 0 0;
-}
-._9MGQf1 {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-svg:not(:root) {
-    overflow: hidden;
-}
-.iSbtQg {
-    margin-top: 0.9375rem;
-}
-.BUWNCB {
-    margin-bottom: 0.9375rem;
-}
-.Ixoq95 {
-    border: 1px solid rgba(0,0,0,.09);
-    border-radius: 0.625rem;
-    padding: 0.25rem 0.625rem;
-    color: #929292;
-    font-size: .75rem;
-    margin-right: 0.625rem;
-    word-break: break-word;
-    display: inline-block;
-}
-.qyTV2S {
-    margin-top: 0.4375rem;
-    color: #bbb;
-    font-size: .75rem;
-}
+        .DfB\+wQ {
+            flex: 1;
+            border-top: 1px solid rgba(0,0,0,.05);
+            padding-top: 1.375rem;
+        }
+        .wPeQVR {
+            font-size: .75rem;
+            line-height: .875rem;
+            color: #222;
+            margin-bottom: 0.375rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .rating-stars__container {
+            display: flex;
+        }
+        .rating-stars__star {
+            stroke: currentColor;
+        }
+        .ytO7le {
+            position: relative;
+        }
+        .rating-stars__container>div {
+            margin: 0 0.125rem;
+        }
+        .DfB\+wQ .rating-stars__container>div {
+            margin: 0 0.125rem 0 0;
+        }
+        ._9MGQf1 {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        svg:not(:root) {
+            overflow: hidden;
+        }
+        .iSbtQg {
+            margin-top: 0.9375rem;
+        }
+        .BUWNCB {
+            margin-bottom: 0.9375rem;
+        }
+        .Ixoq95 {
+            border: 1px solid rgba(0,0,0,.09);
+            border-radius: 0.625rem;
+            padding: 0.25rem 0.625rem;
+            color: #929292;
+            font-size: .75rem;
+            margin-right: 0.625rem;
+            word-break: break-word;
+            display: inline-block;
+        }
+        .qyTV2S {
+            margin-top: 0.4375rem;
+            color: #bbb;
+            font-size: .75rem;
+        }
     </style>
     <div  class="cdk-global-overlay-wrapper  "  dir="ltr">
       <div id="cdk-overlay-form" class="cdk-overlay-pane hiden-btn" style="position: static;">
@@ -1708,116 +1715,35 @@ svg:not(:root) {
                                     <div class="DfB+wQ">
                                         <div class="wPeQVR">@Model.Patient.Name</div>
                                         <div class="rating-stars__container">
-                                            <div class="rating-stars__star ytO7le" style="width: 14px; height: 14px;"><svg viewBox="0 0 30 30"
-                                                    class="_9MGQf1">
-                                                    <defs>
-                                                        <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
-                                                            <stop offset="0%" stop-color="#FFD211"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
-                                                        d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
-                                                    </path>
-                                                </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width: 100%;">
-                                                    <defs>
-                                                        <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
-                                                            <stop offset="0%" stop-color="#FFCA11"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="url(#star__solid)" fill-rule="evenodd"
-                                                        d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
-                                                    </path>
-                                                </svg></div>
-                                            <div class="rating-stars__star ytO7le" style="width: 14px; height: 14px;"><svg viewBox="0 0 30 30"
-                                                    class="_9MGQf1">
-                                                    <defs>
-                                                        <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
-                                                            <stop offset="0%" stop-color="#FFD211"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
-                                                        d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
-                                                    </path>
-                                                </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width: 100%;">
-                                                    <defs>
-                                                        <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
-                                                            <stop offset="0%" stop-color="#FFCA11"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="url(#star__solid)" fill-rule="evenodd"
-                                                        d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
-                                                    </path>
-                                                </svg></div>
-                                            <div class="rating-stars__star ytO7le" style="width: 14px; height: 14px;"><svg viewBox="0 0 30 30"
-                                                    class="_9MGQf1">
-                                                    <defs>
-                                                        <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
-                                                            <stop offset="0%" stop-color="#FFD211"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
-                                                        d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
-                                                    </path>
-                                                </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width: 100%;">
-                                                    <defs>
-                                                        <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
-                                                            <stop offset="0%" stop-color="#FFCA11"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="url(#star__solid)" fill-rule="evenodd"
-                                                        d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
-                                                    </path>
-                                                </svg></div>
-                                            <div class="rating-stars__star ytO7le" style="width: 14px; height: 14px;"><svg viewBox="0 0 30 30"
-                                                    class="_9MGQf1">
-                                                    <defs>
-                                                        <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
-                                                            <stop offset="0%" stop-color="#FFD211"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
-                                                        d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
-                                                    </path>
-                                                </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width: 100%;">
-                                                    <defs>
-                                                        <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
-                                                            <stop offset="0%" stop-color="#FFCA11"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="url(#star__solid)" fill-rule="evenodd"
-                                                        d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
-                                                    </path>
-                                                </svg></div>
-                                            <div class="rating-stars__star ytO7le" style="width: 14px; height: 14px;"><svg viewBox="0 0 30 30"
-                                                    class="_9MGQf1">
-                                                    <defs>
-                                                        <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
-                                                            <stop offset="0%" stop-color="#FFD211"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="none" fill-rule="evenodd" stroke="url(#star__hollow)" stroke-width="2"
-                                                        d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
-                                                    </path>
-                                                </svg><svg viewBox="0 0 30 30" class="_9MGQf1" style="width: 100%;">
-                                                    <defs>
-                                                        <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
-                                                            <stop offset="0%" stop-color="#FFCA11"></stop>
-                                                            <stop offset="100%" stop-color="#FFAD27"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path fill="url(#star__solid)" fill-rule="evenodd"
-                                                        d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
-                                                    </path>
-                                                </svg></div>
+                                            @for(int r = 0; r <= 4;r++){
+                                                <div class="rating-stars__star ytO7le" style="width: 14px; height: 14px;">
+                                                    <svg viewBox="0 0 30 30"
+                                                        class="_9MGQf1">
+                                                        <defs>
+                                                            <linearGradient id="star__hollow" x1="50%" x2="50%" y1="0%" y2="99.0177926%">
+                                                                <stop offset="0%" stop-color="#FFD211"></stop>
+                                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <path fill="none" fill-rule="evenodd" stroke="#ffbb1d" stroke-width="2"
+                                                            d="M23.226809 28.390899l-1.543364-9.5505903 6.600997-6.8291523-9.116272-1.4059447-4.01304-8.63019038-4.013041 8.63019038-9.116271 1.4059447 6.600997 6.8291523-1.543364 9.5505903 8.071679-4.5038874 8.071679 4.5038874z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg viewBox="0 0 30 30" class="_9MGQf1" style="width:@(r<Model.Rate.Rating?"100%":"0");">
+                                                        <defs>
+                                                            <linearGradient id="star__solid" x1="50%" x2="50%" y1="0%" y2="100%">
+                                                                <stop offset="0%" stop-color="#FFCA11"></stop>
+                                                                <stop offset="100%" stop-color="#FFAD27"></stop>
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <path fill="#ffbb1d" stroke="#ffbb1d" fill-rule="evenodd"
+                                                            d="M14.9988798 25.032153l-8.522024 4.7551739c-.4785069.2670004-.7939037.0347448-.7072938-.5012115l1.6339124-10.1109185-6.8944622-7.1327607c-.3871203-.4005006-.2499178-.7947292.2865507-.8774654l9.5090982-1.46652789L14.5740199.51703028c.2346436-.50460972.6146928-.50543408.8497197 0l4.2693588 9.18141263 9.5090986 1.46652789c.545377.0841102.680337.4700675.28655.8774654l-6.894462 7.1327607 1.633912 10.1109185c.08788.5438118-.232337.7662309-.707293.5012115l-8.5220242-4.7551739z">
+                                                        </path>
+                                                    </svg>
+                                                </div>
+
+                                            }
+                                            
                                         </div>
                                         <div class="iSbtQg">
                                             <div class="BUWNCB">

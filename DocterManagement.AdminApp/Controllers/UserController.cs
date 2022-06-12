@@ -47,28 +47,8 @@ namespace DoctorManagement.AdminApp.Controllers
                 year = year,
                 role = rolename
             };
-            if (check == "year" || check == null)
-            {
-                requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
-                requeststatictic.month = null;
-                requeststatictic.day = null;
-
-                ViewBag.Statitic = JsonConvert.SerializeObject(await _statisticApiClient.GetServiceFeeStatiticYear(requeststatictic));
-            }
-            else if (check == "month")
-            {
-                requeststatictic.day = null;
-                requeststatictic.month = month == null ? DateTime.Now.ToString("MM") : month;
-                requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
-                ViewBag.Statitic = JsonConvert.SerializeObject(await _statisticApiClient.GetServiceFeeStatiticMonth(requeststatictic));
-            }
-            else
-            {
-                requeststatictic.day = day == null ? DateTime.Now.ToString("dd") : day;
-                requeststatictic.month = month == null ? DateTime.Now.ToString("MM") : month;
-                requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
-                ViewBag.Statitic = JsonConvert.SerializeObject(await _statisticApiClient.GetServiceFeeStatiticDay(requeststatictic));
-            }
+            ViewBag.Statitic = JsonConvert.SerializeObject(await Statistic(requeststatictic,day,month,year,check));
+           
             ViewBag.Keyword = keyword;
             ViewBag.Day = requeststatictic.day == null ? DateTime.Now.ToString("dd") : requeststatictic.day;
             ViewBag.Month = requeststatictic.month == null ? DateTime.Now.ToString("MM") : requeststatictic.month;
@@ -86,6 +66,30 @@ namespace DoctorManagement.AdminApp.Controllers
             }
             return View(data.Data);
         }
+        public async Task<List<StatisticActive>> Statistic(GetHistoryActivePagingRequest requeststatictic, string? day, string? month, string? year, string? check)
+        {
+            switch (check)
+            {
+                case "year" or null:
+                    requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    requeststatictic.month = null;
+                    requeststatictic.day = null;
+                    return await _statisticApiClient.GetServiceFeeStatiticYear(requeststatictic);
+
+                case "month":
+                    requeststatictic.day = null;
+                    requeststatictic.month = month == null ? DateTime.Now.ToString("MM") : month;
+                    requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    return await _statisticApiClient.GetServiceFeeStatiticMonth(requeststatictic);
+
+                default:
+                    requeststatictic.day = day == null ? DateTime.Now.ToString("dd") : day;
+                    requeststatictic.month = month == null ? DateTime.Now.ToString("MM") : month;
+                    requeststatictic.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    return await _statisticApiClient.GetServiceFeeStatiticDay(requeststatictic);
+            }
+        }
+
         public List<SelectListItem> SeletectRole(string? str)
         {
             List<SelectListItem> role = new List<SelectListItem>()

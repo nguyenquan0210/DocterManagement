@@ -27,13 +27,13 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách tài khoản</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark">Quản lý thu phí dịch vụ</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách thu phí dịch vụ</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Danh sách nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Danh sách thu phí dịch vụ</h6>
 }
 @section Search{
-	<form asp-controller="User" asp-action="Index"  method="get">
+	<form  asp-action="ServiceFeePaging"  method="get">
 		<div class="input-group">
 			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
 			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
@@ -53,10 +53,9 @@
 				<div class="card-header pb-0">
 					<div class="d-lg-flex">
 						<div>
-							<h5 class="mb-0">Tất cả thành phố</h5>
+							<h5 class="mb-0">Danh sách thu phí dịch vụ</h5>
 							<p class="text-sm">
 								<i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
-								<span class="font-weight-bold">tăng thêm 4%</span> vào năm 2021
 							</p>
 						</div>
 						<div class="col-7 ms-auto my-auto mt-lg-0">
@@ -154,9 +153,9 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả tài khoản</h5>
+                            <h5 class="mb-0">Danh sách đóng phí</h5>
                             <p class="text-sm mb-0">
-                                Chỉ có người quảng trị mới quản lý tất cả tài khoản.
+                                Phí dịch vụ được tạo mới theo năm.
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4 col-4">
@@ -431,21 +430,13 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
 
     <script>
-
         var menu_bd = document.getElementById("menu_acc");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_acc");
-        a_xbd.classList.add("active");
         var a_acc = document.getElementById("a_service");
         a_acc.classList.add("active");
         var dashboardsExamples = document.getElementById("QUANLYTAIKHOAN");
         dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("quanlynhanvien");
-        usersExample.classList.add("show");
-
-
-
     </script>
 
     <script src="~/js/plugins/datatables.js"></script>
