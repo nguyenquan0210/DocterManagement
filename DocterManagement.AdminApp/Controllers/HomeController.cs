@@ -82,7 +82,7 @@ namespace DoctorManagement.AdminApp.Controllers
             {
                 month = date.ToString("MM"),
                 year = date.ToString("yyyy"),
-                role = role
+                role = role,
             };
             var userMonthNow = (await _statisticApiClient.GetServiceFeeStatiticMonth(requeststatictic)).Sum(x=>x.count);
             requeststatictic.month = date.AddMonths(-1).ToString("MM");

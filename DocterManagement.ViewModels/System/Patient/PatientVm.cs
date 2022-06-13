@@ -36,5 +36,6 @@ namespace DoctorManagement.ViewModels.System.Patient
         public Guid EthnicId { get; set; }
         public string FullAddress { get; set; }
         public string RelativeEmail { get; set; }
+        public int CountBooking { get; set; }
     }
 }

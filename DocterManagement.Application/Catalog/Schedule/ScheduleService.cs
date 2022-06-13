@@ -189,8 +189,9 @@ namespace DoctorManagement.Application.Catalog.Schedule
             {
                 query = query.Where(x => x.CheckInDate.ToShortDateString().Contains(request.Keyword));
             }
-            foreach(var item in query)
+            foreach(var item in query.Where(x=>x.IsDeleted==false))
             {
+                var date = DateTime.Parse(item.CheckInDate.ToShortDateString() +" " + item.FromTime);
                 if(item.CheckInDate < DateTime.Now.AddHours(-1))
                 {
                     var addstatus = await _context.Schedules.FindAsync(item.Id);

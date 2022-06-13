@@ -89,7 +89,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 DoctorId = request.DoctorId,
                 Note = request.Note,
                 IsDoctor = request.IsDoctor,
-                Stt = stt + 1,
+                Stt = stt ,
                 CancelDate = new DateTime()
             };
             if (request.formFiles != null)
@@ -288,6 +288,28 @@ namespace DoctorManagement.Application.Catalog.Appointment
             {
                 query = query.Where(x => x.a.Status == request.status);
             }
+            if (request.PatientId != null)
+            {
+                query = query.Where(x => x.p.PatientId == request.PatientId);
+            }
+            if (!string.IsNullOrEmpty(request.day))
+            {
+                var fromdate = DateTime.Parse(request.day + "/" + request.month + "/" + request.year);
+                var todate = fromdate.AddDays(1);
+                query = query.Where(x => x.sche.CheckInDate >= fromdate && x.sche.CheckInDate<= todate);
+            }
+            else if (!string.IsNullOrEmpty(request.month))
+            {
+                var fromdate = DateTime.Parse("01/" + request.month + "/" + request.year);
+                var todate = fromdate.AddMonths(1);
+                query = query.Where(x => x.sche.CheckInDate >= fromdate && x.sche.CheckInDate <= todate);
+            }
+            else
+            {
+                var fromdate = DateTime.Parse("01/01/" + request.year);
+                var todate = fromdate.AddYears(1);
+                query = query.Where(x => x.sche.CheckInDate >= fromdate && x.sche.CheckInDate <= todate);
+            }
             int totalRow = await query.CountAsync();
             query = query.OrderByDescending(x => x.sche.CheckInDate).ThenBy(x=>x.a.Status);
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
@@ -368,6 +390,63 @@ namespace DoctorManagement.Application.Catalog.Appointment
             return new ApiSuccessResult<PagedResult<AppointmentVm>> (pagedResult);
         }
 
+        public async Task<ApiResult<PagedResult<PatientVm>>> GetAllPatient(GetAppointmentPagingRequest request)
+        {
+
+            var query = from a in _context.Appointments
+                        join d in _context.Doctors on a.DoctorId equals d.UserId
+                        join ud in _context.AppUsers on d.UserId equals ud.Id
+                        join p in _context.Patients on a.PatientId equals p.PatientId
+                        join u in _context.AppUsers on p.UserId equals u.Id
+                        select new { a, p,  u,ud,d};
+
+            //2. filter
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.a.No.Contains(request.Keyword) || x.p.Name.Contains(request.Keyword) || x.p.RelativePhone.Contains(request.Keyword) );
+            }
+            if (!string.IsNullOrEmpty(request.UserNameDoctor))
+            {
+                query = query.Where(x => x.ud.UserName == request.UserNameDoctor);
+            }
+            var checkdtring = "";
+            var patients = new List<PatientVm>();
+            foreach (var item in query.ToList())
+            {
+                if (!checkdtring.Contains(item.p.PatientId.ToString()))
+                {
+                    var patient = new PatientVm()
+                    {
+                        Id = item.p.PatientId,
+                        Name = item.p.Name,
+                        No = item.p.No,
+                        Address = item.p.Address,
+                        Dob = item.p.Dob,
+                        FullAddress = item.p.FullAddress,
+                        Gender = item.p.Gender,
+                        Identitycard = item.p.Identitycard,
+                        RelativeName = item.p.RelativeName,
+                        RelativePhone = item.p.RelativePhone,
+                        CountBooking = query.Where(x => x.p.PatientId == item.p.PatientId && x.a.Status == StatusAppointment.complete).Count(),
+                    };
+                    patients.Add(patient);
+                }
+                checkdtring = checkdtring + item.p.PatientId + ", ";
+            }
+            int totalRow = patients.Count();
+            var data = patients.OrderByDescending(x => x.CountBooking).Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToList();
+
+            var pagedResult = new PagedResult<PatientVm>()
+            {
+                TotalRecords = totalRow,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex,
+                Items = data
+            };
+            return new ApiSuccessResult<PagedResult<PatientVm>>(pagedResult);
+        }
         public async Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPagingRating(GetAppointmentPagingRequest request)
         {
 

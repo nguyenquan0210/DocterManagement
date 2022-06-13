@@ -350,6 +350,8 @@ namespace DoctorManagement.Application.System.Users
                 },
                 DoctorVm = doctor != null ? new DoctorVm()
                 {
+                    FullAddress = fulladdreess,
+                    FullName = doctor.Prefix + " " + doctor.LastName + " " + doctor.FirstName,
                     UserId =doctor.UserId,
                     FirstName = doctor.FirstName,
                     Intro = doctor.Intro,
@@ -386,6 +388,7 @@ namespace DoctorManagement.Application.System.Users
                     ,
                 PatientVm = patient != null ? new PatientVm()
                 {
+                    FullAddress = fulladdreess,
                     UserId = patient.UserId,
                     Address = patient.Address,
                     Img = patient.Img,
@@ -471,6 +474,8 @@ namespace DoctorManagement.Application.System.Users
                     Address = doctor.Address,
                     Img = doctor.Img,
                     No = doctor.No,
+                    FullAddress = fulladdreess,
+                    FullName = doctor.Prefix + " " +doctor.LastName+" " + doctor.FirstName,
                     Services = service.Select(s => new ServiceVm()
                     {
                         Id = s.Id,
@@ -503,6 +508,7 @@ namespace DoctorManagement.Application.System.Users
                 {
                     UserId = patient.UserId,
                     Address = patient.Address,
+                    FullAddress = fulladdreess,
                     Img = patient.Img,
                     No = patient.No,
                     RelativeName = patient.RelativeName,
@@ -772,7 +778,7 @@ namespace DoctorManagement.Application.System.Users
                         LastName = request.LastName,
                         Slug = request.Slug+"-"+str,
                         Booking = false,
-                        IsPrimary = false,
+                        IsPrimary = request.IsPrimary,
                         MapUrl = request.MapUrl,
                         LocationId = request.SubDistrictId,
                         ServicesSpecialities = new List<ServicesSpecialities>(),
@@ -1017,14 +1023,6 @@ namespace DoctorManagement.Application.System.Users
             {
                 if (doctor != null)
                 {
-                    /*if (request.ThumbnailImage != null)
-                    {
-                        if (doctor.Img != null && doctor.Img != "user_default.png")
-                        {
-                            await _storageService.DeleteFileAsyncs(doctor.Img, USER_CONTENT_FOLDER_NAME);
-                        }
-                        doctor.Img = await this.SaveFile(request.ThumbnailImage, USER_CONTENT_FOLDER_NAME);
-                    }*/
                     doctor.Address = request.Address;
                     doctor.ClinicId = request.ClinicId;
                     doctor.ServicesSpecialities = new List<ServicesSpecialities>();
@@ -1063,32 +1061,7 @@ namespace DoctorManagement.Application.System.Users
                         spe_service_isdelete.IsDelete = true;
                     }
                     var i = 0;
-                   /* var remove_gallery = new Galleries();
-                    doctor.Galleries = new List<Galleries>();*/
-                    /*if (request.Galleries != null)
-                    {
-                        *//*var remove_galleries = _context.Galleries.Where(x => x.DoctorId == doctor.UserId).ToList();
-                        if (remove_galleries.Count() > 0)
-                        {
-                            foreach (var item in remove_galleries)
-                            {
-                                remove_gallery = await _context.Galleries.FindAsync(item.Id);
-                                await _storageService.DeleteFileAsyncs(remove_gallery.Img, GALLERY_CONTENT_FOLDER_NAME);
-                                _context.Galleries.Remove(remove_gallery);
-                            }
-                        }*//*
-                        foreach (var file in request.Galleries)
-                        {
-                            var image = new Galleries()
-                            {
-                                DoctorId = doctor.UserId,
-                                Img = await SaveFile(file, GALLERY_CONTENT_FOLDER_NAME),
-                                SortOrder = i,
-                            };
-                            doctor.Galleries.Add(image);
-                            i++;
-                        }
-                    }*/
+                  
                     doctor.Intro = WebUtility.HtmlDecode(request.Description);
                     doctor.Prizes = WebUtility.HtmlDecode(request.Prizes);
                     doctor.Note = WebUtility.HtmlDecode(request.Note);

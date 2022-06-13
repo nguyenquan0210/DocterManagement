@@ -2,6 +2,7 @@
 using DoctorManagement.Data.Entities;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Patient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -95,6 +96,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             await _appointmentService.AddExpired(request);
             var user = await _appointmentService.GetAllPaging(request);
+            return Ok(user);
+        }
+        /// <summary>
+        /// Lấy danh sách đặt khám phân trang
+        /// </summary>
+        /// 
+        [HttpGet("paging-patient")]
+        public async Task<ActionResult<ApiResult<PagedResult<PatientVm>>>> GetAllPatient([FromQuery] GetAppointmentPagingRequest request)
+        {
+            var user = await _appointmentService.GetAllPatient(request);
             return Ok(user);
         }
         /// <summary>

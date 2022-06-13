@@ -34,7 +34,7 @@
 	<li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý phòng khám</a></li>
 	<li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết phòng khám</li>
 </ol>
-<h6 class="font-weight-bolder mb-0">Chi tiết phòng khám, các bác sĩ chuyên khoa liên quan</h6>
+<h6 class="font-weight-bolder mb-0">Chi tiết phòng khám</h6>
 }
 @section Search{
 <form asp-action="Index" method="get">
@@ -128,41 +128,35 @@
 									<i class="fa fa-star-o" aria-hidden="true"></i>								
 								}								
 							}																
-							@*<i class="fas fa-star" aria-hidden="true"></i>
-							<i class="fas fa-star" aria-hidden="true"></i>
-							<i class="fas fa-star" aria-hidden="true"></i>
-							<i class="fas fa-star" aria-hidden="true"></i>
-							<i class="fas fa-star-half-alt" aria-hidden="true"></i>*@
+							
 						</div>
 						<br>
-						@*<h6 class="mb-0 mt-3">Price</h6>
-						<h5>$1,419</h5>*@
+						
 						<span class="badge   @(Model.Status == Status.Active ? "badge-success" : Model.Status == Status.InActive ? "badge-danger": "badge-warning ")">
 							@(Model.Status == Status.Active ? "Đang hoạt động" : Model.Status == Status.InActive ? "Tạp dừng hoạt động": "Ngừng hoạt động")
 						</span>
 						<br>
-						<label class="mt-4">Mô tả</label>
-						<p class="form-control">
-									@Model.Description
-						</p>
-						@*<ul>
-							<li>The most beautiful curves of this swivel stool adds an elegant touch to any environment</li>
-							<li>Memory swivel seat returns to original seat position</li>
-							<li>Comfortable integrated layered chair seat cushion design</li>
-							<li>Fully assembled! No assembly required</li>
-						</ul>*@
+					
 						<div class="row mt-4">
 							<div class="col-lg-12 mt-lg-0 mt-2">
 								<label>Địa chỉ</label>
 								<p class="form-control">
-									@Model.Address
+									@Model.FullAddress
 								</p>
 							</div>
 							
 						</div>
+						<label class="mt-4">Ghi chú</label>
+						<div class="form-control">
+									@Html.Raw(Model.Note)
+						</div>
+						<label class="mt-4">Mô tả</label>
+						<div class="form-control">
+									@Html.Raw(Model.Description)
+						</div>
 						<div class="row mt-4">
 							<div class="col-lg-5">
-								<a class="btn bg-gradient-primary mb-0 mt-lg-auto w-100" asp-action="Update" asp-route-userName="@User.Identity.Name">chỉnh sửa</a>
+								<a class="btn bg-gradient-primary mb-0 mt-lg-auto w-100" asp-action="Update">chỉnh sửa</a>
 							</div>
 						</div>
 					</div>
@@ -174,12 +168,12 @@
 							<table class="table align-items-center mb-0">
 								<thead>
 									<tr>
+										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
 										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bác sĩ</th>
 										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">E-mail</th>
 										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Điện thoại</th>
 										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Đánh giá</th>
 										
-										<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -188,6 +182,9 @@
 											foreach(var item in Model.DoctorVms)
 											{
 											<tr>
+												<td class="align-middle ">
+													<span class="text-secondary text-sm">@item.No</span>
+												</td>
 												<td>
 													<div class="d-flex px-2 py-1">
 														<div>
@@ -231,9 +228,6 @@
 													</div>
 												</td>
 												
-												<td class="align-middle text-center">
-													<span class="text-secondary text-sm">@item.No</span>
-												</td>
 											</tr>
 											}
 										}

@@ -46,8 +46,12 @@ namespace DoctorManagement.Application.Catalog.Servicce
             int check = 0;
             if (Services == null) return new ApiSuccessResult<int>(check);
 
-            Services.IsDeleted = true;
-            check = 2;
+            if (Services.IsDeleted == false)
+            {
+                Services.IsDeleted = true;
+                check = 2;
+
+            }
 
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check);

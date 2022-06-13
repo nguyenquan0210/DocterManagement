@@ -42,10 +42,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="DetailtDoctor">Thông tin bác sĩ</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cập nhật thông tin</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Chỉnh sửa thông tin bác sĩ</h6>
 }
 @section Search{
 	<form asp-controller="User" asp-action="Index"  method="get">
@@ -63,9 +63,9 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Cập nhật bác sĩ</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            
                         </p>
                     </div>
 
@@ -322,7 +322,7 @@
                             @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
                         }
                     
-                      <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                      <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Sửa</button>
                 </div>
                 </div>
            </form>
@@ -608,14 +608,10 @@
         var menu_bd = document.getElementById("menu_acc");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_cteacc");
+        var a_xbd = document.getElementById("a_acc");
         a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_accc");
-        a_acc.classList.add("active");
         var dashboardsExamples = document.getElementById("QUANLYTAIKHOAN");
         dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("quanlynhanvien");
-        usersExample.classList.add("show");
     </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
     <script>

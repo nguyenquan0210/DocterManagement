@@ -149,7 +149,7 @@
                     </div>
                    
                    
-                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                    <a asp-action="Update" asp-route-id="@Model.Id"  class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Chỉnh sửa</a>
                 </div>
                 </div>
            
@@ -159,3 +159,11 @@
     </div>
    
 </div>
+@section jsFooter{
+    <script>
+        var menu_bd = document.getElementById("menu-post");
+        menu_bd.classList.add("active");
+        menu_bd.classList.remove("collapsed");
+        
+    </script>
+}

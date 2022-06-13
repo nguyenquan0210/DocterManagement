@@ -23,9 +23,9 @@ namespace DoctorManagement.DoctorApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Update(string userName)
+        public async Task<IActionResult> Update()
         {
-            var user = await _userApiClient.GetByUserName(userName);
+            var user = await _userApiClient.GetByUserName(User.Identity.Name);
             var result = await _clinicApiClient.GetById(user.Data.DoctorVm.GetClinic.Id);
             //var doctor = await _ClinicApiClient.Get
             if (result.IsSuccessed)
@@ -88,6 +88,7 @@ namespace DoctorManagement.DoctorApp.Controllers
         public async Task<IActionResult> Detailt()
         {
             var user = await _userApiClient.GetByUserName(User.Identity.Name);
+            if(user.Data.DoctorVm.IsPrimary == false) return RedirectToAction("Error", "Home");
             var result = await _clinicApiClient.GetById(user.Data.DoctorVm.GetClinic.Id);
             if (result.IsSuccessed)
             {

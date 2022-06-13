@@ -14,5 +14,9 @@ namespace DoctorManagement.ViewModels.Catalog.Appointment
         public string? UserName { get; set; }
         public string? UserNameDoctor { get; set; }
         public StatusAppointment? status { get; set; }
+        public Guid? PatientId { get; set; }
+        public string? day { get; set; }
+        public string? month { get; set; }
+        public string? year { get; set; }
     }
 }

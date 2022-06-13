@@ -20,19 +20,21 @@ namespace DoctorManagement.DoctorApp.Controllers
             _userApiClient = userApiClient;
             _masterDataApiClient = masterDataApiClient;
         }
-        public async Task<IActionResult> Index(string keyword,  int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, Guid? topicId,  int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetPostPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                Usename = User.Identity.Name
+                Usename = User.Identity.Name,
+                TopicId = topicId
             };
            
             var data = await _postApiClient.GetAllPaging(request);
             ViewBag.Keyword = keyword;
-
+            ViewBag.Type = topicId;
+            ViewBag.Types = await SeletectType(topicId);
             return View(data.Data);
 
         }
@@ -57,7 +59,22 @@ namespace DoctorManagement.DoctorApp.Controllers
             }
             return View(request);
         }
+        public async Task<List<SelectListItem>> SeletectType(Guid? id)
+        {
+            var rs = (await _masterDataApiClient.GetAllMainMenu()).Data.Where(x => x.Type == "Topic" || x.Type == "Category" || x.Type == "Categoryfeature");
+            var select = rs.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = id == x.Id
+            }).ToList();
+            select.Add(new SelectListItem() { Text = "Tất cả",
+                Value = "",
+                Selected = id.ToString() == ""
+            });
+            return select;
 
+        }
         public async Task<List<SelectListItem>> SeletectTypeMenu(Guid? id)
         {
             var rs = (await _masterDataApiClient.GetAllMainMenu()).Data.Where(x => x.Type == "Topic"|| x.Type == "Category" || x.Type == "Categoryfeature");

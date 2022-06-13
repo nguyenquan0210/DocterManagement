@@ -32,5 +32,6 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
 
         public List<ImageClinicVm>? Images { get; set; }
         public string? Note { get; set; }
+        public string MapUrl { get; set; }
     }
 }

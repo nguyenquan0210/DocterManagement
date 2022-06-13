@@ -140,7 +140,7 @@ namespace DoctorManagement.DoctorApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> Update(Guid id)
+        public async Task<IActionResult> Update()
         {
             var result = await _userApiClient.GetByUserName(User.Identity.Name);
             if (result.IsSuccessed)
@@ -243,7 +243,7 @@ namespace DoctorManagement.DoctorApp.Controllers
                     return RedirectToAction("DetailtDoctor", new { userName = User.Identity.Name});
                 }
 
-                ModelState.AddModelError("", result.Message);
+               
                 return View(request);
         }
         [HttpGet]
@@ -283,9 +283,9 @@ namespace DoctorManagement.DoctorApp.Controllers
         }
        
         [HttpGet]
-        public async Task<IActionResult> DetailtDoctor(string userName)
+        public async Task<IActionResult> DetailtDoctor()
         {
-            var result = await _userApiClient.GetByUserName(userName);
+            var result = await _userApiClient.GetByUserName(User.Identity.Name);
             if (result.IsSuccessed)
             {
                 var user = result.Data;
@@ -293,19 +293,8 @@ namespace DoctorManagement.DoctorApp.Controllers
                 ViewBag.Gender = user.Gender == Gender.Male ? "Nam" : "Nữ";
                 ViewBag.Dob = user.Dob.ToShortDateString();
                 ViewBag.Status = user.Status == Status.NotActivate ? "Ngừng hoạt động" : user.Status == Status.Active ? "Hoạt động" : "không hoạt động";
-                var updateRequest = new UserVm()
-                {
-                    Email = user.Email,
-                    Name = user.Name,
-                    PhoneNumber = user.PhoneNumber,
-                    Id = user.Id,
-                    Address = user.Address,
-                    Img = user.Img,
-                    UserName = user.UserName,
-                    GetRole = user.GetRole,
-                    DoctorVm = user.DoctorVm,
-                };
-                return View(updateRequest);
+               
+                return View(user);
             }
             return RedirectToAction("Error", "Home");
         }

@@ -46,10 +46,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý phòng khám</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cập nhật phòng khám</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Chỉnh sửa phòng khám</h6>
 }
 
 
@@ -61,21 +61,18 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Cập nhật phòng khám</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            Chỉnh sửa phòng khám.
                         </p>
                     </div>
 
                     @if (TempData["AlertMessage"] != null)
                     {
-
                         <div id="AlertBox" data-notify="container" class="col-xs-12 col-sm-12 alert @TempData["AlertType"] alert-with-icon hide1" role="alert" data-notify-position="top-center" style="">
-
                             <span data-notify="title"></span> <span data-notify="message">@TempData["AlertMessage"]</span>
                             <a href="#" target="_blank" data-notify="url"></a>
                         </div>
-
                         <style>
                             .seachvisble {
                                 display: none;
@@ -84,15 +81,15 @@
                     }
                 <div class="card-body pt-0">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-8">
                             <label asp-for="Name" class="form-label"></label>
                             <input asp-for="Name" class="multisteps-form__input form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
 
                         </div>
-                        <div class="col-6">
+                        <div class="col-12">
                             <label asp-for="Description" class="form-label"></label>
-                            <input asp-for="Description" class="multisteps-form__input form-control" />
+                            <textarea asp-for="Description" class="multisteps-form__input form-control classic-editor" ></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
 
                         </div>
@@ -131,9 +128,21 @@
                             <span asp-validation-for="Address" class="text-danger"></span>
 
                         </div>    
-                         
+                         <div class="col-12">
+                            <label asp-for="MapUrl" class="form-label  mt-4"></label>
+                            <input asp-for="MapUrl" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="MapUrl" class="text-danger"></span>
+
+                        </div>    
                             
-                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label asp-for="Note" class="form-label mt-4"></label>
+                            <textarea asp-for="Note" class="multisteps-form__input form-control " ></textarea>
+                            <span asp-validation-for="Note" class="text-danger"></span>
+                        </div>    
+                    </div>
                     <div class="row">
                         <div class="col-6 mt-4">
                             <label asp-for="ImgLogo" class="form-label "></label>
@@ -452,5 +461,20 @@
         a_xbd.classList.add("active");
         var usersExample = document.getElementById("manageclinic");
         usersExample.classList.add("show");
+    </script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
+    <script>
+        var allEditors = document.querySelectorAll(".classic-editor");
+        allEditors.forEach(function(userItem) {
+          ClassicEditor
+            .create( userItem, {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+                ckfinder: { uploadUrl: '/index/UploadImage' }
+            } )
+            .catch( error => {
+                console.log( error );
+            } );
+        });
+     
     </script>
 }

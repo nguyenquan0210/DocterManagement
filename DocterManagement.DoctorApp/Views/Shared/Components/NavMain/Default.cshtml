@@ -37,13 +37,13 @@
                 <div class="collapse   " id="QUANLYTAIKHOAN">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                           <a id="a_acc" class="nav-link" asp-controller="User" asp-action="DetailtDoctor" asp-route-userName="@User.Identity.Name">
+                           <a id="a_acc" class="nav-link" asp-controller="User" asp-action="DetailtDoctor">
                                <span class="sidenav-mini-icon text-xs"> TK </span>
                                <span class="sidenav-normal"> Xem thông tin </span>
                            </a>   
                         </li>
                         <li class="nav-item ">
-                            <a id="a_cteacc" class="nav-link " asp-controller="User" asp-action="Update" asp-route-userName="@User.Identity.Name">
+                            <a id="a_cteacc" class="nav-link " asp-controller="User" asp-action="Update">
                                 <span class="sidenav-mini-icon text-xs"> TTK </span>
                                 <span class="sidenav-normal"> Chỉnh sửa thông tin </span>
                             </a>
@@ -54,9 +54,30 @@
             </li>
             <li class="nav-item mt-3">
                 <hr class="horizontal dark" />
-                <h6 class="ps-4  ms-2 text-uppercase text-xs font-weight-bolder opacity-6">PAGES</h6>
+               
             </li>
-            @if(user.DoctorVm.GetClinic.Id != new Guid())
+             <li class="nav-item">
+                <a id="menu-petient" asp-action="Index" asp-controller="Patient" class="nav-link collapsed" aria-controls="quanlyfooter" role="button">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <svg width="12px" height="12px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <title>settings</title>
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g transform="translate(-2020.000000, -442.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                                    <g transform="translate(1716.000000, 291.000000)">
+                                        <g transform="translate(304.000000, 151.000000)">
+                                            <polygon class="color-background" opacity="0.596981957" points="18.0883333 15.7316667 11.1783333 8.82166667 13.3333333 6.66666667 6.66666667 0 0 6.66666667 6.66666667 13.3333333 8.82166667 11.1783333 15.315 17.6716667"></polygon>
+                                            <path class="color-background" d="M31.5666667,23.2333333 C31.0516667,23.2933333 30.53,23.3333333 30,23.3333333 C29.4916667,23.3333333 28.9866667,23.3033333 28.48,23.245 L22.4116667,30.7433333 L29.9416667,38.2733333 C32.2433333,40.575 35.9733333,40.575 38.275,38.2733333 L38.275,38.2733333 C40.5766667,35.9716667 40.5766667,32.2416667 38.275,29.94 L31.5666667,23.2333333 Z" opacity="0.596981957"></path>
+                                            <path class="color-background" d="M33.785,11.285 L28.715,6.215 L34.0616667,0.868333333 C32.82,0.315 31.4483333,0 30,0 C24.4766667,0 20,4.47666667 20,10 C20,10.99 20.1483333,11.9433333 20.4166667,12.8466667 L2.435,27.3966667 C0.95,28.7083333 0.0633333333,30.595 0.00333333333,32.5733333 C-0.0583333333,34.5533333 0.71,36.4916667 2.11,37.89 C3.47,39.2516667 5.27833333,40 7.20166667,40 C9.26666667,40 11.2366667,39.1133333 12.6033333,37.565 L27.1533333,19.5833333 C28.0566667,19.8516667 29.01,20 30,20 C35.5233333,20 40,15.5233333 40,10 C40,8.55166667 39.685,7.18 39.1316667,5.93666667 L33.785,11.285 Z"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Quản lý bệnh nhân</span>
+                </a>
+            </li>
+            @if(user.DoctorVm.GetClinic.Id != new Guid() && user.DoctorVm.IsPrimary)
             {
                 <li class="nav-item">
                     <a id="menu_clinic" href="#manageclinic" class="nav-link " aria-controls="manageclinic" role="button" data-bs-toggle="collapse">
@@ -101,7 +122,7 @@
                 
             }
             <li class="nav-item">
-                <a id="menu_post" data-bs-toggle="collapse" href="#managepost" class="nav-link " aria-controls="managepost" role="button" aria-expanded="false">
+                <a id="menu-post" data-bs-toggle="collapse" href="#manage-post" class="nav-link " aria-controls="manage-post" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>office</title>
@@ -117,27 +138,27 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Quản lý đăng bài</span>
+                    <span class="nav-link-text ms-1">Quản lý bài viết</span>
                 </a>
-                <div class="collapse " id="managepost">
+                <div class="collapse " id="manage-post">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_post" class="nav-link " aria-expanded="false" asp-controller="Post" asp-action="Index">
+                            <a id="a-post" class="nav-link " aria-expanded="false" asp-controller="Post" asp-action="Index">
                                 <span class="sidenav-mini-icon"> CK </span>
-                                <span class="sidenav-normal"> Danh sách bài đăng <b class="caret"></b></span>
+                                <span class="sidenav-normal"> Danh sách bài viết<b class="caret"></b></span>
                             </a>
                         </li>
                         <li class="nav-item ">
-                            <a id="a_createpost" class="nav-link " aria-expanded="false" asp-controller="Post" asp-action="CreatePost">
+                            <a id="a-create-post" class="nav-link " aria-expanded="false" asp-controller="Post" asp-action="CreatePost">
                                 <span class="sidenav-mini-icon"> TCK </span>
-                                <span class="sidenav-normal">Thêm bài đăng <b class="caret"></b></span>
+                                <span class="sidenav-normal">Thêm bài viết <b class="caret"></b></span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item">
-                <a id="menu_loacation" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#managelocation" aria-controls="managelocation" role="button">
+                <a id="menu-schedule" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#manage-schedule" aria-controls="manage-schedule" role="button">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <svg width="12px" height="20px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>spaceship</title>
@@ -157,17 +178,17 @@
                     </div>
                     <span class="nav-link-text ms-1">Quản lý lịch khám</span>
                 </a>
-                <div class="collapse " id="managelocation">
+                <div class="collapse " id="manage-schedule">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_loacation" class="nav-link  " aria-expanded="false" asp-controller="Schedule" asp-action="Index">
+                            <a id="a-schedule" class="nav-link  " aria-expanded="false" asp-controller="Schedule" asp-action="Index">
                                 <span class="sidenav-mini-icon"> LK </span>
                                 <span class="sidenav-normal"> Danh sách lịch khám <b class="caret"></b></span>
                             </a>
 
                         </li>
                         <li class="nav-item ">
-                            <a id="a_createlocation" class="nav-link   " aria-expanded="false" asp-controller="Schedule" asp-action="Create">
+                            <a id="a-create-schedule" class="nav-link   " aria-expanded="false" asp-controller="Schedule" asp-action="Create">
                                 <span class="sidenav-mini-icon"> TLK </span>
                                 <span class="sidenav-normal"> Thêm lịch khám <b class="caret"></b></span>
                             </a>
@@ -178,7 +199,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a id="menu_city" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#quanlythanhpho" aria-controls="quanlythanhpho" role="button">
+                <a id="menu-appointment" class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#manageappointment" aria-controls="manageappointment" role="button">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>box-3d-50</title>
@@ -197,17 +218,15 @@
                     </div>
                     <span class="nav-link-text ms-1">Quản lý đặt khám</span>
                 </a>
-                <div class="collapse " id="quanlythanhpho">
+                <div class="collapse " id="manageappointment">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item ">
-                            <a id="a_city" class="nav-link  " aria-expanded="false" asp-controller="Appointment" asp-action="Index">
+                            <a id="a-appointment" class="nav-link  " aria-expanded="false" asp-controller="Appointment" asp-action="Index">
                                 <span class="sidenav-mini-icon"> ĐK </span>
                                 <span class="sidenav-normal"> Danh sách đặt khám <b class="caret"></b></span>
                             </a>
 
                         </li>
-                       
-
                     </ul>
                 </div>
             </li>
@@ -331,8 +350,6 @@
                     </ul>
                 </div>
 
-
-
             </li>
             <li class="nav-item">
                 <a id="menu_adver" data-bs-toggle="collapse" href="#quanlyquangcao" class="nav-link collapsed" aria-controls="quanlyquangcao" role="button" aria-expanded="false">
@@ -376,32 +393,7 @@
 
 
             @*</li>*@
-           @* <li class="nav-item">
-                <a id="menu_footer" asp-action="Index" asp-controller="Contact" class="nav-link collapsed" aria-controls="quanlyfooter" role="button">
-                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <svg width="12px" height="12px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <title>settings</title>
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <g transform="translate(-2020.000000, -442.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                                    <g transform="translate(1716.000000, 291.000000)">
-                                        <g transform="translate(304.000000, 151.000000)">
-                                            <polygon class="color-background" opacity="0.596981957" points="18.0883333 15.7316667 11.1783333 8.82166667 13.3333333 6.66666667 6.66666667 0 0 6.66666667 6.66666667 13.3333333 8.82166667 11.1783333 15.315 17.6716667"></polygon>
-                                            <path class="color-background" d="M31.5666667,23.2333333 C31.0516667,23.2933333 30.53,23.3333333 30,23.3333333 C29.4916667,23.3333333 28.9866667,23.3033333 28.48,23.245 L22.4116667,30.7433333 L29.9416667,38.2733333 C32.2433333,40.575 35.9733333,40.575 38.275,38.2733333 L38.275,38.2733333 C40.5766667,35.9716667 40.5766667,32.2416667 38.275,29.94 L31.5666667,23.2333333 Z" opacity="0.596981957"></path>
-                                            <path class="color-background" d="M33.785,11.285 L28.715,6.215 L34.0616667,0.868333333 C32.82,0.315 31.4483333,0 30,0 C24.4766667,0 20,4.47666667 20,10 C20,10.99 20.1483333,11.9433333 20.4166667,12.8466667 L2.435,27.3966667 C0.95,28.7083333 0.0633333333,30.595 0.00333333333,32.5733333 C-0.0583333333,34.5533333 0.71,36.4916667 2.11,37.89 C3.47,39.2516667 5.27833333,40 7.20166667,40 C9.26666667,40 11.2366667,39.1133333 12.6033333,37.565 L27.1533333,19.5833333 C28.0566667,19.8516667 29.01,20 30,20 C35.5233333,20 40,15.5233333 40,10 C40,8.55166667 39.685,7.18 39.1316667,5.93666667 L33.785,11.285 Z"></path>
-                                        </g>
-                                    </g>
-                                </g>
-                            </g>
-                        </svg>
-
-                    </div>
-                    <span class="nav-link-text ms-1">Quản lý footer</span>
-                </a>
-
-
-
-
-            </li>*@
+           
         </ul>
     </div>
     <div class="sidenav-footer mx-3 mt-3 pt-3">

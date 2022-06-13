@@ -30,10 +30,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý chuyên khoa</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm chuyên khoa</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý đặt khám</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tạo hồ sơ bệnh</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm chuyên khoa</h6>
+    <h6 class="font-weight-bolder mb-0">Tạo hồ sơ bệnh theo lịch hẹn</h6>
 }
 @section Search{
 	<form asp-action="Index"  method="get">
@@ -58,9 +58,9 @@
                     <div class="card-header">
                         <div class="d-lg-flex">
                             <div>
-                                 <h5>Thông tin khách hàng</h5>
+                                 <h5>Tạo hồ sơ bệnh</h5>
                                 <p class="text-sm mb-0">
-                                    Chi tiết thông tin liên hệ
+                                    Tạo hồ sơ bệnh theo lịch hẹn.
                                 </p>
                             </div>
                             <div class="ms-auto my-auto mt-lg-0 mt-4 ">
@@ -626,8 +626,9 @@
     </script>
    
     <script>
-        var menu_bd = document.getElementById("menu-contact");
+        var menu_bd = document.getElementById("menu-appointment");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
+       
     </script>
 }

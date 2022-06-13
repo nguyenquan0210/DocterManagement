@@ -26,5 +26,7 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
 
         [Required]
         public IFormFileCollection ImgClinics { get; set; }
+        public string MapUrl { get; set; }
+        public string Note { get; set; }
     }
 }

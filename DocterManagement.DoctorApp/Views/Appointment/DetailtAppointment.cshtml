@@ -25,10 +25,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý chuyên khoa</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm chuyên khoa</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý đặt khám</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết đặt khám</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm chuyên khoa</h6>
+    <h6 class="font-weight-bolder mb-0">Thông tin chi tiết lịch hẹn</h6>
 }
 @section Search{
 	<form asp-action="Index"  method="get">
@@ -53,17 +53,14 @@
                     <div class="card-header">
                         <div class="d-lg-flex">
                             <div>
-                                 <h5>Thông tin khách hàng</h5>
+                                 <h5>Chi tiết đặt khám</h5>
                                 <p class="text-sm mb-0">
-                                    Chi tiết thông tin liên hệ
+                                    Thông tin chi tiết lịch hẹn.
                                 </p>
                             </div>
                             <div class="ms-auto my-auto mt-lg-0 mt-4 ">
                            
                                 <div class="ms-auto my-auto">
-                                
-                                 
-                                     
                                       <span class="badge 
                                             @(Model.Status==StatusAppointment.approved?"badge-dark":
                                                                 Model.Status==StatusAppointment.cancel?"badge-danger":
@@ -103,31 +100,11 @@
 
                                 </div>
                             </div>
-                           @* <div class="row">
-                               
-                                <div class="col-2">
-                                   <label asp-for="NeedToPay" class="form-label mt-4"></label>
-                                    <p  class="multisteps-form__input form-control" > @Model.NeedToPay</p>
-
-                                </div>
-                                 <div class="col-2">
-                                    <label asp-for="Contingency" class="form-label mt-4"></label>
-                                    <p  class="multisteps-form__input form-control" > @Model.Contingency</p>
-
-                                </div>
-                                <div class="col-2">
-                                    <label asp-for="TuitionPaidFreeNumBer" class="form-label mt-4"></label>
-                                    <p  class="multisteps-form__input form-control" > @Model.TuitionPaidFreeNumBer</p>
-
-                                </div>
-                                <div class="col-6">
-                                   <label asp-for="TuitionPaidFreeText" class="form-label mt-4"></label>
-                                    <p  class="multisteps-form__input form-control" > @Model.TuitionPaidFreeText</p>
-
-                                </div>
-                            </div>*@
+                          
                         </div>
                     </div>
+                    
+                    <a asp-action="Detailt" asp-controller="Patient" asp-route-id="@Model.Patient.Id"  class="btn float-end bg-gradient-info btn-sm mt-6 mb-0">Xem chi tiết</a>
                         </div>
                 </div>
                 <div class="card mt-4" id="basic-info">
@@ -154,22 +131,22 @@
                             
                                 <div class="row">
                                
-                                    <div class="col-2">
+                                    <div class="col-3">
                                        <label asp-for="No" class="form-label mt-4"></label>
                                         <p  class="multisteps-form__input form-control" > @Model.No</p>
 
                                     </div>
-                                     <div class="col-2">
+                                     <div class="col-3">
                                         <label asp-for="Schedule.CheckInDate" class="form-label mt-4"></label>
                                         <p  class="multisteps-form__input form-control" > @(Model.Schedule.CheckInDate.DayOfWeek +", "+ Model.Schedule.CheckInDate.ToShortDateString())</p>
 
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-3">
                                         <label asp-for="SlotSchedule.FromTime" class="form-label mt-4"></label>
                                         <p  class="multisteps-form__input form-control" > @(Model.SlotSchedule.FromTime.ToString().Substring(0,5)+"-"+Model.SlotSchedule.ToTime.ToString().Substring(0,5))</p>
 
                                     </div>
-                                   <div class="col-6">
+                                   <div class="col-3">
                                        <label asp-for="IsDoctor" class="form-label mt-4"></label>
                                         <p  class="multisteps-form__input form-control" > @(Model.IsDoctor==true?"đặt khám theo bác sĩ":"đặt khám theo phòng khám")</p>
 
@@ -524,7 +501,7 @@
         })
     </script>
     <script>
-        var menu_bd = document.getElementById("menu-contact");
+       var menu_bd = document.getElementById("menu-appointment");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
     </script>

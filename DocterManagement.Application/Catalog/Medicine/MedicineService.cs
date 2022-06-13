@@ -62,9 +62,12 @@ namespace DoctorManagement.Application.Catalog.Medicine
             var medicines = await _context.Medicines.FindAsync(Id);
             int check = 0;
             if (medicines == null) return new ApiSuccessResult<int>(check);
-
+            if(medicines.IsDeleted == false)
+            {
                 medicines.IsDeleted = true;
                 check = 2;
+
+            }
           
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check);

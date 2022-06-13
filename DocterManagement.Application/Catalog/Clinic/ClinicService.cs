@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,12 +51,14 @@ namespace DoctorManagement.Application.Catalog.Clinic
             {
                 Name = request.Name,
                 ImgLogo = await SaveFile(request.ImgLogo, CLINIC_CONTENT_FOLDER_NAME),
-                Description = request.Description,
+                Description = WebUtility.HtmlDecode(request.Description),
                 Address = request.Address ,
                 FullAddress = fullAddress,
                 LocationId = request.LocationId,
                 Status = Status.Active,
-                No = str
+                No = str,
+                Note = request.Note,
+                MapUrl = request.MapUrl
             };
             var i = 0;
             if (request.ImgClinics != null)
@@ -391,11 +394,13 @@ namespace DoctorManagement.Application.Catalog.Clinic
             clinics.Note = request.Note;
             clinics.Address = request.Address;
             clinics.Name = request.Name;
-            clinics.Description = request.Description;
+            clinics.Description = WebUtility.HtmlDecode(request.Description);
             clinics.Address = request.Address;
             clinics.LocationId = request.LocationId;
             clinics.Status = request.Status;
-            if(request.ImgLogo != null)
+            clinics.Note = request.Note;
+            clinics.MapUrl = request.MapUrl;
+            if (request.ImgLogo != null)
             {
                 if(clinics.ImgLogo != null) await _storageService.DeleteFileAsyncs(clinics.ImgLogo, CLINIC_CONTENT_FOLDER_NAME);
                 clinics.ImgLogo = await SaveFile(request.ImgLogo, CLINIC_CONTENT_FOLDER_NAME);

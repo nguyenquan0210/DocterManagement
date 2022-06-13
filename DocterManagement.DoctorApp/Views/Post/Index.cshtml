@@ -27,10 +27,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý phòng khám</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách phòng khám</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý bài viết</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách bài viết</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Danh sách phòng khám</h6>
+    <h6 class="font-weight-bolder mb-0">Danh sách bài viêt</h6>
 }
 @section Search{
 	<form asp-controller="MasterData" asp-action="MenuMain"  method="get">
@@ -48,17 +48,17 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả phòng khám</h5>
+                            <h5 class="mb-0">Danh sách bài viết</h5>
                             <p class="text-sm mb-0">
-                               Quản lý tất cả phòng khám.
+                               Tạo nhiều bài viết hữu ích để tăng lượng tương tác.
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4 col-6">
                            
                             <div class="ms-auto my-auto">
-                                 <form  asp-action="MenuMain" method="get"
+                                 <form  asp-action="Index" method="get"
                                       class="m-4 col-7 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
-                                    <select id ="type" name="type" oninvalid="@ViewBag.Type" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.Types" >
+                                    <select id ="type" name="topicId" oninvalid="@ViewBag.Type" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.Types" >
                                     </select>
                                 </form>
                                 <a asp-action="CreatePost"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm bài viết</a>
@@ -106,7 +106,7 @@
                                             <div class="d-flex align-items-center">
                                                 <img src="@(Configuration["BaseAddress"] + "/img/" + @item.Image)" class="avatar avatar-xs me-2" alt="user image">
                                                 
-                                                <h6 class="ms-3 my-auto">@item.Title</h6>
+                                                <h6 class="ms-3 my-auto" style="max-width">@(item.Title.Length>31?item.Title.Substring(0,30)+"...":item.Title)</h6>
                                             </div>
                                         </td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Topic.Name</h6></td>
@@ -312,20 +312,12 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
 
     <script>
-
-          var menu_bd = document.getElementById("menu-masterdata");
+        var menu_bd = document.getElementById("menu-post");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_menumain");
+        var a_xbd = document.getElementById("a-post");
         a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_amenumain");
-        a_acc.classList.add("active");
-        var dashboardsExamples = document.getElementById("masterdata");
+        var dashboardsExamples = document.getElementById("manage-post");
         dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("menumain");
-        usersExample.classList.add("show");
-
-
-
     </script>
 }
