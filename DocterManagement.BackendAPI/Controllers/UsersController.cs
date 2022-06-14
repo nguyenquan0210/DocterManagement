@@ -221,6 +221,42 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
+        /// Quên mật khẩu
+        /// </summary>
+        /// 
+        [HttpPut("forgot-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.ForgotPassword(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        /// <summary>
+        /// cài lại mật khẩu
+        /// </summary>
+        /// 
+        [HttpPut("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.ResetPassword(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        /// <summary>
         /// Thêm vai trong mới cho tài khoản
         /// </summary>
         /// 

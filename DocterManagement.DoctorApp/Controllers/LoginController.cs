@@ -33,13 +33,13 @@ namespace DoctorManagement.DoctorApp.Controllers
         public async Task<IActionResult> Index(LoginRequest request)
         {
             if (!ModelState.IsValid)
-                return View(ModelState);
+                return View(request);
             request.Check = "doctor";
             var result = await _userApiClient.Authenticate(request);
-            if (result.Data == null)
+            if (!result.IsSuccessed)
             {
                 ModelState.AddModelError("", result.Message);
-                return View();
+                return View(request);
             }
             var userPrincipal = ValidateToken(result.Data);
 
@@ -58,8 +58,43 @@ namespace DoctorManagement.DoctorApp.Controllers
                         userPrincipal,
                         authProperties);
 
-
             return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        {
+            request.Role = "doctor";
+            var rs = await _userApiClient.ForgotPassword(request);
+            if (rs.IsSuccessed)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            return View(request);
+        }
+        [HttpGet]
+        public IActionResult ResetPassword(string uid, string token)
+        {
+            ResetPasswordRequest resetPasswordModel = new ResetPasswordRequest
+            {
+                Token = token,
+                UserId = uid
+            };
+            return View(resetPasswordModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            var rs = await _userApiClient.ResetPassword(request);
+            if (rs.IsSuccessed)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            return View(request);
         }
         [HttpGet]
         public async Task<IActionResult> LoginClient(string token)

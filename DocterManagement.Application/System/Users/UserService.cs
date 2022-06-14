@@ -151,6 +151,47 @@ namespace DoctorManagement.Application.System.Users
             }
             return new ApiErrorResult<bool>(new string[] { "warning", "Đổi mật khẩu không thành công!" });
         }
+        public async Task<ApiResult<bool>> ForgotPassword(ForgotPasswordRequest request)
+        {
+            var role = await _context.AppRoles.FirstOrDefaultAsync(x=>x.Name == request.Role);
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x=>x.Email == request.Email && x.RoleId == role.Id);
+            if (user == null) return new ApiErrorResult<bool>("Email không tồn tại");
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            if (!string.IsNullOrEmpty(token))
+            {
+                await SendForgotPasswordEmail(user, token);
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Gửi mail không thành công!" );
+           
+        }
+        public async Task<ApiResult<bool>> ResetPassword(ResetPasswordRequest model)
+        {
+            model.Token = model.Token.Replace(" ", "+");
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if(user == null) return new ApiErrorResult<bool>("Tài khoản không tồn tại!");
+            var rs = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            if(rs.Succeeded) return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Đổi mật khẩu không thành công!");
+        }
+        private async Task SendForgotPasswordEmail(AppUsers user, string token)
+        {
+            string appDomain = _config.GetSection("Application:AppDomainFeature").Value;
+            string confirmationLink = _config.GetSection("Application:ForgotPassword").Value;
+
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string>() { user.Email },
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", user.UserName),
+                    new KeyValuePair<string, string>("{{Link}}",
+                        string.Format(appDomain + confirmationLink, user.Id, token))
+                }
+            };
+
+            await _emailService.SendEmailForForgotPassword(options);
+        }
         private async Task SendEmailChangePassword(AppUsers user)
         {
             UserEmailOptions options = new UserEmailOptions

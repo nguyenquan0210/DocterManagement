@@ -61,6 +61,7 @@ namespace DoctorManagement.AdminApp.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+      
         [HttpGet]
         public async Task<IActionResult> LoginClient(string token)
         {

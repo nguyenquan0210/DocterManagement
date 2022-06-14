@@ -3,6 +3,7 @@ using DoctorManagement.Data.Enums;
 using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Catalog.MedicalRecords;
+using DoctorManagement.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -28,7 +29,7 @@ namespace DoctorManagement.DoctorApp.Controllers
             _serviceApiClient = serviceApiClient;
         }
 
-        public async Task<IActionResult> Index(string keyword, StatusAppointment? status,string? check, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, StatusAppointment? status,string check, int pageIndex = 1, int pageSize = 10)
         {
             if(check== null&&keyword==null)
             {
@@ -41,13 +42,96 @@ namespace DoctorManagement.DoctorApp.Controllers
                 PageSize = pageSize,
                 UserNameDoctor = User.Identity.Name,
                 status =  status
-            }; 
+            };
             var data = await _appointmentApiClient.GetAppointmentPagings(request);
             ViewBag.Keyword = keyword;
             ViewBag.Status = request.status.ToString();
             ViewBag.LStatus = SeletectStatus(request.status.ToString());
 
             return View(data.Data);
+        }
+        public async Task<IActionResult> StatisticAppointment(string keyword, StatusAppointment? status, string day, string month, string year, string check, int pageIndex = 1, int pageSize = 10)
+        {
+            var request = new GetAppointmentPagingRequest()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                UserNameDoctor = User.Identity.Name,
+                status = status,
+                day = day,
+                month = month,
+                year = year,
+            };
+            var statistic = await Statistic(request, day, month, year, check);
+            ViewBag.Statitic = JsonConvert.SerializeObject(statistic);
+            var data = await _appointmentApiClient.GetAppointmentPagings(request);
+            ViewBag.Keyword = keyword;
+            ViewBag.Day = request.day == null ? DateTime.Now.ToString("dd") : request.day;
+            ViewBag.Month = request.month == null ? DateTime.Now.ToString("MM") : request.month;
+            ViewBag.Year = request.year;
+            ViewBag.Check = check;
+            ViewBag.Status = request.status.ToString();
+            ViewBag.LStatus = SeletectStatus(request.status.ToString());
+            ViewBag.Days = SeletectDay(request.day == null ? DateTime.Now.ToString("dd") : request.day);
+            ViewBag.Months = SeletectMonth(request.month == null ? DateTime.Now.ToString("MM") : request.month);
+            ViewBag.Years = SeletectYear(request.year);
+            ViewBag.StatisticPie = JsonConvert.SerializeObject(await StatisticPie(request));
+            var count = (await StatisticPie(request)).Sum(x => int.Parse(x.Value));
+            ViewBag.Count = SetCount(count);
+           
+
+            return View(data.Data);
+        }
+        public async Task<List<SelectListItem>> StatisticPie(GetAppointmentPagingRequest request)
+        {
+            //pending, approved, complete,cancel
+            //request.status = null;
+            request.PageSize = 1000000000;
+            var data = (await _appointmentApiClient.GetAppointmentPagings(request)).Data.Items;
+            List<SelectListItem> status = new List<SelectListItem>()
+            {
+               new SelectListItem(){ Text = "Đã khám", Value="2"},
+               new SelectListItem(){ Text = "Quá hạn", Value="0"},
+               new SelectListItem(){ Text = "Đã hủy", Value="3"},
+               new SelectListItem(){ Text = "Chờ khám", Value="1"},
+            };
+            List<SelectListItem> model = new List<SelectListItem>();
+            foreach (var item in status)
+            {
+                var parsestatus = (StatusAppointment)int.Parse(item.Value);
+                var statistic = new SelectListItem()
+                {
+                    Text = item.Text,
+                    Value = data.Count(x => x.Status == parsestatus).ToString(),
+                };
+                model.Add(statistic);
+            }
+            return model;
+        }
+        public async Task<List<StatisticNews>> Statistic(GetAppointmentPagingRequest request, string? day, string? month, string? year, string? check)
+        {
+            switch (check)
+            {
+                case "year" or null:
+                    request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    request.month = null;
+                    request.day = null;
+                    return await _appointmentApiClient.GetAppointmentStatiticYear(request);
+
+                case "month":
+                    request.day = null;
+                    request.month = month == null ? DateTime.Now.ToString("MM") : month;
+                    request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    return await _appointmentApiClient.GetAppointmentStatiticMonth(request);
+
+                default:
+                    request.day = day == null ? DateTime.Now.ToString("dd") : day;
+                    request.month = month == null ? DateTime.Now.ToString("MM") : month;
+                    request.year = year == null ? DateTime.Now.ToString("yyyy") : year;
+                    return await _appointmentApiClient.GetAppointmentStatiticDay(request);
+
+            }
         }
         public List<SelectListItem> SeletectStatus(string? id)
         {

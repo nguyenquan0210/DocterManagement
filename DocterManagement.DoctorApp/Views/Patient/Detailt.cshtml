@@ -58,54 +58,44 @@
                 <div class="card-body pt-0">
                    
                      <div class="row">
-                       
-                        <div class="col-4 ">
-                                    <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(ViewBag.Img ==null ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/user-content/" + ViewBag.Img)" alt="">
-                        </div>
-                        <div class="col-8 ">
+                        
                              <div class="row ">
-                                    <div class="col-4">
+                                    <div class="col-3">
                                         <label asp-for="No" class="form-label mt-4"></label>
                                         <input asp-for="No" class="multisteps-form__input form-control"readonly />
 
                                     </div>
-                                     <div class="col-4">
+                                     <div class="col-3">
                                         <label asp-for="Name" class="form-label mt-4"></label>
                                         <input asp-for="Name" class="multisteps-form__input form-control" readonly />
                                     </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4">
+                                <div class="col-3">
                                     <label asp-for="Gender" class="form-label mt-4"></label>
                                     <input  class="multisteps-form__input form-control" readonly value="@ViewBag.Gender"/>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3">
                                     <label asp-for="Dob" class="form-label mt-4"></label>
                                     <input value = "@ViewBag.Dob" class="form-control " readonly />
                                 </div>
-                                
                             </div>
+                          
                             <div class = "row" >
-                                 <div class="col-12">
-                                    <label asp-for="Address" class="form-label mt-4"></label>
-                                    <input asp-for="Address" class="multisteps-form__input form-control" readonly/>
-                                </div>
-                            </div>
-                             <div class="row">
-
-                                <div class="col-6">
+                                <div class="col-3">
                                     <label asp-for="RelativeEmail" class="form-label mt-4"></label>
                                     <input asp-for="RelativeEmail" class="multisteps-form__input form-control" readonly/>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-3">
 
                                     <label asp-for="RelativePhone" class="form-label mt-4"></label>
                                     <input asp-for="RelativePhone" class="multisteps-form__input form-control" readonly />
                            
                                 </div> 
-                       
+                                 <div class="col-6">
+                                    <label asp-for="FullAddress" class="form-label mt-4"></label>
+                                    <input asp-for="FullAddress" class="multisteps-form__input form-control" readonly/>
+                                </div>
                             </div>
-                        </div>
+                        
                    </div>
                     
                 </div>
@@ -137,8 +127,8 @@
                         <table class="table table-flush" id="list">
                             <thead class="thead-light">
                                 <tr>
+                                    <th>STT</th>
                                     <th>Mã phiếu khám</th>
-                                    <th>STT phiếu khám</th>
                                     <th>Ngày khám</th>
                                     <th>Tên Bệnh nhân</th>
                                     <th>Số điện thoại</th>
@@ -153,8 +143,8 @@
                                 @foreach (var item in appointment.Items)
                                 {
                                     <tr id="row_@item.Id">
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Stt</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@(item.SlotSchedule.FromTime.ToString().Substring(0,5)+" - "+ item.Schedule.CheckInDate.ToShortDateString())</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Patient.Name</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Patient.RelativePhone</h6></td>
@@ -187,8 +177,8 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Mã phiếu khám</th>
                                     <th>STT phiếu khám</th>
+                                    <th>Mã phiếu khám</th>
                                     <th>Ngày khám</th>
                                     <th>Tên Bệnh nhân</th>
                                     <th>Số điện thoại</th>
@@ -244,17 +234,10 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
     <script>
 
-        var menu_bd = document.getElementById("menu_acc");
+        var menu_bd = document.getElementById("menu-patient");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_cteacc");
-        a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_accc");
-        a_acc.classList.add("active");
-        var dashboardsExamples = document.getElementById("QUANLYTAIKHOAN");
-        dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("quanlynhanvien");
-        usersExample.classList.add("show");
+       ;
 
 
     </script>

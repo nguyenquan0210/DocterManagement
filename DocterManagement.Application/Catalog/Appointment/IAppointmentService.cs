@@ -24,7 +24,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
         Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPaging(GetAppointmentPagingRequest request);
         Task<ApiResult<PagedResult<PatientVm>>> GetAllPatient(GetAppointmentPagingRequest request);
         Task<ApiResult<PagedResult<AppointmentVm>>> GetAllPagingRating(GetAppointmentPagingRequest request);
-        Task<ApiResult<List<AppointmentVm>>> GetAll();
+        Task<ApiResult<List<AppointmentVm>>> GetAll(string? UserNameDoctor);
 
         Task<ApiResult<bool>> AddExpired(GetAppointmentPagingRequest request);
         //Task<ApiResult<bool>> ToAppointmentTime(GetAppointmentPagingRequest request);

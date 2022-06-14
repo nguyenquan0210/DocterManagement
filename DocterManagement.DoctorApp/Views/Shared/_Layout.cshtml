@@ -26,6 +26,7 @@
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- Anti-flicker snippet (recommended)  -->
 	<link href="~/css/Style_layout.css" rel="stylesheet" />
+
 	<script src="~/js/plugins/jquery.min.js"></script>
 </head>
 
@@ -36,8 +37,8 @@
 
 	<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
 		<!-- Navbar -->
-
-		<nav class="navbar navbar-main navbar-expand-lg position-sticky mt-4 top-1 px-0 mx-4 shadow-none border-radius-xl z-index-sticky" id="navbarBlur" data-scroll="true">
+@*	position-sticky,mt-4,top-1,z-index-sticky,navbarBlur.attr("data-scroll", "false");*@
+		<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
 			<div class="container-fluid py-1 px-3">
 				<nav aria-label="breadcrumb">
 					@RenderSection("Header", required: false)
@@ -99,7 +100,7 @@
 		</footer>
 	</main>
 
-	<div class="fixed-plugin">
+	@*<div class="fixed-plugin">
 		<a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
 			<i class="fa fa-cog py-2"> </i>
 		</a>
@@ -172,7 +173,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>*@
 	<script src="~/js/plugins/jquery.js"></script>
 	<script src="~/js/plugins/jquery.min.js"></script>
 	<script src="~/js/core/popper.min.js"></script>

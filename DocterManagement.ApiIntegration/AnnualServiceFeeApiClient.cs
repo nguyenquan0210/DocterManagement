@@ -94,7 +94,6 @@ namespace DoctorManagement.ApiIntegration
             var fromdate = DateTime.Parse("01/01/" + request.year);
             var datenews = data.Data.Items.Where(x => x.CreatedAt.ToString("yyyy") == request.year).Select(x => x.CreatedAt.ToString("MM/yyyy")).Distinct();
             List<StatisticNews> model = new List<StatisticNews>();
-
             for (var i = 1; i <= 12; i++)
             {
                 model.Add(new StatisticNews

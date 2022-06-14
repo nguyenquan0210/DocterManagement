@@ -59,7 +59,7 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<List<SelectListItem>> StatisticPie(GetAnnualServiceFeePagingRequest request)
         {
             //pending, approved, complete,cancel
-            request.status = null;
+            //request.status = null;
             request.PageSize = 1000000000;
             var data = (await _annualServiceFeeApiClient.GetAllPaging(request)).Data.Items;
             List<SelectListItem> status = new List<SelectListItem>()

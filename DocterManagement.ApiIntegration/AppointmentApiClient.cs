@@ -77,9 +77,9 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<AppointmentVm>($"/api/appointment/{Id}");
         }
 
-        public async Task<ApiResult<List<AppointmentVm>>> GetAllAppointment()
+        public async Task<ApiResult<List<AppointmentVm>>> GetAllAppointment(string? UserNameDoctor)
         {
-            var data = await GetListAsync<AppointmentVm>($"/api/appointment/all");
+            var data = await GetListAsync<AppointmentVm>($"/api/appointment/all?&userNameDoctor={UserNameDoctor}");
             return data;
         }
 
@@ -92,7 +92,11 @@ namespace DoctorManagement.ApiIntegration
                $"&userName={request.UserName}" +
                $"&userNameDoctor={request.UserNameDoctor}" +
                $"&status={request.status}" +
-               $"&patientId={request.PatientId}");
+               $"&patientId={request.PatientId}" +
+               $"&patientId={request.PatientId}" +
+               $"&day={request.day}" +
+               $"&month={request.month}" +
+               $"&year={request.year}");
         }
         public async Task<ApiResult<PagedResult<PatientVm>>> GetAppointmentPagingPatient(GetAppointmentPagingRequest request)
         {
@@ -128,16 +132,18 @@ namespace DoctorManagement.ApiIntegration
             $"&month={request.month}" +
             $"&year={request.year}");
             var fromdate = DateTime.Parse("01/01/" + request.year);
-            var datenews = data.Data.Items.Where(x => x.CreatedAt.ToString("yyyy") == request.year).Select(x => x.CreatedAt.ToString("MM/yyyy")).Distinct();
+            
             List<StatisticNews> model = new List<StatisticNews>();
 
             for (var i = 1; i <= 12; i++)
             {
+                var query = data.Data.Items.Where(x => x.Schedule.CheckInDate.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy"));
                 model.Add(new StatisticNews
                 {
                     date = i == 1 ? "thg " + fromdate.ToString("MM/yyyy") : "thg " + fromdate.ToString("MM"),
-                    amount = data.Data.Items.DistinctBy(x => x.Patient.Id).Count(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy")),
-                    count = data.Data.Items.Count(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy"))
+                    countpatient = query.DistinctBy(x => x.Patient.Id).Count(),
+                    count = query.Count(),
+                    amount = query.Sum(x => x.MedicalRecord.TotalAmount) / 1000000,
                 });
                 fromdate = fromdate.AddMonths(1);
             }
@@ -157,18 +163,19 @@ namespace DoctorManagement.ApiIntegration
             $"&month={request.month}" +
             $"&year={request.year}");
             var fromdate = DateTime.Parse(request.day + "/" + request.month + "/" + request.year);
-            var datenews = data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy") == request.day + "/" + request.month + "/" + request.year).Select(x => x.CreatedAt.ToString("dd/MM/yyyy HH")).Distinct();
+           
 
             List<StatisticNews> model = new List<StatisticNews>();
 
             for (var i = 1; i <= 24; i++)
             {
-                var date = datenews.FirstOrDefault(x => x == fromdate.ToString("dd/MM/yyyy HH"));
+                var query = data.Data.Items.Where(x => x.Schedule.CheckInDate.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH"));
                 model.Add(new StatisticNews
                 {
                     date = i == 1 ? fromdate.ToString("HH dd/MM/yyyy ") : fromdate.ToString("HH") + "h",
-                    countpatient = data.Data.Items.DistinctBy(x => x.Patient.Id).Count(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH")),
-                    count = data.Data.Items.Count(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH"))
+                    countpatient = query.DistinctBy(x => x.Patient.Id).Count(),
+                    count = query.Count(),
+                    amount = query.Sum(x => x.MedicalRecord.TotalAmount) / 1000000,
                 });
                 fromdate = fromdate.AddHours(1);
             }
@@ -188,17 +195,19 @@ namespace DoctorManagement.ApiIntegration
             $"&month={request.month}" +
             $"&year={request.year}");
             var fromdate = DateTime.Parse("01/" + request.month + "/" + request.year);
-            var datenews = data.Data.Items.Where(x => x.CreatedAt.ToString("MM/yyyy") == request.month + "/" + request.year).Select(x => x.CreatedAt.ToString("dd/MM/yyyy")).Distinct();
+            
 
             List<StatisticNews> model = new List<StatisticNews>();
-
+           
             for (var i = 1; i <= 31; i++)
             {
+                var query = data.Data.Items.Where(x => x.Schedule.CheckInDate.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy"));
                 model.Add(new StatisticNews
                 {
-                    date = i == 1 ? "Ng " + fromdate.ToString("dd/MM/yyyy") : "Ng " + fromdate.ToString("dd"),
-                    countpatient = data.Data.Items.DistinctBy(x => x.Patient.Id).Count(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")),
-                    count = data.Data.Items.Count(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")),
+                    date = i == DateTime.Now.Day ? "Ng " + fromdate.ToString("dd/MM/yyyy") : "Ng " + fromdate.ToString("dd"),
+                    countpatient = query.DistinctBy(x => x.Patient.Id).Count(),
+                    count = query.Count(),
+                    amount = query.Sum(x => x.MedicalRecord.TotalAmount) / 1000000,
                 });
                 fromdate = fromdate.AddDays(1);
             }

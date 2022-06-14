@@ -182,10 +182,13 @@ namespace DoctorManagement.Application.Catalog.Appointment
             return new ApiSuccessResult<int>(check);
         }
 
-        public async Task<ApiResult<List<AppointmentVm>>> GetAll()
+        public async Task<ApiResult<List<AppointmentVm>>> GetAll(string? UserNameDoctor)
         {
-            var query = _context.Appointments;
-            
+            var query = from a in _context.Appointments select a;
+            if (!string.IsNullOrEmpty(UserNameDoctor))
+            {
+                query = query.Where(x => x.Doctors.AppUsers.UserName == UserNameDoctor);
+            }
             var rs = await query.Select(x => new AppointmentVm()
             {
                 Id = x.Id,
@@ -214,6 +217,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                     Identitycard = x.Patients.Identitycard,
                     RelativeName = x.Patients.RelativeName,
                     RelativePhone = x.Patients.RelativePhone,
+                    CountBooking = query.Where(s=>s.PatientId == x.PatientId).Count(),
                 },
                 Schedule = new ScheduleVm()
                 {
@@ -304,7 +308,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 var todate = fromdate.AddMonths(1);
                 query = query.Where(x => x.sche.CheckInDate >= fromdate && x.sche.CheckInDate <= todate);
             }
-            else
+            else if (!string.IsNullOrEmpty(request.year))
             {
                 var fromdate = DateTime.Parse("01/01/" + request.year);
                 var todate = fromdate.AddYears(1);
@@ -376,6 +380,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                         CreateAt = x.m.CreatedAt,
                         Diagnose = x.m.Diagnose,
                         Note = x.m.Note,
+                        TotalAmount = x.m.TotalAmount
                     }: new MedicalRecordVm()
 
                 }).ToListAsync();
@@ -742,7 +747,7 @@ namespace DoctorManagement.Application.Catalog.Appointment
                           join u in _context.AppUsers on p.UserId equals u.Id
                           join slot in _context.schedulesSlots on a.SchedulesSlotId equals slot.Id
                           join sche in _context.Schedules on slot.ScheduleId equals sche.Id
-                          where sche.CheckInDate >= DateTime.Now.AddHours(12) && a.Status == StatusAppointment.approved
+                          where sche.CheckInDate <= DateTime.Now.AddHours(-12) && a.Status == StatusAppointment.approved
                           select new { a, u, ud};
             if (!string.IsNullOrEmpty(request.UserName))
             {

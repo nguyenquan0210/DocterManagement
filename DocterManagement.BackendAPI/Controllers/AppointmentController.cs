@@ -135,9 +135,9 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<ActionResult<ApiResult<List<AppointmentVm>>>> GetAll()
+        public async Task<ActionResult<ApiResult<List<AppointmentVm>>>> GetAll(string? UserNameDoctor)
         {
-            var result = await _appointmentService.GetAll();
+            var result = await _appointmentService.GetAll(UserNameDoctor);
             return Ok(result);
         }
     }

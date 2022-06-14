@@ -22,7 +22,7 @@ namespace DoctorManagement.ApiIntegration
         Task<ApiResult<bool>> AddRate(RateCreateRequest request);
         Task<ApiResult<bool>> CreateMedicalRecord(MedicalRecordCreateRequest request);
         Task<int> Delete(Guid Id);
-        Task<ApiResult<List<AppointmentVm>>> GetAllAppointment();
+        Task<ApiResult<List<AppointmentVm>>> GetAllAppointment(string? UserNameDoctor);
         Task<ApiResult<AppointmentVm>> GetById(Guid Id);
 
         Task<List<StatisticNews>> GetAppointmentStatiticYear(GetAppointmentPagingRequest request);

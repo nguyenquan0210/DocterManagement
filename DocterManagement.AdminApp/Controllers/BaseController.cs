@@ -39,7 +39,7 @@ namespace DoctorManagement.AdminApp.Controllers
             List<SelectListItem> selectListDay = new List<SelectListItem>();
             for (int i = 1; i <= 31; i++)
             {
-                selectListDay.Add(new SelectListItem(text: "Ng " + i, i < 10 ? ("0" + i.ToString()) : i.ToString()));
+                selectListDay.Add(new SelectListItem(text: "Ng " + i, value: i < 10 ? ("0" + i.ToString()) : i.ToString()));
             }
             var rs = selectListDay.Select(x => new SelectListItem()
             {
