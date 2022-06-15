@@ -1,6 +1,7 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Statistic;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,18 +22,61 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILocationApiClient _locationApiClient;
         private readonly IDoctorApiClient _doctorApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.WebApp.Controllers.Login";
         public LoginController(IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
-            IConfiguration configuration, ILocationApiClient locationApiClient)
+            IConfiguration configuration, ILocationApiClient locationApiClient, IStatisticApiClient statisticApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
             _locationApiClient = locationApiClient;
             _doctorApiClient = doctorApiClient;
+            _statisticApiClient = statisticApiClient;
+        }
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? usertemporary = null;
+            string? user = null;
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
+                usertemporary = currentHistory.Usertemporary;
+                user = currentHistory.User;
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name == null ? user : User.Identity.Name,
+                    Usertemporary = (usertemporary == null && User.Identity.Name == null) ? ("patient" + new Random().Next(10000000, 99999999) + new Random().Next(10000000, 99999999)) : (usertemporary == null ? User.Identity.Name : usertemporary),
+                    Type = user == null ? "patientlogout" : "patient",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
+
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Index",
+                MethodName = "Get",
+                ExtraProperties = "success",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             return View();
         }
         [HttpPost]
@@ -42,6 +86,14 @@ namespace DoctorManagement.WebApp.Controllers
                 return View(request);
             request.Check = "patient";
             var result = await _userApiClient.Authenticate(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Index",
+                MethodName = "Get",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (!result.IsSuccessed)
             {
                 TempData["AlertMessage"] = result.Message;
@@ -73,8 +125,16 @@ namespace DoctorManagement.WebApp.Controllers
                         authProperties);
             return RedirectToAction("Index", "Home");
         }
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Register",
+                MethodName = "Get",
+                ExtraProperties ="success",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             return View();
         }
         [HttpPost]
@@ -82,13 +142,28 @@ namespace DoctorManagement.WebApp.Controllers
         {
             if (!ModelState.IsValid) return View();
             var result = await _userApiClient.CheckPhone(request);
-            if (result.Data == null)
+            var historyactive = new HistoryActiveCreateRequest()
             {
-                return View();
+                ServiceName = NAMESAPACE + ".Register",
+                MethodName = "POST",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
+            if (!result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return View(request);
             }
+
+            TempData["AlertMessage"] = "Gửi mã xác nhận thành công.";
+            TempData["AlertType"] = "success";
+            TempData["AlertId"] = "successToast";
             var registerPatientSession = new RegisterPatientSession()
             {
-                PhoneNumber = request.PhoneNumber,
+                Email = request.Email,
                 NoOTP = result.Data,
                 dateTime = DateTime.Now
             };
@@ -96,17 +171,17 @@ namespace DoctorManagement.WebApp.Controllers
             HttpContext.Session.SetString(SystemConstants.OtpSession, JsonConvert.SerializeObject(registerPatientSession));
             var RegisterEnterOTPRequest = new RegisterEnterOTPRequest()
             {
-                PhoneNumber = request.PhoneNumber,
+                Email = request.Email,
             };
 
             return RedirectToAction("RegisterEnterOTP", RegisterEnterOTPRequest);
         }
         [HttpPost]
-        public async Task<IActionResult> ResetOtp(string phoneNumber)
+        public async Task<IActionResult> ResetOtp(string Email)
         {
             var registerEnterPhone = new RegisterEnterPhoneRequest()
             {
-                PhoneNumber = phoneNumber,
+                Email = Email,
             };
             var result = await _userApiClient.CheckPhone(registerEnterPhone);
             if (result.Data == null)
@@ -115,7 +190,7 @@ namespace DoctorManagement.WebApp.Controllers
             }
             var registerPatientSession = new RegisterPatientSession()
             {
-                PhoneNumber = phoneNumber,
+                Email = Email,
                 NoOTP = result.Data,
                 dateTime = DateTime.Now
             };
@@ -123,15 +198,23 @@ namespace DoctorManagement.WebApp.Controllers
 
             return Json(1);
         }
-        public IActionResult RegisterEnterOTP()
+        public async Task<IActionResult> RegisterEnterOTP()
         {
             var session = HttpContext.Session.GetString(SystemConstants.OtpSession);
             var currentOtp = JsonConvert.DeserializeObject<RegisterPatientSession>(session);
             ViewBag.RegisterPatientSession = currentOtp;
             var RegisterEnterOTPRequest = new RegisterEnterOTPRequest()
             {
-                PhoneNumber = currentOtp.PhoneNumber,
+                Email = currentOtp.Email,
             };
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".RegisterEnterOTP",
+                MethodName = "Get",
+                ExtraProperties ="success",
+                Parameters = JsonConvert.SerializeObject(RegisterEnterOTPRequest),
+            };
+            await HistoryActive(historyactive);
             return View(RegisterEnterOTPRequest);
         }
         [HttpPost]
@@ -142,45 +225,75 @@ namespace DoctorManagement.WebApp.Controllers
             var session = HttpContext.Session.GetString(SystemConstants.OtpSession);
             var currentOtp = JsonConvert.DeserializeObject<RegisterPatientSession>(session);
             var checktime = DateTime.Now - currentOtp.dateTime;
-            if(currentOtp.NoOTP != otp)
+            var historyactive = new HistoryActiveCreateRequest()
             {
-                ModelState.AddModelError("", "mã otp không đúng");
-                return View();
+                ServiceName = NAMESAPACE + ".RegisterEnterOTP",
+                MethodName = "POST",
+                ExtraProperties = "success" ,
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
+            if (currentOtp.NoOTP != otp)
+            {
+                TempData["AlertMessage"] = "mã xác nhân không đúng";
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return View(request);
             }else if(checktime.Minutes > 2)
             {
-                ModelState.AddModelError("", "mã otp của bạn đã quá 2 phút.");
-                return View();
+                TempData["AlertMessage"] = "mã xác nhân của bạn đã quá 2 phút";
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return View(request);
             }
+            TempData["AlertMessage"] = "Nhập mã xác nhận thành công.";
+            TempData["AlertType"] = "success";
+            TempData["AlertId"] = "successToast";
             ViewBag.RegisterPatientSession = currentOtp;
 
             return RedirectToAction("RegisterEnterPassword");
         }
 
-        public IActionResult RegisterEnterPassword()
+        public async Task<IActionResult> RegisterEnterPassword()
         {
                 var session = HttpContext.Session.GetString(SystemConstants.OtpSession);
                 var currentOtp = JsonConvert.DeserializeObject<RegisterPatientSession>(session);
                 var registerEnterPasswordRequest = new RegisterEnterPasswordRequest()
                 {
-                    PhoneNumber = currentOtp.PhoneNumber,
+                    Email = currentOtp.Email,
                 };
-                return View(registerEnterPasswordRequest);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".RegisterEnterPassword",
+                MethodName = "GET",
+                ExtraProperties = "success" ,
+                Parameters = JsonConvert.SerializeObject(registerEnterPasswordRequest),
+            };
+            await HistoryActive(historyactive);
+            return View(registerEnterPasswordRequest);
         }
         [HttpPost]
-        public IActionResult RegisterEnterPassword(RegisterEnterPasswordRequest request)
+        public async Task<IActionResult> RegisterEnterPassword(RegisterEnterPasswordRequest request)
         {
             if (!ModelState.IsValid) return View(ModelState);
             var session = HttpContext.Session.GetString(SystemConstants.OtpSession);
             var currentOtp = JsonConvert.DeserializeObject<RegisterPatientSession>(session);
             var registerPatientSession = new RegisterPatientSession()
             {
-                PhoneNumber = currentOtp.PhoneNumber,
+                Email = currentOtp.Email,
                 NoOTP = currentOtp.NoOTP,
                 dateTime = currentOtp.dateTime,
                 Password = request.Password,
             };
             HttpContext.Session.SetString(SystemConstants.OtpSession, JsonConvert.SerializeObject(registerPatientSession));
-
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".RegisterEnterPassword",
+                MethodName = "POST",
+                ExtraProperties = "success",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
 
             return RedirectToAction("RegisterEnterProfile");
         }
@@ -194,10 +307,17 @@ namespace DoctorManagement.WebApp.Controllers
             ViewBag.SubDistrict = new List<SelectListItem>();
             var registerEnterProfile = new RegisterEnterProfileRequest()
             {
-                PhoneNumber = currentOtp.PhoneNumber,
+                Email = currentOtp.Email,
                 Password = currentOtp.Password,
-                RelativePhone = currentOtp.PhoneNumber
             };
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".RegisterEnterProfile",
+                MethodName = "GET",
+                ExtraProperties = "success" ,
+                Parameters = JsonConvert.SerializeObject(registerEnterProfile),
+            };
+            await HistoryActive(historyactive);
             return View(registerEnterProfile);
         }
         [HttpPost]
@@ -216,13 +336,22 @@ namespace DoctorManagement.WebApp.Controllers
             
             if (!ModelState.IsValid) { return View(request); }
             var result = await _userApiClient.RegisterPatient(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".RegisterEnterProfile",
+                MethodName = "POST",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin thành công";
                 TempData["AlertType"] = "alert-success";
+                var userName = request.Email.Split("@")[0];
                 var login = new LoginRequest()
                 {
-                    UserName = request.PhoneNumber,
+                    UserName = userName,
                     Password = request.Password,
                     Check = "patient",
                     RememberMe = false
@@ -239,7 +368,7 @@ namespace DoctorManagement.WebApp.Controllers
                     IsPersistent = false
                 };
 
-                var patient = (await _doctorApiClient.GetPatientProfile(request.PhoneNumber)).Data;
+                var patient = (await _doctorApiClient.GetPatientProfile(userName)).Data;
                 HttpContext.Session.SetString(SystemConstants.Patient, JsonConvert.SerializeObject(patient.FirstOrDefault(x=>x.IsPrimary==true)));
 
                 HttpContext.Session.SetString(SystemConstants.AppSettings.Token, rs.Data);
@@ -272,6 +401,43 @@ namespace DoctorManagement.WebApp.Controllers
                 return Json(district);
             }
             return null;
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        {
+            request.Role = "patient";
+            var rs = await _userApiClient.ForgotPassword(request);
+            if (rs.IsSuccessed)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            return View(request);
+        }
+        [HttpGet]
+        public IActionResult ResetPassword(string uid, string token)
+        {
+            ResetPasswordRequest resetPasswordModel = new ResetPasswordRequest
+            {
+                Token = token,
+                UserId = uid
+            };
+            return View(resetPasswordModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            var rs = await _userApiClient.ResetPassword(request);
+            if (rs.IsSuccessed)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            return View(request);
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {

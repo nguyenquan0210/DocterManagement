@@ -23,16 +23,19 @@ namespace DoctorManagement.Application.System.StatisticService
             var timespan = request.ToTime - request.FromTime;
             var executionDuration = (int) timespan.TotalSeconds;
             var fromdate = DateTime.Parse(request.FromTime.ToShortDateString());
-            var hiss = _context.HistoryActives.FirstOrDefault(x=>x.User == request.User&&x.CreatedAt>= fromdate && x.CreatedAt < fromdate.AddDays(1));
             
-            if (hiss == null)
+            var hiss = _context.HistoryActives.FirstOrDefault(x=>x.User == request.Usertemporary&&x.CreatedAt>= fromdate && x.CreatedAt < fromdate.AddDays(1));
+            var hissemporary = new HistoryActives();
+            if(hiss == null && request.User != null) hissemporary = _context.HistoryActives.FirstOrDefault(x=>x.User == request.User&&x.CreatedAt>= fromdate && x.CreatedAt < fromdate.AddDays(1));
+            var user = request.User == null ? request.Usertemporary : request.User;
+            if (hiss == null && hissemporary.User == null)
             {
                 var his = new HistoryActives()
                 {
                     CreatedAt = DateTime.Now,
                     Qty = 1,
                     Type = request.Type,
-                    User = request.User,
+                    User = user,
                     HistoryActiveDetailts = new List<HistoryActiveDetailts>()
                 };
                 var hisd = new HistoryActiveDetailts()
@@ -49,9 +52,10 @@ namespace DoctorManagement.Application.System.StatisticService
             }
             else
             {
-                var his = await _context.HistoryActives.FindAsync(hiss.Id);
+                var his = await _context.HistoryActives.FindAsync(hiss ==null?hissemporary.Id:hiss.Id);
                 his.Qty = his.Qty + 1;
                 his.CreatedAt = request.FromTime;
+                his.User = user;
                 his.HistoryActiveDetailts = new List<HistoryActiveDetailts>();
                 var hisd = new HistoryActiveDetailts()
                 {
@@ -92,7 +96,7 @@ namespace DoctorManagement.Application.System.StatisticService
                 var todate = fromdate.AddMonths(1);
                 query = query.Where(x => x.CreatedAt >= fromdate && x.CreatedAt <= todate);
             }
-            else
+            else if(!string.IsNullOrEmpty(request.year))
             {
                 var fromdate = DateTime.Parse("01/01/" + request.year);
                 var todate = fromdate.AddYears(1);

@@ -10,7 +10,6 @@ namespace DoctorManagement.ViewModels.System.Patient
     public class RegisterEnterProfileRequest
     {
         public string RelativePhone { get; set; }
-        public string PhoneNumber { get; set; }
         public string Password { get; set; }
 
         public string Name { get; set; }

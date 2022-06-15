@@ -44,6 +44,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 AccountBankName = MasterDatas.AccountBankName,
                 ServiceFee = MasterDatas.ServiceFee,
                 Content = MasterDatas.Content,
+                MapFrame = MasterDatas.MapFrame,
             };
 
             return new ApiSuccessResult<InformationVm>(rs);

@@ -312,7 +312,10 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 CreatedAt = clinics.CreatedAt,
                 FullAddress = clinics.FullAddress ,
                 MapUrl = clinics.MapUrl,
+                Service = clinics.Service,
+                Contact = clinics.Contact,
                 Rating = rating,
+                RatingText = icount.ToString(),
                 LocationVm= new LocationVm()
                 {
                     Id = subdistrict.Id,

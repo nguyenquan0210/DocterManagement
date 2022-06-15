@@ -27,5 +27,8 @@ namespace DoctorManagement.ViewModels.Catalog.Clinic
         public string MapUrl { get; set; }
         public string Note { get; set; }
         public int Rating { get; set; }
+        public string RatingText{ get; set; }
+        public string Service { get; set; }
+        public string Contact { get; set; }
     }
 }

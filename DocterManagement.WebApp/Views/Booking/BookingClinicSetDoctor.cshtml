@@ -2559,13 +2559,14 @@
                         </app-booking-step-bar>
                         <div _ngcontent-serverapp-c189="" class="grid md:grid-cols-12 gap-4">
                             <div _ngcontent-serverapp-c189="" class="col-span-12 md:col-span-7 lg:col-span-8 space-y-4">
-                                <div _ngcontent-serverapp-c189="" class="flex bg-orange-50 p-2 rounded-lg"><img
+                                @if(clinic.Note!= null)
+                                {<div _ngcontent-serverapp-c189="" class="flex bg-orange-50 p-2 rounded-lg"><img
                                         _ngcontent-serverapp-c189="" width="16" height="16"
                                         src="~/img/booking/svg/boldWarning2.svg"
                                         class="w-4 h-4 leading-5 object-cover mr-1">
                                     <p _ngcontent-serverapp-c189="" class="font-normal text-sm ng-star-inserted"> -
                                          @clinic.Note </p>
-                                </div>
+                                </div>}
                                 <nz-steps _ngcontent-serverapp-c189="" nzdirection="vertical" nzsize="small">
                                     <div class="ant-steps ant-steps-vertical ant-steps-small">
                                         <nz-step _ngcontent-serverapp-c189="" id="showstepdoctor" class="ant-steps-item ant-steps-item-process ant-steps-item-active ng-star-inserted">

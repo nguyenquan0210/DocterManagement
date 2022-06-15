@@ -651,8 +651,8 @@
                         @*<li _ngcontent-serverapp-c161=""><a _ngcontent-serverapp-c161="" class="menu-item"
                                 href="/thanh-toan">Lịch sử thanh toán</a></li>*@
                         <li _ngcontent-serverapp-c170=""><a _ngcontent-serverapp-c161=""
-                                class="menu-item item-active" asp-action="Index" asp-controller="Profile">Hồ sơ</a></li>
-                        <li _ngcontent-serverapp-c170=""><a _ngcontent-serverapp-c161="" asp-action="Account" class="menu-item"
+                                class="menu-item " asp-action="Index" asp-controller="Profile">Hồ sơ</a></li>
+                        <li _ngcontent-serverapp-c170=""><a _ngcontent-serverapp-c161="" asp-action="Account" class="menu-item item-active"
                                >Tài khoản</a></li>
                         <li _ngcontent-serverapp-c170=""><a _ngcontent-serverapp-c161="" class="menu-item"
                                 asp-action="Logout" asp-controller="Login">Đăng xuất</a></li>
@@ -670,6 +670,10 @@
                                         _ngcontent-serverapp-c169="">Họ và tên</label>
                                     <p _ngcontent-serverapp-c169="" class="font-medium">@patient.Name</p>
                                 </div>
+                                 <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
+                                        _ngcontent-serverapp-c169="">E-mail</label>
+                                    <p _ngcontent-serverapp-c169="" class="font-medium">@patient.RelativeEmail</p>
+                                </div>
                                 <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
                                         _ngcontent-serverapp-c169="">Số điện thoại</label>
                                     <p _ngcontent-serverapp-c169="" class="font-medium">@patient.RelativePhone</p>
@@ -685,10 +689,6 @@
                                 <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
                                         _ngcontent-serverapp-c169="">CMND/CCCD</label>
                                     <p _ngcontent-serverapp-c169="" class="font-medium">@patient.Identitycard</p>
-                                </div>
-                                <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><label
-                                        _ngcontent-serverapp-c169="">Mã BHYT</label>
-                                    <p _ngcontent-serverapp-c169="" class="font-medium">---</p>
                                 </div>
                                 <div _ngcontent-serverapp-c169="" class="flex justify-between py-2"><a
                                         _ngcontent-serverapp-c169=""asp-action="UpdateInfo" asp-route-id="@patient.Id" 

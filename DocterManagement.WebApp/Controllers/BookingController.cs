@@ -1,10 +1,13 @@
 ﻿using DoctorManagement.ApiIntegration;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Catalog.Schedule;
 using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Statistic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.WebApp.Controllers
 {
@@ -19,9 +22,11 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly IAppointmentApiClient _appointmentApiClient;
         private readonly IClinicApiClient _clinicalApiClient;
         private readonly ILocationApiClient _locationApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.WebApp.Controllers.Home";
         public BookingController(ILogger<HomeController> logger, IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
             ISpecialityApiClient specialityApiClient, IScheduleApiClient scheduleApiClient, IAppointmentApiClient appointmentApiClient,
-            IClinicApiClient clinicApiClient, ILocationApiClient locationApiClient)
+            IClinicApiClient clinicApiClient, ILocationApiClient locationApiClient, IStatisticApiClient statisticApiClient)
         {
             _logger = logger;
             _userApiClient = userApiClient;
@@ -31,6 +36,39 @@ namespace DoctorManagement.WebApp.Controllers
             _appointmentApiClient = appointmentApiClient;
             _clinicalApiClient = clinicApiClient;
             _locationApiClient = locationApiClient;
+            _statisticApiClient = statisticApiClient;
+        }
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? usertemporary = null;
+            string? user = null;
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
+                usertemporary = currentHistory.Usertemporary;
+                user = currentHistory.User;
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name == null ? user : User.Identity.Name,
+                    Usertemporary = (usertemporary == null && User.Identity.Name == null) ? ("patient" + new Random().Next(10000000, 99999999) + new Random().Next(10000000, 99999999)) : (usertemporary == null ? User.Identity.Name : usertemporary),
+                    Type = user == null ? "patientlogout" : "patient",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
+
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
         }
         public IActionResult Index()
         {
@@ -51,7 +89,15 @@ namespace DoctorManagement.WebApp.Controllers
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(doctorid)).Data.ToList();
             ViewBag.GetScheduleDoctor = getScheduleDoctor;
             var slot = await _scheduleApiClient.GetByScheduleSlotId(scheduleid);
-            if(slot.IsSuccessed)
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".BookingDoctorSetPatient",
+                MethodName = "GET",
+                ExtraProperties = slot.IsSuccessed ? "success" : "error",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
+            if (slot.IsSuccessed)
             {
                 ViewBag.Date = slot.Data.Schedule.CheckInDate;
                 ViewBag.TimeSpan = slot.Data.FromTime.ToString().Substring(0, 5) + "-" + slot.Data.ToTime.ToString().Substring(0, 5);
@@ -84,6 +130,14 @@ namespace DoctorManagement.WebApp.Controllers
             }
             if (!ModelState.IsValid) return View(request);
             var result = await _appointmentApiClient.Create(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".BookingDoctorSetPatient",
+                MethodName = "POST",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 return RedirectToAction("BookingSuccess", new { Id = result.Data });
@@ -147,7 +201,14 @@ namespace DoctorManagement.WebApp.Controllers
             ViewBag.SubDistrict = new List<SelectListItem>();
             ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(clinicId)).Data;
-
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".BookingClinicSetDoctor",
+                MethodName = "GET",
+                ExtraProperties = "",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             return View();
         }
         [HttpPost]
@@ -163,6 +224,14 @@ namespace DoctorManagement.WebApp.Controllers
             
             if (!ModelState.IsValid) return View(request);
             var result = await _appointmentApiClient.Create(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".BookingClinicSetDoctor",
+                MethodName = "POST",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 return RedirectToAction("BookingSuccess", new { Id = result.Data });

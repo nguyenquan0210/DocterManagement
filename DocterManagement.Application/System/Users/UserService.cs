@@ -125,14 +125,31 @@ namespace DoctorManagement.Application.System.Users
         }
         public async Task<ApiResult<string>> CheckPhone(RegisterEnterPhoneRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.PhoneNumber);
+            var user = await _userManager.FindByNameAsync(request.Email.Split("@")[0]);
             if (user != null) return new ApiErrorResult<string>("Tài khoản đã tồn tại");
+            if (await _userManager.FindByEmailAsync(request.Email) != null) return new ApiErrorResult<string>("E-mail đã tồn tại");
             var otp = "";
             for (var i = 0; i < 6; i++)
             {
                  otp = otp + new Random().Next(0, 9).ToString();
             }
+            await SendEmailConfirmationEmailRegister(request.Email, otp);
             return new ApiSuccessResult<string>(otp);
+        }
+        private async Task SendEmailConfirmationEmailRegister(string email, string otp)
+        {
+           
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string>() { email },
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", email.Split("@")[0]),
+                    new KeyValuePair<string, string>("{{Confirmation}}",otp),
+                }
+            };
+
+            await _emailService.SendEmailForEmailConfirmationRegister(options);
         }
         public async Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request)
         {
@@ -159,7 +176,7 @@ namespace DoctorManagement.Application.System.Users
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             if (!string.IsNullOrEmpty(token))
             {
-                await SendForgotPasswordEmail(user, token);
+                await SendForgotPasswordEmail(user, role, token);
                 return new ApiSuccessResult<bool>();
             }
             return new ApiErrorResult<bool>("Gửi mail không thành công!" );
@@ -174,9 +191,9 @@ namespace DoctorManagement.Application.System.Users
             if(rs.Succeeded) return new ApiSuccessResult<bool>();
             return new ApiErrorResult<bool>("Đổi mật khẩu không thành công!");
         }
-        private async Task SendForgotPasswordEmail(AppUsers user, string token)
+        private async Task SendForgotPasswordEmail(AppUsers user, AppRoles roles, string token)
         {
-            string appDomain = _config.GetSection("Application:AppDomainFeature").Value;
+            string appDomain = _config.GetSection("Application:"+(roles.Name =="admin"? "AppDomainAdmin": roles.Name == "admin" ? "AppDomainDoctor" : "AppDomainPatient")).Value;
             string confirmationLink = _config.GetSection("Application:ForgotPassword").Value;
 
             UserEmailOptions options = new UserEmailOptions
@@ -767,14 +784,15 @@ namespace DoctorManagement.Application.System.Users
 
         public async Task<ApiResult<bool>> ManageRegister(ManageRegisterRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.Email);
+            string[] username = request.Email.Split('@');
+            var user = await _userManager.FindByNameAsync(username[0]);
 
             var role = await _roleManager.FindByNameAsync("doctor");
             if (user != null)
             {
                 return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
             }
-            if (await _context.AppUsers.Where(x=>x.Email == request.Email && x.RoleId == role.Id).FirstOrDefaultAsync() != null)
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
@@ -789,7 +807,7 @@ namespace DoctorManagement.Application.System.Users
             else if (count < 99999) str = "DTD" + year + month + (count + 1);
 
             var password = "pw"+ str + new Random().Next(100000,999999) +"$";
-            string[] username = request.Email.Split('@');
+            
             user = new AppUsers()
             {
                 Email = request.Email,
@@ -881,14 +899,15 @@ namespace DoctorManagement.Application.System.Users
         }
         public async Task<ApiResult<bool>> RegisterPatient(RegisterEnterProfileRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.PhoneNumber);
+            var userName = request.Email.Split("@")[0];
+            var user = await _userManager.FindByNameAsync(userName);
 
             var role = await _roleManager.FindByNameAsync("patient");
             if (user != null)
             {
                 return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
             }
-            if (await _context.AppUsers.Where(x => x.Email == request.Email && x.RoleId == role.Id).FirstOrDefaultAsync() != null)
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
                 return new ApiErrorResult<bool>("Emai đã tồn tại");
             }
@@ -904,8 +923,8 @@ namespace DoctorManagement.Application.System.Users
             user = new AppUsers()
             {
                 Email = request.Email,
-                UserName = request.PhoneNumber,
-                PhoneNumber = request.PhoneNumber,
+                UserName = userName,
+                PhoneNumber = request.RelativePhone,
                 Status = Status.Active,
                 CreatedAt = DateTime.Now,
                 RoleId = role.Id
@@ -948,6 +967,7 @@ namespace DoctorManagement.Application.System.Users
             }
             return new ApiErrorResult<bool>("Đăng ký không thành công");
         }
+        
         public async Task GenerateEmailConfirmationTokenAsync(AppUsers user)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);

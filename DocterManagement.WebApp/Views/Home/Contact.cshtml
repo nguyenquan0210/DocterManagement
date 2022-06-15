@@ -1,9 +1,11 @@
-﻿@model DoctorManagement.ViewModels.Catalog.Contact.ContactCreateRequest
+﻿@using DoctorManagement.ViewModels.Catalog.MasterData
+@model DoctorManagement.ViewModels.Catalog.Contact.ContactCreateRequest
 @{
     ViewData["Title"] = "Contact";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var information = (InformationVm)ViewBag.Information;
 }
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
   <link rel="stylesheet" id="theme-css" href="https://youmed.vn/wp-content/themes/youmed/css/app.css?ver=3.0.0"
         type="text/css" media="all">
     <link rel="stylesheet" id="form-css-css" href="https://youmed.vn/wp-content/themes/youmed/css/form.css?ver=3.0.0"
@@ -12,6 +14,11 @@
       .ant-collapse .ant-collapse-item-disabled>.ant-collapse-header {
             color: #000000;
             cursor: pointer;
+        }
+        iframe{
+            position: absolute;
+            width:100%;
+            height:100%;
         }
   </style>
 <div id="content" class="site-content flex-grow">
@@ -25,10 +32,7 @@
                 <div class="relative overflow-hidden md:col-span-3 bg-gray-100 p-2 rounded-lg min-h-[500px]">
                     <div class="absolute inset-0 ">
                         <div class="gmap_canvas">
-                            <iframe width="100%" height="100%" id="gmap_canvas" class="absolute"
-                                src="https://maps.google.com/maps?q=523%20T%C3%B4%20Hi%E1%BA%BFn%20Th%C3%A0nh,%20P.%2014,%20Q.%2010,%20Tp.%20HCM&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
-                                loading="lazy" frameborder="0" scrolling="no" marginheight="0"
-                                marginwidth="0"></iframe>
+                               @Html.Raw(information.MapFrame)
                         </div>
                     </div>
                     <div class="p-6 bg-white rounded-lg shadow relative">

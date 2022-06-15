@@ -20,5 +20,6 @@ namespace DoctorManagement.ViewModels.Catalog.MasterData
         public string AccountBankName { get; set; }
         public decimal ServiceFee { get; set; }
         public string Content { get; set; }
+        public string MapFrame { get; set; }
     }
 }

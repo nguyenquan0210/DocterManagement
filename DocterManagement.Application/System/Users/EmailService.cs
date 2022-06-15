@@ -26,13 +26,20 @@ namespace DoctorManagement.Application.System.Users
 
         public async Task SendEmailForEmailConfirmation(UserEmailOptions userEmailOptions)
         {
-            userEmailOptions.Subject = UpdatePlaceHolders("Xin chaò {{UserName}}, Confirm your email id.", userEmailOptions.PlaceHolders);
+            userEmailOptions.Subject = UpdatePlaceHolders("Xin chào {{UserName}}, xác nhận mật khẩu.", userEmailOptions.PlaceHolders);
 
             userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("EmailConfirm"), userEmailOptions.PlaceHolders);
 
             await SendEmail(userEmailOptions);
         }
+        public async Task SendEmailForEmailConfirmationRegister(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolders("Xin chào{{UserName}}, xác nhân email.", userEmailOptions.PlaceHolders);
 
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("EmailConfirmRegister"), userEmailOptions.PlaceHolders);
+
+            await SendEmail(userEmailOptions);
+        }
         public async Task SendEmailForForgotPassword(UserEmailOptions userEmailOptions)
         {
             userEmailOptions.Subject = UpdatePlaceHolders("Xin chào {{UserName}}, cài lại mật khẩu.", userEmailOptions.PlaceHolders);

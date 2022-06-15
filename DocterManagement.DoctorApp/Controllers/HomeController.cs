@@ -32,6 +32,7 @@ namespace DoctorManagement.DoctorApp.Controllers
             ViewBag.StatisticAppointment = await StatisticActivePatient("appointment");
             ViewBag.StatisticRevanue = await StatisticActivePatient("ravanue");
             ViewBag.TopPatientCompleAppointment = await TopPatientCompleAppointment();
+            
             return View();
         }
         public async Task<List<AppointmentVm>> TopPatientCompleAppointment()

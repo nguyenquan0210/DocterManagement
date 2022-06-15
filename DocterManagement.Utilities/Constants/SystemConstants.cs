@@ -18,6 +18,7 @@ namespace DoctorManagement.Utilities.Constants
         public const string Service = "Service";
         public const string Contact = "Contact";
         public const string CheckPostInfo = "false";
+        public const string History = "History";
         public class AppSettings
         {
             public const string Token = "Token";

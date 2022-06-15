@@ -20,6 +20,8 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.No).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Address).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Description).HasMaxLength(int.MaxValue);
+            builder.Property(x => x.Contact).HasMaxLength(int.MaxValue);
+            builder.Property(x => x.Service).HasMaxLength(int.MaxValue);
             builder.Property(x => x.Note).HasMaxLength(int.MaxValue);
             builder.Property(x => x.ImgLogo).IsRequired().HasMaxLength(100);
 
