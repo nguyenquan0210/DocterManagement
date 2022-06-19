@@ -65,7 +65,7 @@
 
                         <style>
                             .seachvisble {
-                                display: none;
+                                display: block;
                             }
                         </style>
                     }
@@ -183,28 +183,28 @@
                         </div>
                     </div>
                     <div class="row ">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <label asp-for="ClinicId" class="control-label mt-4"></label>
                                 <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
                                     <option value="">-- Chọn phòng khám --</option>
                                 </select>
                                 <span asp-validation-for="ClinicId" class="text-danger"></span>
                             </div>
-                            <div class="col-2">
+                            <div class="col-6">
+                                <label asp-for="SpecialityId" class="control-label mt-4"></label>
+                                <select asp-for="SpecialityId" class= " multisteps-form__input form-control" >
+                                </select>
+                                <span asp-validation-for="SpecialityId" class="text-danger"></span>
+                            </div>
+                            <div class="col-3">
                                 <label asp-for="IsPrimary" class="form-label "></label>
                                    <div class="form-check form-switch ps-0">
                                        <input asp-for="IsPrimary" type="checkbox" class="form-check-input mt-1 ms-auto "  />
                                    </div>
                                 <span asp-validation-for="IsPrimary" class="text-danger"></span>
                             </div>
-                            <div class="col-3">
-                                <label asp-for="SpecialityId" class="control-label mt-4"></label>
-                                <select asp-for="SpecialityId" asp-items="ViewBag.Speciality" class= " multisteps-form__input form-control" >
-                                </select>
-                                <span asp-validation-for="SpecialityId" class="text-danger"></span>
-                            </div>
-                        <div class="col-4">
-                            <label asp-for="Slug" class="form-label mt-4"></label>
+                        <div class="col-6">
+                            <label asp-for="Slug" class="form-label "></label>
                             <input asp-for="Slug" class="multisteps-form__input form-control"  />
                             <span asp-validation-for="Slug" class="text-danger"></span>
                         </div>
@@ -274,12 +274,21 @@
             }); // flatpickr
         }
 
-      if (document.getElementById('SpecialityId')) {
-          var Speciality = document.getElementById('SpecialityId');
-          const examples = new Choices(Speciality, {
-          removeItemButton: true
-         });
-      }
+      
+      var dateindex = @Html.Raw(ViewBag.SetChoices);
+         if (document.getElementById('SpecialityId')) {
+             
+             var Speciality = document.getElementById('SpecialityId');
+              const examples = new Choices(Speciality, {
+              removeItemButton: true
+             });
+             examples.setChoices(
+               dateindex,
+                'value',
+                'label',
+                false,
+              );
+         }
 
     </script>
    <script>

@@ -16,5 +16,6 @@ namespace DoctorManagement.ViewModels.System.Statistic
         public DateTime ExecutionTime { get; set; }
         public int ExecutionDuration { get; set; }
         public string ExtraProperties { get; set; }
+        public int Count { get; set; }
     }
 }

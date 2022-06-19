@@ -104,7 +104,7 @@
                                        
                                         
                                         <td>
-                                            <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>
+                                            <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-warning") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "chưa xem" : "đã xem")</span>
                                         </td>
                                         <td class="text-sm">
                                             <a asp-controller = "Contact" asp-action = "DetailtContact" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">

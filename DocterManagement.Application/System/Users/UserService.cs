@@ -438,7 +438,7 @@ namespace DoctorManagement.Application.System.Users
                         Price = s.Price,
                     }).ToList(),
                     Location = new LocationVm() { Id = location.Id, Name = location.Name, District = new DistrictVm() { Id = district.Id, Name = district.Name, Province = new ProvinceVm() { Id = province.Id, Name = province.Name } } },
-                    GetClinic = new GetClinicVm(){ Id = clinic.Id, Name = clinic.Name},
+                    GetClinic = clinic==null?new GetClinicVm(): new GetClinicVm(){ Id = clinic.Id, Name = clinic.Name},
                     GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.spe.Id, Title = x.spe.Title }).ToList(),
                     Rates = rates.Select(x => new RateVm() { Id = x.r.Id, Rating = x.r.Rating }).ToList(),
                     Galleries = galleries.Select(x => new GalleryVm() { Id = x.Id, Name = GALLERY_CONTENT_FOLDER_NAME + "/" + x.Img }).ToList(),
@@ -603,7 +603,7 @@ namespace DoctorManagement.Application.System.Users
            
             if (!string.IsNullOrEmpty(request.Keyword) && request.checkclient==false)
             {
-                query = query.Where(x => x.UserName.Contains(request.Keyword)
+                query = query.Where(x => x.UserName.Contains(request.Keyword) || x.Email.Contains(request.Keyword)
                  || x.PhoneNumber.Contains(request.Keyword));
             }
             var checkdocter = await _context.Doctors.ToListAsync();

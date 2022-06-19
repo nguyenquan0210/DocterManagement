@@ -14,9 +14,11 @@ namespace DoctorManagement.ApiIntegration
 
         Task<ApiResult<bool>> Update(PostUpdateRequest request);
 
-        Task<int> Delete(Guid Id);
+        Task<int> DeleteDoctor(Guid Id);
+        Task<int> DeleteAdmin(Guid Id);
 
         Task<ApiResult<PagedResult<PostVm>>> GetAllPaging(GetPostPagingRequest request);
+        Task<ApiResult<PagedResult<PostVm>>> AdminGetAllPaging(GetPostPagingRequest request);
 
         Task<ApiResult<List<PostVm>>> GetAll();
 

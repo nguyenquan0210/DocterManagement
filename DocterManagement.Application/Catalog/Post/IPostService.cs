@@ -15,9 +15,10 @@ namespace DoctorManagement.Application.Catalog.Post
 
         Task<ApiResult<bool>> Update(PostUpdateRequest request);
 
-        Task<ApiResult<int>> Delete(Guid Id);
+        Task<ApiResult<int>> Delete(Guid Id, bool checkdoctor);
 
         Task<ApiResult<PagedResult<PostVm>>> GetAllPaging(GetPostPagingRequest request);
+        Task<ApiResult<PagedResult<PostVm>>> GetAllPagingAdmin(GetPostPagingRequest request);
 
         Task<ApiResult<List<PostVm>>> GetAll();
 

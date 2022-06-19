@@ -490,11 +490,10 @@
                                                                             class="ant-form-item-control-input-content ng-tns-c210-7">
                                                                             <label _ngcontent-serverapp-c213=""
                                                                                 asp-for="UserName"
-                                                                                class="form-label ng-tns-c210-7">Số điện
-                                                                                thoại</label><input asp-for="UserName" value="0373951042"
+                                                                                class="form-label ng-tns-c210-7">Tên tài khoản hoặc e-mail</label><input asp-for="UserName" value="0373951042"
                                                                                 _ngcontent-serverapp-c213=""
-                                                                                onkeypress="return /[0-9]/i.test(event.key)" maxlength="10"
-                                                                                placeholder="Số điện thoại"
+                                                                              
+                                                                                placeholder="Tài khoản hoặc e-mail"
                                                                                 
                                                                                 
                                                                                 class="form-control ng-tns-c210-7 ng-pristine ng-invalid ng-touched"
@@ -698,8 +697,7 @@
 		        formGroup: ".form-section__form-group",
 		        errorMessage: ".text-error",
 		        rules: [
-			        Validator.isRequired('#UserName', 'Vui lòng nhập số điện thoại!'),
-			        Validator.isPhone('#UserName', 'Vui lòng nhập đúng số điện thoại!'),
+			        Validator.isRequired('#UserName', 'Vui lòng tên tài khoản hoặc e-mail!'),
 			        Validator.isRequired('#Password', 'Vui lòng nhập mật khẩu!'),
 		        ]
 	        })

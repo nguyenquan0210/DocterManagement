@@ -64,9 +64,13 @@ namespace DoctorManagement.ApiIntegration
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
-        public async Task<int> Delete(Guid Id)
+        public async Task<int> DeleteDoctor(Guid Id)
         {
-            return await Delete($"/api/post/" + Id);
+            return await Delete($"/api/post/deleted-doctor/" + Id);
+        }
+        public async Task<int> DeleteAdmin(Guid Id)
+        {
+            return await Delete($"/api/post/deleted-admin/" + Id);
         }
         public async Task<int> DeleteImg(Guid Id)
         {
@@ -91,6 +95,15 @@ namespace DoctorManagement.ApiIntegration
         {
             return await GetAsync<PagedResult<PostVm>>(
                $"/api/post/paging?pageIndex={request.PageIndex}" +
+               $"&pageSize={request.PageSize}" +
+               $"&keyword={request.Keyword}" +
+               $"&usename={request.Usename}" +
+               $"&topicId={request.TopicId}");
+        }
+        public async Task<ApiResult<PagedResult<PostVm>>> AdminGetAllPaging(GetPostPagingRequest request)
+        {
+            return await GetAsync<PagedResult<PostVm>>(
+               $"/api/post/admin/paging?pageIndex={request.PageIndex}" +
                $"&pageSize={request.PageSize}" +
                $"&keyword={request.Keyword}" +
                $"&usename={request.Usename}" +

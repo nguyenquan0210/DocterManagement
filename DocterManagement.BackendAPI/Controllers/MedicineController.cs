@@ -43,11 +43,6 @@ namespace DoctorManagement.BackendAPI.Controllers
         [Authorize]
         public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var affectedResult = await _medicineService.Delete(Id);
 
             return Ok(affectedResult);

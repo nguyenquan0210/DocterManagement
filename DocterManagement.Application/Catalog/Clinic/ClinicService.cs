@@ -58,7 +58,10 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 Status = Status.Active,
                 No = str,
                 Note = request.Note,
-                MapUrl = request.MapUrl
+                MapUrl = request.MapUrl,
+                Service = request.Service,
+                Contact = request.Contact,
+                CreatedAt = DateTime.Now,
             };
             var i = 0;
             if (request.ImgClinics != null)
@@ -297,7 +300,7 @@ namespace DoctorManagement.Application.Catalog.Clinic
                     icount++;
                 }
             }
-            rating = rating / icount;
+            rating = rating / (icount==0?1:icount);
 
             var rs = new ClinicVm()
             {
@@ -398,11 +401,12 @@ namespace DoctorManagement.Application.Catalog.Clinic
             clinics.Address = request.Address;
             clinics.Name = request.Name;
             clinics.Description = WebUtility.HtmlDecode(request.Description);
-            clinics.Address = request.Address;
             clinics.LocationId = request.LocationId;
             clinics.Status = request.Status;
             clinics.Note = request.Note;
             clinics.MapUrl = request.MapUrl;
+            clinics.Service = request.Service;
+            clinics.Contact = request.Contact;
             if (request.ImgLogo != null)
             {
                 if(clinics.ImgLogo != null) await _storageService.DeleteFileAsyncs(clinics.ImgLogo, CLINIC_CONTENT_FOLDER_NAME);

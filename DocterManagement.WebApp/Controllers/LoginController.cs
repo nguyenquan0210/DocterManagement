@@ -54,7 +54,7 @@ namespace DoctorManagement.WebApp.Controllers
                 {
                     User = User.Identity.Name == null ? user : User.Identity.Name,
                     Usertemporary = (usertemporary == null && User.Identity.Name == null) ? ("patient" + new Random().Next(10000000, 99999999) + new Random().Next(10000000, 99999999)) : (usertemporary == null ? User.Identity.Name : usertemporary),
-                    Type = user == null ? "patientlogout" : "patient",
+                    Type = user == null ? "passersby" : "patient",
                     ServiceName = request.ServiceName,
                     MethodName = request.MethodName,
                     ExtraProperties = request.ExtraProperties,

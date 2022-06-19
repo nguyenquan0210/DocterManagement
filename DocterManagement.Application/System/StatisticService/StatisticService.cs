@@ -2,6 +2,7 @@
 using DoctorManagement.Data.Entities;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Statistic;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,6 +121,22 @@ namespace DoctorManagement.Application.System.StatisticService
                     Parameters = s.Parameters
                 }).ToList(),
             }).ToList());
+        }
+
+        public async Task<ApiResult<List<HistoryActiveDetailtVm>>> ListActiveUserDetailt()
+        {
+            var query = from hd in _context.historyActiveDetailts select hd;
+            return new ApiSuccessResult<List<HistoryActiveDetailtVm>>(await query.Select(s => new HistoryActiveDetailtVm()
+            {
+                Id = s.Id,
+                ServiceName = s.ServiceName,
+                ExecutionDuration = s.ExecutionDuration,
+                ExecutionTime = s.ExecutionTime,
+                ExtraProperties = s.ExtraProperties,
+                MethodName = s.MethodName,
+                Parameters = s.Parameters,
+                Count = query.Where(x=>x.Parameters == s.Parameters).Count()
+            }).ToListAsync());
         }
     }
 }

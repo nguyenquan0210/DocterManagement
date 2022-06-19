@@ -20,8 +20,8 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Tạo mới phòng khám
         /// </summary>
         /// 
-        [Authorize]
         [HttpPost]
+        [Authorize]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<ApiResult<bool>>> Create([FromForm] ClinicCreateRequest request)
         {

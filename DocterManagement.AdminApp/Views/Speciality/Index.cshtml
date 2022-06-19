@@ -107,7 +107,7 @@
                                                 <h6 class="ms-3 my-auto">@item.Title</h6>
                                             </div>
                                         </td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@( item.Description!=null? (item.Description.Length>30?item.Description.Substring(0,29)+"...":item.Description):"")</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.SortOrder</h6></td>
                                         
                                         <td>

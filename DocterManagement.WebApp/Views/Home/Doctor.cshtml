@@ -301,7 +301,7 @@
                                                         <div _ngcontent-serverapp-c189="" class="flex gap-4"><img
                                                                 _ngcontent-serverapp-c189="" width="64" height="64" loading="lazy"
                                                                 class="rounded-full w-16 h-16 object-cover ring-1 ring-slate-100"
-                                                                src="@(Configuration["BaseAddress"] + "/img/user-content/" + item.Img)"
+                                                                src="@(Configuration["BaseAddress"] + "/img/" + item.Img)"
                                                                 alt="@(item.LastName + " " + item.FirstName)">
                                                             <div _ngcontent-serverapp-c189="" class="flex flex-col overflow-hidden">
                                                                 <div _ngcontent-serverapp-c189=""
@@ -361,10 +361,10 @@
                                 {
                                     <app-special-block _ngcontent-serverapp-c192="" _nghost-serverapp-c191=""
                                                 class="ng-star-inserted">
-                                        <div _ngcontent-serverapp-c191="" class="flex flex-col items-center"><a asp-action="DoctorSpecialityDemo" asp-controller="Doctor" asp-route-id="@item.Id"
+                                        <div _ngcontent-serverapp-c191="" class="flex flex-col items-center"><a asp-action="DoctorSpecialityDemo" asp-controller="Doctor" asp-route-specialityid="@item.Id"
                                                 _ngcontent-serverapp-c191="" class="rounded-full mb-2 bg-primary/10"><img
                                                     _ngcontent-serverapp-c191="" alt="icon-special" height="60" width="60"
-                                                    src="@(Configuration["BaseAddress"] + "/img/" + item.Img)" class=" ng-lazyloading"></a><a asp-action="DoctorSpeciality" asp-controller="Doctor" asp-route-id="@item.Id"
+                                                    src="@(Configuration["BaseAddress"] + "/img/" + item.Img)" class=" ng-lazyloading"></a><a asp-action="DoctorSpecialityDemo" asp-controller="Doctor" asp-route-specialityid="@item.Id"
                                                 _ngcontent-serverapp-c191=""
                                                 class="text-sm-w400 text-center hover:text-[#1890ff] xl:text-base"> @item.Title
                                             </a></div>
@@ -447,27 +447,43 @@
                     </section>
                     
                 </app-carousel-intro>
-                <app-download _ngcontent-serverapp-c194="" _nghost-serverapp-c69="">
+                <app-download _ngcontent-serverapp-c71="" _nghost-serverapp-c69="">
                     <section _ngcontent-serverapp-c69="" id="download"
-                        class="bg-gradient-to-t md:bg-gradient-to-r from-[#00C6FB] to-[#0758D8] md:mt-12">
+                        class="bg-gradient-to-t md:bg-gradient-to-r from-[#00C6FB] to-[#0758D8]">
                         <div _ngcontent-serverapp-c69="" class="max-w-7xl mx-auto md:grid md:grid-cols-12">
                             <div _ngcontent-serverapp-c69=""
                                 class="px-4 py-6 lg:py-12 text-white space-y-6 md:col-span-5 lg:col-span-4">
                                 <h2 _ngcontent-serverapp-c69="" class="text-2xl md:text-4xl font-bold text-white">Hãy sử dụng DoctorMed</h2>
-                                    <ul _ngcontent-serverapp-c69="" class="space-y-4">
-                                        <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img _ngcontent-serverapp-c69=""
-                                                width="24" height="24" alt="icon" class="mr-1  ng-lazyloaded"
-                                                src="~/img/booking/svg/iconCheck.svg"><span _ngcontent-serverapp-c69="" class="text-white">Đặt khám
-                                                Bác sĩ - Phòng khám </span></li>
-                                        
-                                        <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img _ngcontent-serverapp-c69=""
-                                                width="24" height="24" alt="icon" class="mr-1  ng-lazyloaded"
-                                                src="~/img/booking/svg/iconCheck.svg"><span _ngcontent-serverapp-c69="" class="text-white">Trả kết
-                                                quả khám, lưu trữ hồ sơ</span></li>
-                                        
-                                        
-                                    </ul>
-                                @*<div _ngcontent-serverapp-c69="" class="flex gap-4 justify-center md:justify-start"><a
+                                <ul _ngcontent-serverapp-c69="" class="space-y-4">
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg/hospital.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Đặt lịch khám bệnh và xét
+                                            nghiệm</span></li>
+                                    
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded" src="~/img/booking/svg/like.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Đặt lịch khám bệnh với các phòng khám</span></li>
+                                    
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg//shield-security.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Lưu trữ hồ sơ sức khỏe</span>
+                                    </li>
+                                    
+                                   @* <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg/wallet-minus.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Thanh toán dịch vụ trực
+                                            tuyến</span></li>*@
+                                    
+                                    
+                                </ul>
+                               @* <div _ngcontent-serverapp-c69="" class="flex gap-4 justify-center md:justify-start"><a
                                         _ngcontent-serverapp-c69="" target="_blank"
                                         href="https://play.google.com/store/apps/details?id=com.DoctorMed.info"><img
                                             _ngcontent-serverapp-c69="" width="135" height="40" loading="lazy"
@@ -488,8 +504,9 @@
                                     class="absolute top-0 lg:-top-1/2">
                                 <div _ngcontent-serverapp-c69=""
                                     class="invisible md:visible absolute z-10 bottom-0 max-w-[195.8px] md:max-w-full">
-                                    <img _ngcontent-serverapp-c69="" lazyload="~/img/booking/png/ip13.webp"
-                                        class="w-full md:max-h-[350px] object-cover ng-lazyloading" src="~/img/booking/png/ip13.webp"></div>
+                                    <img _ngcontent-serverapp-c69="" 
+                                        class="w-full md:max-h-[350px] object-cover  ng-lazyloaded"
+                                        src="~/img/booking/png/Clinic/Feature2.webp"></div>
                             </div>
                         </div>
                     </section>

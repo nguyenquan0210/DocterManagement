@@ -1,4 +1,5 @@
-﻿@model DoctorManagement.ViewModels.Catalog.Post.PostVm
+﻿@using DoctorManagement.Data.Enums
+@model DoctorManagement.ViewModels.Catalog.Post.PostVm
 @{
     ViewData["Title"] = "DetailtPost";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -74,11 +75,23 @@
           
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
-                    <div class="card-header">
-                        <h5>Xem bài viết</h5>
-                        <p class="text-sm mb-0">
-                            Bài viết tốt có thể tăng độ theo dõi của các bệnh nhân.
-                        </p>
+                     <div class="card-header">
+                        <div class="d-lg-flex">
+                            <div>
+                                <h5>Xem bài viết</h5>
+                                <p class="text-sm mb-0">
+                                    Bài viết tốt có thể tăng độ theo dõi của các bệnh nhân.
+                                </p>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                           
+                                <div class="ms-auto my-auto">
+                                     <span class="badge @(Model.Status == Status.Active ? "badge-success" : "badge-danger") badge-sm" id="status_@Model.Id">@(Model.Status == Status.Active ? "Hoạt động" : "đã khóa")</span>
+                              
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
 
                     @if (TempData["AlertMessage"] != null)

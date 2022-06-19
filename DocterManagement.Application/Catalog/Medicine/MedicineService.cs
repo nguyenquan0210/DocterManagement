@@ -68,7 +68,6 @@ namespace DoctorManagement.Application.Catalog.Medicine
                 check = 2;
 
             }
-          
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check);
         }

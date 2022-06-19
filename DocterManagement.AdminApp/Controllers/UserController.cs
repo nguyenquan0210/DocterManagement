@@ -126,10 +126,11 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Clinic = await _userApiClient.GetAllClinic(new Guid());
-            ViewBag.Speciality = await _userApiClient.GetAllSpeciality(new Guid());
+            ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(new List<GetSpecialityVm>()));
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             ViewBag.District = new List<SelectListItem>();
             ViewBag.SubDistrict = new List<SelectListItem>();
+
             return View();
         }
 
@@ -138,11 +139,24 @@ namespace DoctorManagement.AdminApp.Controllers
         public async Task<IActionResult> Create(ManageRegisterRequest request)
         {
             ViewBag.Clinic = await _userApiClient.GetAllClinic(request.ClinicId);
-            //ViewBag.Speciality = await _userApiClient.GetAllSpeciality(request.SpecialityId);
+            
             ViewBag.Province = await _locationApiClient.GetAllProvince(request.ProvinceId);
             ViewBag.District = await _locationApiClient.CityGetAllDistrict(request.DistrictId, request.ProvinceId==null?new Guid():request.ProvinceId);
             ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(request.SubDistrictId,request.DistrictId == null ? new Guid() : request.DistrictId);
-            //ViewBag.Gender = SeletectGender(request.Gender.ToString());
+            var getallspecialities = await _userApiClient.GetAllSpeciality(new Guid());
+            var specialities = new List<GetSpecialityVm>();
+            foreach (var spe in request.SpecialityId)
+            {
+                var speciality = new GetSpecialityVm()
+                {
+                    Id = spe,
+                    IsDeleted = false,
+                    Title = getallspecialities.FirstOrDefault(x => x.Value == spe.ToString()).Text,
+                };
+                specialities.Add(speciality);
+            }
+
+            ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(specialities));
             if (!ModelState.IsValid)
                 return View();
             
@@ -154,7 +168,8 @@ namespace DoctorManagement.AdminApp.Controllers
                 TempData["AlertType"] = "alert-success";
                 return RedirectToAction("Index");
             }
-            ModelState.AddModelError("", result.Message);
+            TempData["AlertMessage"] = result.Message;
+            TempData["AlertType"] = "alert-warning";
             return View(request);
         }
         [HttpGet]
@@ -256,13 +271,13 @@ namespace DoctorManagement.AdminApp.Controllers
             ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(new Guid(), request.DistrictId);
             var getallspecialities = await _userApiClient.GetAllSpeciality(new Guid());
             var specialities = new List<GetSpecialityVm>();
-            foreach (var spe in getallspecialities)
+            foreach (var spe in request.Specialities)
             {
                 var speciality = new GetSpecialityVm()
                 {
-                    Id = new Guid(spe.Value),
+                    Id = spe,
                     IsDeleted = false,
-                    Title = spe.Text
+                    Title = getallspecialities.FirstOrDefault(x => x.Value == spe.ToString()).Text,
                 };
                 specialities.Add(speciality);
             }
@@ -338,7 +353,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+          
             return View(request);
         }
         [HttpGet]
@@ -388,7 +403,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+          
             return View(request);
         }
         [HttpGet]

@@ -95,8 +95,8 @@
                         </div>
 
                     </div>
-                     <div class="row ">
-                         <div class="col-6">
+                    <div class="row ">
+                        <div class="col-6">
                             <label  class="form-label mt-4">Thành phố</label>
                             <input value="TP Đà Nẵng" class="multisteps-form__input form-control" readonly />
                             <span  class="text-danger"></span>
@@ -135,6 +135,21 @@
 
                         </div>    
                             
+                    </div>
+                     <div class="row">
+                        <div class="col-6">
+                            <label asp-for="Service" class="form-label"></label>
+                            <textarea asp-for="Service" class="multisteps-form__input form-control classic-editor" ></textarea>
+                            <span asp-validation-for="Service" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Contact" class="form-label"></label>
+                            <textarea asp-for="Contact" class="multisteps-form__input form-control classic-editor" ></textarea>
+                            <span asp-validation-for="Contact" class="text-danger"></span>
+
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-12">

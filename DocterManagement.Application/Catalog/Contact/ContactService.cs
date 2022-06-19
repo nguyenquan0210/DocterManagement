@@ -107,6 +107,8 @@ namespace DoctorManagement.Application.Catalog.Contact
         public async Task<ApiResult<ContactVm>> GetByIdContact(Guid Id)
         {
             var contacts = await _context.Contacts.FindAsync(Id);
+            if (contacts.IsDeleted == false) contacts.IsDeleted = true;
+            await _context.SaveChangesAsync();
             if (contacts == null) return new ApiErrorResult<ContactVm>("Liên hệ không được xác nhận!");
             var rs = new ContactVm()
             {

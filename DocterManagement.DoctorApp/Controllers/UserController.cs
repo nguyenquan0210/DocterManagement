@@ -220,18 +220,18 @@ namespace DoctorManagement.DoctorApp.Controllers
             ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(new Guid(), request.DistrictId);
             var getallspecialities = await _userApiClient.GetAllSpeciality(new Guid());
             var specialities = new List<GetSpecialityVm>();
-            foreach (var spe in getallspecialities)
+            foreach (var spe in request.Specialities)
             {
                 var speciality = new GetSpecialityVm()
                 {
-                    Id = new Guid(spe.Value),
+                    Id = spe,
                     IsDeleted = false,
-                    Title = spe.Text
+                    Title = getallspecialities.FirstOrDefault(x => x.Value == spe.ToString()).Text,
                 };
                 specialities.Add(speciality);
             }
 
-            ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(specialities));
+            ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(specialities)); ;
             if (!ModelState.IsValid)
                 return View();
 

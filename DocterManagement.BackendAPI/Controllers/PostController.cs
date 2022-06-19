@@ -34,10 +34,10 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Xóa bài viết
+        /// Xóa bài viết từ bác sĩ
         /// </summary>
         /// 
-        [HttpDelete("{Id}")]
+        [HttpDelete("deleted-doctor/{Id}")]
         [Authorize]
         public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
@@ -46,7 +46,24 @@ namespace DoctorManagement.BackendAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _postService.Delete(Id);
+            var result = await _postService.Delete(Id,true);
+
+            return Ok(result);
+        }
+        /// <summary>
+        /// Xóa bài viết từ admin
+        /// </summary>
+        /// 
+        [HttpDelete("deleted-admin/{Id}")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<int>>> DeleteAdmin([FromRoute] Guid Id)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _postService.Delete(Id,false);
 
             return Ok(result);
         }
@@ -75,6 +92,16 @@ namespace DoctorManagement.BackendAPI.Controllers
         public async Task<ActionResult<ApiResult<PagedResult<PostVm>>>> GetAllPaging([FromQuery] GetPostPagingRequest request)
         {
             var result = await _postService.GetAllPaging(request);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy danh sách phân trang bài viết từ admin
+        /// </summary>
+        /// 
+        [HttpGet("admin/paging")]
+        public async Task<ActionResult<ApiResult<PagedResult<PostVm>>>> GetAllPagingPostAdmin([FromQuery] GetPostPagingRequest request)
+        {
+            var result = await _postService.GetAllPagingAdmin(request);
             return Ok(result);
         }
         /// <summary>

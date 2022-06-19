@@ -1,11 +1,22 @@
 ﻿@using DoctorManagement.ViewModels.Catalog.MasterData
 @using DoctorManagement.ViewModels.System.Doctors
+@using DoctorManagement.ViewModels.System.Statistic
 @{
     var menuPanner = (List<MainMenuVm>)ViewBag.MenuPanner;
     var doctors = (List<DoctorVm>)ViewBag.Doctor;
     var information = (InformationVm)ViewBag.Information;
+    var keywords = (List<HistoryActiveDetailtVm>)ViewBag.Keywords;
     var i = 0;
 }
+<style>
+    .keyword {
+    padding: 0 2px;
+    border-radius: 2px;
+}
+.keyword:hover {
+    background:#333;
+}
+</style>
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 <app-banner _ngcontent-serverapp-c71="" _nghost-serverapp-c67="" class="ng-tns-c67-33 ng-star-inserted">
     <section _ngcontent-serverapp-c67=""
@@ -47,10 +58,14 @@
                             <div _ngcontent-serverapp-c65="" class="flex flex-row gap-6">
                                 <div _ngcontent-serverapp-c65="" class="flex-shrink-0 text-white">Tìm
                                     kiếm phổ biến:</div>
-                                <p _ngcontent-serverapp-c65=""
-                                    class="cursor-pointer whitespace-nowrap underline text-white hover:opacity-50 m-0 ng-star-inserted">
-                                    Mỹ mỹ </p>
-                                <p _ngcontent-serverapp-c65=""
+                                @foreach(var item in keywords.Take(6))
+                                {
+                                    <a  asp-action="FilterDoctorHome" asp-controller="Home" asp-route-keyword="@item.Parameters" _ngcontent-serverapp-c65=""
+                                        class="keyword cursor-pointer whitespace-nowrap text-white hover:opacity-50 m-0 ng-star-inserted">
+                                        @item.Parameters </a>
+                                    
+                                }
+                               @* <p _ngcontent-serverapp-c65=""
                                     class="cursor-pointer whitespace-nowrap underline text-white hover:opacity-50 m-0 ng-star-inserted">
                                     My my </p>
                                 <p _ngcontent-serverapp-c65=""
@@ -64,11 +79,16 @@
                                     Phùng Nguyễn Thế Nguyên </p>
                                 <p _ngcontent-serverapp-c65=""
                                     class="cursor-pointer whitespace-nowrap underline text-white hover:opacity-50 m-0 ng-star-inserted">
-                                    bá thắng </p>
+                                    bá thắng </p>*@
                                 <datalist _ngcontent-serverapp-c65="" id="list-popular-keywords">
-                                    <option _ngcontent-serverapp-c65="" class="ng-star-inserted"> Mỹ mỹ
-                                    </option>
-                                    <option _ngcontent-serverapp-c65="" class="ng-star-inserted"> My my
+                                    @foreach(var item in keywords.Take(10))
+                                    {
+                                        <option _ngcontent-serverapp-c65="" class="ng-star-inserted"> @item.Parameters
+                                        </option>
+                                    
+                                    }
+                                    
+                                    <@*option _ngcontent-serverapp-c65="" class="ng-star-inserted"> My my
                                     </option>
                                     <option _ngcontent-serverapp-c65="" class="ng-star-inserted"> Phùng
                                         nguyễn thế nguyên </option>
@@ -85,7 +105,7 @@
                                     <option _ngcontent-serverapp-c65="" class="ng-star-inserted"> mỹ mỹ
                                     </option>
                                     <option _ngcontent-serverapp-c65="" class="ng-star-inserted"> Phòng
-                                        khám mỹ mỹ </option>
+                                        khám mỹ mỹ </option>*@
                                 </datalist>
                             </div>
                         </div>

@@ -86,7 +86,7 @@
                                     <th>Mã phòng khám</th>
                                     <th>Tên phòng khám</th>
                                     <th>Địa chỉ</th>
-                                    <th>Mô tả</th>
+                                    @*<th>Mô tả</th>*@
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -106,7 +106,7 @@
                                             </div>
                                         </td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Address </h6></td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>
+                                       @* <td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>*@
                                         
                                         <td>
                                             <span class="badge @(item.Status == Status.Active ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.Status == Status.Active ? "Hoạt động" : "đã khóa")</span>
@@ -131,7 +131,7 @@
                                     <th>Mã phòng khám</th>
                                     <th>Tên phòng khám</th>
                                     <th>Địa chỉ</th>
-                                    <th>Mô tả</th>
+                                    @*<th>Mô tả</th>*@
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>

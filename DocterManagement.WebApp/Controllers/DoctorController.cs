@@ -56,7 +56,7 @@ namespace DoctorManagement.WebApp.Controllers
                 {
                     User = User.Identity.Name == null ? user : User.Identity.Name,
                     Usertemporary = (usertemporary == null && User.Identity.Name == null) ? ("patient" + new Random().Next(10000000, 99999999) + new Random().Next(10000000, 99999999)) : (usertemporary == null ? User.Identity.Name : usertemporary),
-                    Type = user == null ? "patientlogout" : "patient",
+                    Type = user == null ? "passersby" : "patient",
                     ServiceName = request.ServiceName,
                     MethodName = request.MethodName,
                     ExtraProperties = request.ExtraProperties,
@@ -144,7 +144,7 @@ namespace DoctorManagement.WebApp.Controllers
 
             return View(doctor.Data);
         }
-        public async Task<IActionResult> DoctorSpecialityJson(Guid Id, string keyword, string searchSpeciality, int pageIndex = 1, int pageSize = 20)
+        public async Task<IActionResult> DoctorSpecialityJson(Guid specialityid, string keyword, string searchSpeciality, int pageIndex = 1, int pageSize = 20)
         {
             var request = new GetUserPagingRequest()
             {
@@ -152,7 +152,7 @@ namespace DoctorManagement.WebApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 RoleName = "doctor",
-                SpecialityId = Id,
+                SpecialityId = specialityid,
                 searchSpeciality = searchSpeciality
             };
 

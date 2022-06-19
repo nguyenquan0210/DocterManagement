@@ -29,11 +29,11 @@ namespace DoctorManagement.Application.Catalog.Speciality
         public async Task<ApiResult<bool>> Create(SpecialityCreateRequest request)
         {
             string year = DateTime.Now.ToString("yy");
-            int count = await _context.Specialities.Where(x => x.No.Contains("SP-" + year)).CountAsync();
+            int count = await _context.Specialities.Where(x => x.No.Contains("DTMSP" + year)).CountAsync();
             string str = "";
-            if (count < 9) str = "SP-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
-            else if (count < 99) str = "SP-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
-            else if (count < 999) str = "SP-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+            if (count < 9) str = "DTMSP" + DateTime.Now.ToString("yy") + "00" + (count + 1);
+            else if (count < 99) str = "DTMSP" + DateTime.Now.ToString("yy") + "0" + (count + 1);
+            else if (count < 999) str = "DTMSP" + DateTime.Now.ToString("yy") + "" + (count + 1);
             var specialities = new Specialities()
             {
                 Title = request.Title,

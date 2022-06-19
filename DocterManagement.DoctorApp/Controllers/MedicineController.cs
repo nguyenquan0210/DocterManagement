@@ -122,7 +122,7 @@ namespace DoctorManagement.DoctorApp.Controllers
             }
             return RedirectToAction("Error", "Home");
         }
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Delete(Guid Id)
         {
             var result = await _medicineApiClient.Delete(Id);

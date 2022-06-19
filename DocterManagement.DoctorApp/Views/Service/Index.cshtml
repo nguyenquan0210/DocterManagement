@@ -273,11 +273,11 @@
                 dataType: "json",
                 type: "POST",
                 success: function (result) {
-                    if (result.response == 2) {
+                    if (result.response == 1) {
                         $("#row_" + empId).remove();
                           $("#title").html("Xóa Thành Công");
                         $("#descript").html("Xóa người dùng thành công.");
-                    } else if(result.response == 1) {
+                    } else if(result.response == 2) {
                         document.getElementById("status_" + empId).classList.toggle('badge-success');
                         document.getElementById("status_" + empId).classList.toggle('badge-danger');
                         $("#status_" + empId).html("đã khóa");
