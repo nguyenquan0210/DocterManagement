@@ -32,6 +32,10 @@ namespace DoctorManagement.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("BankName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("CancelReason")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -178,7 +182,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "f5013cfb-2570-4a05-ac9b-11d4c44091db",
+                            ConcurrencyStamp = "30474367-f943-4fe6-850a-1baea973cce7",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -186,7 +190,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("2dd4ec71-5669-42d7-9cf9-bb17220c64c7"),
-                            ConcurrencyStamp = "7e5f4997-ac6a-4676-9d8a-e1b31d6a4c49",
+                            ConcurrencyStamp = "f5f43e42-6778-4aaa-81b2-e200567bcb89",
                             Description = "doctor role",
                             Name = "doctor",
                             NormalizedName = "doctor"
@@ -194,7 +198,7 @@ namespace DoctorManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("50fe257e-6475-41f0-93f7-f530d622362b"),
-                            ConcurrencyStamp = "87950fc4-5cfd-4335-bd9d-936de7eb899c",
+                            ConcurrencyStamp = "afa718de-4f6b-457d-924e-5c227d35959b",
                             Description = "patient role",
                             Name = "patient",
                             NormalizedName = "patient"
@@ -275,14 +279,14 @@ namespace DoctorManagement.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "218ae6db-e197-439c-86dd-d45051e07f28",
+                            ConcurrencyStamp = "d8d6f639-2507-4118-aa48-30486a9e0be8",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nguyenquan52000@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyenquan52000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEN76kYKIksmbM+dtRxoMuNLBVgN+OyCVxN/GgEIw8+BGRIH9yPKmrPBTl5ZBeV9zUA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFGpPuQKaVZ3dx8bmrX7O6Qe3lR3uA2oa9qDqOZ630a+uwrFfwazU0Sp4ZKgwrNp6w==",
                             PhoneNumber = "0373951042",
                             PhoneNumberConfirmed = false,
                             RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
@@ -646,8 +650,8 @@ namespace DoctorManagement.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Parameters")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ServiceName")
                         .HasMaxLength(255)

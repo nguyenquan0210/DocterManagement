@@ -61,7 +61,55 @@ namespace DoctorManagement.AdminApp.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-      
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        {
+            request.Role = "admin";
+            var rs = await _userApiClient.ForgotPassword(request);
+            if (rs.IsSuccessed)
+            {
+                TempData["AlertMessage"] = "Thay đổi thông tin thành công";
+                TempData["AlertType"] = "success";
+                TempData["AlertId"] = "successToast";
+                return RedirectToAction("Index", "Login");
+            }
+            TempData["AlertMessage"] = rs.Message;
+            TempData["AlertType"] = "danger";
+            TempData["AlertId"] = "dangerToast";
+            return View(request);
+        }
+        [HttpGet]
+        public IActionResult ResetPassword(string uid, string token)
+        {
+            ResetPasswordRequest resetPasswordModel = new ResetPasswordRequest
+            {
+                Token = token,
+                UserId = uid
+            };
+            return View(resetPasswordModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            var rs = await _userApiClient.ResetPassword(request);
+            if (rs.IsSuccessed)
+            {
+                TempData["AlertMessage"] = "Thay đổi thông tin thành công";
+                TempData["AlertType"] = "success";
+                TempData["AlertId"] = "successToast";
+                return RedirectToAction("Index", "Login");
+            }
+            TempData["AlertMessage"] = rs.Message;
+            TempData["AlertType"] = "danger";
+            TempData["AlertId"] = "dangerToast";
+            return View(request);
+        }
+
         [HttpGet]
         public async Task<IActionResult> LoginClient(string token)
         {

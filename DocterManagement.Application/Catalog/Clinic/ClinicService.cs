@@ -38,11 +38,11 @@ namespace DoctorManagement.Application.Catalog.Clinic
         public async Task<ApiResult<bool>> Create(ClinicCreateRequest request)
         {
             string year = DateTime.Now.ToString("yy");
-            int count = await _context.Clinics.Where(x => x.No.Contains("PK-" + year)).CountAsync();
+            int count = await _context.Clinics.Where(x => x.No.Contains("DTMC" + year)).CountAsync();
             string str = "";
-            if (count < 9) str = "PK-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
-            else if (count < 99) str = "PK-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
-            else if (count < 999) str = "PK-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+            if (count < 9) str = "DTMC" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
+            else if (count < 99) str = "DTMC" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
+            else if (count < 999) str = "DTMC" + DateTime.Now.ToString("yy") + "-" + (count + 1);
             var location = await _context.Locations.FindAsync(request.LocationId);
             var district = await _context.Locations.FindAsync(location.ParentId);
             var province = await _context.Locations.FindAsync(district.ParentId);

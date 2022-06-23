@@ -149,7 +149,9 @@
                             
                             <div class="col-2">
                                 <label asp-for="Image" class="form-label mt-4"></label>
-                                <img src="@(Configuration["BaseAddress"] + "/img/" + Model.Image)"  class="multisteps-form__input form-control" />
+                                <a href="@(Configuration["BaseAddress"] + "/img/annualservicefee-content/" + Model.Image)" target="_bank">
+                                    <img src="@(Configuration["BaseAddress"] + "/img/annualservicefee-content/" + Model.Image)"  class="multisteps-form__input form-control" />
+                                </a>
 
                             </div>
                         }
@@ -174,7 +176,8 @@
                                 </div>
                                <div class="col-6">
                                    <label asp-for="TuitionPaidFreeText" class="form-label mt-4"></label>
-                                    <input asp-for="TuitionPaidFreeNumBer" class="multisteps-form__input form-control" readonly /> 
+                                   <p  class="multisteps-form__input form-control" > @Model.TuitionPaidFreeText</p>
+                                    @*<input asp-for="TuitionPaidFreeText" class="multisteps-form__input form-control" readonly /> *@
 
                                 </div>
                             </div>

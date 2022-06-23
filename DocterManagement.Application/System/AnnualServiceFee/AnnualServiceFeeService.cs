@@ -112,11 +112,15 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                 var todate = fromdate.AddMonths(1);
                 query = query.Where(x => x.c.CreatedAt >= fromdate && x.c.CreatedAt <= todate);
             }
-            else
+            else if(!string.IsNullOrEmpty(request.year))
             {
                 var fromdate = DateTime.Parse("01/01/" + request.year);
                 var todate = fromdate.AddYears(1);
                 query = query.Where(x => x.c.CreatedAt >= fromdate && x.c.CreatedAt <= todate);
+            }
+            if (!string.IsNullOrEmpty(request.UserName))
+            {
+                query = query.Where(x => x.d.AppUsers.UserName == request.UserName);
             }
             int totalRow = await query.CountAsync();
 
@@ -126,6 +130,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                 {
                     
                     Id = x.c.Id,
+                    No = x.c.No,
                     Status = x.c.Status,
                     AccountBank = x.c.AccountBank,
                     Contingency = x.c.Contingency,
@@ -268,12 +273,12 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
         {
             var service = await _context.AnnualServiceFees.FindAsync(Id);
             if (service == null) return new ApiErrorResult<bool>("Dịch cụ nộp phí không được xác nhận!");
-            var serviceFees = await _context.AnnualServiceFees.Where(x => x.DoctorId == service.DoctorId && x.CreatedAt > service.CreatedAt).OrderByDescending(x => x.CreatedAt).ToListAsync();
+            /*var serviceFees = await _context.AnnualServiceFees.Where(x => x.DoctorId == service.DoctorId && x.CreatedAt > service.CreatedAt).OrderByDescending(x => x.CreatedAt).ToListAsync();
             foreach(var remove in serviceFees)
             {
                 var removeservice = await _context.AnnualServiceFees.FindAsync(remove.Id);
                 _context.AnnualServiceFees.Remove(removeservice);
-            }
+            }*/
             service.Status = StatusAppointment.complete;
             var rs = await _context.SaveChangesAsync();
             if (rs != 0)
@@ -322,11 +327,12 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
             service.TuitionPaidFreeNumBer = request.TuitionPaidFreeNumBer;
             service.TuitionPaidFreeText = request.TuitionPaidFreeText;
             service.TransactionCode = request.TransactionCode;
+            service.BankName = request.BankName;
             service.AccountBank = request.AccountBank;
             service.Image = await SaveFile(request.Image, ANNUALSERVICEFEE_CONTENT_FOLDER_NAME);
             service.Type = "trực tuyến";
-            service.NeedToPay = service.NeedToPay + (request.TuitionPaidFreeNumBer - service.NeedToPay);
-            service.Contingency = service.Contingency + (request.TuitionPaidFreeNumBer - service.NeedToPay);
+            service.Contingency = service.Contingency + (request.TuitionPaidFreeNumBer > service.NeedToPay ? (request.TuitionPaidFreeNumBer - service.NeedToPay) : 0);
+            service.NeedToPay = request.TuitionPaidFreeNumBer > service.NeedToPay ? 0 : (service.NeedToPay - request.TuitionPaidFreeNumBer);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0)
             {

@@ -92,6 +92,7 @@ namespace DoctorManagement.AdminApp.Controllers
                     LocationId = clinic.LocationVm.Id,
                     DistrictId = clinic.LocationVm.District.Id,
                     Images = clinic.Images,
+                    MapUrl = clinic.MapUrl
                 };
                 return View(updateRequest);
             }

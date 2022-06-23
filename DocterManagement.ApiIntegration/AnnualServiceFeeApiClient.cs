@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -74,7 +75,8 @@ namespace DoctorManagement.ApiIntegration
                 $"&day={request.day}" +
                 $"&month={request.month}" +
                 $"&year={request.year}" +
-                $"&status={request.status}");
+                $"&status={request.status}" +
+                $"&userName={request.UserName}");
         }
         public async Task<ApiResult<AnnualServiceFeeVm>> GetById(Guid Id)
         {
@@ -188,20 +190,37 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<bool>> PaymentServiceFeeDoctor(AnnualServiceFeePaymentDoctorRequest request)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var requestContent = new MultipartFormDataContent();
+            if (request.Image != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.Image.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Image.OpenReadStream().Length);
+                }
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "image", request.Image.FileName);
+            }
+            requestContent.Add(new StringContent(request.Id.ToString()), "id");
+            requestContent.Add(new StringContent(request.NeedToPay.ToString()), "needToPay");
+            requestContent.Add(new StringContent(request.Contingency.ToString()), "contingency");
+            requestContent.Add(new StringContent(request.TuitionPaidFreeText.ToString()), "tuitionPaidFreeText");
+            requestContent.Add(new StringContent(request.TuitionPaidFreeNumBer.ToString()), "tuitionPaidFreeNumBer");
+            requestContent.Add(new StringContent(request.BankName.ToString()), "bankName");
+            requestContent.Add(new StringContent(request.AccountBank.ToString()), "accountBank");
+            requestContent.Add(new StringContent(request.TransactionCode.ToString()), "transactionCode");
+            if(request.Note!=null)requestContent.Add(new StringContent(request.Note.ToString()), "note");
 
-            var response = await client.PutAsync($"/api/annualServiceFee/payment-service-fee-doctor", httpContent);
-            var body = await response.Content.ReadAsStringAsync();
+            var response = await client.PutAsync($"/api/annualServiceFee/payment-service-fee-doctor", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
     }
 }

@@ -35,6 +35,7 @@
     <Folder Include="wwwroot\img\gallery-content\" />
     <Folder Include="wwwroot\img\masterData-content\" />
     <Folder Include="wwwroot\img\medicine-content\" />
+    <Folder Include="wwwroot\img\annualservicefee-content\" />
     <Folder Include="wwwroot\img\posts-feature-content\" />
     <Folder Include="wwwroot\img\topic-content\" />
     <Folder Include="wwwroot\img\speciality-content\" />

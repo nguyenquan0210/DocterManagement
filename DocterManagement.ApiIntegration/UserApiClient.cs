@@ -287,11 +287,11 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.ClinicId.ToString()), "clinicId");
             requestContent.Add(new StringContent(request.Gender.ToString()), "gender");
             requestContent.Add(new StringContent(request.Dob.ToString()), "dob");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
-            requestContent.Add(new StringContent(request.Educations.ToString()), "educations");
-            requestContent.Add(new StringContent(request.Note.ToString()), "note");
-            requestContent.Add(new StringContent(request.Prizes.ToString()), "prizes");
-            requestContent.Add(new StringContent(request.TimeWorking.ToString()), "timeWorking");
+            if (request.Description!=null) requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if (request.Educations != null) requestContent.Add(new StringContent(request.Educations.ToString()), "educations");
+            if (request.Note != null) requestContent.Add(new StringContent(request.Note.ToString()), "note");
+            if (request.Prizes != null) requestContent.Add(new StringContent(request.Prizes.ToString()), "prizes");
+            if (request.TimeWorking != null) requestContent.Add(new StringContent(request.TimeWorking.ToString()), "timeWorking");
 
             var response = await client.PutAsync($"/api/users/doctor/update-doctor-request/{id}", requestContent);
             var result = await response.Content.ReadAsStringAsync();

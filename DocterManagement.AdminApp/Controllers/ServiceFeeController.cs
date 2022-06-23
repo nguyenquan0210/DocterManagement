@@ -166,6 +166,8 @@ namespace DoctorManagement.AdminApp.Controllers
                 var service = new AnnualServiceFeePaymentRequest()
                 {
                     Id = result.Data.Id,
+                    NeedToPay = result.Data.NeedToPay,
+                    Contingency = result.Data.Contingency
                 };
                 return View(service);
             }

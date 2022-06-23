@@ -191,7 +191,7 @@
                             <div class="col-4">
                                  <label asp-for="ClinicId" class="control-label mt-4"></label>
                                 <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn phòng khám --</option>
+                                    <option value="">-- Chọn phòng khám --</option>
                                 </select>
                                 <span asp-validation-for="ClinicId" class="text-danger"></span>
                             </div>
@@ -262,10 +262,12 @@
                             <span asp-validation-for="Galleries" class="text-danger"></span>
                         </div>
                         <div class="col-12  " id="file_img" >
-                         </div>
-                         <div class="col-12  "  id="show-file-img">
-                             @if (images.Count() > 0)
+                        </div>
+                        <div class="col-12  "  id="show-file-img">
+                            @if (Model.GetGalleries != null)
+                             if (Model.GetGalleries.Count > 0)
                                 {
+                                    var demo  = Model.GetGalleries;
                                     <div class="row form-control dropzone dz-clickable dz-started mt-4" >
                                         @foreach(var img in images)
                                          {
@@ -307,6 +309,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                     @for (int g = 0; g < Model.GetGalleries.Count(); g++)
+                                    {
+                                        @Html.TextBoxFor(x=>x.GetGalleries[g].Id, new{ type = "hidden"})
+                                        @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
+                                    }
                                 }
                          </div>
                      </div>
@@ -316,11 +323,7 @@
                             
                        @* <input asp-for="Galleries" type = "hidden"/>*@
                        
-                       @for (int g = 0; g < Model.GetGalleries.Count(); g++)
-                        {
-                            @Html.TextBoxFor(x=>x.GetGalleries[g].Id, new{ type = "hidden"})
-                            @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
-                        }
+                      
                     
                       <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Sửa</button>
                 </div>
@@ -533,8 +536,8 @@
                     success: function (result) {
                         if (result.response == 2) {
                             $("#row_" + empId).remove();
-                            if(@images.Count == 1){
-                                $("#show-file-img").empty();
+                            if(@images == @null){
+                                    $("#show-file-img").empty();
                             }
                               $("#title").html("Xóa Thành Công");
                             $("#descript").html("Xóa người dùng thành công.");
