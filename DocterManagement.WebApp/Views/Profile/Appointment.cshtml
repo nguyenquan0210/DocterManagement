@@ -821,7 +821,14 @@
                                                     _ngcontent-serverapp-c253="" class="whitespace-nowrap mr-2">Bác
                                                     sĩ</span><span _ngcontent-serverapp-c253=""
                                                     class="font-medium text-right">@Model.Doctor.FullName</span></div>
-                                    
+                                        @if(Model.Status== StatusAppointment.cancel)
+                                        {
+                                            <div _ngcontent-serverapp-c253=""
+                                                    class="flex justify-between ng-star-inserted"><span
+                                                        _ngcontent-serverapp-c253="" class="whitespace-nowrap mr-2">Lý do hủy</span><span _ngcontent-serverapp-c253=""
+                                                        class="font-medium text-right">@Model.CancelReason</span></div>
+                                            
+                                        }
                                     
                                         </div>
                                 

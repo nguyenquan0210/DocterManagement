@@ -1,6 +1,7 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
 using DoctorManagement.DoctorApp.Models;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.System.ActiveUsers;
 using DoctorManagement.ViewModels.System.Statistic;
@@ -15,13 +16,44 @@ namespace DoctorManagement.DoctorApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAppointmentApiClient _appointmentApiClient;
- 
-        public HomeController(ILogger<HomeController> logger, IAppointmentApiClient appointmentApiClient)
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.DoctorApp.Controllers.Home";
+
+        public HomeController(ILogger<HomeController> logger, IAppointmentApiClient appointmentApiClient, IStatisticApiClient statisticApiClient)
         {
+            _statisticApiClient = statisticApiClient;
             _logger = logger;
             _appointmentApiClient = appointmentApiClient;
         }
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
+             
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name ,
+                    Usertemporary = User.Identity.Name ,
+                    Type = "doctor",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
 
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
+        }
         public async Task<IActionResult> Index()
         {
             ViewBag.StatisticAppointmentAll = JsonConvert.SerializeObject(await StatisticAppointmentAll());
@@ -32,7 +64,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             ViewBag.StatisticAppointment = await StatisticActivePatient("appointment");
             ViewBag.StatisticRevanue = await StatisticActivePatient("ravanue");
             ViewBag.TopPatientCompleAppointment = await TopPatientCompleAppointment();
-            
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Index",
+                MethodName = "GET",
+                ExtraProperties = "success",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             return View();
         }
         public async Task<List<AppointmentVm>> TopPatientCompleAppointment()

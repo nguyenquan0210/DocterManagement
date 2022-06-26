@@ -1,8 +1,11 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Post;
+using DoctorManagement.ViewModels.System.Statistic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.DoctorApp.Controllers
 {
@@ -12,13 +15,45 @@ namespace DoctorManagement.DoctorApp.Controllers
         private readonly IConfiguration _configuration;
         private readonly IUserApiClient _userApiClient;
         private readonly IMasterDataApiClient _masterDataApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.DoctorApp.Controllers.Post";
         public PostController(IPostApiClient postApiClient, IUserApiClient userApiClient, IConfiguration configuration,
-            IMasterDataApiClient masterDataApiClient)
+            IMasterDataApiClient masterDataApiClient, IStatisticApiClient statisticApiClient)
         {
+            _statisticApiClient = statisticApiClient;
             _postApiClient = postApiClient;
             _configuration = configuration;
             _userApiClient = userApiClient;
             _masterDataApiClient = masterDataApiClient;
+        }
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
+
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name,
+                    Usertemporary = User.Identity.Name,
+                    Type = "doctor",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
+
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
         }
         public async Task<IActionResult> Index(string keyword, Guid? topicId,  int pageIndex = 1, int pageSize = 10)
         {
@@ -32,6 +67,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             };
            
             var data = await _postApiClient.GetAllPaging(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Index",
+                MethodName = "Get",
+                ExtraProperties = data.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             ViewBag.Keyword = keyword;
             ViewBag.Type = topicId;
             ViewBag.Types = await SeletectType(topicId);
@@ -41,7 +84,15 @@ namespace DoctorManagement.DoctorApp.Controllers
         public async Task<IActionResult> CreatePost()
         {
             var result = await _userApiClient.GetByUserName(User.Identity.Name);
-            if(!result.IsSuccessed) return RedirectToAction("Index");
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Create",
+                MethodName = "Get",
+                ExtraProperties = "success",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
+            if (!result.IsSuccessed) return RedirectToAction("Index");
             ViewBag.DoctorId = result.Data.Id;
             ViewBag.Menus = await SeletectTypeMenu(new Guid());
             return View();
@@ -53,6 +104,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             ViewBag.Menus = await SeletectTypeMenu(request.TopicId);
             if (!ModelState.IsValid) return View(request);
             var rs = await _postApiClient.Create(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".CreatePost",
+                MethodName = "Post",
+                ExtraProperties = rs.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (rs.IsSuccessed)
             {
                 return RedirectToAction("Index");
@@ -108,7 +167,14 @@ namespace DoctorManagement.DoctorApp.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             var result = await _postApiClient.GetById(id);
-
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "Get",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{id: " + id + "}",
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 var Post = result.Data;
@@ -141,6 +207,14 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return View();
 
             var result = await _postApiClient.Update(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Create",
+                MethodName = "Post",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin phòng khám " + request.Title + " thành công.";
@@ -153,6 +227,14 @@ namespace DoctorManagement.DoctorApp.Controllers
         public async Task<IActionResult> DetailtPost(Guid id)
         {
             var result = await _postApiClient.GetById(id);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".DetailtMedicine",
+                MethodName = "Get",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{id: "+ id+"}",
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 return View(result.Data);

@@ -79,6 +79,7 @@ namespace DoctorManagement.Application.System.Users
 
         public async Task<ApiResult<string>> Authencate(LoginRequest request)
         {
+            request.UserName = request.UserName.Split("@")[0];
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
 

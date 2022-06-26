@@ -1,8 +1,11 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.System.Statistic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.DoctorApp.Controllers
 {
@@ -11,22 +14,60 @@ namespace DoctorManagement.DoctorApp.Controllers
         private readonly IClinicApiClient _clinicApiClient;
         private readonly IConfiguration _configuration;
         private readonly IUserApiClient _userApiClient;
-        private readonly ILocationApiClient _locationApiClient;     
-
+        private readonly ILocationApiClient _locationApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.DoctorApp.Controllers.Clinic";
         public ClinicController(IClinicApiClient clinicApiClient, IUserApiClient userApiClient,
-            IConfiguration configuration, ILocationApiClient locationApiClient)
+            IConfiguration configuration, ILocationApiClient locationApiClient, IStatisticApiClient statisticApiClient)
         {
+            _statisticApiClient = statisticApiClient;
             _clinicApiClient = clinicApiClient;
             _configuration = configuration;
             _userApiClient = userApiClient;
             _locationApiClient = locationApiClient;
         }
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
 
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name,
+                    Usertemporary = User.Identity.Name,
+                    Type = "doctor",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
+
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> Update()
         {
             var user = await _userApiClient.GetByUserName(User.Identity.Name);
             var result = await _clinicApiClient.GetById(user.Data.DoctorVm.GetClinic.Id);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "GET",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             //var doctor = await _ClinicApiClient.Get
             if (result.IsSuccessed)
             {
@@ -76,6 +117,14 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return View();
 
             var result = await _clinicApiClient.Update(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "Post",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin phòng khám " + request.Name + " thành công.";
@@ -90,6 +139,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             var user = await _userApiClient.GetByUserName(User.Identity.Name);
             if(user.Data.DoctorVm.IsPrimary == false) return RedirectToAction("Error", "Home");
             var result = await _clinicApiClient.GetById(user.Data.DoctorVm.GetClinic.Id);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Detailt",
+                MethodName = "GET",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 var clinicdata = result.Data;

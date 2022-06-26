@@ -54,13 +54,13 @@ namespace DoctorManagement.Application.Catalog.Appointment
                 var checkAppoi = from app in _context.Appointments
                                  join slot in _context.schedulesSlots on app.SchedulesSlotId equals slot.Id
                                  join sche in _context.Schedules on slot.ScheduleId equals sche.Id
-                                 where app.PatientId == request.PatientId && sche.CheckInDate >= datecheck && sche.CheckInDate < datecheck.AddDays(1) && sche.FromTime >= fromtime && sche.ToTime <= totime
+                                 where app.Status == StatusAppointment.complete && app.PatientId == request.PatientId && sche.CheckInDate >= datecheck && sche.CheckInDate < datecheck.AddDays(1) && sche.FromTime >= fromtime && sche.ToTime <= totime
                                  select sche;
                 if (checkAppoi.ToList().Count > 0)
                 {
                     return new ApiErrorResult<Guid>("Bạn không thể đặt lịch cùng ngày trên 1 khung giờ quá 2 lần!");
                 }
-                var slotcount = from slot in _context.schedulesSlots where slot.ScheduleId == scheduleId select slot;
+                var slotcount = from slot in _context.schedulesSlots where slot.ScheduleId == scheduleId  select slot;
                 var i = 1;
                 foreach(var x in slotcount)
                 {
@@ -700,10 +700,9 @@ namespace DoctorManagement.Application.Catalog.Appointment
             appointments.CancelDate = DateTime.Now;
             var slot = await _context.schedulesSlots.FindAsync(appointments.SchedulesSlotId);
             var schedule = await _context.Schedules.FindAsync(slot.ScheduleId);
-            if (request.Checked== "patient"){
+            if (request.Checked == "patient"){
                 
                 slot.IsBooked = false;
-                
                 schedule.BookedQty = schedule.BookedQty - 1;
                 schedule.AvailableQty = schedule.AvailableQty + 1;
             }

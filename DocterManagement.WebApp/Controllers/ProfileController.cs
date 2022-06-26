@@ -369,7 +369,7 @@ namespace DoctorManagement.WebApp.Controllers
             {
                 Id = Id,
                 CancelReason = "Bận đột xuất",
-                Checked = "pantient"
+                Checked = "patient"
             };
             var result = await _appointmentApiClient.CanceledAppointment(cancelRequest);
             var historyactive = new HistoryActiveCreateRequest()

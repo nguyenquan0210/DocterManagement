@@ -213,7 +213,7 @@
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Doctor.No</h6></td>
                                         <td class="text-xs font-weight-bold">
                                             <div class="d-flex align-items-center">
-                                                <img src="@(item.Doctor.Img.Contains("default") ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/user-content/" + @item.Doctor.Img)" class="avatar avatar-xs me-2" alt="user image">
+                                                <img src="@(item.Doctor.Img.Contains("default") ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/" + @item.Doctor.Img)" class="avatar avatar-xs me-2" alt="user image">
                                                 <span>@item.Doctor.FullName</span>
                                             </div>
                                         </td>

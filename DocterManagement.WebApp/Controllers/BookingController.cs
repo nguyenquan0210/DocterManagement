@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace DoctorManagement.WebApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class BookingController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -84,7 +84,7 @@ namespace DoctorManagement.WebApp.Controllers
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             ViewBag.District = new List<SelectListItem>();
             ViewBag.SubDistrict = new List<SelectListItem>();
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Doctor = (await _doctorApiClient.GetById(doctorid)).Data;
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(doctorid)).Data.ToList();
             ViewBag.GetScheduleDoctor = getScheduleDoctor;
@@ -118,7 +118,7 @@ namespace DoctorManagement.WebApp.Controllers
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             ViewBag.District = new List<SelectListItem>();
             ViewBag.SubDistrict = new List<SelectListItem>();
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Doctor = (await _doctorApiClient.GetById(request.DoctorId)).Data;
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(request.DoctorId)).Data.ToList();
             ViewBag.GetScheduleDoctor = getScheduleDoctor;
@@ -138,11 +138,18 @@ namespace DoctorManagement.WebApp.Controllers
                 Parameters = JsonConvert.SerializeObject(request),
             };
             await HistoryActive(historyactive);
-            if (result.IsSuccessed)
+            if (!result.IsSuccessed)
             {
-                return RedirectToAction("BookingSuccess", new { Id = result.Data });
+                TempData["AlertMessage"] = result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return View(request);
             }
-            return View(request);
+
+            TempData["AlertMessage"] = "Đăng nhập thành công.";
+            TempData["AlertType"] = "success";
+            TempData["AlertId"] = "successToast";
+            return RedirectToAction("BookingSuccess", new { Id = result.Data });
         }
         [HttpPost]
         public async Task<IActionResult> AddInfoParent(AddPatientInfoParentRequest request)
@@ -189,7 +196,7 @@ namespace DoctorManagement.WebApp.Controllers
                 UserName = request.UserName,
             };
             await _doctorApiClient.AddInfo(add);
-            var patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
+            var patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             return Json(patient);
 
         }
@@ -199,7 +206,7 @@ namespace DoctorManagement.WebApp.Controllers
             ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
             ViewBag.District = new List<SelectListItem>();
             ViewBag.SubDistrict = new List<SelectListItem>();
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(clinicId)).Data;
             var historyactive = new HistoryActiveCreateRequest()
             {
@@ -219,7 +226,7 @@ namespace DoctorManagement.WebApp.Controllers
             ViewBag.District = new List<SelectListItem>();
             ViewBag.SubDistrict = new List<SelectListItem>();
             request.IsDoctor = false;
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(request.ClinicId.Value)).Data;
             
             if (!ModelState.IsValid) return View(request);
@@ -352,7 +359,7 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> BookingClinicSetPatient(Guid clinicId)
         {
-            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile("0373951042"/*User.Identity.Name*/)).Data;
+            ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             var clinic = await _clinicalApiClient.GetById(clinicId);
             if (!clinic.IsSuccessed)
             {

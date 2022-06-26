@@ -45,6 +45,7 @@ namespace DoctorManagement.WebApp.Controllers.Components
                         FirstName = appointment.Doctor.FirstName,
                         LastName = appointment.Doctor.LastName,
                         Img = appointment.Doctor.Img,
+                        UserId = appointment.Doctor.UserId, 
                     };
                     docters.Add(doctor);
                 }

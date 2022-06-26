@@ -27,7 +27,7 @@ namespace DoctorManagement.Application.System.StatisticService
             
             var hiss = _context.HistoryActives.FirstOrDefault(x=>x.User == request.Usertemporary&&x.CreatedAt>= fromdate && x.CreatedAt < fromdate.AddDays(1));
             var hissemporary = new HistoryActives();
-            if(hiss == null && request.User != null) hissemporary = _context.HistoryActives.FirstOrDefault(x=>x.User == request.User&&x.CreatedAt>= fromdate && x.CreatedAt < fromdate.AddDays(1));
+            if(hiss == null && request.User != null && request.Type!="doctor") hissemporary = _context.HistoryActives.FirstOrDefault(x=>x.User == request.User&&x.CreatedAt>= fromdate && x.CreatedAt < fromdate.AddDays(1));
             var user = request.User == null ? request.Usertemporary : request.User;
             if (hiss == null && hissemporary.User == null)
             {

@@ -110,7 +110,12 @@
      @*<script src="~/js/plugins/jquery.js"></script>*@
 	
      <script>
-		
+		function menuShow(){
+            $('#primary-menu').removeClass("hidden");
+        }
+        $('#primary-menu-close').click(function(){
+            $('#primary-menu').addClass("hidden");
+        });
         setTimeout(
           function() 
           { 
