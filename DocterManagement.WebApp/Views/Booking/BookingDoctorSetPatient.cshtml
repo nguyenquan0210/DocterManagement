@@ -1,0 +1,2389 @@
+﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.Catalog.Schedule
+@using DoctorManagement.ViewModels.System.Doctors
+@using DoctorManagement.ViewModels.System.Patient
+@model DoctorManagement.ViewModels.Catalog.Appointment.AppointmentCreateRequest
+@{
+    ViewData["Title"] = "AppointmentDoctorSetPatient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    DoctorVm doctor = (DoctorVm)ViewBag.Doctor;
+    List<PatientVm> patient = (List<PatientVm>)ViewBag.Patient;
+    List<DoctorScheduleClientsVm> schedules = (List<DoctorScheduleClientsVm>)ViewBag.GetScheduleDoctor;
+    var i = 0;
+    var schedulesSlotId = Model.SchedulesSlotId;
+    DateTime checkrequestdate = ViewBag.Date!=null? (DateTime)ViewBag.Date: new DateTime();
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@section Stylesheet{
+    <style>
+        .root-layout[_ngcontent-serverApp-c55] {
+            background-color: #f6f6f6
+        }
+    </style>
+    <style>
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @@media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @@media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c54] .ant-collapse-content-box {
+            padding: 0 !important
+        }
+
+        nz-collapse-panel[_ngcontent-serverApp-c54] {
+            padding: 0 !important
+        }
+
+        [_nghost-serverApp-c54] .ant-collapse-header {
+            cursor: pointer !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 600 !important;
+            color: currentColor !important
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c54] .ant-collapse-header {
+                cursor: auto !important
+            }
+
+            nz-collapse-panel[_ngcontent-serverApp-c54] {
+                border-style: none !important
+            }
+        }
+
+        a[_ngcontent-serverApp-c54]:hover {
+            color: currentColor
+        }
+    </style>
+    <style>
+        .wrapper-main[_ngcontent-serverApp-c71] {
+            background: linear-gradient(90deg, #00c6fb 0%, #0758d8 98.74%)
+        }
+
+        @@media only screen and (max-width: 767px) {
+            .banner-navigation[_ngcontent-serverApp-c71] {
+                background: white
+            }
+        }
+
+        .selected[_ngcontent-serverApp-c71] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [nz-carousel-content][_ngcontent-serverApp-c72] {
+            overflow: hidden
+        }
+    </style>
+    <style>
+        .main-search[_ngcontent-serverApp-c68] {
+            margin: 0;
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: .5rem;
+            border-color: transparent;
+            padding: .75rem 2.25rem .75rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+
+        .main-search[_ngcontent-serverApp-c68]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .main-search[_ngcontent-serverApp-c68]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            outline: 2px solid transparent;
+            outline-offset: 2px
+        }
+
+        @@media (min-width: 782px) {
+            .main-search[_ngcontent-serverApp-c68] {
+                padding-right: .75rem;
+                padding-left: 3rem
+            }
+        }
+
+        .main-search[_ngcontent-serverApp-c68]::-webkit-calendar-picker-indicator {
+            display: none !important
+        }
+    </style>
+    <style>
+        .bookmark_hospital[_ngcontent-serverApp-c70]::-webkit-scrollbar {
+            background: transparent;
+            width: 0px
+        }
+    </style>
+    <style>
+        .tab-item[_ngcontent-serverApp-c188] {
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            padding: 1rem;
+            font-weight: 500
+        }
+
+        .tab-item[_ngcontent-serverApp-c188]:hover,
+        .tab-item.active[_ngcontent-serverApp-c188] {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        .tab-item[_ngcontent-serverApp-c221] {
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            padding: 1rem;
+            font-weight: 500
+        }
+
+        .tab-item[_ngcontent-serverApp-c221]:hover,
+        .tab-item.active[_ngcontent-serverApp-c221] {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        .see-more-box[_ngcontent-serverApp-c265] {
+            background: linear-gradient(0deg, #ffffff 50%, rgba(255, 255, 255, 0) 88.64%);
+            z-index: 3
+        }
+
+        .expanded[_ngcontent-serverApp-c265] {
+            height: 850px;
+            transition: height 1.25s linear
+        }
+
+        .not-expanded[_ngcontent-serverApp-c265] {
+            height: auto
+        }
+    </style>
+    <style>
+        .typical-doctor-card[_ngcontent-serverApp-c262] {
+            box-shadow: 0 1px 2px #0000001a, 0 1px 1px #0000000f
+        }
+
+        .btn-booking-primary[_ngcontent-serverApp-c262] {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            width: 124px;
+            height: 41px;
+            left: 0px;
+            top: 0px;
+            background: #eff6ff;
+            border: 1px solid #eff6ff;
+            box-sizing: border-box;
+            box-shadow: 0 1px 1px #0000000d;
+            border-radius: 4px;
+            flex: none;
+            order: 0;
+            align-self: stretch;
+            flex-grow: 0
+        }
+
+        .limit-line-break[_ngcontent-serverApp-c262] {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            line-height: 16px;
+            max-height: 32px;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical
+        }
+    </style>
+    <style>
+        .ant-collapse-borderless[_ngcontent-serverApp-c273]>.ant-collapse-item[_ngcontent-serverApp-c273] {
+            border: none !important
+        }
+
+        .profile-card[_ngcontent-serverApp-c273] .ant-tabs-nav {
+            margin-bottom: 0
+        }
+
+        .profile-card[_ngcontent-serverApp-c273] .ant-tabs-tab {
+            border-top-width: 4px;
+            border-color: transparent
+        }
+
+        .profile-card[_ngcontent-serverApp-c273] .ant-tabs-tab .ant-tabs-tab-btn:hover {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .profile-card[_ngcontent-serverApp-c273] .ant-tabs-tab.ant-tabs-tab-active {
+            --tw-border-opacity: 1;
+            border-top-color: rgb(26 118 227 / var(--tw-border-opacity))
+        }
+
+        .profile-card[_ngcontent-serverApp-c273] .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c261] .ant-steps-item-icon {
+            float: none !important
+        }
+
+        [_nghost-serverApp-c261] .ant-steps-item-tail {
+            display: none !important
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c260] .ant-steps {
+            align-items: stretch
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c260] .ant-steps-item {
+                margin-top: 1rem
+            }
+        }
+
+        [_nghost-serverApp-c260] .ant-steps-item.ant-steps-item-active .ant-steps-item-icon {
+            --tw-border-opacity: 1 !important;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity)) !important;
+            --tw-bg-opacity: 1 !important;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity)) !important;
+            --tw-text-opacity: 1 !important;
+            color: rgb(255 255 255 / var(--tw-text-opacity)) !important
+        }
+
+        [_nghost-serverApp-c260] .ant-steps-item.ant-steps-item-active .ant-steps-item-icon .ant-steps-icon {
+            --tw-text-opacity: 1 !important;
+            color: rgb(255 255 255 / var(--tw-text-opacity)) !important
+        }
+
+        [_nghost-serverApp-c260] .ant-steps-item .ant-steps-item-icon {
+            position: absolute;
+            top: .75rem;
+            left: .75rem
+        }
+
+        [_nghost-serverApp-c260] .ant-steps-item .step-button {
+            display: flex;
+            flex: 1 1 0%;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: .75rem;
+            padding-left: 2.75rem
+        }
+
+        [_nghost-serverApp-c260] .ant-steps-item .ant-steps-item-container {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c260] .ant-steps-item .ant-steps-item-container {
+                border-radius: .5rem
+            }
+        }
+
+        [_nghost-serverApp-c260] .ant-steps-item .ant-steps-item-container .ant-steps-item-title {
+            display: flex
+        }
+
+        [_nghost-serverApp-c260] .ant-steps-item .ant-steps-item-content {
+            min-height: auto
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c173] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem .5rem 2rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c173]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c173]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+    </style>
+    <style>
+        .active[_ngcontent-serverApp-c172] {
+            border: 2px solid #1a76e3
+        }
+
+        .active[_ngcontent-serverApp-c172] .item[_ngcontent-serverApp-c172] {
+            padding: 7px
+        }
+
+        .item-row[_ngcontent-serverApp-c172] {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: .5rem
+        }
+
+        .item-row__label[_ngcontent-serverApp-c172] {
+            margin: 0;
+            white-space: nowrap;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 400;
+            line-height: 19px
+        }
+
+        .item-row__value[_ngcontent-serverApp-c172] {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 500;
+            line-height: 19px
+        }
+
+        .item-name-bg[_ngcontent-serverApp-c172],
+        .item-name[_ngcontent-serverApp-c172] {
+            margin: 0;
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%)
+        }
+    </style>
+    <style>
+        .hiden{
+            visibility: hidden; height: 0px;width:0px; 
+        }
+        .hiden-btn{display:none;}
+        .container {
+            overflow-x: hidden;
+            display: flex;
+          }
+          .section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+  
+         
+    </style>
+    <style>
+      .form-control[_ngcontent-serverApp-c188] {
+        margin-top: .25rem;
+        display: block;
+        width: 100%;
+        border-radius: .375rem;
+        border-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+        padding: .5rem .75rem;
+        --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+        --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+      }
+
+      .form-control[_ngcontent-serverApp-c188]::placeholder {
+        font-size: .875rem;
+        line-height: 1.25rem
+      }
+
+      .form-control[_ngcontent-serverApp-c188]:focus {
+        --tw-border-opacity: 1;
+        border-color: rgb(26 118 227 / var(--tw-border-opacity));
+        --tw-ring-opacity: 1;
+        --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+      }
+
+      .form-control[_ngcontent-serverApp-c188]:focus-visible {
+        outline: 2px solid transparent;
+        outline-offset: 2px
+      }
+
+      .form-select[_ngcontent-serverApp-c188] {
+        margin-top: .25rem;
+        display: block;
+        width: 100%;
+        border-radius: .375rem;
+        border-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+        padding-top: .25rem;
+        padding-bottom: .25rem;
+        --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+        --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+      }
+
+      .form-select[_ngcontent-serverApp-c188]::placeholder {
+        font-size: .875rem;
+        line-height: 1.25rem
+      }
+
+      .form-select[_ngcontent-serverApp-c188]:focus {
+        --tw-border-opacity: 1;
+        border-color: rgb(26 118 227 / var(--tw-border-opacity));
+        --tw-ring-opacity: 1;
+        --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+      }
+
+      .form-radio[_ngcontent-serverApp-c188] {
+        margin: 0;
+        border-radius: .375rem;
+        border-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+        padding: .5rem .75rem;
+        --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+        --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+      }
+
+      .form-label[_ngcontent-serverApp-c188] {
+        display: block;
+        font-size: .875rem;
+        line-height: 1.25rem;
+        font-weight: 500;
+        --tw-text-opacity: 1;
+        color: rgb(55 65 81 / var(--tw-text-opacity))
+      }
+    </style>
+    <style>
+        .flatpickr-calendar {
+            background: transparent;
+            opacity: 0;
+            display: none;
+            text-align: center;
+            visibility: hidden;
+            padding: 0;
+            animation: none;
+            direction: ltr;
+            border: 0;
+            font-size: 14px;
+            line-height: 24px;
+            border-radius: 5px;
+            position: absolute;
+            width: 307.875px;
+            box-sizing: border-box;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            background: #fff;
+            -webkit-box-shadow: 0 8px 26px -4px hsl(0deg 0% 8% / 15%), 0 8px 9px -5px hsl(0deg 0% 8% / 6%);
+        }
+        .flatpickr-calendar.inline, .flatpickr-calendar.open {
+            opacity: 1;
+            max-height: 640px;
+            visibility: visible;
+        }
+        .flatpickr-calendar.open {
+            display: inline-block;
+            z-index: 99999;
+        }
+        .flatpickr-calendar.open {
+            margin-left: -38px;
+            margin-top: 4px;
+        }
+        .flatpickr-calendar.animate.open {
+            animation: k .3s cubic-bezier(.23,1,.32,1);
+        }
+        .flatpickr-calendar:after, .flatpickr-calendar:before {
+            position: absolute;
+            display: block;
+            pointer-events: none;
+            border: solid transparent;
+            content: "";
+            height: 0;
+            width: 0;
+            left: 22px;
+        }
+        .flatpickr-calendar:before {
+            border-width: 5px;
+            margin: 0 -5px;
+        }
+        .flatpickr-calendar:after {
+            border-width: 4px;
+            margin: 0 -4px;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            bottom: 100%;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            border-bottom-color: #fff;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            bottom: 100%;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            border-bottom-color: #fff;
+        }
+        .flatpickr-months {
+            display: -ms-flexbox;
+            display: flex;
+        }
+        .flatpickr-months .flatpickr-next-month, .flatpickr-months .flatpickr-prev-month {
+            text-decoration: none;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            height: 34px;
+            padding: 10px;
+            z-index: 3;
+            color: rgba(0,0,0,.9);
+            fill: rgba(0,0,0,.9);
+        }
+        .flatpickr-months .flatpickr-next-month.flatpickr-prev-month, .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month {
+            left: 0;
+        }
+        .flatpickr-months .flatpickr-next-month svg, .flatpickr-months .flatpickr-prev-month svg {
+            width: 14px;
+            height: 14px;
+        }
+        .flatpickr-months .flatpickr-next-month svg path, .flatpickr-months .flatpickr-prev-month svg path {
+            transition: fill .1s;
+            fill: inherit;
+        }
+        .flatpickr-months .flatpickr-month {
+            background: transparent;
+            color: rgba(0,0,0,.9);
+            fill: rgba(0,0,0,.9);
+            height: 34px;
+            line-height: 1;
+            text-align: center;
+            position: relative;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            overflow: hidden;
+            -ms-flex: 1;
+            flex: 1;
+        }
+        .flatpickr-current-month {
+            font-size: 135%;
+            line-height: inherit;
+            font-weight: 300;
+            color: inherit;
+            position: absolute;
+            width: 75%;
+            left: 12.5%;
+            padding: 7.48px 0 0;
+            line-height: 1;
+            height: 34px;
+            display: inline-block;
+            text-align: center;
+            transform: translateZ(0);
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            appearance: menulist;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-sizing: border-box;
+            color: inherit;
+            cursor: pointer;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: 300;
+            height: auto;
+            line-height: inherit;
+            margin: -1px 0 0;
+            outline: none;
+            padding: 0 0 0 0.5ch;
+            position: relative;
+            vertical-align: initial;
+            -webkit-box-sizing: border-box;
+            -webkit-appearance: menulist;
+            -moz-appearance: menulist;
+            width: auto;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+            background-color: transparent;
+            outline: none;
+            padding: 0;
+        }
+        .numInputWrapper {
+            position: relative;
+            height: auto;
+        }
+        .flatpickr-current-month .numInputWrapper {
+            width: 6ch;
+            width: 7ch\0;
+            display: inline-block;
+        }
+        .numInputWrapper input, .numInputWrapper span {
+            display: inline-block;
+        }
+        .numInputWrapper input {
+            width: 100%;
+        }
+        .flatpickr-current-month input.cur-year {
+            background: transparent;
+            box-sizing: border-box;
+            color: inherit;
+            cursor: text;
+            padding: 0 0 0 0.5ch;
+            margin: 0;
+            display: inline-block;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: 300;
+            line-height: inherit;
+            height: auto;
+            border: 0;
+            border-radius: 0;
+            vertical-align: initial;
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        .numInputWrapper input, .numInputWrapper span {
+            display: inline-block;
+        }
+        .numInputWrapper span {
+            position: absolute;
+            right: 0;
+            width: 14px;
+            padding: 0 4px 0 2px;
+            height: 50%;
+            line-height: 50%;
+            opacity: 0;
+            cursor: pointer;
+            border: 1px solid rgba(57,57,57,.15);
+            box-sizing: border-box;
+        }
+        .numInputWrapper span.arrowUp {
+            top: 0;
+            border-bottom: 0;
+        }
+        .flatpickr-calendar .numInputWrapper span {
+            border: none;
+            border-bottom: 1px solid rgba(57,57,57,.15);
+        }
+        *, :after, :before {
+            box-sizing: border-box;
+        }
+        .numInputWrapper span:after {
+            display: block;
+            content: "";
+            position: absolute;
+        }
+        .numInputWrapper span.arrowUp:after {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 4px solid rgba(57,57,57,.6);
+            top: 26%;
+        }
+        .flatpickr-current-month .numInputWrapper span.arrowUp:after {
+            border-bottom-color: rgba(0,0,0,.9);
+        }
+        .numInputWrapper span.arrowDown {
+            top: 50%;
+        }
+        .numInputWrapper span.arrowDown:after {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid rgba(57,57,57,.6);
+            top: 40%;
+        }
+        .flatpickr-current-month .numInputWrapper span.arrowDown:after {
+            border-top-color: rgba(0,0,0,.9);
+        }
+        .flatpickr-months .flatpickr-next-month.flatpickr-next-month, .flatpickr-months .flatpickr-prev-month.flatpickr-next-month {
+            right: 0;
+        }
+        .flatpickr-innerContainer {
+            display: block;
+            display: -ms-flexbox;
+            display: flex;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .flatpickr-calendar .flatpickr-innerContainer {
+            margin-top: 15px!important;
+        }
+        .flatpickr-rContainer {
+            display: inline-block;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .flatpickr-weekdays {
+            background: transparent;
+            text-align: center;
+            overflow: hidden;
+            width: 100%;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            height: 28px;
+        }
+        .flatpickr-days {
+            position: relative;
+            overflow: hidden;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: start;
+            align-items: flex-start;
+            width: 307.875px;
+        }
+        .flatpickr-weekdays .flatpickr-weekdaycontainer {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex: 1;
+            flex: 1;
+        }
+        span.flatpickr-weekday {
+            cursor: default;
+            font-size: 90%;
+            background: transparent;
+            color: rgba(0,0,0,.54);
+            line-height: 1;
+            margin: 0;
+            text-align: center;
+            display: block;
+            -ms-flex: 1;
+            flex: 1;
+            font-weight: bolder;
+        }
+        .dayContainer {
+            padding: 0;
+            outline: 0;
+            text-align: left;
+            width: 307.875px;
+            min-width: 307.875px;
+            max-width: 307.875px;
+            box-sizing: border-box;
+            display: inline-block;
+            display: -ms-flexbox;
+            display: flex;
+            flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            -ms-flex-pack: justify;
+            justify-content: space-around;
+            transform: translateZ(0);
+            opacity: 1;
+        }
+        .flatpickr-day {
+            background: none;
+            border: 1px solid transparent;
+            border-radius: 150px;
+            box-sizing: border-box;
+            color: #393939;
+            cursor: pointer;
+            font-weight: 400;
+            width: 14.2857143%;
+            -ms-flex-preferred-size: 14.2857143%;
+            flex-basis: 14.2857143%;
+            max-width: 39px;
+            height: 39px;
+            line-height: 39px;
+            margin: 0;
+            display: inline-block;
+            position: relative;
+            -ms-flex-pack: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .flatpickr-day.today {
+            border-color: #959ea9;
+        }
+        .flatpickr-calendar .flatpickr-day.endRange, .flatpickr-calendar .flatpickr-day.selected, .flatpickr-calendar .flatpickr-day.startRange, .flatpickr-calendar .flatpickr-day.today {
+            background: #cb0c9f!important;
+            color: #fff;
+            border: none;
+        }
+        .flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover, .flatpickr-day.nextMonthDay, .flatpickr-day.notAllowed, .flatpickr-day.notAllowed.nextMonthDay, .flatpickr-day.notAllowed.prevMonthDay, .flatpickr-day.prevMonthDay {
+            color: rgba(57,57,57,.3);
+            background: transparent;
+            border-color: transparent;
+            cursor: default;
+        }
+        .flatpickr-day.inRange, .flatpickr-day.nextMonthDay.inRange, .flatpickr-day.nextMonthDay.today.inRange, .flatpickr-day.nextMonthDay:focus, .flatpickr-day.nextMonthDay:hover, .flatpickr-day.prevMonthDay.inRange, .flatpickr-day.prevMonthDay.today.inRange, .flatpickr-day.prevMonthDay:focus, .flatpickr-day.prevMonthDay:hover, .flatpickr-day.today.inRange, .flatpickr-day:focus, .flatpickr-day:hover {
+            cursor: pointer;
+            outline: 0;
+            background: #e6e6e6;
+            border-color: #e6e6e6;
+        }
+        .flatpickr-calendar .flatpickr-day.inRange, .flatpickr-calendar .flatpickr-day:not(.selected):focus, .flatpickr-calendar .flatpickr-day:not(.selected):hover {
+            background: rgba(94,114,228,.28);
+            border: none;
+        }
+    </style>
+    <style>
+        [type=radio]:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            --tw-ring-inset: var(--tw-empty, );
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: #3b82f680;
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);
+        }
+        .form-section__form-group {
+	        margin-bottom: 16px;
+	        display: flex;
+	        flex-direction: column;
+            position:relative;
+        }
+
+        .form-section__form-label {
+	        font-size: 1.4rem;
+	        font-weight: 700;
+	        line-height: 18px;
+	        color: #333;
+	        padding-bottom: 6px;
+        }
+
+        .form-section__form-input-wrap {
+	        position: relative;
+	        display: flex;
+	        align-items: center;
+        }
+
+        input[name=fullName] {
+	        text-transform: capitalize;
+        }
+
+        input[type=radio],
+        input[type=checkbox] {
+	        margin-right: 5px;
+	        cursor: pointer;
+        }
+
+        input[type=radio] ~ .form-section__form-label,
+        input[type=checkbox] ~ .form-section__form-label {
+	        padding-bottom: 0;
+        }
+
+        /*.form-section__form-input {
+	        height: 40px;
+	        max-width: 100%;
+	        width: 100%;
+	        padding: 8px 12px;
+	        border: 1px solid #b3b3b3;
+	        border-radius: 3px;
+	        outline: none;
+	        color: #333;
+	        font-family: inherit;
+	        transition: all .3s linear;
+        }
+
+        .form-section__form-input:focus,
+        .form-section__form-input:hover {
+	        border-color: #1dbfaf;
+        }
+
+        .form-section__form-group.error .form-section__form-input:hover {
+	        background-color: #fdebee;
+        }
+        .form-section__form-group.error .form-section__form-input {
+            background-color: #fdebee;
+            border-color: #f33a58;
+        }
+        .form-section__form-input::placeholder {
+	        color: #b7b7b7;
+        }*/
+
+        .form-section__form-error-icon {
+	        display: none;
+	        position: absolute;
+	        top: 0;
+	        right: 10px;
+	        height: 100%;
+	        align-items: center;
+	        transform-origin: 50% 0;
+	        transition: transform .3s linear 1s;
+        }
+
+        @@keyframes bellAni {
+	        0% {
+		        transform: rotate(-20deg);
+	        }
+
+	        20% {
+		        transform: rotate(20deg);
+	        }
+
+	        40% {
+		        transform: rotate(-20deg);
+	        }
+
+	        60% {
+		        transform: rotate(20deg);
+	        }
+
+	        80% {
+		        transform: rotate(-20deg);
+	        }
+
+	        100% {
+		        transform: rotate(0);
+	        }
+        }
+
+        .form-section__form-group-icon {
+	        cursor: pointer;
+	        position: absolute;
+	        top: 50%;
+	        right: 10px;
+	        font-size: 1.4rem;
+	        color: #009090;
+	        transform: translateY(-50%);
+        }
+
+        .form-section__form-group-icon i:last-child {
+	        display: none;
+        }
+
+        .form-section__form-group-icon.hidden i:first-child {
+	        display: none;
+        }
+
+        .form-section__form-group-icon.hidden i:last-child {
+	        display: inline;
+        }
+
+        
+        .form-section__form-checkList {
+	        margin-top: 16px;
+	        list-style: none;
+        }
+
+        .form-section__form-checkList.hidden {
+	        display: none;
+        }
+
+        .form-section__form-checkItem {
+	        padding: 3px 0;
+	        font-size: 1.4rem;
+	        color: grey;
+        }
+
+        .form-section__form-checkItem.checked {
+	        color: #283033;
+        }
+
+        .form-section__form-checkItem i:last-child {
+	        display: none;
+        }
+
+        .form-section__form-checkItem.checked i:first-child {
+	        display: none;
+        }
+
+        .form-section__form-checkItem.checked i:last-child {
+	        display: inline-block;
+	        color: inherit;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-input {
+	        background-color: #fdebee;
+	        border-color: #f33a58;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-message {
+	        display: block;
+            position: absolute;
+            top: 65px;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-error-icon {
+	        display: flex;
+	        animation: bellAni .8s linear forwards;
+        }
+
+        .form-section__form-submit {
+	        font-size: 1.4rem;
+	        font-weight: 600;
+	        outline: none;
+	        border: none;
+	        border-radius: 5px;
+	        padding: 12px 16px;
+	        color: #fdebee;
+	        background-color: #1dbfaf;
+	        transition: all .3s linear;
+        }
+
+        .form-section__form-submit:hover {
+	        cursor: pointer;
+	        background-color: #009090;
+        }
+
+        /* form section avatar */
+
+        .form-section__form-show-img {
+	        margin-top: 20px;
+	        padding-top: 50%;
+	        width: 50%;
+	        height: 0;
+	        background-position: center;
+	        background-size: cover;
+	        background-repeat: no-repeat;
+	        transition: .5s ease;
+        }
+
+        .form-section__form-show-img.hidden {
+	        padding-top: 0;
+        }
+
+        .form-section__form-img {
+	        width: 100%;
+	        height: auto;
+        }
+
+        /*form section footer*/
+
+        .form-section__footer {
+	        font-size: 1.4rem;
+	        color: #333;
+	        font-weight: 400;
+	        text-align: center;
+        }
+
+        .form-section__footer-link {
+	        color: #1dbfaf;
+	        text-decoration: none;
+	        font-weight: 600;
+        }
+
+        .form-section__footer-link:hover {
+	        text-decoration: underline;
+        }
+
+        /*footer*/
+
+        .copyright {
+	        width: 100%;
+	        margin-top: 10px;
+	        color: #333;
+	        text-align: center;
+	        font-size: 1.4rem;
+        }
+
+        .copyright-icon {
+	        color: #ff0000;
+        }
+
+        .copyright-icon--coding,
+        .copyright-author {
+	        color: #09e609;
+        }
+
+        .copyright-author {
+	        font-weight: 600;
+        }
+    </style>
+}
+<app-step-booking-doctor _nghost-serverapp-c261="" class="ng-star-inserted">
+                <app-static-steps _ngcontent-serverapp-c261="" _nghost-serverapp-c260="">
+                    <section _ngcontent-serverapp-c260="" class="bg-gray-100 py-5 text-gray-800">
+                        <div _ngcontent-serverapp-c260="" class="max-w-7xl mx-auto md:px-2">
+                            <app-booking-step-bar _ngcontent-serverapp-c260="" class="hidden md:block"
+                                _nghost-serverapp-c131="">
+                                <div _ngcontent-serverapp-c131=""
+                                    class="px-10 py-6 flex flex-row gap-4 ng-star-inserted">
+                                    <div _ngcontent-serverapp-c131="" id="showcheckday"
+                                        class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted">
+                                        <img
+                                            _ngcontent-serverapp-c131="" onclick="showSlot()"
+                                            src="~/img/booking/svg/checked-bg-blue.svg" alt=""
+                                            class="w-6 h-6 ng-star-inserted checkday @(schedulesSlotId != new Guid()? "": "hiden")">
+                                        <div _ngcontent-serverapp-c173="" class="w-6 h-6 bg-green-500 text-white text-center rounded ng-star-inserted checknumber @(schedulesSlotId != new Guid()? "hiden": "")">1 </div>
+                                        <div _ngcontent-serverapp-c131=""
+                                            class="font-normal text-sm text-gray-800 leading-17">Thời gian khám </div>
+                                        <img _ngcontent-serverapp-c131="" src="~/img/booking/svg/border.svg"
+                                            class="w-6 h-6 ng-star-inserted checkday @(schedulesSlotId != new Guid()? "": "hiden")">
+                                    </div>
+                                    
+                                    <div _ngcontent-serverapp-c131="" id="showcheckprofile" 
+                                        class="cursor-pointer flex flex-row items-center gap-2 ng-star-inserted @(schedulesSlotId == new Guid()? "hiden": "")">
+                                        
+                                        <div _ngcontent-serverapp-c131=""
+                                            class="w-6 h-6 bg-green-500 text-white text-center rounded ng-star-inserted">
+                                            2 </div>
+                                        <div _ngcontent-serverapp-c131=""
+                                            class="font-normal text-sm text-gray-800 leading-17">Bệnh nhân </div>
+                                    </div>
+                                </div>
+                            </app-booking-step-bar>
+                            <div _ngcontent-serverapp-c260="" class="grid grid-cols-12 gap-4">
+                                <div _ngcontent-serverapp-c260=""
+                                    class="col-span-12 md:col-span-7 lg:col-span-8 space-y-4">
+                                    @if(doctor.Note!=null){
+                                        <div _ngcontent-serverapp-c260="" class="flex bg-orange-50 p-2 rounded-lg"><img
+                                                _ngcontent-serverapp-c260="" width="16" height="16"
+                                                src="~/img/booking/svg/boldWarning2.svg"
+                                                class="w-4 h-4 leading-5 object-cover mr-1">
+                                                @Html.Raw(doctor.Note)
+                                        </div>
+                                    }
+                                    <nz-steps _ngcontent-serverapp-c260="" nzsize="small" nzdirection="vertical">
+                                        <div class="ant-steps ant-steps-vertical ant-steps-small">
+                                            <nz-step _ngcontent-serverapp-c260=""
+                                                class="ant-steps-item ant-steps-item-process ng-star-inserted">
+                                                <div class="ant-steps-item-container" tabindex="0" role="button" id="chose-slot">
+                                                    <div class="ant-steps-item-tail ng-star-inserted"></div>
+                                                    
+                                                    <div class="ant-steps-item-icon">
+                                                        <span class="ant-steps-icon ng-star-inserted"> 1 </span>
+                                                    </div>
+                                                    <div class="ant-steps-item-content">
+                                                        <div class="ant-steps-item-title"><a onclick="showSlot()"
+                                                                _ngcontent-serverapp-c260=""
+                                                                class="step-button ng-star-inserted">
+                                                                <p _ngcontent-serverapp-c260=""
+                                                                    class="font-semibold text-primary">Ngày và giờ khám
+                                                                </p><img _ngcontent-serverapp-c260="" width="18"
+                                                                    height="18"
+                                                                    src="~/img/booking/svg/arrow-down.svg"
+                                                                    alt="arrow-down" title="Xem thêm thông tin">
+                                                            </a>
+                                                        </div>
+                                                        <div class="ant-steps-item-description @(schedulesSlotId != new Guid()? "hiden": "")" >
+                                                            <app-booking-doctor-working-date-and-slots
+                                                                _ngcontent-serverapp-c187="" _nghost-serverapp-c171=""
+                                                                class="ng-star-inserted">
+                                                                <div _ngcontent-serverapp-c171=""
+                                                                    class="px-4 overflow-hidden ng-star-inserted">
+                                                                    @if(schedules.Count()!=0){
+
+                                                                        <nz-tabset _ngcontent-serverapp-c171=""
+                                                                            nzcentered=""
+                                                                            class="ant-tabs ant-tabs-centered ant-tabs-top ant-tabs-default ng-star-inserted">
+                                                                            <nz-tabs-nav role="tablist" 
+                                                                                class="ant-tabs-nav ng-star-inserted ">
+                                                                       
+                                                                                <div
+                                                                                    class="ant-tabs-nav-wrap ant-tabs-nav-wrap-ping-right">
+                                                                                    <div nztabscrolllist=""
+                                                                                        class="ant-tabs-nav-list container"
+                                                                                        style="transform: translate(0px, 0px);">
+                                                                                        @{i=1; var dd = 1;}
+                                                                                         @foreach(var item_sche in schedules){
+                                                                                            <div id = "tabday_@i" onclick="tabchoseday(@i)" data-value-date="@item_sche.DateTime.ToShortDateString()"
+                                                                                                class="section ant-tabs-tab @(checkrequestdate == new DateTime() ? (i==1?"ant-tabs-tab-active":""):(item_sche.DateTime.ToShortDateString()==checkrequestdate.ToShortDateString()?"ant-tabs-tab-active":"")) ng-star-inserted check-tabs">
+                                                                                                <div role="tab" nztabnavitem="" 
+                                                                                                    cdkmonitorelementfocus=""
+                                                                                                    class="ant-tabs-tab-btn"
+                                                                                                    tabindex="@(i==1?"0":"-1")"
+                                                                                                    aria-disabled="false"
+                                                                                                    aria-selected="true"
+                                                                                                    aria-controls="nz-tabs-0-tab-@i">
+                                                                                                    <div _ngcontent-serverapp-c171=""
+                                                                                                        class="text-center ng-star-inserted">
+                                                                                                        <p _ngcontent-serverapp-c171=""
+                                                                                                            class="font-medium text-sm">
+                                                                                                            @(item_sche.DateTime.ToString("dddd")=="Monday"?"Thứ 2":
+                                                                                                            item_sche.DateTime.ToString("dddd")=="Tuesday"?"Thứ 3":
+                                                                                                            item_sche.DateTime.ToString("dddd")=="Wednesday"?"Thứ 4":
+                                                                                                            item_sche.DateTime.ToString("dddd")=="Thursday"?"Thứ 5":
+                                                                                                            item_sche.DateTime.ToString("dddd")=="Friday"?"Thứ 6":
+                                                                                                            item_sche.DateTime.ToString("dddd")=="Saturday"?"Thứ 7":"CN"),
+                                                                                                            @(" "+item_sche.DateTime.ToString("dd/MM"))
+                                                                                                        </p>
+                                                                                                        <span
+                                                                                                            _ngcontent-serverapp-c171=""
+                                                                                                            class="text-green-500 text-xs">
+                                                                                                            @item_sche.AvailableQty khung giờ </span>
+                                                                                                    </div>
+                                                                                            
+                                                                                            
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            if(i==1 && checkrequestdate!= new DateTime()){
+                                                                                                dd=1;
+                                                                                            }else if(item_sche.DateTime.ToShortDateString()==checkrequestdate.ToShortDateString()){
+                                                                                                 dd=i;
+                                                                                            }
+                                                                                        
+                                                                                            i++;
+                                                                                         }
+                                                                                         <div nz-tabs-ink-bar=""
+                                                                                               class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
+                                                                                               style="left: @((dd-1)*122)px; width: 90px;">
+                                                                                         </div>
+                                                                                    
+                                                                                    
+                                                                                    </div>
+                                                                                </div>
+                                                                                <nz-tab-nav-operation
+                                                                                    class="ant-tabs-nav-operations"><button
+                                                                                        nz-dropdown="" type="button"
+                                                                                        tabindex="-1" aria-hidden="true"
+                                                                                        nzoverlayclassname="nz-tabs-dropdown"
+                                                                                        class="ant-dropdown-trigger ant-tabs-nav-more"><i
+                                                                                            nz-icon="" nztype="ellipsis"
+                                                                                            class="anticon anticon-ellipsis"><svg
+                                                                                                viewBox="64 64 896 896"
+                                                                                                focusable="false"
+                                                                                                fill="currentColor"
+                                                                                                width="1em" height="1em"
+                                                                                                data-icon="ellipsis"
+                                                                                                aria-hidden="true">
+                                                                                                <path
+                                                                                                    d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z">
+                                                                                                </path>
+                                                                                            </svg></i></button>
+                                                                                
+                                                                                
+                                                                                
+                                                                                </nz-tab-nav-operation>
+                                                                                <div
+                                                                                    class="ant-tabs-extra-content ng-star-inserted">
+                                                                                    <button _ngcontent-serverapp-c171=""
+                                                                                        class="bg-white shadow-md rounded-full p-2 text-gray-500 ring-1 ring-stone-100 mr-1 ng-star-inserted"><svg
+                                                                                            _ngcontent-serverApp-c171=""
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            width="20" height="20"
+                                                                                            viewBox="0 0 512 512"
+                                                                                            class="ionicon">
+                                                                                            <path
+                                                                                                _ngcontent-serverApp-c171=""
+                                                                                                fill="none"
+                                                                                                stroke="currentColor"
+                                                                                                stroke-linecap="round"
+                                                                                                stroke-linejoin="round"
+                                                                                                stroke-width="48"
+                                                                                                d="M184 112l144 144-144 144">
+                                                                                            </path>
+                                                                                        </svg></button>
+                                                                                
+                                                                                </div>
+                                                                            
+                                                                            </nz-tabs-nav>
+                                                                        
+                                                                            <div class="ant-tabs-content-holder">
+                                                                                <div class="ant-tabs-content ant-tabs-content-top ant-tabs-content-animated"
+                                                                                    style="margin-left: 0%;">
+                                                                                    @{
+                                                                                        i = 1;
+                                                                                        var text = "";
+                                                                                        var img = "";
+                                                                                        var fromtime = 0;
+                                                                                        var totime = 0;
+                                                                                        var j = 0;
+                                                                                    }
+                                                                                    @foreach(var item_sche in schedules){
+                                                                                        <div nz-tab-body="" id = "choseslotday_@i" 
+                                                                                        class="ant-tabs-tabpane @(checkrequestdate == new DateTime() ? (i==1?"ant-tabs-tabpane-active ":"hiden"):(item_sche.DateTime.ToShortDateString()==checkrequestdate.ToShortDateString()?"ant-tabs-tabpane-active ":"hiden"))  ng-star-inserted check-tab" tabindex=" @(i==1?"0":"-1")" aria-hidden="@(i==1?"false":"true")">
+                                                                                    
+                                                                                            <div _ngcontent-serverapp-c171=""
+                                                                                                class="ng-star-inserted">
+                                                                                                @for(var d = 1; d <= item_sche.CountTimeSpan;d++){
+                                                                                                    totime = item_sche.ScheduleSlots.FirstOrDefault(x => x.Type == d).ToTime.Hours;
+                                                                                                    if( totime  < 12) {
+                                                                                                        text ="Buổi sáng";
+                                                                                                        img = "sun.svg";
+                                                                                                    }
+                                                                                                    else if( totime  < 18)
+                                                                                                    {
+                                                                                                        text ="Buổi chiều";
+                                                                                                        img = "sun-fog.svg";
+                                                                                                    }else if( totime  <= 23)
+                                                                                                    {
+                                                                                                        text ="Buổi tối";
+                                                                                                        img = "sun-fog.svg";
+                                                                                                    }else 
+                                                                                                    {
+                                                                                                        text ="Cả ngày";
+                                                                                                        img = "sun.svg";
+                                                                                                    }
+                                                                                                    <div _ngcontent-serverapp-c171=""
+                                                                                                        class="ng-star-inserted" >
+                                                                                                        <div _ngcontent-serverapp-c171=""
+                                                                                                            class="mb-2 ng-star-inserted">
+                                                                                                            <div _ngcontent-serverapp-c171=""
+                                                                                                                class="flex">
+                                                                                                                <img
+                                                                                                                    _ngcontent-serverapp-c171=""
+                                                                                                                    width="20"
+                                                                                                                    height="20"
+                                                                                                                    loading="lazy"
+                                                                                                                    src="~/img/booking/svg/@img"
+                                                                                                                    alt="Buổi sáng">
+                                                                                                                <p _ngcontent-serverapp-c171=""
+                                                                                                                    class="ml-1 text-sm font-medium text-gray-600">
+                                                                                                                    @text</p>
+                                                                                                            </div>
+                                                                                                            <div _ngcontent-serverapp-c171=""
+                                                                                                                class="flex flex-wrap gap-2 py-3 max-h-52 ">
+                                                                                                                @foreach(var slot in item_sche.ScheduleSlots){
+                                                                                                                    if(slot.Type == d){
+                                                                                                                        <a _ngcontent-serverapp-c171=""
+                                                                                                                            onclick="choseSlot(@j)" id="slot_@j" data-id="@slot.Id" data-value-day="@item_sche.DateTime.ToShortDateString()" data-value-time="@(slot.FromTime.ToString().Substring(0,5)+"-"+@slot.ToTime.ToString().Substring(0,5))"
+                                                                                                                            class="text-center font-medium border rounded-md px-2 py-2 tabular-nums hover:bg-primary hover:text-white hover:border-primary ng-star-inserted">
+                                                                                                                             @(slot.FromTime.ToString().Substring(0,5)+"-"+@slot.ToTime.ToString().Substring(0,5))
+                                                                                                                        </a>
+                                                                                                                        j++;
+                                                                                                                   
+                                                                                                                    }
+                                                                                                                }
+                                                                                                           
+                                                                                                            
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                }
+                                                                                            
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        i++;
+                                                                                    }
+                                                                               
+                                                                                </div>
+                                                                            </div>
+                                                                        </nz-tabset>
+                                                                    }
+                                                                    else{
+                                                                        <nz-empty _ngcontent-serverapp-c232="" class="ant-empty p-4 text-gray-600 text-sm ng-star-inserted">
+                                                                            <div class="ant-empty-image">
+                                                                                <nz-empty-default class="ng-star-inserted"><svg width="184" height="152" viewBox="0 0 184 152"
+                                                                                        xmlns="http://www.w3.org/2000/svg" class="ant-empty-img-default">
+                                                                                        <g fill="none" fill-rule="evenodd">
+                                                                                            <g transform="translate(24 31.67)">
+                                                                                                <ellipse cx="67.797" cy="106.89" rx="67.797" ry="12.668" class="ant-empty-img-default-ellipse">
+                                                                                                </ellipse>
+                                                                                                <path
+                                                                                                    d="M122.034 69.674L98.109 40.229c-1.148-1.386-2.826-2.225-4.593-2.225h-51.44c-1.766 0-3.444.839-4.592 2.225L13.56 69.674v15.383h108.475V69.674z"
+                                                                                                    class="ant-empty-img-default-path-1"></path>
+                                                                                                <path
+                                                                                                    d="M101.537 86.214L80.63 61.102c-1.001-1.207-2.507-1.867-4.048-1.867H31.724c-1.54 0-3.047.66-4.048 1.867L6.769 86.214v13.792h94.768V86.214z"
+                                                                                                    transform="translate(13.56)" class="ant-empty-img-default-path-2"></path>
+                                                                                                <path
+                                                                                                    d="M33.83 0h67.933a4 4 0 0 1 4 4v93.344a4 4 0 0 1-4 4H33.83a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4z"
+                                                                                                    class="ant-empty-img-default-path-3"></path>
+                                                                                                <path
+                                                                                                    d="M42.678 9.953h50.237a2 2 0 0 1 2 2V36.91a2 2 0 0 1-2 2H42.678a2 2 0 0 1-2-2V11.953a2 2 0 0 1 2-2zM42.94 49.767h49.713a2.262 2.262 0 1 1 0 4.524H42.94a2.262 2.262 0 0 1 0-4.524zM42.94 61.53h49.713a2.262 2.262 0 1 1 0 4.525H42.94a2.262 2.262 0 0 1 0-4.525zM121.813 105.032c-.775 3.071-3.497 5.36-6.735 5.36H20.515c-3.238 0-5.96-2.29-6.734-5.36a7.309 7.309 0 0 1-.222-1.79V69.675h26.318c2.907 0 5.25 2.448 5.25 5.42v.04c0 2.971 2.37 5.37 5.277 5.37h34.785c2.907 0 5.277-2.421 5.277-5.393V75.1c0-2.972 2.343-5.426 5.25-5.426h26.318v33.569c0 .617-.077 1.216-.221 1.789z"
+                                                                                                    class="ant-empty-img-default-path-4"></path>
+                                                                                            </g>
+                                                                                            <path
+                                                                                                d="M149.121 33.292l-6.83 2.65a1 1 0 0 1-1.317-1.23l1.937-6.207c-2.589-2.944-4.109-6.534-4.109-10.408C138.802 8.102 148.92 0 161.402 0 173.881 0 184 8.102 184 18.097c0 9.995-10.118 18.097-22.599 18.097-4.528 0-8.744-1.066-12.28-2.902z"
+                                                                                                class="ant-empty-img-default-path-5"></path>
+                                                                                            <g transform="translate(149.65 15.383)" class="ant-empty-img-default-g">
+                                                                                                <ellipse cx="20.654" cy="3.167" rx="2.849" ry="2.815"></ellipse>
+                                                                                                <path d="M5.698 5.63H0L2.898.704zM9.259.704h4.985V5.63H9.259z"></path>
+                                                                                            </g>
+                                                                                        </g>
+                                                                                    </svg></nz-empty-default>
+                                                                            </div>
+                                                                            <p class="ant-empty-description ng-star-inserted"> Bác sĩ hiện tại không có lịch khám, xin vui lòng thử lại sau !
+                                                                            </p>
+                                                                        </nz-empty>
+
+                                                                    }
+                                                                </div>
+                                                                
+                                                            </app-booking-doctor-working-date-and-slots>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </nz-step>
+                                            <nz-step _ngcontent-serverapp-c260=""
+                                                class="ant-steps-item ant-steps-item-wait ant-steps-item-active ng-star-inserted">
+                                                <div class="ant-steps-item-container @(schedulesSlotId != new Guid()? "": "hiden")" tabindex="0" role="button" id="chose-profile">
+                                                    <div class="ant-steps-item-icon">
+                                                        <span class="ant-steps-icon ng-star-inserted"> 2 </span>
+                                                    </div>
+                                                    <div class="ant-steps-item-content">
+                                                        <div class="ant-steps-item-title"><button
+                                                                _ngcontent-serverapp-c260=""
+                                                                class="step-button ng-star-inserted">
+                                                                <p _ngcontent-serverapp-c260=""
+                                                                    class="font-semibold text-primary">Hồ sơ bệnh nhân
+                                                                </p><img _ngcontent-serverapp-c260="" width="18"
+                                                                    height="18"
+                                                                    src="~/img/booking/svg/arrow-down.svg"
+                                                                    alt="arrow-down" title="Xem thêm thông tin">
+                                                            </button>
+                                                        </div>
+                                                        <div class="ant-steps-item-description">
+                                                            <div _ngcontent-serverapp-c260=""
+                                                                class="p-4 ng-star-inserted">
+                                                                <app-booking-doctor-patient _ngcontent-serverapp-c260=""
+                                                                    _nghost-serverapp-c254="">
+                                                                    <div _ngcontent-serverapp-c254=""
+                                                                        class="text-gray-800">
+                                                                        <app-step-profile _ngcontent-serverapp-c254=""
+                                                                            _nghost-serverapp-c173="">
+                                                                            <div _ngcontent-serverapp-c173=""
+                                                                                class="border-t border-t-gray-100 mt-3 py-4 space-y-4 ng-star-inserted">
+                                                                                
+                                                                                <div _ngcontent-serverapp-c173=""
+                                                                                    hidden="">
+                                                                                    <form _ngcontent-serverapp-c173=""
+                                                                                        novalidate=""
+                                                                                        class="relative ng-untouched ng-pristine ng-valid">
+                                                                                        <img _ngcontent-serverapp-c173=""
+                                                                                            width="18" height="18"
+                                                                                            src="~/img/booking/svg/search-normal.svg"
+                                                                                            class="cursor-pointer absolute left-3 bottom-1/2 translate-y-1/2 object-cover"><input
+                                                                                            _ngcontent-serverapp-c173=""
+                                                                                            type="search"
+                                                                                            formcontrolname="query"
+                                                                                            placeholder="Tìm nhanh"
+                                                                                            class="form-control ng-untouched ng-pristine ng-valid">
+                                                                                    </form>
+                                                                                </div>
+                                                                                <div _ngcontent-serverapp-c173=""
+                                                                                    class="font-medium text-sm">Chọn hồ
+                                                                                    sơ bạn muốn đặt khám</div>
+                                                                                <nz-spin _ngcontent-serverapp-c173=""
+                                                                                    class="ant-spin-nested-loading">
+                                                                                    
+                                                                                    
+                                                                                    <div
+                                                                                        class="ant-spin-container ng-star-inserted">
+                                                                                        <div _ngcontent-serverapp-c173=""
+                                                                                            id="patient"
+                                                                                            nfinite-scroll=""
+                                                                                            infinite-scroll=""
+                                                                                            class="grid gap-4 max-h-96 overflow-y-auto ng-star-inserted">
+                                                                                            <app-patient-preview
+                                                                                                _ngcontent-serverapp-c173=""
+                                                                                                _nghost-serverapp-c172=""
+                                                                                                class="ng-star-inserted">
+                                                                                                @{i=0;}
+                                                                                                @foreach(var profile in patient){
+
+                                                                                                    <div _ngcontent-serverapp-c172="" onclick="choserprofile(@i)" id="patient_@i" data-id="@profile.Id" data-value-patient="@profile.Name"
+                                                                                                        class="check-active cursor-pointer border-gray-300 rounded-lg flex flex-col ng-star-inserted" style="margin-bottom:20px;">
+                                                                                                        <div _ngcontent-serverapp-c172=""
+                                                                                                            class="item flex flex-row justify-between items-center p-2">
+                                                                                                            <div _ngcontent-serverapp-c172=""
+                                                                                                                class="flex row gap-1">
+                                                                                                                <div _ngcontent-serverapp-c172=""
+                                                                                                                    class="relative p-1">
+                                                                                                                    <img _ngcontent-serverapp-c172=""
+                                                                                                                        src="~/img/booking/svg/Family-Block.svg"
+                                                                                                                        alt="Folder avatar"
+                                                                                                                        class="w-[60px] h-[60px] ng-star-inserted">
+                                                                                                                
+                                                                                                                
+                                                                                                                    <div _ngcontent-serverapp-c172=""
+                                                                                                                        class="absolute top-0 right-0 font-normal rounded-lg text-[11px] text-white leading-15 bg-gray-400 px-1">
+                                                                                                                        Tôi
+                                                                                                                    </div>
+                                                                                                                    <img _ngcontent-serverapp-c172=""
+                                                                                                                        src="~/img/booking/avatar_patient_bg.svg"
+                                                                                                                        alt="Background"
+                                                                                                                        class="item-name-bg w-[37px] h-[37px]"><span
+                                                                                                                        _ngcontent-serverapp-c172=""
+                                                                                                                        class="item-name text-base text-white ng-star-inserted">
+                                                                                                                        QU
+                                                                                                                    </span>
+                                                                                                                
+                                                                                                                </div>
+                                                                                                                <div _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex flex-col justify-center items-start">
+                                                                                                                    <span
+                                                                                                                        _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium text-base text-gray-800">
+                                                                                                                        @profile.Name
+                                                                                                                    </span><span
+                                                                                                                        _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-normal text-sm text-gray-600">
+                                                                                                                        @profile.Dob.ToShortDateString()
+                                                                                                                    </span>
+                                                                                                                </div>
+                                                                                                            </div><button 
+                                                                                                                _ngcontent-serverapp-c172=""
+                                                                                                                class="p-2"><img onclick="showprofile(@i)"
+                                                                                                                    _ngcontent-serverapp-c172=""
+                                                                                                                    src="~/img/booking/svg/arrow-down.svg"
+                                                                                                                    title="Xem thêm thông tin"
+                                                                                                                    class="cursor-pointer w-4 h-4"></button>
+                                                                                                        </div>
+                                                                                                        <div _ngcontent-serverapp-c172="" id="profile-@i"
+                                                                                                            class="flex flex-col gap-4 p-4 hidden">
+                                                                                                            <ul _ngcontent-serverapp-c172=""
+                                                                                                                class="divide-y divide-gray-100">
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-1 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Mã
+                                                                                                                        bệnh
+                                                                                                                        nhân
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @profile.No
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Họ
+                                                                                                                        và
+                                                                                                                        tên
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @profile.Name
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                            
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Giới
+                                                                                                                        tính
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @(profile.Gender == Gender.Male?"Nam":"Nữ")
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                            
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Ngày
+                                                                                                                        sinh
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @profile.Dob.ToShortDateString()
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Số
+                                                                                                                        điện
+                                                                                                                        thoại
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                        @profile.RelativePhone
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                            
+                                                                                                                <li _ngcontent-serverapp-c172=""
+                                                                                                                    class="flex justify-between flex-wrap text-gray-800 py-2 ng-star-inserted">
+                                                                                                                    <p
+                                                                                                                        _ngcontent-serverapp-c172="">
+                                                                                                                        Địa
+                                                                                                                        chỉ
+                                                                                                                    </p>
+                                                                                                                    <p _ngcontent-serverapp-c172=""
+                                                                                                                        class="font-medium">
+                                                                                                                       @profile.Address
+                                                                                                                    </p>
+                                                                                                                </li>
+                                                                                                            
+                                                                                                            </ul>
+                                                                                                            @*<div _ngcontent-serverapp-c172=""
+                                                                                                                class="flex flex-row gap-4 items-start">
+                                                                                                                <a _ngcontent-serverapp-c172=""
+                                                                                                                    class="font-semibold text-sm text-primary leading-17 bg-blue-50 border-inherit shadow-sm rounded px-4 py-3">Điều
+                                                                                                                    chỉnh</a>
+                                                                                                            </div>*@
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    i++;
+                                                                                                }
+                                                                                                
+                                                                                            </app-patient-preview>
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                        </div>
+                                                                                        
+                                                                                        
+                                                                                    </div>
+                                                                                    
+                                                                                </nz-spin>
+                                                                            </div>
+                                                                            
+                                                                        </app-step-profile>
+                                                                        <app-additional-information
+                                                                            _ngcontent-serverapp-c254=""
+                                                                            _nghost-serverapp-c253=""
+                                                                            class="ng-star-inserted">
+                                                                            <div _ngcontent-serverapp-c253=""
+                                                                                class="space-y-4 text-gray-800 ng-star-inserted">
+                                                                                <div _ngcontent-serverapp-c253=""
+                                                                                    class="font-medium text-sm">Thông
+                                                                                    tin bổ sung (không bắt buộc)</div>
+                                                                                <div _ngcontent-serverapp-c253=""
+                                                                                    class="flex flex-col"><label
+                                                                                        _ngcontent-serverapp-c253=""
+                                                                                        for="note"
+                                                                                        class="font-medium text-sm">Ghi
+                                                                                        chú</label>
+                                                                                    <form _ngcontent-serverapp-c253="" id="form-booking" asp-action="BookingDoctorSetPatient" method="post"
+                                                                                        novalidate=""
+                                                                                        class="ng-untouched ng-pristine ng-valid">
+                                                                                        <textarea asp-for="Note" _ngcontent-serverapp-c180="" rows="1" formcontrolname="note" nz-input="" class="rounded mt-1 ant-input ng-pristine ng-valid ng-touched" placeholder="Triệu chứng, thuốc đang dùng, tiền sử, ..." style="max-height: 120px; min-height: 76px; height: 76px;"></textarea>
+                                                                                        <input type="hidden" asp-for="SchedulesSlotId" />  
+                                                                                        <input type="hidden" asp-for="PatientId" />  
+                                                                                        <input type="hidden" asp-for="DoctorId" />  
+                                                                                        <input type="hidden" asp-for="IsDoctor" />  
+                                                                                        
+                                                                                        <div _ngcontent-serverapp-c253=""
+                                                                                            class="flex flex-row justify-between font-semibold" style="margin-top:20px;">
+                                                                                            <a _ngcontent-serverapp-c253=""
+                                                                                               onclick="ShowBotton()"
+                                                                                                class="text-sm bg-transparent border border-solid text-primary rounded py-3 px-4">
+                                                                                                Thêm hồ sơ mới </a>
+                                                                                                <div id="cdk-overlay-btn" class="cdk-overlay-pane hiden-btn" style="left: 150px;"  onclick="ShowForm()">
+                                                                                                  <div
+                                                                                                    class="ant-popover ng-tns-c155-16 ng-animate-disabled ng-trigger ng-trigger-zoomBigMotion ng-star-inserted null ant-popover-placement-right">
+                                                                                                    <div class="ant-popover-content ng-tns-c155-16">
+                                                                                                      <div class="ant-popover-arrow ng-tns-c155-16"><span class="ant-popover-arrow-content ng-tns-c155-16"></span></div>
+                                                                                                      <div role="tooltip" class="ant-popover-inner ng-tns-c155-16">
+                                                                                                        <div class="ng-tns-c155-16">
+                                                                                                          <div class="ant-popover-inner-content ng-tns-c155-16">
+                                                                                                            <div _ngcontent-serverapp-c192="" class="ng-star-inserted" style="">
+                                                                                                              <div _ngcontent-serverapp-c192=""
+                                                                                                                class="p-4 rounded cursor-pointer flex flex-row justify-between gap-4 hover:bg-gray-50"><span
+                                                                                                                  _ngcontent-serverapp-c192="" class="font-semibold text-sm">Chưa từng khám, tạo hồ sơ mới</span><img
+                                                                                                                  _ngcontent-serverapp-c192="" src="~/img/booking/svg/add-record.svg" class="w-4 h-4"></div>
+                                                                                                            </div>
+                                                                                                          </div>
+                                                                                                        </div>
+                                                                                                      </div>
+                                                                                                    </div>
+                                                                                                  </div>
+                                                                                                </div>
+
+                                                                                            <a
+                                                                                                _ngcontent-serverapp-c253=""
+                                                                                                class="text-sm bg-transparent border border-primary text-white bg-primary rounded py-3 px-4 hover:bg-primary/80 hover:text-white"
+                                                                                                hidden="">Xác nhận</a>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </app-additional-information>
+                                                                    </div>
+                                                                </app-booking-doctor-patient>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </nz-step>
+                                        </div>
+                                    </nz-steps>
+                                </div>
+                                <div _ngcontent-serverapp-c260=""
+                                    class="col-span-12 md:p-0 md:z-auto p-4 md:col-span-5 lg:col-span-4 bg-white md:bg-transparent py-6">
+                                    <div _ngcontent-serverapp-c260="" class="sticky top-20">
+                                        <div _ngcontent-serverapp-c260=""
+                                            class="bg-white md:rounded-lg overflow-hidden ng-star-inserted">
+                                            <app-side-bar-booking _ngcontent-serverapp-c260=""
+                                                _nghost-serverapp-c259="">
+                                                <app-booking-flow-info _ngcontent-serverapp-c259=""
+                                                    _nghost-serverapp-c257="" class="ng-star-inserted">
+                                                    <div _ngcontent-serverapp-c257=""
+                                                        class="hidden md:block divide-y divide-gray-100">
+                                                        <div _ngcontent-serverapp-c257=""
+                                                            class="flex flex-row justify-between px-4 lg:px-6 py-4 bg-white rounded-t-md">
+                                                            <div _ngcontent-serverapp-c257=""
+                                                                class="font-semibold text-base text-gray-800">Thông tin
+                                                                đặt khám</div><img _ngcontent-serverapp-c257=""
+                                                                width="18" height="18"
+                                                                src="~/img/booking/svg/arrow-down.svg"
+                                                                class="w-[18px] h-[18px] rotate-180">
+                                                        </div>
+                                                        <div _ngcontent-serverapp-c257=""
+                                                            class="flex flex-row items-center gap-4 px-4 lg:px-6 py-2">
+                                                            <div _ngcontent-serverapp-c257=""
+                                                                class="flex-none ng-star-inserted"><img
+                                                                    _ngcontent-serverapp-c257=""
+                                                                    defaultimage="~/img/placeholder.webp"
+                                                                    class="w-[60px] h-[60px] object-scale-down rounded-full lazyload  ng-lazyloaded"
+                                                                    alt="@(doctor.Prefix+doctor.LastName+" "+doctor.FirstName)"
+                                                                    src="@(Configuration["BaseAddress"] + "/img/" + doctor.Img)">
+                                                            </div>
+                                                            
+                                                            <div _ngcontent-serverapp-c257="">
+                                                                <p _ngcontent-serverapp-c257=""
+                                                                    class="font-medium text-base"> @(doctor.Prefix+doctor.LastName+" "+doctor.FirstName)
+                                                                </p>
+                                                                <p _ngcontent-serverapp-c257=""
+                                                                    class="font-normal text-xs text-gray-500 line-clamp-2">
+                                                                    @doctor.FullAddress </p>
+                                                            </div>
+                                                        </div>
+                                                        <div _ngcontent-serverapp-c257="" class="p-4 lg:px-6 bg-white">
+                                                            <div _ngcontent-serverapp-c257="" class="ng-star-inserted">
+                                                                <div _ngcontent-serverapp-c257=""
+                                                                    class="flex flex-row justify-between py-2 text-gray-800 ng-star-inserted">
+                                                                    <div _ngcontent-serverapp-c257="">Ngày khám</div>
+                                                                    <div _ngcontent-serverapp-c257="" id="showday"
+                                                                        class="font-medium"> @(ViewBag.Date != null ? ViewBag.Date.ToString("dd/MM/yyyy"):"") </div>
+                                                                </div>
+                                                                
+                                                                <div _ngcontent-serverapp-c257=""
+                                                                    class="flex flex-row justify-between py-2 text-gray-800 ng-star-inserted">
+                                                                    <div _ngcontent-serverapp-c257="">Khung giờ</div>
+                                                                    <div _ngcontent-serverapp-c257="" id="showtime"
+                                                                        class="font-medium"> @ViewBag.TimeSpan </div>
+                                                                </div>
+                                                                <div _ngcontent-serverapp-c257=""
+                                                                    class="flex flex-row justify-between py-2 text-gray-800 ng-star-inserted">
+                                                                    <div _ngcontent-serverapp-c257="">Bệnh nhân</div>
+                                                                    <div _ngcontent-serverapp-c257="" id="showpatient"
+                                                                        class="font-medium"> </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <nz-spin _ngcontent-serverapp-c257=""
+                                                        class="ant-spin-nested-loading">
+                                                        <div class="ant-spin-container ng-star-inserted">
+                                                            <div _ngcontent-serverapp-c257="" class="md:p-4 bg-white ng-star-inserted" id="btn-submit">
+                                                                <button  _ngcontent-serverapp-c257="" class="bg-gray-300 text-white font-semibold w-full text-center px-4 py-4 rounded cursor-not-allowed ng-star-inserted"> Xác nhận đặt khám</button>
+                                                                <button _ngcontent-serverapp-c188="" onclick="submitForm()" class="w-full button font-semibold text-sm text-white px-4 py-4 bg-primary ng-star-inserted hiden-btn"> Đặt lịch</button>
+                                                            </div>
+                                                        </div>
+                                                    </nz-spin>
+                                                </app-booking-flow-info>
+                                            </app-side-bar-booking>
+                                        </div>
+                                        <div _ngcontent-serverapp-c260="" class="mt-2">
+                                            <p _ngcontent-serverapp-c260="" class="font-normal text-xs text-gray-600">
+                                                Bằng cách nhấn nút xác nhận, bạn đã đồng ý với <a
+                                                    _ngcontent-serverapp-c260="" href="#" target="_blank">các điều khoản
+                                                    và điều kiện đặt khám</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section _ngcontent-serverapp-c260="" class="bg-white md:bg-gray-100">
+                       <app-download _ngcontent-serverapp-c71="" _nghost-serverapp-c69="">
+                    <section _ngcontent-serverapp-c69="" id="download"
+                        class="bg-gradient-to-t md:bg-gradient-to-r from-[#00C6FB] to-[#0758D8]">
+                        <div _ngcontent-serverapp-c69="" class="max-w-7xl mx-auto md:grid md:grid-cols-12">
+                            <div _ngcontent-serverapp-c69=""
+                                class="px-4 py-6 lg:py-12 text-white space-y-6 md:col-span-5 lg:col-span-4">
+                                <h2 _ngcontent-serverapp-c69="" class="text-2xl md:text-4xl font-bold text-white">Hãy sử dụng DoctorMed</h2>
+                                <ul _ngcontent-serverapp-c69="" class="space-y-4">
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg/hospital.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Đặt lịch khám bệnh và xét
+                                            nghiệm</span></li>
+                                    
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded" src="~/img/booking/svg/like.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Đặt lịch khám bệnh với các phòng khám</span></li>
+                                    
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg//shield-security.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Lưu trữ hồ sơ sức khỏe</span>
+                                    </li>
+                                    
+                                   @* <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg/wallet-minus.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Thanh toán dịch vụ trực
+                                            tuyến</span></li>*@
+                                    
+                                    
+                                </ul>
+                               @* <div _ngcontent-serverapp-c69="" class="flex gap-4 justify-center md:justify-start"><a
+                                        _ngcontent-serverapp-c69="" target="_blank"
+                                        href="https://play.google.com/store/apps/details?id=com.DoctorMed.info"><img
+                                            _ngcontent-serverapp-c69="" width="135" height="40" loading="lazy"
+                                            src="~/img/booking/svg/google-play.svg"
+                                            title="Tải ứng dụng đặt khám trên Google Play"
+                                            alt="Tải ứng dụng đặt khám trên Google Play"></a><a
+                                        _ngcontent-serverapp-c69="" target="_blank"
+                                        href="https://itunes.apple.com/gb/app/DoctorMed/id1466077723?mt=8"><img
+                                            _ngcontent-serverapp-c69="" width="120" height="40" loading="lazy"
+                                            src="~/img/booking/svg/apple-store.svg"
+                                            title="Tải ứng dụng đặt khám trên Apple Store"
+                                            alt="Tải ứng dụng đặt khám trên Apple Store"></a></div>*@
+                            </div>
+                            <div _ngcontent-serverapp-c69=""
+                                class="md:col-span-7 lg:col-span-8 relative overflow-hidden md:overflow-visible flex items-end justify-center">
+                                <img _ngcontent-serverapp-c69="" width="734" height="734"
+                                    src="~/img/booking/svg/rounded_full.svg" alt="decor"
+                                    class="absolute top-0 lg:-top-1/2">
+                                <div _ngcontent-serverapp-c69=""
+                                    class="invisible md:visible absolute z-10 bottom-0 max-w-[195.8px] md:max-w-full">
+                                    <img _ngcontent-serverapp-c69="" 
+                                        class="w-full md:max-h-[350px] object-cover  ng-lazyloaded"
+                                        src="~/img/booking/png/Clinic/Feature2.webp"></div>
+                            </div>
+                        </div>
+                    </section>
+                </app-download>
+                 <router-outlet _ngcontent-serverapp-c194=""></router-outlet>
+                    </section>
+                </app-static-steps>
+</app-step-booking-doctor>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+@section Alert{
+    <div class="cdk-global-overlay-wrapper" dir="ltr">
+      @if (TempData["AlertMessage"] != null)
+      {
+          <div id="cdk-overlay-9" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
+            <nz-message-container>
+              <div class="ant-message" style="top: 24px;">
+                <nz-message class="ng-tns-c43-75 ng-star-inserted">
+                  <div class="ant-message-notice ng-tns-c43-75 ng-trigger ng-trigger-moveUpMotion">
+                    <div class="ant-message-notice-content ng-tns-c43-75">
+                      <div class="ant-message-custom-content ng-tns-c43-75 ant-message-@TempData["AlertType"]">
+                          @if(TempData["AlertType"]=="success"){
+
+                              <i nz-icon="" nztype="check-circle" class="anticon ng-tns-c43-75 anticon-check-circle ng-star-inserted" style="">
+                                <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                                    class="ng-tns-c43-75" data-icon="check-circle" aria-hidden="true">
+                                    <path
+                                      d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z">
+                                    </path>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                              </i>
+                          }else{
+                             <i nz-icon="" nztype="close-circle"
+                                class="anticon ng-tns-c43-5 anticon-close-circle ng-star-inserted" style=""><svg
+                                    viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em"
+                                    height="1em" class="ng-tns-c43-5" data-icon="close-circle"
+                                    aria-hidden="true">
+                                    <path
+                                        d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 .3L512 465.6l-99.3-118.4-66.1-.3c-4.4 0-8 3.5-8 8 0 1.9.7 3.7 1.9 5.2l130.1 155L340.5 670a8.32 8.32 0 00-1.9 5.2c0 4.4 3.6 8 8 8l66.1-.3L512 564.4l99.3 118.4 66 .3c4.4 0 8-3.5 8-8 0-1.9-.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z">
+                                    </path>
+                                    <path
+                                        d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                             </i>
+
+                          }
+                        <span class="ng-tns-c43-75 ng-star-inserted" style="">@TempData["AlertMessage"]</span>
+                      </div>
+                    </div>
+                  </div>
+                </nz-message>
+              </div>
+            </nz-message-container>
+          </div>
+            
+      } 
+    </div>
+    <div  class="cdk-global-overlay-wrapper  "  dir="ltr">
+      <div id="cdk-overlay-form" class="cdk-overlay-pane hiden-btn" style="position: static;">
+        <div tabindex="0" class="cdk-visually-hidden cdk-focus-trap-anchor" aria-hidden="true"></div>
+        <nz-modal-container tabindex="-1" role="dialog"
+          class="ng-tns-c149-18 ng-trigger ng-trigger-modalContainer ant-modal-wrap ant-modal-centered ng-star-inserted"
+          style="z-index: 1000;">
+          <div role="document" class="ant-modal ng-tns-c149-18"
+            style="width: 800px; transform-origin: 399.6px -107.2px 0px;">
+            <div class="ant-modal-content ng-tns-c149-18"><button aria-label="Close" onclick="CloseForm()"
+                class="ant-modal-close ng-tns-c149-18 ng-star-inserted" style=""><span class="ant-modal-close-x"><i
+                    nz-icon="" class="anticon ant-modal-close-icon anticon-close ng-star-inserted"><svg
+                      viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                      data-icon="close" aria-hidden="true">
+                      <path
+                        d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z">
+                      </path>
+                    </svg></i>
+                </span></button>
+          
+              <div nz-modal-title="" class="ant-modal-header ng-tns-c149-18 ng-star-inserted" style="">
+                <div class="ant-modal-title">
+                  <div class="ng-star-inserted">Thêm hồ sơ mới</div>
+                </div>
+              </div>
+          
+              <div class="ant-modal-body ng-tns-c149-18">
+                <app-add-patient-modal _nghost-serverapp-c188="" class="ng-star-inserted" style="">
+                  <div _ngcontent-serverapp-c188="">
+                    <form _ngcontent-serverapp-c188="" novalidate="" asp-action="AddInfoParent" id="form-register"  
+                      class="grid grid-cols-1 md:grid-cols-2 lg:p-6 gap-4 ng-invalid ng-touched ng-dirty">
+                      <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label _ngcontent-serverapp-c188="" for="name" class="form-label">Họ
+                          và tên <span _ngcontent-serverapp-c188="" class="text-red-500">*</span></label><input
+                          _ngcontent-serverapp-c188="" name="Name" id="Name" nz-input="" type="text"
+                          placeholder="Họ và tên" class="form-control ant-input ng-untouched ng-pristine ng-invalid form-section__form-input">
+                           <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                      </div>
+                      <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label _ngcontent-serverapp-c188="" for="phone"
+                          class="form-label">Số điện thoại <span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label><input _ngcontent-serverapp-c188="" name="RelativePhone" id="RelativePhone"
+                          nz-input="" type="text" placeholder="Số điện thoại" maxlength="10" inputmode="numeric"
+                          pattern="[0-9]*" digitonly="" class="form-control ant-input ng-untouched ng-pristine ng-invalid form-section__form-input">
+                            <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                    
+                      </div>
+                        <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label _ngcontent-serverapp-c188="" for="birthDay" class="form-label">Ngày sinh <span
+                              _ngcontent-serverapp-c188="" class="text-red-500">*</span></label>
+                          <nz-date-picker _ngcontent-serverapp-c188="" formcontrolname="birthDay" nzplaceholder="Ngày tháng năm sinh"
+                            class="form-control ng-tns-c137-19 ant-picker ng-untouched ng-pristine ng-valid ng-star-inserted">
+                          <div class="ng-tns-c90-30 ant-picker-input ng-star-inserted">
+                              <input id="Dob" name="Dob" autocomplete="off" class="form-section__form-input ng-tns-c90-30 ng-untouched ng-pristine ng-valid datetimepicker"
+                                placeholder="Ngày tháng năm sinh" size="12">
+                              <div class="ng-tns-c90-30 ant-picker-active-bar ng-star-inserted">
+                                  </div><span class="ng-tns-c90-30 ant-picker-clear ng-star-inserted"><i nz-icon="" nztype="close-circle" nztheme="fill"
+                                      class="anticon ng-tns-c90-30 anticon-close-circle"><svg viewBox="64 64 896 896" focusable="false"
+                                        fill="currentColor" width="1em" height="1em" class="ng-tns-c90-30" data-icon="close-circle" aria-hidden="true">
+                                        <path
+                                          d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z">
+                                        </path>
+                                      </svg></i></span>
+                                  <span class="ng-tns-c90-30 ant-picker-suffix ng-star-inserted"><i nz-icon=""
+                                      class="anticon ng-tns-c90-30 anticon-calendar ng-star-inserted"><svg viewBox="64 64 896 896" focusable="false"
+                                        fill="currentColor" width="1em" height="1em" class="ng-tns-c90-30" data-icon="calendar" aria-hidden="true">
+                                        <path
+                                          d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z">
+                                        </path>
+                                      </svg></i>
+                                  </span>
+
+                            </div>
+                          </nz-date-picker>
+                            <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                        </div>
+                      <div _ngcontent-serverapp-c188="" ><label _ngcontent-serverapp-c188="" for="gender" style="margin-bottom:10px;"
+                          class="form-label">Giới tính<span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label>
+                        <label class="container1" style="margin-right: 10px;">
+                          <input type="radio" checked id="Gender" name="Gender" value="@Gender.Male" />
+                          <span class="checkmark">Nam</span>
+                        </label>
+                        <label class="container1">
+                          <input type="radio" name="Gender" id="Gender" value="@Gender.Female" />
+                          <span class="checkmark">Nữ</span>
+                        </label>
+                      </div>
+                      <div _ngcontent-serverapp-c188="" class="md:col-span-2 grid lg:grid-cols-3 gap-4">
+                        <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label style="margin-bottom: 5px" _ngcontent-serverapp-c188="" for="ProvinceId" class="form-label">Tỉnh / Thành
+                          phố<span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label>
+                          <select class="select form-section__form-input" name="ProvinceId" id="ProvinceId" asp-items="ViewBag.Province">
+                              <option value="">- Thành Phố -</option>
+                          </select>
+                          <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                        </div>
+                        <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label  style="margin-bottom: 5px" _ngcontent-serverapp-c188="" for="DistrictId" class="form-label">Quận /
+                          Huyện<span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label>
+                          <select class="  form-section__form-input" name="DistrictId" id="DistrictId" asp-items="ViewBag.District">
+                              <option value="">- Quận/Huyện -</option>
+                          </select>
+                          <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                        </div>
+                        <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label  style="margin-bottom: 5px" _ngcontent-serverapp-c188="" for="LocationId" class="form-label">Phường /
+                          Xã<span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label>
+                          <select class="  form-section__form-input" name="LocationId" id="LocationId" asp-items="ViewBag.SubDistrict">
+                              <option value="">- Phường/Xã -</option>
+                          </select>
+                          <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                        </div>
+                      </div>
+                      <div _ngcontent-serverapp-c188="" class="md:col-span-2 grid lg:grid-cols-3 gap-4">
+                        <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label _ngcontent-serverapp-c188="" for="address"
+                            class="form-label">Địa chỉ cụ thể<span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label><input _ngcontent-serverapp-c188=""
+                            name="Address" id="Address" nz-input="" type="text" placeholder="Số nhà, tên đường"
+                            class="form-control ant-input ng-pristine ng-valid ng-touched form-section__form-input">
+                            <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                        </div>
+                        <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label _ngcontent-serverapp-c188="" for="nationalId"
+                            class="form-label">Số CMND/CCCD<span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label><input _ngcontent-serverapp-c188=""
+                            name="IdentityCard" id="IdentityCard" nz-input="" type="text" placeholder="Số CMND hoặc CCCD"
+                            inputmode="numeric" pattern="[0-9]*" digitonly=""
+                            class="form-control ant-input ng-pristine ng-valid ng-touched form-section__form-input">
+                            <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                        </div>
+                        <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label style="margin-bottom: 5px" _ngcontent-serverapp-c188="" for="ethnicGroupId"
+                            class="form-label">Dân tộc<span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label>
+                          <select class="select form-section__form-input " name="EthnicId" id="EthnicId" asp-items="ViewBag.Ethnics">
+                                 <option value="">- Dân tộc -</option>
+                          </select>
+                          <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                        </div>
+                      </div>
+                      
+                      <div _ngcontent-serverapp-c188="" class="form-section__form-group"><label _ngcontent-serverapp-c188="" for="RelativeEmail"
+                          class="form-label">Email<span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label><input _ngcontent-serverapp-c188="" name="RelativeEmail" id="RelativeEmail"
+                          nz-input="" type="text" placeholder="Địa chỉ email của bạn"
+                          class="form-control ant-input ng-pristine ng-valid ng-touched form-section__form-input">
+                          <div _ngcontent-serverapp-c188="" class="text-error text-red-500 mt-1 ng-star-inserted"></div>
+                      </div>
+                      <div _ngcontent-serverapp-c188=""><label _ngcontent-serverapp-c188="" for="email"
+                          class="form-label">Mối quan hệ <span _ngcontent-serverapp-c188=""
+                            class="text-red-500">*</span></label>
+                        <nz-radio-group _ngcontent-serverapp-c188="" formcontrolname="relativeRelationshipId"
+                                              class="ant-radio-group mt-1 grid grid-cols-3 gap-4 items-center text-gray-800 font-medium ng-untouched ng-pristine ng-valid">
+                                              <label _ngcontent-serverApp-c188 class="container1 form-radio ant-radio-wrapper ng-star-inserted"
+                                                style="margin-right: 10px;">
+                                                <input type="radio" name="RelativeName" id="RelativeName" value="Cha" />
+                                                <span class="checkmark">Cha</span>
+                                              </label>
+                                              <label _ngcontent-serverApp-c188 class="container1 form-radio ant-radio-wrapper ng-star-inserted">
+                                                <input type="radio" name="RelativeName" id="RelativeName" value="Mẹ" />
+                                                <span class="checkmark">Mẹ</span>
+                                              </label>
+                                              <label _ngcontent-serverApp-c188 class="container1 form-radio ant-radio-wrapper ng-star-inserted">
+                                                <input type="radio" name="RelativeName" id="RelativeName" value="Con" />
+                                                <span class="checkmark">Con</span>
+                                              </label>
+                                              <label _ngcontent-serverApp-c188 class="container1 form-radio ant-radio-wrapper ng-star-inserted">
+                                                <input type="radio" name="RelativeName" id="RelativeName" value="Vợ" />
+                                                <span class="checkmark">Vợ</span>
+                                              </label>
+                                              <label _ngcontent-serverApp-c188 class="container1 form-radio ant-radio-wrapper ng-star-inserted">
+                                                <input type="radio" name="RelativeName" id="RelativeName" value="Chồng" />
+                                                <span class="checkmark">Chồng</span>
+                                              </label>
+                                              <label _ngcontent-serverApp-c188 class="container1 form-radio ant-radio-wrapper ng-star-inserted">
+                                                <input type="radio" checked name="RelativeName" id="RelativeName" value="Khác" />
+                                                <span class="checkmark">Khác</span>
+                                              </label>
+                                            </nz-radio-group>
+                                             <input type="hidden" name="UserName" id="UserName" value="@User.Identity" />
+                                             <input type="hidden" name="scheduleid" id="scheduleid" value="@Model.SchedulesSlotId"/>
+                                             <input type="hidden" name="doctorid" id="doctorid" value="@Model.DoctorId" />
+                      </div>
+                      <div _ngcontent-serverapp-c188="">
+                    
+                      </div>
+                      <div _ngcontent-serverapp-c188="" class="flex justify-end"><button _ngcontent-serverapp-c188=""
+                          class="btn-primary self-end "
+                          >Thêm hồ sơ mới</button></div>
+                    </form>
+                  </div>
+                </app-add-patient-modal>
+              </div>
+          
+            </div>
+          </div>
+        </nz-modal-container>
+        <div tabindex="0" class="cdk-visually-hidden cdk-focus-trap-anchor" aria-hidden="true"></div>
+      </div>
+    </div>
+}
+
+@section JavaScript{
+    <script>
+
+        var $showSlot = $('#chose-slot .ant-steps-item-description');
+        var $chosesprofile = $('#chose-profile .ant-steps-item-description');
+        function ShowForm(){
+            $('#cdk-overlay-form').removeClass('hiden-btn');
+        }
+        function ShowBotton(){
+            $('#cdk-overlay-btn').removeClass('hiden-btn');
+        }
+         function CloseForm(){
+             $('#cdk-overlay-form').addClass('hiden-btn');
+        }
+        function showSlot(){
+            $showSlot.removeClass('hiden');
+            $('#chose-profile').addClass('hiden');
+            $('#showcheckday .checkday').addClass('hiden');
+            $('#showcheckday .checknumber').removeClass('hiden');
+            $('#showcheckprofile').addClass('hiden');
+            $('#btn-submit .button').addClass('hiden-btn');
+            $('#btn-submit .rounded').removeClass('hiden-btn');
+           
+        }
+        function choseSlot(id){
+            $('#chose-profile').removeClass('hiden');
+            var slotId = $("#slot_"+id).attr("data-id");
+            $("#SchedulesSlotId").val(slotId);
+            $("#scheduleid").val(slotId);
+            var showday = $("#slot_"+id).attr("data-value-day");
+            $("#showday").html(showday);
+            var showtime = $("#slot_"+id).attr("data-value-time");
+            $("#showtime").html(showtime);
+            $showSlot.addClass('hiden');
+            $('#showcheckday .checkday').removeClass('hiden');
+            $('#showcheckday .checknumber').addClass('hiden');
+            $('#showcheckprofile').removeClass('hiden');
+            var checkbtn = $('#PatientId').val();
+            if(checkbtn!="00000000-0000-0000-0000-000000000000") {
+                $('#btn-submit .button').removeClass('hiden-btn');
+                $('#btn-submit .rounded').addClass('hiden-btn');
+            }
+        }
+        function showprofile(i){
+            $('#profile-'+i).toggleClass('hidden');
+            //$showSlot.addClass('hiden');
+        }
+        function choserprofile(id){
+            var patientId = $("#patient_"+id).attr("data-id");
+            $("#PatientId").val(patientId);
+            $(".check-active").removeClass('active');
+            $('#patient_'+id).addClass('active');
+            var showpatient = $("#patient_"+id).attr("data-value-patient");
+            $("#showpatient").html(showpatient);
+            $('#btn-submit .button').removeClass('hiden-btn');
+            $('#btn-submit .rounded').addClass('hiden-btn');
+        }
+        function ConfirmDelete(){
+             
+            $("#hiddenEmployeeId").val(SpecialityId);
+        }
+        function submitForm(){
+            document.getElementById('form-booking').submit();
+        }
+        function tabchoseday(i){
+            $('.check-tab').removeClass('ant-tabs-tabpane-active');
+            $('.check-tabs').removeClass('ant-tabs-tab-active');
+            $('.check-tab').addClass('hiden');
+            $('#tabday_'+i).addClass('ant-tabs-tab-active');
+            var left = (i-1)*122;
+            $('#choseslotday_'+i).addClass('ant-tabs-tabpane-active');
+            $('#choseslotday_'+i).removeClass('hiden');
+            $('.ant-tabs-ink-bar').css("left", left+"px")
+        }
+    </script>
+    <script id="rendered-js">
+        const scrollContainer = document.querySelector("div.container");
+
+        scrollContainer.addEventListener("wheel", evt => {
+            evt.preventDefault();
+            scrollContainer.scrollLeft += evt.deltaY;
+        });
+              //# sourceURL=pen.js
+    </script>
+    <script src="~/js/plugins/flatpickr.min.js"></script>
+    
+    <script>
+        if (document.querySelector('.datetimepicker')) {
+            flatpickr('.datetimepicker', {
+                allowInput: false,
+                maxDate: new Date(),
+                // sideBySide: true,
+                dateFormat: "d/m/Y",
+            }); // flatpickr
+        }
+    </script>
+   
+    <script>
+        var DistrictId = "";
+        var ProvinceId = "";
+        $(document).ready(function () {
+            $("#ProvinceId").change(function () {
+                $('#DistrictId option').remove();
+                ProvinceId = $('#ProvinceId option:selected').val();
+                if (ProvinceId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Login/GetDistrict?ProvinceId= + ' + ProvinceId, 
+                        success: function (result) {
+                            var s = '<option value="">- Quận Huyện -</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#DistrictId').html(s);
+                        }
+                    })
+                }else{
+                    $('#DistrictId').html('<option value="" >- uận Huyện -</option>');
+                }
+            })
+             $("#DistrictId").change(function () {
+                $('#LocationId option').remove();
+                DistrictId = $('#DistrictId option:selected').val();
+                if (DistrictId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Login/GetSubDistrict?DistrictId= + ' + DistrictId, 
+                        success: function (result) {
+                            var s = '<option value="" >- Phường Xã -</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option  value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#LocationId').html(s);
+                        }
+                    })
+                }else{
+                    $('#LocationId').html('<option value="" >- Phường Xã -</option>');
+                }
+            })
+        });
+    </script>
+    <script src="~/js/Validator1.js"></script>
+    <script>
+        Validator({
+	        form: "#form-register",
+	        formGroup: ".form-section__form-group",
+	        errorMessage: ".text-error ",
+	        rules: [
+                Validator.isRequired('#Name', 'Vui lòng nhập họ tên!'),
+                Validator.isRequired('#RelativePhone', 'Vui lòng nhập số điện thoại thuộc hồ sơ này!'),
+                Validator.isRequired('#Dob', 'Vui lòng nhập ngày sinh!'),
+                Validator.isRequired('#IdentityCard', 'Vui lòng nhập CCCD!'),
+                Validator.isRequired('#EthnicId', 'Vui lòng chọn dân tộc!'),
+		        Validator.isRequired('#ProvinceId', 'Vui lòng chọn thành phố!'),
+		        Validator.isRequired('#DistrictId', 'Vui lòng chọn quận huyện!'),
+		        Validator.isRequired('#LocationId', 'Vui lòng chọn phường xã!'),
+		        Validator.isRequired('#Address', 'Vui lòng nhập địa chỉ cụ thể!'),
+		        Validator.isRequired('#RelativeEmail', 'Vui lòng nhập địa chỉ e-mail!'),
+                Validator.isEmail('#RelativeEmail'),
+	        ]
+        })
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <script>
+         $(document).ready(function () {
+              $('.select').selectize({
+                  sortField: 'text'
+              });
+          });
+    </script>
+}

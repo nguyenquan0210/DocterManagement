@@ -1,0 +1,831 @@
+﻿@using DoctorManagement.ViewModels.System.Patient
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<PatientVm> patient = (List<PatientVm>)ViewBag.Patient;
+    var i = 0;
+}
+
+@section Stylesheet{
+    <style>
+        .root-layout[_ngcontent-serverApp-c55] {
+            background-color: #f6f6f6
+        }
+    </style>
+    <style>
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @@media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @@media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c54] .ant-collapse-content-box {
+            padding: 0 !important
+        }
+
+        nz-collapse-panel[_ngcontent-serverApp-c54] {
+            padding: 0 !important
+        }
+
+        [_nghost-serverApp-c54] .ant-collapse-header {
+            cursor: pointer !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 600 !important;
+            color: currentColor !important
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c54] .ant-collapse-header {
+                cursor: auto !important
+            }
+
+            nz-collapse-panel[_ngcontent-serverApp-c54] {
+                border-style: none !important
+            }
+        }
+
+        a[_ngcontent-serverApp-c54]:hover {
+            color: currentColor
+        }
+    </style>
+    <style>
+        .wrapper-main[_ngcontent-serverApp-c67] {
+            background: linear-gradient(90deg, #00c6fb 0%, #0758d8 98.74%)
+        }
+
+        @@media only screen and (max-width: 767px) {
+            .banner-navigation[_ngcontent-serverApp-c67] {
+                background: white
+            }
+        }
+
+        .selected[_ngcontent-serverApp-c67] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [nz-carousel-content][_ngcontent-serverApp-c68] {
+            overflow: hidden
+        }
+    </style>
+    <style>
+        .main-search[_ngcontent-serverApp-c64] {
+            margin: 0;
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: .5rem;
+            border-color: transparent;
+            padding: .75rem 2.25rem .75rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+
+        .main-search[_ngcontent-serverApp-c64]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .main-search[_ngcontent-serverApp-c64]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            outline: 2px solid transparent;
+            outline-offset: 2px
+        }
+
+        @@media (min-width: 782px) {
+            .main-search[_ngcontent-serverApp-c64] {
+                padding-right: .75rem;
+                padding-left: 3rem
+            }
+        }
+
+        .main-search[_ngcontent-serverApp-c64]::-webkit-calendar-picker-indicator {
+            display: none !important
+        }
+    </style>
+    <style>
+        .bookmark_hospital[_ngcontent-serverApp-c66]::-webkit-scrollbar {
+            background: transparent;
+            width: 0px
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c135] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c135]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c135]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c135]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c135] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c135]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c157] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c157]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c157]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c157]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c157] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c157]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        .menu-item[_ngcontent-serverApp-c161] {
+            position: relative;
+            display: block;
+            white-space: nowrap;
+            padding: 1rem;
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .menu-item[_ngcontent-serverApp-c161]:before {
+            content: "";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            display: block;
+            height: .25rem;
+            width: 100%;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: transparent
+        }
+
+        @@media (min-width: 782px) {
+            .menu-item[_ngcontent-serverApp-c161]:before {
+                right: auto;
+                top: 0px;
+                height: auto;
+                width: .25rem;
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+                border-top-left-radius: 0
+            }
+        }
+
+        .menu-item[_ngcontent-serverApp-c161]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c161] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        .menu-item.item-active[_ngcontent-serverApp-c161]:before {
+            --tw-bg-opacity: 1;
+            background-color: rgb(26 118 227 / var(--tw-bg-opacity))
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c159] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c159]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c159]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-select[_ngcontent-serverApp-c159] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-select[_ngcontent-serverApp-c159]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-select[_ngcontent-serverApp-c159]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-radio[_ngcontent-serverApp-c159] {
+            margin: 0;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-label[_ngcontent-serverApp-c159] {
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c158] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c158]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c158]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-select[_ngcontent-serverApp-c158] {
+            margin-top: .25rem;
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-select[_ngcontent-serverApp-c158]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-select[_ngcontent-serverApp-c158]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-radio[_ngcontent-serverApp-c158] {
+            margin: 0;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-label[_ngcontent-serverApp-c158] {
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+    </style>
+}
+<app-patient-record _nghost-serverapp-c161="" class="ng-star-inserted">
+    <section _ngcontent-serverapp-c161="" class="bg-gray-100">
+        <div _ngcontent-serverapp-c161=""
+            class="max-w-7xl mx-auto md:p-4 grid grid-cols-1 md:grid-cols-12 md:gap-4 lg:py-10">
+            <div _ngcontent-serverapp-c161="" class="col-span-1 md:col-span-3">
+                <div _ngcontent-serverapp-c161="" class="bg-white md:rounded-md">
+                    <ul _ngcontent-serverapp-c161=""
+                        class="flex overflow-y-auto hide-scroll-bar md:py-4 md:flex-col">
+                        <li _ngcontent-serverapp-c161=""><a _ngcontent-serverapp-c161="" class="menu-item"
+                               asp-action="Appointment" asp-controller="Profile">Lịch khám</a></li>
+                       @* <li _ngcontent-serverapp-c161=""><a _ngcontent-serverapp-c161="" class="menu-item"
+                                href="/thanh-toan">Lịch sử thanh toán</a></li>*@
+                        <li _ngcontent-serverapp-c161=""><a _ngcontent-serverapp-c161=""
+                                class="menu-item item-active" asp-action="Index" asp-controller="Profile">Hồ sơ</a></li>
+                        <li _ngcontent-serverapp-c161=""><a _ngcontent-serverapp-c161="" class="menu-item"
+                                asp-action="Account">Tài khoản</a></li>
+                        <li _ngcontent-serverapp-c161=""><a _ngcontent-serverapp-c161="" class="menu-item"
+                                asp-action="Logout" asp-controller="Login">Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div _ngcontent-serverapp-c161="" class="md:col-span-9">
+                <h1 _ngcontent-serverapp-c161="" class="text-xl mb-2 p-4 md:px-0">Hồ sơ</h1>
+                <app-list _ngcontent-serverapp-c161="" _nghost-serverapp-c160=""
+                    class="ng-tns-c160-29 ng-star-inserted">
+                    <div _ngcontent-serverapp-c160=""
+                        class="bg-gray-100 grid md:grid-cols-10 md:rounded-lg md:gap-px ng-tns-c160-29">
+                        <div _ngcontent-serverapp-c160=""
+                            class="bg-white flex flex-col md:col-span-4 md:rounded-tl-lg md:rounded-bl-lg overflow-hidden ng-tns-c160-29">
+                            <div _ngcontent-serverapp-c160="" class="p-4 ng-tns-c160-29"><input
+                                    _ngcontent-serverapp-c160="" placeholder="Tìm nhanh hồ sơ" type="text"
+                                    class="w-full placeholder:text-sm rounded border-gray-200 bg-white focus:shadow ng-tns-c160-29 ng-pristine ng-valid ng-touched">
+                            </div>
+                            <nz-spin _ngcontent-serverapp-c160=""
+                                class="ng-tns-c160-29 ant-spin-nested-loading">
+                                
+                                
+                                <div class="ant-spin-container ng-star-inserted">
+                                    <div _ngcontent-serverapp-c292="" infinite-scroll="" class="container-patient flex-1 overflow-x-auto max-h-[400px] lg:max-h-[600px] overflow-y-scroll ng-tns-c292-114 ng-star-inserted">
+                                        @{
+                                            i = 1;
+                                            string[] str = { };
+                                        }
+                                        @foreach(var item in patient)
+                                        {
+                                            
+                                            <div _ngcontent-serverapp-c292="" id="showinfo_@i" onclick="showinfo(@i)" data-id="@item.Id" class="check-show-info flex p-4 items-center gap-4 cursor-pointer ng-tns-c292-114 ng-star-inserted @(i==1?"bg-gray-50":"")">
+                                                <div _ngcontent-serverapp-c292="" class="relative ng-tns-c292-114"><img _ngcontent-serverapp-c292="" alt="Primary" class="ng-tns-c292-114" src="~/img/booking/svg/@(i%2==0?"bulkFolder.svg":"Family-Block.svg")">
+                                                    <div _ngcontent-serverapp-c292="" class="absolute inset-0 flex items-center justify-center ng-tns-c292-114">
+                                                        <span _ngcontent-serverapp-c292="" class="mt-1 absolute z-10 w-8 h-8 rounded-full bg-gradient-to-r from-[#22d3ee] to-[#0ea5e9] ng-tns-c292-114"></span>
+                                                        <div _ngcontent-serverapp-c292="" class="mt-1 absolute z-20 text-sm text-white font-bold ng-tns-c292-114 ng-star-inserted">
+                                                            @{
+                                                                str = item.Name.Split(" ");
+                                                            } @str[str.Length-1].Substring(0,2) </div>
+                                                        <span _ngcontent-serverapp-c292="" class="absolute z-20 text-xs bg-gray-400 rounded-full -top-1 right-0 text-white px-1 ng-tns-c292-114">
+                                                            @item.RelativeName </span>
+                                                    </div>
+                                                </div>
+                                                <div _ngcontent-serverapp-c292="" class="flex flex-col ng-tns-c292-114">
+                                                    <h2 _ngcontent-serverapp-c292="" class="font-medium ng-tns-c292-114">
+                                                        @item.Name</h2>
+                                                    <p _ngcontent-serverapp-c292="" class="text-gray-600 text-sm ng-tns-c292-114"> @item.Dob.ToShortDateString() </p>
+                                                </div>
+                                            </div>
+                                            i++;
+                                        }
+                                        
+                                        @*<div _ngcontent-serverapp-c292="" class="flex p-4 items-center gap-4 cursor-pointer ng-tns-c292-114 ng-star-inserted">
+                                            <div _ngcontent-serverapp-c292="" class="relative ng-tns-c292-114"><img _ngcontent-serverapp-c292="" alt="Primary" class="ng-tns-c292-114" src="~/img/booking/svg/bulkFolder.svg">
+                                                <div _ngcontent-serverapp-c292="" class="absolute inset-0 flex items-center justify-center ng-tns-c292-114">
+                                                    <span _ngcontent-serverapp-c292="" class="mt-1 absolute z-10 w-8 h-8 rounded-full bg-gradient-to-r from-[#22d3ee] to-[#0ea5e9] ng-tns-c292-114"></span>
+                                                    <div _ngcontent-serverapp-c292="" class="mt-1 absolute z-20 text-sm text-white font-bold ng-tns-c292-114 ng-star-inserted">
+                                                        LO </div>
+                                                    <span _ngcontent-serverapp-c292="" class="absolute z-20 text-xs bg-gray-400 rounded-full -top-1 right-0 text-white px-1 ng-tns-c292-114">
+                                                        Cha </span>
+                                                </div>
+                                            </div>
+                                            <div _ngcontent-serverapp-c292="" class="flex flex-col ng-tns-c292-114">
+                                                <h2 _ngcontent-serverapp-c292="" class="font-medium ng-tns-c292-114">
+                                                    Nguyễn Đình Long</h2>
+                                                <p _ngcontent-serverapp-c292="" class="text-gray-600 text-sm ng-tns-c292-114"> 02/10/1973 </p>
+                                            </div>
+                                        </div>*@
+                                        
+                                        
+                                    </div>
+                                </div>
+                                
+                            </nz-spin>
+                            <div _ngcontent-serverapp-c160=""
+                                class="p-4 lg:p-6 border-t border-gray-100 ng-tns-c160-29"><a asp-action="AddInfo"
+                                    _ngcontent-serverapp-c160=""
+                                    class="w-full btn-secondary ng-tns-c160-29"> Thêm hồ sơ </a></div>
+                        </div>
+                        <div _ngcontent-serverapp-c160="" id="list-info"
+                            class="bg-white md:col-span-6 md:rounded-r-lg overflow-hidden ng-tns-c160-29">
+                            @{  i = 1;}
+                            @foreach(var item in patient)
+                            {
+                                
+                                <div _ngcontent-serverapp-c160="" id="viewinfo_@i" @(i==1?"":"hidden") class="checkshow ng-tns-c160-29 ng-star-inserted ">
+                                    <div _ngcontent-serverapp-c160=""
+                                        class="p-4 lg:p-6 flex gap-4 items-center ng-tns-c160-29">
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="relative flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#22d3ee] to-[#0ea5e9] ng-tns-c160-29">
+                                            <div _ngcontent-serverapp-c160=""
+                                                class="absolute text-lg text-white font-bold ng-tns-c160-29 ng-star-inserted">
+                                                @{
+                                                                str = item.Name.Split(" ");
+                                                            } @str[str.Length-1].Substring(0,2) </div>
+                                        
+                                        </div>
+                                        <div _ngcontent-serverapp-c160="" class="ng-tns-c160-29">
+                                            <h3 _ngcontent-serverapp-c160=""
+                                                class="text-base font-bold ng-tns-c160-29 ng-star-inserted"> @item.Name
+                                            </h3>
+                                        
+                                            <p _ngcontent-serverapp-c160=""
+                                                class="text-gray-500 text-sm ng-tns-c160-29">Mã BN: @item.No
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div _ngcontent-serverapp-c160=""
+                                        class="bg-orange-50 p-3 flex flex-row items-center ng-tns-c160-29"><svg
+                                            _ngcontent-serverApp-c160="" width="16" height="16"
+                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                            class="ng-tns-c160-29">
+                                            <path _ngcontent-serverApp-c160=""
+                                                d="M3.24331 4.33318L3.24367 4.33298L7.19472 2.04762C7.19509 2.04741 7.19545 2.0472 7.19581 2.047C7.69601 1.76168 8.3058 1.76315 8.79663 2.04649C8.79664 2.0465 8.79665 2.04651 8.79667 2.04651L12.7533 4.33124C12.7539 4.33155 12.7544 4.33185 12.7549 4.33215C13.2494 4.62345 13.5542 5.1472 13.56 5.72248V10.2802C13.56 10.8559 13.2544 11.3836 12.7633 11.6671L12.7633 11.6672L8.80525 13.9527C8.80493 13.9529 8.8046 13.9531 8.80427 13.9533C8.30404 14.2387 7.69418 14.2372 7.20331 13.9538L3.24506 11.6682C2.75048 11.3768 2.44666 10.847 2.44666 10.2802V5.72016C2.44666 5.14444 2.75224 4.61669 3.24331 4.33318ZM8.82687 11.6604L8.83617 11.6511L8.84497 11.6413C8.94141 11.5342 9.01905 11.4131 9.07486 11.2791C9.1295 11.148 9.16666 10.996 9.16666 10.8335C9.16666 10.6737 9.13072 10.5241 9.07756 10.3944C9.01633 10.2379 8.93146 10.1218 8.84497 10.0257L8.83617 10.0159L8.82688 10.0066C8.50044 9.68017 7.99409 9.57313 7.55766 9.75719C7.40282 9.81832 7.28761 9.90262 7.19217 9.98851L7.1824 9.99731L7.1731 10.0066C6.94742 10.2323 6.83332 10.5352 6.83332 10.8335C6.83332 10.9699 6.85412 11.1248 6.91845 11.2791L6.92507 11.295L6.93278 11.3104C6.98794 11.4208 7.05838 11.5339 7.15501 11.6413L7.17261 11.6609L7.19217 11.6785C7.28827 11.765 7.40442 11.8498 7.56089 11.9111C7.69054 11.9642 7.84017 12.0002 7.99999 12.0002C8.30764 12.0002 8.60299 11.8843 8.82687 11.6604ZM7.99999 4.16683C7.45051 4.16683 6.99999 4.61735 6.99999 5.16683V8.66683C6.99999 9.21631 7.45051 9.66683 7.99999 9.66683C8.54946 9.66683 8.99999 9.21631 8.99999 8.66683V5.16683C8.99999 4.61735 8.54946 4.16683 7.99999 4.16683Z"
+                                                fill="#F97316" stroke="#F97316" class="ng-tns-c160-29"></path>
+                                        </svg>
+                                        <p _ngcontent-serverapp-c160="" class="ml-1 text-sm ng-tns-c160-29">Hoàn
+                                            thiện thông tin để đặt khám và quản lý hồ sơ y tế được tốt hơn.</p>
+                                    </div>
+                                    <div _ngcontent-serverapp-c160=""
+                                        class="p-4 lg:p-6 space-y-3 ng-tns-c160-29">
+                                        <h4 _ngcontent-serverapp-c160="" class="font-medium ng-tns-c160-29">
+                                            Thông tin cơ bản</h4>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Họ và
+                                                tên</span><span _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">@item.Name</span></div>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Điện
+                                                thoại</span><span _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">@item.RelativePhone</span>
+                                        </div>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Ngày
+                                                sinh</span><span _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">@item.Dob.ToShortDateString() </span>
+                                        </div>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Giới
+                                                tính</span><span _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">@(item.Gender == DoctorManagement.Data.Enums.Gender.Male?"Nam":"Nữ")</span></div>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Địa
+                                                chỉ</span><span _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">@item.Address</span>
+                                        </div>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Email</span><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">@item.RelativeEmail</span>
+                                        </div>
+                                    </div>
+                                    <div _ngcontent-serverapp-c160=""
+                                        class="p-4 lg:px-6 space-y-3 ng-tns-c160-29">
+                                        <h4 _ngcontent-serverapp-c160="" class="font-medium ng-tns-c160-29">
+                                            Thông tin bổ sung</h4>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Mã
+                                                BHYT</span><span _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">--</span></div>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Số
+                                                CMND/CCCD</span><span _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">@(item.Identitycard==null?"--":item.Identitycard)</span></div>
+                                        <div _ngcontent-serverapp-c160=""
+                                            class="flex justify-between ng-tns-c160-29"><span
+                                                _ngcontent-serverapp-c160=""
+                                                class="whitespace-nowrap mr-2 ng-tns-c160-29">Dân
+                                                tộc</span><span _ngcontent-serverapp-c160=""
+                                                class="font-medium text-right ng-tns-c160-29">@item.Ethnics.Name</span></div>
+                                        
+                                    </div>
+                                    <div _ngcontent-serverapp-c160=""
+                                        class="p-4 lg:p-6 flex justify-end gap-6 ng-tns-c160-29">
+                                        @if(!item.IsPrimary){
+
+                                            <button _ngcontent-serverapp-c160="" class="text-red-500 ng-tns-c125-3 ng-star-inserted">Xóa hồ sơ</button>
+                                        }
+                                        <a _ngcontent-serverapp-c160="" asp-action="UpdateInfo" asp-route-id="@item.Id" 
+                                            class="btn-primary ng-tns-c160-29">Thay đổi thông tin</a>
+                                    </div>
+                                </div>
+                                i++;
+                            }
+                            
+                        </div>
+                      
+                    </div>
+                </app-list>
+                
+            </div>
+        </div>
+    </section>
+</app-patient-record>
+@section Alert{
+    <div class="cdk-global-overlay-wrapper" dir="ltr">
+      @if (TempData["AlertMessage"] != null)
+      {
+          <div id="cdk-overlay-9" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
+            <nz-message-container>
+              <div class="ant-message" style="top: 24px;">
+                <nz-message class="ng-tns-c43-75 ng-star-inserted">
+                  <div class="ant-message-notice ng-tns-c43-75 ng-trigger ng-trigger-moveUpMotion">
+                    <div class="ant-message-notice-content ng-tns-c43-75">
+                      <div class="ant-message-custom-content ng-tns-c43-75 ant-message-@TempData["AlertType"]">
+                          @if(TempData["AlertType"]=="success"){
+
+                              <i nz-icon="" nztype="check-circle" class="anticon ng-tns-c43-75 anticon-check-circle ng-star-inserted" style="">
+                                <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                                    class="ng-tns-c43-75" data-icon="check-circle" aria-hidden="true">
+                                    <path
+                                      d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z">
+                                    </path>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                              </i>
+                          }else{
+                             <i nz-icon="" nztype="close-circle"
+                                class="anticon ng-tns-c43-5 anticon-close-circle ng-star-inserted" style=""><svg
+                                    viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em"
+                                    height="1em" class="ng-tns-c43-5" data-icon="close-circle"
+                                    aria-hidden="true">
+                                    <path
+                                        d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 .3L512 465.6l-99.3-118.4-66.1-.3c-4.4 0-8 3.5-8 8 0 1.9.7 3.7 1.9 5.2l130.1 155L340.5 670a8.32 8.32 0 00-1.9 5.2c0 4.4 3.6 8 8 8l66.1-.3L512 564.4l99.3 118.4 66 .3c4.4 0 8-3.5 8-8 0-1.9-.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z">
+                                    </path>
+                                    <path
+                                        d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                             </i>
+
+                          }
+                        <span class="ng-tns-c43-75 ng-star-inserted" style="">@TempData["AlertMessage"]</span>
+                      </div>
+                    </div>
+                  </div>
+                </nz-message>
+              </div>
+            </nz-message-container>
+          </div>
+            
+      } 
+    </div>
+}
+@section JavaScript{
+    <script>
+        function showinfo(i){
+            $('#list-info').removeAttr("hidden");
+            $('#add-info').attr("hidden", true);
+            $('.checkshow').attr("hidden", true);
+            $('.check-show-info').removeClass('bg-gray-50');
+            $('#viewinfo_'+i).removeAttr("hidden");
+            $('#showinfo_'+i).addClass('bg-gray-50');
+        }
+        
+    </script>
+}
+

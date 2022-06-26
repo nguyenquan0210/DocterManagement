@@ -1,0 +1,1400 @@
+﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.Catalog.MasterData
+@using DoctorManagement.ViewModels.Catalog.Post
+@using DoctorManagement.ViewModels.Common;
+@model PagedResult<DoctorManagement.ViewModels.Catalog.Post.PostVm>
+@{
+    ViewData["Title"] = "Topic";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var posts = (List<PostVm>)ViewBag.PostCategory;
+    var topic_ = (MainMenuVm)ViewBag.Topic;
+    var menus = (List<MainMenuVm>)ViewBag.Menus;
+    var i = 0;
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<link rel="stylesheet" id="medamp-archive-css"
+        href="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/dist/css/archive.min.css" media="all">
+ <link rel="stylesheet" id="theme-css" href="https://youmed.vn/wp-content/themes/youmed/css/app.css?ver=3.0.0"
+        type="text/css" media="all">
+    <link rel="stylesheet" id="form-css-css" href="https://youmed.vn/wp-content/themes/youmed/css/form.css?ver=3.0.0"
+        type="text/css" media="all">
+  <style>
+      .ant-collapse .ant-collapse-item-disabled>.ant-collapse-header {
+            color: #000000;
+            cursor: pointer;
+        }
+        h2 {
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+        h3 {
+            display: block;
+            font-size: 1.17em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+        article > *:not(.entry-content), .entry-content > * {
+            margin-left: 0;
+            margin-right: 0;
+            max-width: 1024px;
+
+        }
+         .entry-content strong{
+                font-weight: normal;
+        }
+  </style>
+@section Searchpost{
+    <div class="site-search" style="margin:0 5px;">
+        <button class="search-menu-toggle icon-rounded inline-flex items-center justify-center md:hidden"  tabindex="0">
+            <span class="screen-reader-text">Open search</span>
+            <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img" focusable="false" fill="none">
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg> </button>
+        <div class="header-search hidden md:flex">
+
+            <form role="search" method="get" class="search-form" asp-action="SearchPost"  asp-controller="Post" >
+                <label for="search-form-1">
+                    <span class="screen-reader-text">Search for:</span>
+                </label>
+                <input type="search" id="search-form-1" class="search-field"
+                    placeholder="Tìm kiếm bài viết" value="@ViewBag.Keyword" name="keyword">
+                <button type="submit" class="search-submit">
+                    <svg width="24" height="24" fill="none" class="search-icon">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="screen-reader-text">
+                        Search </span>
+                </button>
+            </form>
+        </div>
+    </div>
+}
+<main id="main" role="main">
+    <style>
+        html { --color: #369d5b;
+        }
+    </style>
+    <section class="archive-page">
+        <div class="archive-detail max-w-6xl mx-auto w-90">
+            <div class="archive-header">
+                <h1 class="archive-title font-serif">@topic_.Name</h1>
+                @if(topic_.Type=="category"){
+                    <picture class="archive-image">
+                        <source type="image/webp"
+                            srcset="@(Configuration["BaseAddress"] + "/img/" + topic_.Image) 233w, @(Configuration["BaseAddress"] + "/img/" + topic_.Image) 150w"
+                            sizes="(max-width: 233px) 100vw, 233px">
+                        <img width="233" height="233"
+                            src="@(Configuration["BaseAddress"] + "/img/" + topic_.Image)" alt=""
+                            sizes="(max-width: 233px) 100vw, 233px"
+                            srcset="@(Configuration["BaseAddress"] + "/img/" + topic_.Image) 233w, @(Configuration["BaseAddress"] + "/img/" + topic_.Image) 150w"
+                            class="lazyloaded" data-ll-status="loaded">
+                    </picture>
+                    <noscript>
+                        <picture class="archive-image">
+                            <source type="image/webp"
+                                srcset="@(Configuration["BaseAddress"] + "/img/" + topic_.Image) 233w, @(Configuration["BaseAddress"] + "/img/" + topic_.Image) 150w"
+                                sizes="(max-width: 233px) 100vw, 233px" />
+                            <img width="233" height="233"
+                                src="@(Configuration["BaseAddress"] + "/img/" + topic_.Image)" alt=""
+                                srcset="@(Configuration["BaseAddress"] + "/img/" + topic_.Image) 233w, @(Configuration["BaseAddress"] + "/img/" + topic_.Image) 150w"
+                                sizes="(max-width: 233px) 100vw, 233px" />
+                        </picture>
+                    </noscript>
+
+                }
+            </div>
+        </div>
+        <div class="archive-wrapper max-w-6xl mx-auto w-90">
+            @*<div class="sc-quote" style="background-color: #369d5b1a !important">
+                <div class="order-0 order-md-1 media-body">
+                    <svg width="45" height="36"
+                        class="opacity-4 position-absolute top-0 w-auto right-0  opacity-4 w-auto" "=""><path d="
+                        M13.415.001C6.07 5.185.887 13.681.887 23.041c0 7.632 4.608 12.096 9.936 12.096 5.04 0
+                        8.784-4.032 8.784-8.784 0-4.752-3.312-8.208-7.632-8.208-.864 0-2.016.144-2.304.288.72-4.896
+                        5.328-10.656 9.936-13.536L13.415.001zm24.768 0c-7.2 5.184-12.384 13.68-12.384 23.04 0 7.632
+                        4.608 12.096 9.936 12.096 4.896 0 8.784-4.032 8.784-8.784 0-4.752-3.456-8.208-7.776-8.208-.864
+                        0-1.872.144-2.16.288.72-4.896 5.184-10.656 9.792-13.536L38.183.001z" fill="#369d5b"></path>
+                        </svg>
+                    <blockquote>Da là cơ quan lớn nhất của cơ thể. Hàng ngày, các tế bào da cũ chết đi để các tế bào
+                        mới hình thành nên. Do đó, quá trình chăm sóc da phải được thực hiện thường xuyên và liên
+                        tục, nhằm giúp tiếp thêm nguồn năng lượng cho da, để da được khỏe mạnh và làm chậm quá trình
+                        lão hóa.</blockquote>
+                </div>
+                <picture class="order-1 order-md-0 d-block align-self-end mx-auto" loading="lazy">
+                    <source type="image/webp"
+                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/10/bac-si-cham-soc-da-e1601741627378.png.webp">
+                    <img width="160" loading="lazy"
+                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/10/bac-si-cham-soc-da-e1601741627378.png"
+                        alt="Chăm sóc da" class="lazyloaded" data-ll-status="loaded">
+                </picture>
+                <noscript>
+                    <picture class="order-1 order-md-0 d-block align-self-end mx-auto" loading="lazy">
+                        <source type="image/webp"
+                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/10/bac-si-cham-soc-da-e1601741627378.png.webp" />
+                        <img width="160" loading="lazy"
+                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/10/bac-si-cham-soc-da-e1601741627378.png"
+                            alt="Chăm sóc da" />
+                    </picture>
+                </noscript>
+            </div>*@
+            @foreach(var topic in menus){
+                var postInTopic = posts.Where(x => x.Topic.Id == topic.Id).ToList();
+                <div class="cat-block">
+                    <h2 class="category-title font-serif"><a asp-action="Topic" asp-controller="Post"  asp-route-id="@topic.Id"
+                            title="@topic.Name" class="flex flex-row items-center" data-wpel-link="internal">@topic.Name
+                            <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                                focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"></path>
+                                <path d="M0 0h24v24H0z" fill="none"></path>
+                            </svg></a></h2>
+                    <div class="category-posts archive-grid grid-4">
+                        @foreach(var item in postInTopic.Take(4))
+                        {
+                            <article id="post-197359" class="block-card">
+                                <a asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                    title="@item.Title" data-wpel-link="internal">
+                                    <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                        <source type="image/webp"
+                                            srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px">
+                                        <img width="1200" height="627"
+                                            src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                            alt="" loading="lazy" sizes="(max-width: 1200px) 100vw, 1200px"
+                                            srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image), @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                            class="lazyloaded" data-ll-status="loaded">
+                                    </picture>
+                                    <noscript>
+                                        <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                            <source type="image/webp"
+                                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                                sizes="(max-width: 1200px) 100vw, 1200px" />
+                                            <img width="1200" height="627"
+                                                src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                                alt="" loading="lazy"
+                                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image), @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                                sizes="(max-width: 1200px) 100vw, 1200px" />
+                                        </picture>
+                                    </noscript>
+                                </a>
+                                <div class="block-card-body">
+                                    <a class="post-title line-clamp-2 font-serif font-bold"
+                                       asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                        data-wpel-link="internal">@item.Title</a>
+
+                                    <div class="content-author">
+                                        @{
+                                            var m = (int) (DateTime.Now - item.CreatedAt).TotalMinutes;
+                                            var text = m > (60*24*30*12) ? (item.CreatedAt.Day+" Thg"+item.CreatedAt.Month+", "+item.CreatedAt.Year) :m > (60*24*30) ? (m / (60*24*30)) + " tháng trước" :m > (60*24) ? (m / (60*24)) + " ngày trước" : m > 60 ? (m / 60) + " giờ trước" : "";
+                                        }
+                                        <div class="article-author"><a class="url fn n"
+                                                asp-action="Index" asp-controller="Doctor" asp-route-id="@item.Doctors.UserId"
+                                                data-wpel-link="internal"><span class="author vcard">@(item.Doctors.LastName+" "+item.Doctors.FirstName)</span></a></div>
+                                                <time class="published-date">Ngày đăng:  @text </time>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                        }
+                       @* <article id="post-197335" class="block-card">
+                            <a href="https://youmed.vn/tin-tuc/mun-trung-ca-nen-su-dung-loai-thuoc-nao-de-loai-bo/"
+                                title="Mụn trứng cá: Nguyên nhân và cách điều trị bằng thuốc" data-wpel-link="internal">
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px">
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12.jpg"
+                                        alt="mun-trung-ca-nen-su-dung-loai-thuoc-nao-de-loai-bo" loading="lazy"
+                                        sizes="(max-width: 1200px) 100vw, 1200px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-768x401.jpg 768w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-1024x535.jpg.webp 1024w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px" />
+                                        <img width="1200" height="627"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12.jpg"
+                                            alt="mun-trung-ca-nen-su-dung-loai-thuoc-nao-de-loai-bo" loading="lazy"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-12-768x401.jpg 768w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    </picture>
+                                </noscript>
+                            </a>
+                            <div class="block-card-body">
+                                <a class="post-title line-clamp-2 font-serif font-bold"
+                                    href="https://youmed.vn/tin-tuc/mun-trung-ca-nen-su-dung-loai-thuoc-nao-de-loai-bo/"
+                                    data-wpel-link="internal">Mụn trứng cá: Nguyên nhân và cách điều trị bằng thuốc</a>
+                                <div class="content-author">
+                                    <div class="article-author"><a class="url fn n"
+                                            href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                            data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                                THẢO</span></a></div><time class="published-date"
+                                        datetime="2022-05-06T14:46:23+07:00">Ngày đăng: 29 Th8
+                                        2021</time>
+                                </div>
+                            </div>
+                        </article>
+                        <article id="post-197306" class="block-card">
+                            <a href="https://youmed.vn/tin-tuc/mun-boc-sung-do-lam-sao-de-giai-quyet/"
+                                title="Mụn bọc sưng đỏ: Làm sao để giải quyết?" data-wpel-link="internal">
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px">
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10.jpg"
+                                        alt="Mụn bọc sưng đỏ: Làm sao để giải quyết?" loading="lazy"
+                                        sizes="(max-width: 1200px) 100vw, 1200px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-768x401.jpg 768w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-1024x535.jpg.webp 1024w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px" />
+                                        <img width="1200" height="627"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10.jpg"
+                                            alt="Mụn bọc sưng đỏ: Làm sao để giải quyết?" loading="lazy"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-10-768x401.jpg 768w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    </picture>
+                                </noscript>
+                            </a>
+                            <div class="block-card-body">
+                                <a class="post-title line-clamp-2 font-serif font-bold"
+                                    href="https://youmed.vn/tin-tuc/mun-boc-sung-do-lam-sao-de-giai-quyet/"
+                                    data-wpel-link="internal">Mụn bọc sưng đỏ: Làm sao để giải quyết?</a>
+                                <div class="content-author">
+                                    <div class="article-author"><a class="url fn n"
+                                            href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                            data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                                THẢO</span></a></div><time class="published-date"
+                                        datetime="2022-01-27T15:38:38+07:00">Ngày đăng: 25 Th8
+                                        2021</time>
+                                </div>
+                            </div>
+                        </article>
+                        <article id="post-197324" class="block-card">
+                            <a href="https://youmed.vn/tin-tuc/9-bien-phap-hieu-qua-khac-phuc-mun-boc-tai-nha/"
+                                title="9 biện pháp hiệu quả khắc phục mụn bọc tại nhà" data-wpel-link="internal">
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px">
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11.jpg"
+                                        alt=": 9 biện pháp hiệu quả khắc phục mụn bọc tại nhà" loading="lazy"
+                                        sizes="(max-width: 1200px) 100vw, 1200px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-768x401.jpg 768w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-1024x535.jpg.webp 1024w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px" />
+                                        <img width="1200" height="627"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11.jpg"
+                                            alt=": 9 biện pháp hiệu quả khắc phục mụn bọc tại nhà" loading="lazy"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew-11-768x401.jpg 768w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    </picture>
+                                </noscript>
+                            </a>
+                            <div class="block-card-body">
+                                <a class="post-title line-clamp-2 font-serif font-bold"
+                                    href="https://youmed.vn/tin-tuc/9-bien-phap-hieu-qua-khac-phuc-mun-boc-tai-nha/"
+                                    data-wpel-link="internal">9 biện pháp hiệu quả khắc phục mụn bọc tại nhà</a>
+                                <div class="content-author">
+                                    <div class="article-author"><a class="url fn n"
+                                            href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                            data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                                THẢO</span></a></div><time class="published-date"
+                                        datetime="2021-10-19T15:54:53+07:00">Ngày đăng: 24 Th8
+                                        2021</time>
+                                </div>
+                            </div>
+                        </article>*@
+                    </div>
+                </div>
+
+            }
+            @*<div class="cat-block">
+                <h2 class="category-title font-serif"><a href="https://youmed.vn/tin-tuc/da-lieu/duong-trang-da/"
+                        title="Dưỡng trắng da" class="flex flex-row items-center" data-wpel-link="internal">Dưỡng
+                        trắng da <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                            focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"></path>
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                        </svg></a></h2>
+                <div class="category-posts archive-grid grid-4">
+                    <article id="post-194865" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/5-cach-lam-trang-da-tay-da-chan-tai-nha/"
+                            title="5 cách làm trắng da tay, da chân tại nhà" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1024x535.jpg.webp 1024w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890.jpg"
+                                    alt="Cách làm trắng da tay, da chân tại nhà" loading="lazy"
+                                    sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890.jpg"
+                                        alt="Cách làm trắng da tay, da chân tại nhà" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/5-cach-lam-trang-da-tay-da-chan-tai-nha/"
+                                data-wpel-link="internal">5 cách làm trắng da tay, da chân tại nhà</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                        data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                            THẢO</span></a></div><time class="published-date"
+                                    datetime="2021-10-21T14:59:28+07:00">Ngày đăng: 22 Th8
+                                    2021</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-194887" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/cach-lam-kem-trang-da-tai-nha-tiet-kiem-nhat/"
+                            title="Cách làm kem trắng da tại nhà tiết kiệm nhất" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-1024x535.jpg.webp 1024w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1.jpg"
+                                    alt="Cách làm kem trắng da tại nhà" loading="lazy"
+                                    sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1.jpg"
+                                        alt="Cách làm kem trắng da tại nhà" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-1-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/cach-lam-kem-trang-da-tai-nha-tiet-kiem-nhat/"
+                                data-wpel-link="internal">Cách làm kem trắng da tại nhà tiết kiệm nhất</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                        data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                            THẢO</span></a></div><time class="published-date"
+                                    datetime="2021-10-21T14:25:04+07:00">Ngày đăng: 19 Th8
+                                    2021</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-184266" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/cach-lam-trang-da-toan-than-tai-nha-don-gian-nhat/"
+                            title="Cách làm trắng da toàn thân tại nhà đơn giản nhất" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-1024x535.jpg.webp 1024w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7.jpg"
+                                    alt="Cách làm trắng da toàn thân tại nhà" loading="lazy"
+                                    sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7.jpg"
+                                        alt="Cách làm trắng da toàn thân tại nhà" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-3-7-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/cach-lam-trang-da-toan-than-tai-nha-don-gian-nhat/"
+                                data-wpel-link="internal">Cách làm trắng da toàn thân tại nhà đơn giản nhất</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                        data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                            THẢO</span></a></div><time class="published-date"
+                                    datetime="2021-10-21T14:20:21+07:00">Ngày đăng: 25 Th6
+                                    2021</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-184255" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/bat-mi-cach-lam-trang-da-cho-nam-tai-nha/"
+                            title="Bật mí cách làm trắng da cho nam tại nhà" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-1024x535.jpg.webp 1024w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7.jpg"
+                                    alt="Cách làm trắng da cho nam tại nhà" loading="lazy"
+                                    sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7.jpg"
+                                        alt="Cách làm trắng da cho nam tại nhà" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/LayoutYMNew-2-7-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/bat-mi-cach-lam-trang-da-cho-nam-tai-nha/"
+                                data-wpel-link="internal">Bật mí cách làm trắng da cho nam tại nhà</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                        data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                            THẢO</span></a></div><time class="published-date"
+                                    datetime="2022-01-19T09:43:52+07:00">Ngày đăng: 24 Th6
+                                    2021</time>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="cat-block">
+                <h2 class="category-title font-serif"><a href="https://youmed.vn/tin-tuc/da-lieu/chong-lao-hoa/"
+                        title="Chống lão hóa" class="flex flex-row items-center" data-wpel-link="internal">Chống lão
+                        hóa <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                            focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"></path>
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                        </svg></a></h2>
+                <div class="category-posts archive-grid grid-4">
+                    <article id="post-128061" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/nep-nhan-vung-mat-co-de-xoa-hay-khong/"
+                            title="Nếp nhăn vùng mắt có dễ xóa hay không?" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT.png.webp 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT-300x158.png.webp 300w"
+                                    sizes="(max-width: 1000px) 100vw, 1000px">
+                                <img width="1000" height="525"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT.png"
+                                    alt="" loading="lazy" sizes="(max-width: 1000px) 100vw, 1000px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT.png 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT-300x158.png 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT-768x403.png 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT-640x336.png 640w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT.png.webp 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT-300x158.png.webp 300w"
+                                        sizes="(max-width: 1000px) 100vw, 1000px" />
+                                    <img width="1000" height="525"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT.png"
+                                        alt="" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT.png 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT-300x158.png 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT-768x403.png 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/09/NEP-NHAN-VUNG-MAT-640x336.png 640w"
+                                        sizes="(max-width: 1000px) 100vw, 1000px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/nep-nhan-vung-mat-co-de-xoa-hay-khong/"
+                                data-wpel-link="internal">Nếp nhăn vùng mắt có dễ xóa hay không?</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-lam-giang/"
+                                        data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN LÂM
+                                            GIANG</span></a></div><time class="published-date"
+                                    datetime="2022-04-02T01:30:50+07:00">Ngày đăng: 29 Th9
+                                    2020</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-74400" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/goc-tu-do/"
+                            title="Gốc tự do: Kẻ thù lẩn trốn bên trong cơ thể" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do.jpg.webp 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do-300x158.jpg.webp 300w"
+                                    sizes="(max-width: 1000px) 100vw, 1000px">
+                                <img width="1000" height="525"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do.jpg"
+                                    alt="Gốc tự do" loading="lazy" sizes="(max-width: 1000px) 100vw, 1000px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do.jpg 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do-300x158.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do-768x403.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do-640x336.jpg 640w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do.jpg.webp 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do-300x158.jpg.webp 300w"
+                                        sizes="(max-width: 1000px) 100vw, 1000px" />
+                                    <img width="1000" height="525"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do.jpg"
+                                        alt="Gốc tự do" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do.jpg 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do-300x158.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do-768x403.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/goc-tu-do-640x336.jpg 640w"
+                                        sizes="(max-width: 1000px) 100vw, 1000px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/goc-tu-do/" data-wpel-link="internal">Gốc tự do: Kẻ
+                                thù lẩn trốn bên trong cơ thể</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/duoc-si-thai-hoang-tri/"
+                                        data-wpel-link="internal"><span class="author vcard">Dược sĩ THÁI HOÀNG
+                                            TRÍ</span></a></div><time class="published-date"
+                                    datetime="2022-05-23T13:53:24+07:00">Ngày đăng: 9 Th6
+                                    2020</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-65483" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/nep-nhan/"
+                            title="Nguyên nhân và cách hạn chế nếp nhăn trên gương mặt" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-768x401.jpg.webp 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan.jpg"
+                                    alt="nếp nhăn" loading="lazy" sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-768x401.jpg.webp 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan.jpg"
+                                        alt="nếp nhăn" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/nep-nhan-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/nep-nhan/" data-wpel-link="internal">Nguyên nhân và
+                                cách hạn chế nếp nhăn trên gương mặt</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-huynh-thi-nhu-my/"
+                                        data-wpel-link="internal"><span class="author vcard">Bác sĩ HUỲNH THỊ NHƯ
+                                            MỸ</span></a></div><time class="published-date"
+                                    datetime="2022-01-26T14:04:33+07:00">Ngày đăng: 3 Th6
+                                    2020</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-29244" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/quang-tham-o-mat/"
+                            title="Quầng thâm ở mắt: Làm sao để cải thiện?" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện.jpg.webp 1600w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-300x158.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-1024x538.jpg.webp 1024w"
+                                    sizes="(max-width: 1600px) 100vw, 1600px">
+                                <img width="1600" height="840"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện.jpg"
+                                    alt="" loading="lazy" sizes="(max-width: 1600px) 100vw, 1600px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện.jpg 1600w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-300x158.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-1024x538.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-768x403.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-1536x806.jpg 1536w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-640x336.jpg 640w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện.jpg.webp 1600w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-300x158.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-1024x538.jpg.webp 1024w"
+                                        sizes="(max-width: 1600px) 100vw, 1600px" />
+                                    <img width="1600" height="840"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện.jpg"
+                                        alt="" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện.jpg 1600w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-300x158.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-1024x538.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-768x403.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-1536x806.jpg 1536w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Quầng-thâm-ở-mắt-nguyên-nhân-và-biện-pháp-cải-thiện-640x336.jpg 640w"
+                                        sizes="(max-width: 1600px) 100vw, 1600px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/quang-tham-o-mat/" data-wpel-link="internal">Quầng
+                                thâm ở mắt: Làm sao để cải thiện?</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-trung-nghia/"
+                                        data-wpel-link="internal"><span class="author vcard">ThS.BS NGUYỄN TRUNG
+                                            NGHĨA</span></a></div><time class="published-date"
+                                    datetime="2021-07-18T01:57:36+07:00">Ngày đăng: 13 Th5
+                                    2020</time>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="cat-block">
+                <h2 class="category-title font-serif"><a href="https://youmed.vn/tin-tuc/da-lieu/bi-quyet-duong-da/"
+                        title="Bí quyết dưỡng da" class="flex flex-row items-center" data-wpel-link="internal">Bí
+                        quyết dưỡng da <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                            focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"></path>
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                        </svg></a></h2>
+                <div class="category-posts archive-grid grid-4">
+                    <article id="post-224762" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/kham-pha-cong-dung-cua-collagen-thuy-phan-trong-duong-da/"
+                            title="Khám phá công dụng của Collagen thuỷ phân trong dưỡng da" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-768x401.jpg.webp 768w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da.jpg"
+                                    alt="Khám phá công dụng của Collagen thuỷ phân trong dưỡng da" loading="lazy"
+                                    sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-768x401.jpg.webp 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da.jpg"
+                                        alt="Khám phá công dụng của Collagen thuỷ phân trong dưỡng da" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/02/Kham-pha-cong-dung-cua-Collagen-thuy-phan-trong-duong-da-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/kham-pha-cong-dung-cua-collagen-thuy-phan-trong-duong-da/"
+                                data-wpel-link="internal">Khám phá công dụng của Collagen thuỷ phân trong dưỡng
+                                da</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/duoc-si-nguyen-ngoc-cam-tien/"
+                                        data-wpel-link="internal"><span class="author vcard">Dược sĩ NGUYỄN NGỌC CẨM
+                                            TIÊN</span></a></div><time class="published-date"
+                                    datetime="2022-03-03T08:58:44+07:00">Ngày đăng: 25 Th2
+                                    2022</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-195840" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/uu-diem-bat-ngo-khi-se-khit-lo-chan-long-bang-laser/"
+                            title="Ưu điểm bất ngờ khi se khít lỗ chân lông bằng laser" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-1024x535.jpg.webp 1024w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg"
+                                    alt="Trị sẹo bằng laser" loading="lazy" sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg"
+                                        alt="Trị sẹo bằng laser" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/uu-diem-bat-ngo-khi-se-khit-lo-chan-long-bang-laser/"
+                                data-wpel-link="internal">Ưu điểm bất ngờ khi se khít lỗ chân lông bằng laser</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                        data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                            THẢO</span></a></div><time class="published-date"
+                                    datetime="2021-10-19T08:54:23+07:00">Ngày đăng: 26 Th8
+                                    2021</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-195848" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/tri-seo-bang-laser-co-an-toan-hieu-qua-khong/"
+                            title="Trị sẹo bằng laser có an toàn, hiệu quả không?" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-1024x535.jpg.webp 1024w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg"
+                                    alt="Trị sẹo bằng laser" loading="lazy" sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg"
+                                        alt="Trị sẹo bằng laser" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-3-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/tri-seo-bang-laser-co-an-toan-hieu-qua-khong/"
+                                data-wpel-link="internal">Trị sẹo bằng laser có an toàn, hiệu quả không?</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                        data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                            THẢO</span></a></div><time class="published-date"
+                                    datetime="2021-10-19T09:01:33+07:00">Ngày đăng: 25 Th8
+                                    2021</time>
+                            </div>
+                        </div>
+                    </article>
+                    <article id="post-195853" class="block-card">
+                        <a href="https://youmed.vn/tin-tuc/tay-trang-rang-laser-co-nen-hay-khong/"
+                            title="Tẩy trắng răng laser: Có nên hay không?" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-1024x535.jpg.webp 1024w"
+                                    sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4.jpg"
+                                    alt="Tẩy trắng răng laser" loading="lazy" sizes="(max-width: 1200px) 100vw, 1200px"
+                                    srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-768x401.jpg 768w"
+                                    class="lazyloaded" data-ll-status="loaded">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4.jpg"
+                                        alt="Tẩy trắng răng laser" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/08/LayoutYMNew_1618552890-4-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <a class="post-title line-clamp-2 font-serif font-bold"
+                                href="https://youmed.vn/tin-tuc/tay-trang-rang-laser-co-nen-hay-khong/"
+                                data-wpel-link="internal">Tẩy trắng răng laser: Có nên hay không?</a>
+                            <div class="content-author">
+                                <div class="article-author"><a class="url fn n"
+                                        href="https://youmed.vn/tin-tuc/bac-si/thac-si-duoc-si-nguyen-ngoc-hoang/"
+                                        data-wpel-link="internal"><span class="author vcard">Dược sĩ NGUYỄN NGỌC
+                                            HOÀNG</span></a></div><time class="published-date"
+                                    datetime="2021-08-25T09:31:20+07:00">Cập nhật: 20 Th8
+                                    2021</time>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>*@
+            @if (topic_.Type == "category")
+            {
+                <h2 class="font-serif more-title category-title">Các bài viết mới nhất</h2>
+            }
+            <div class="archive-grid">
+                <div class="list-article">
+                    @foreach(var item in Model.Items.Where(x=>x.Status == Status.Active))
+                    {
+                        <article id="post-225657" class="block-card block-quare">
+                            <a asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                title="@item.Title"
+                                data-wpel-link="internal">
+                                <picture class="card-image img-fluid wp-post-image">
+                                    <source type="image/webp"
+                                        srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px">
+                                    <img width="1200" height="627"
+                                        src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                        alt="tẩy nốt ruồi" sizes="(max-width: 1200px) 100vw, 1200px"
+                                        srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="card-image img-fluid wp-post-image">
+                                        <source type="image/webp"
+                                            srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px" />
+                                        <img width="1200" height="627"
+                                            src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                            alt="tẩy nốt ruồi"
+                                            srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    </picture>
+                                </noscript>
+                            </a>
+                            <div class="block-card-body">
+                                <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                        asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id" data-wpel-link="internal">@item.Title</a></h2>
+                                <div class="post-excerpt line-clamp-2 entry-content">
+                                    @Html.Raw(item.Content)
+                                </div><!-- .entry-content -->
+                                <div class="article-author"><a class="url fn n"
+                                         asp-action="Index" asp-controller="Doctor" asp-route-id="@item.Doctors.UserId"
+                                        data-wpel-link="internal"><span class="author vcard">@(item.Doctors.LastName+" "+item.Doctors.FirstName)</span></a></div>
+                            </div>
+                        </article>
+                        
+                    }
+                    @*<article id="post-213491" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/thuoc-dong-y-tri-mun-trung-ca/"
+                            title="Những loại thuốc Đông y trị mụn trứng cá hiệu quả" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy.png.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-300x157.png.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-1024x535.png.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-768x401.png.webp 768w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy.png 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-300x157.png 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-1024x535.png 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-768x401.png 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy.png">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy.png.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-300x157.png.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-1024x535.png.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-768x401.png.webp 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy.png"
+                                        alt="" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy.png 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-300x157.png 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-1024x535.png 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/12/thuocdongy-768x401.png 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/thuoc-dong-y-tri-mun-trung-ca/"
+                                    data-wpel-link="internal">Những loại thuốc Đông y trị mụn trứng cá hiệu quả</a>
+                            </h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Mụn trứng cá có thể xuất hiện ở tuổi thiếu niên và tồn tại cho đến khoảng 30
+                                    tuổi. Khoảng 20% người bệnh tiến triển mụn trứng cá nặng và dẫn đến sẹo. Những
+                                    vết sẹo sau mụn hầu như không thể sửa được. Vì vậy, tìm hiểu và điều trị mụn
+                                    đúng cách thật […]</p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/thac-si-bac-si-du-thi-cam-quynh/"
+                                    data-wpel-link="internal"><span class="author vcard">ThS.BS DƯ THỊ CẨM
+                                        QUỲNH</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-209774" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/top-10-loai-thuoc-tri-mun-trung-ca-tot-nhat-hien-nay/"
+                            title="Top 10 loại thuốc trị mụn trứng cá tốt hiện nay" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="thuốc trị mụn trứng cá" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien.jpg"
+                                        alt="thuốc trị mụn trứng cá" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Cach-tri-mun-tai-nha-don-gian-bang-phuong-phap-tu-nhien-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/top-10-loai-thuoc-tri-mun-trung-ca-tot-nhat-hien-nay/"
+                                    data-wpel-link="internal">Top 10 loại thuốc trị mụn trứng cá tốt hiện nay</a>
+                            </h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Mụn trứng cá là loại mụn cứng đầu và có thể tái diễn lặp đi lặp lại nên rất khó
+                                    để mụn tự hết. Nếu không điều trị thì rất dễ gây vết thâm mụn, sẹo mụn. Hiện nay
+                                    trên thị trường có rất nhiều sản phẩm trị mụn trứng cá được quảng cáo là […]</p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-176256" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/5-cach-tay-te-bao-chet-toan-than-hieu-qua/"
+                            title="5 cách tẩy tế bào chết toàn thân hiệu quả" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="5 cách tẩy tế bào chết toàn thân hiệu quả" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41.jpg"
+                                        alt="5 cách tẩy tế bào chết toàn thân hiệu quả" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew-41-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/5-cach-tay-te-bao-chet-toan-than-hieu-qua/"
+                                    data-wpel-link="internal">5 cách tẩy tế bào chết toàn thân hiệu quả</a></h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Tẩy tế bào chết toàn thân (tẩy tế bào chết body) là một cách đơn giản và hiệu
+                                    quả. Nó giúp giữ cho làn da của bạn trông đầy sức sống và khỏe mạnh. Có rất
+                                    nhiều các sản phẩm có sẵn ở cửa hàng hoặc bạn có thể tự làm tẩy tế bào chết […]
+                                </p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-175342" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/co-nen-dung-sua-rua-mat-thuong-xuyen-khong/"
+                            title="Có nên dùng sữa rửa mặt thường xuyên không?" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1-300x157.jpg.webp 300w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="Có nên dùng sữa rửa mặt" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1-300x157.jpg.webp 300w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1.jpg"
+                                        alt="Có nên dùng sữa rửa mặt" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-15-1-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/co-nen-dung-sua-rua-mat-thuong-xuyen-khong/"
+                                    data-wpel-link="internal">Có nên dùng sữa rửa mặt thường xuyên không?</a></h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Sữa rửa mặt là sản phẩm chăm sóc da không thể thiếu trong túi đồ của chị em phụ
+                                    nữ. Nhưng có nên dùng sữa rửa mặt thường xuyên không? Đối tượng nào không nên
+                                    dùng sữa rửa mặt?&nbsp;Hãy cùng bác sĩ Nguyễn Thị Thảo tìm hiểu thông qua bài
+                                    viết dưới đây nhé! Tìm […]</p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-175329" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/top-10-sua-rua-mat-cho-da-dau-tot-nhat-hien-nay/"
+                            title="Top 10 sữa rửa mặt cho da dầu tốt nhất hiện nay" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="Sữa rửa mặt cho da dầu" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8.jpg"
+                                        alt="Sữa rửa mặt cho da dầu" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-8-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/top-10-sua-rua-mat-cho-da-dau-tot-nhat-hien-nay/"
+                                    data-wpel-link="internal">Top 10 sữa rửa mặt cho da dầu tốt nhất hiện nay</a>
+                            </h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Chăm sóc da vốn là vấn đề rất phức tạp, nhất là ở những người da dầu. Để chọn
+                                    được sữa rửa mặt cho da dầu phù hợp, bạn cần biết đặc điểm da dầu và những hoạt
+                                    chất cần cho làn da dầu. Hãy cùng bác sĩ Nguyễn Thị Thảo tìm hiểu thông qua […]
+                                </p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-175319" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/cham-soc-da-bang-sua-rua-mat-tu-nguyen-lieu-thien-nhien/"
+                            title="Chăm sóc da bằng sữa rửa mặt từ nguyên liệu thiên nhiên" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="Sữa rửa mặt từ thiên nhiên" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4.jpg"
+                                        alt="Sữa rửa mặt từ thiên nhiên" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-4-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/cham-soc-da-bang-sua-rua-mat-tu-nguyen-lieu-thien-nhien/"
+                                    data-wpel-link="internal">Chăm sóc da bằng sữa rửa mặt từ nguyên liệu thiên
+                                    nhiên</a></h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Sử dụng sữa rửa mặt từ thiên nhiên luôn là lựa chọn ưu tiên của những bạn có làn
+                                    da nhạy cảm. Nhưng bạn có thể tự làm ra chúng từ những nguyên liệu nào? Hãy cùng
+                                    bác sĩ Nguyễn Thị Thảo tìm hiểu thông qua bài viết dưới đây nhé! Tại sao nên sử
+                                    […]</p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-175205" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/loi-ich-khi-rua-mat-bang-nuoc-vo-gao/"
+                            title="Lợi ích khi rửa mặt bằng nước vo gạo" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="rửa mặt bằng nước vo gạo" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3.jpg"
+                                        alt="rửa mặt bằng nước vo gạo" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-3-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/loi-ich-khi-rua-mat-bang-nuoc-vo-gao/"
+                                    data-wpel-link="internal">Lợi ích khi rửa mặt bằng nước vo gạo</a></h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Rửa mặt là một bước vệ sinh da mặt cơ bản mà ai cũng thực hiện hàng ngày. Hiện
+                                    nay trên thị trường bán rất nhiều loại sữa rửa mặt chứa nhiều hoạt chất tốt cho
+                                    da. Nhưng các bạn có từng nghĩ có thể tận dụng ngay từ những thực phẩm hàng ngày
+                                    để […]</p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-175302" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/dung-cu-rua-mat-loi-hay-hai-cho-da-ban/"
+                            title="Dụng cụ rửa mặt: Lợi hay hại cho da bạn?" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="Dụng cụ rửa mặt" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1.jpg"
+                                        alt="Dụng cụ rửa mặt" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-14-1-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/dung-cu-rua-mat-loi-hay-hai-cho-da-ban/"
+                                    data-wpel-link="internal">Dụng cụ rửa mặt: Lợi hay hại cho da bạn?</a></h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Dụng cụ rửa mặt là những sản phẩm hỗ trợ quá trình rửa mặt được nhanh, sạch sâu
+                                    hơn. Vì là những vật dụng tiếp xúc trực tiếp với da nên chất lượng cũng như lợi
+                                    ích, nguy cơ khi sử dụng rất được mọi người quan tâm. Để giải đáp những thắc mắc
+                                    trên, […]</p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-175288" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/co-nen-rua-mat-bang-mat-ong-moi-ngay/"
+                            title="Có nên rửa mặt bằng mật ong mỗi ngày?" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="Rửa mặt bằng mật ong" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12.jpg"
+                                        alt="Rửa mặt bằng mật ong" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/04/LayoutYMNew_1618552890-12-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/co-nen-rua-mat-bang-mat-ong-moi-ngay/"
+                                    data-wpel-link="internal">Có nên rửa mặt bằng mật ong mỗi ngày?</a></h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Mật ong có thể được coi là “thần dược” bảo vệ sức khỏe và làm đẹp. Vì dễ bảo quản
+                                    và không có hạn sử dụng nên mật ong được sử dụng phổ biến trong cuộc sống hàng
+                                    ngày. Tuy nhiên liệu rửa mặt bằng mật ong mỗi ngày có gây hại cho da không? […]
+                                </p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-175276" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/bi-quyet-rua-mat-bang-bot-yen-mach/"
+                            title="Bí quyết rửa mặt bằng bột yến mạch" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="Rửa mặt bằng bột yến mạch" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9.jpg"
+                                        alt="Rửa mặt bằng bột yến mạch" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-9-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/bi-quyet-rua-mat-bang-bot-yen-mach/"
+                                    data-wpel-link="internal">Bí quyết rửa mặt bằng bột yến mạch</a></h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Bột yến mạch chắc hẳn không còn xa lạ gì vì tác dụng giảm cân của nó. Nhưng còn
+                                    có rất nhiều lợi ích trong chăm sóc da của yến mạch mà không phải ai cũng rõ.
+                                    Đặc biệt bột yến mạch còn được coi là phương pháp thay thế cho sữa rửa mặt thông
+                                    […]</p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>
+                    <article id="post-175254" class="block-card block-quare">
+                        <a href="https://youmed.vn/tin-tuc/huong-dan-rua-mat-bang-sua-tuoi-dung-cach/"
+                            title="Hướng dẫn rửa mặt bằng sữa tươi đúng cách" data-wpel-link="internal">
+                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-1024x535.jpg.webp 1024w"
+                                    srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px">
+                                <img width="1200" height="627"
+                                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20627'%3E%3C/svg%3E"
+                                    alt="Rửa mặt bằng sữa tươi" loading="lazy"
+                                    data-lazy-srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-768x401.jpg 768w"
+                                    data-lazy-sizes="(max-width: 1200px) 100vw, 1200px"
+                                    data-lazy-src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6.jpg">
+                            </picture>
+                            <noscript>
+                                <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-1024x535.jpg.webp 1024w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                    <img width="1200" height="627"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6.jpg"
+                                        alt="Rửa mặt bằng sữa tươi" loading="lazy"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/05/LayoutYMNew_1618552890-6-768x401.jpg 768w"
+                                        sizes="(max-width: 1200px) 100vw, 1200px" />
+                                </picture>
+                            </noscript>
+                        </a>
+                        <div class="block-card-body">
+                            <h2 class="post-title"><a class="line-clamp-2 font-serif"
+                                    href="https://youmed.vn/tin-tuc/huong-dan-rua-mat-bang-sua-tuoi-dung-cach/"
+                                    data-wpel-link="internal">Hướng dẫn rửa mặt bằng sữa tươi đúng cách</a></h2>
+                            <div class="post-excerpt line-clamp-2">
+                                <p>Sữa tươi là một thực phẩm rất quen thuộc trong đời sống hằng ngày. Không chỉ cung
+                                    cấp giá trị dinh dưỡng, sữa tươi còn mang đến lợi ích không nhỏ cho làn da. So
+                                    với nhiều sản phẩm chăm sóc da khác thì rửa mặt bằng sữa tươi vừa tiết kiệm lại
+                                    an toàn […]</p>
+                            </div><!-- .entry-content -->
+                            <div class="article-author"><a class="url fn n"
+                                    href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-thao/"
+                                    data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ
+                                        THẢO</span></a></div>
+                        </div>
+                    </article>*@
+                    <div class="pagination-wrapper">
+                        @await Component.InvokeAsync("Pager", Model)
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+

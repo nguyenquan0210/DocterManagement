@@ -1,0 +1,1038 @@
+﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.Catalog.MasterData
+@using DoctorManagement.ViewModels.Common;
+@model PagedResult<DoctorManagement.ViewModels.Catalog.Post.PostVm>
+@{
+    ViewData["Title"] = "Post";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var menus = (List<MainMenuVm>)ViewBag.Menus;
+    var i = 0;
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<link rel="stylesheet" id="medamp-front-page-css"
+        href="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/dist/css/front-page.min.css" media="all">
+ <link rel="stylesheet" id="theme-css" href="https://youmed.vn/wp-content/themes/youmed/css/app.css?ver=3.0.0"
+        type="text/css" media="all">
+    <link rel="stylesheet" id="form-css-css" href="https://youmed.vn/wp-content/themes/youmed/css/form.css?ver=3.0.0"
+        type="text/css" media="all">
+  <style>
+      .ant-collapse .ant-collapse-item-disabled>.ant-collapse-header {
+            color: #000000;
+            cursor: pointer;
+        }
+        h2 {
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+        h3 {
+            display: block;
+            font-size: 1.17em;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+        article > *:not(.entry-content), .entry-content > * {
+            margin-left: 0;
+            margin-right: 0;
+            max-width: 1024px;
+
+        }
+         .entry-content strong{
+                font-weight: normal;
+        }
+  </style>
+@section Searchpost{
+    <div class="site-search" style="margin:0 5px;">
+        <button class="search-menu-toggle icon-rounded inline-flex items-center justify-center md:hidden"  tabindex="0">
+            <span class="screen-reader-text">Open search</span>
+            <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img" focusable="false" fill="none">
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg> </button>
+        <div class="header-search hidden md:flex">
+
+            <form role="search" method="get" class="search-form" asp-action="SearchPost"  asp-controller="Post" >
+                <label for="search-form-1">
+                    <span class="screen-reader-text">Search for:</span>
+                </label>
+                <input type="search" id="search-form-1" class="search-field"
+                    placeholder="Tìm kiếm bài viết" value="@ViewBag.Keyword" name="keyword">
+                <button type="submit" class="search-submit">
+                    <svg width="24" height="24" fill="none" class="search-icon">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="screen-reader-text">
+                        Search </span>
+                </button>
+            </form>
+        </div>
+    </div>
+}
+<main id="main" role="main">
+    <div class="front-page max-w-7xl mx-auto">
+        <section id="ym_feature_posts_widget-3" class="widget section pinned-post">
+            @foreach(var item in Model.Items.Where(x=>x.Status == Status.Active).Skip(0).Take(1))
+            {
+                
+                <article class="block-card article-pinned article-1 ">
+                    <a asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                        title="@item.Title"
+                        data-wpel-link="internal">
+                        <picture class="card-image wp-post-image" loading="lazy">
+                            <source type="image/webp"
+                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w"
+                                sizes="(max-width: 1024px) 100vw, 1024px">
+                            <img width="1024" height="535"
+                                src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                alt="@item.Title" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px"
+                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w"
+                                class="lazyloaded" data-ll-status="loaded">
+                        </picture>
+                        <noscript>
+                            <picture class="card-image wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w"
+                                    sizes="(max-width: 1024px) 100vw, 1024px" />
+                                <img width="1024" height="535"
+                                    src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                    alt="@item.Title" loading="lazy"
+                                    srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w"
+                                    sizes="(max-width: 1024px) 100vw, 1024px" />
+                            </picture>
+                        </noscript>
+                    </a>
+                    <div class="block-card-body">
+                        <div class="card-content">
+                            <span class="post-categories"><span class="screen-reader-text">Posted in</span><a
+                                    asp-action="Topic" asp-controller="Post"  asp-route-id="@item.Topic.Id" rel="category tag"
+                                    data-wpel-link="internal">@item.Topic.Name</a></span>
+                            <h2 class="post-title font-serif"> <a asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                    title="@item.Title"
+                                    data-wpel-link="internal">
+                                    @item.Title </a>
+                            </h2>
+                        </div>
+                        @{
+                            var m = (int) (DateTime.Now - item.CreatedAt).TotalMinutes;
+                            var text = m > (60*24*30*12) ? (item.CreatedAt.Day+" Thg"+item.CreatedAt.Month+", "+item.CreatedAt.Year) :m > (60*24*30) ? (m / (60*24*30)) + " tháng trước" :m > (60*24) ? (m / (60*24)) + " ngày trước" : m > 60 ? (m / 60) + " giờ trước" : "";
+                        }
+                        <div class="content-author">
+                            <div class="article-author"><a class="url fn n" asp-action="Index" asp-controller="Doctor" asp-route-id="@item.Doctors.UserId"
+                                    data-wpel-link="internal"><span class="author vcard">@(item.Doctors.LastName+" "+item.Doctors.FirstName)</span></a></div><time
+                                class="published-date" >Ngày đăng:  @text </time>
+                        </div>
+                    </div>
+                </article>
+            }
+            @{
+                i = 2;
+            }
+            @foreach(var item in Model.Items.Where(x=>x.Status == Status.Active).Skip(1).Take(2))
+            {
+                <article class="block-card article-pinned article-@i ">
+                    <div class="block-card-body">
+                        <div class="card-content">
+                            <span class="post-categories"><span class="screen-reader-text">Posted in</span><a
+                                    asp-action="Topic" asp-controller="Post" asp-route-id="@item.Topic.Id" rel="category tag"   
+                                    data-wpel-link="internal">@item.Topic.Name</a></span>
+                            <h3 class="post-title font-serif"> <a
+                                    asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                    title="@item.Title"
+                                    data-wpel-link="internal">
+                                    @item.Title </a>
+                            </h3>
+                            <div class="post-excerpt line-clamp-3 entry-content ">
+                                 @Html.Raw(item.Content);
+                            </div>
+                        </div>
+                         @{
+                            var m = (int) (DateTime.Now - item.CreatedAt).TotalMinutes;
+                            var text = m > (60*24*30*12) ? (item.CreatedAt.Day+" Thg"+item.CreatedAt.Month+", "+item.CreatedAt.Year) :m > (60*24*30) ? (m / (60*24*30)) + " tháng trước" :m > (60*24) ? (m / (60*24)) + " ngày trước" : m > 60 ? (m / 60) + " giờ trước" : "";
+                        }
+                        <div class="content-author">
+                            <div class="article-author"><a class="url fn n" asp-action="Index" asp-controller="Doctor" asp-route-id="@item.Doctors.UserId"
+                                    data-wpel-link="internal"><span class="author vcard">@(item.Doctors.LastName+" "+item.Doctors.FirstName)</span></a></div><time
+                                class="published-date" >Ngày đăng: @text </time>
+                        </div>
+                    </div>
+                </article>
+                i++;
+            }
+             @{
+                i = 4;
+            }
+            @foreach(var item in Model.Items.Where(x=>x.Status == Status.Active).Skip(3).Take(4))
+            {
+
+                <article class="block-card article-pinned article-@i block-quare">
+                    <a asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                        title="@item.Title" data-wpel-link="internal">
+                        <picture class="card-image wp-post-image" loading="lazy">
+                            <source type="image/webp"
+                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w"
+                                sizes="(max-width: 300px) 100vw, 300px">
+                            <img width="300" height="157"
+                                src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                alt="" loading="lazy" sizes="(max-width: 300px) 100vw, 300px"
+                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w"
+                                class="lazyloaded" data-ll-status="loaded">
+                        </picture>
+                        <noscript>
+                            <picture class="card-image wp-post-image" loading="lazy">
+                                <source type="image/webp"
+                                    srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w"
+                                    sizes="(max-width: 300px) 100vw, 300px" />
+                                <img width="300" height="157"
+                                    src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                    alt="" loading="lazy"
+                                    srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1024w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 1200w"
+                                    sizes="(max-width: 300px) 100vw, 300px" />
+                            </picture>
+                        </noscript>
+                    </a>
+                    <div class="block-card-body">
+                        <div class="card-content">
+                            <span class="post-categories"><span class="screen-reader-text">Posted in</span><a
+                                    asp-action="Topic" asp-controller="Post" asp-route-id="@item.Topic.Id" rel="category tag"
+                                    data-wpel-link="internal">@item.Topic.Name</a></span>
+                            <h3 class="post-title font-serif"> <a
+                                     asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                    title="@item.Title"
+                                    data-wpel-link="internal">
+                                    @item.Title </a>
+                            </h3>
+                        </div>
+                         @{
+                            var m = (int) (DateTime.Now - item.CreatedAt).TotalMinutes;
+                            var text = m > (60*24*30*12) ? (item.CreatedAt.Day+" Thg"+item.CreatedAt.Month+", "+item.CreatedAt.Year) :m > (60*24*30) ? (m / (60*24*30)) + " tháng trước" :m > (60*24) ? (m / (60*24)) + " ngày trước" : m > 60 ? (m / 60) + " giờ trước" : "";
+                        }
+                        <div class="content-author">
+                            <div class="article-author"><a class="url fn n" asp-action="Index" asp-controller="Doctor" asp-route-id="@item.Doctors.UserId"
+                                    data-wpel-link="internal"><span class="author vcard">@(item.Doctors.LastName+" "+item.Doctors.FirstName)</span></a></div><time
+                                class="published-date" >Ngày đăng: @text </time>
+                        </div>
+                    </div>
+                </article>
+                i++;
+            }
+           @* <article class="block-card article-pinned article-5 block-quare">
+                <a href="https://youmed.vn/tin-tuc/he-thong-phong-kham-nhi-dong-315-trien-khai-dat-kham-qua-ung-dung-youmed/"
+                    title="Hệ thống phòng khám Nhi đồng 315 triển khai đặt khám qua ứng dụng YouMed"
+                    data-wpel-link="internal">
+                    <picture class="card-image wp-post-image" loading="lazy">
+                        <source type="image/webp"
+                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-768x401.jpg.webp 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed.jpg.webp 1200w"
+                            sizes="(max-width: 300px) 100vw, 300px">
+                        <img width="300" height="157"
+                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-300x157.jpg"
+                            alt="Phòng khám Nhi Đồng 315 kết nối YouMed" loading="lazy"
+                            sizes="(max-width: 300px) 100vw, 300px"
+                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-768x401.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed.jpg 1200w"
+                            class="lazyloaded" data-ll-status="loaded">
+                    </picture>
+                    <noscript>
+                        <picture class="card-image wp-post-image" loading="lazy">
+                            <source type="image/webp"
+                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-768x401.jpg.webp 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed.jpg.webp 1200w"
+                                sizes="(max-width: 300px) 100vw, 300px" />
+                            <img width="300" height="157"
+                                src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-300x157.jpg"
+                                alt="Phòng khám Nhi Đồng 315 kết nối YouMed" loading="lazy"
+                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed-768x401.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Phong-kham-Nhi-Dong-315-ket-noi-YouMed.jpg 1200w"
+                                sizes="(max-width: 300px) 100vw, 300px" />
+                        </picture>
+                    </noscript>
+                </a>
+                <div class="block-card-body">
+                    <div class="card-content">
+                        <span class="post-categories"><span class="screen-reader-text">Posted in</span><a
+                                href="https://youmed.vn/tin-tuc/ban-tin-suc-khoe/tin-tuc-youmed/" rel="category tag"
+                                data-wpel-link="internal">Tin tức YouMed</a></span>
+                        <h3 class="post-title font-serif"> <a
+                                href="https://youmed.vn/tin-tuc/he-thong-phong-kham-nhi-dong-315-trien-khai-dat-kham-qua-ung-dung-youmed/"
+                                title="Hệ thống phòng khám Nhi đồng 315 triển khai đặt khám qua ứng dụng YouMed"
+                                data-wpel-link="internal">
+                                Hệ thống phòng khám Nhi đồng 315 triển khai đặt khám qua ứng dụng YouMed </a>
+                        </h3>
+                    </div>
+                    <div class="content-author">
+                        <div class="article-author"><a class="url fn n" href="https://youmed.vn/tin-tuc/bac-si/youmed/"
+                                data-wpel-link="internal"><span class="author vcard">YouMed</span></a></div><time
+                            class="published-date" datetime="2022-06-07T16:11:25+07:00">Ngày đăng: 15 giờ trước</time>
+                    </div>
+                </div>
+            </article>
+            <article class="block-card article-pinned block-quare">
+                <a href="https://youmed.vn/tin-tuc/fenoglobin/"
+                    title="Thuốc bổ máu Fenoglobin là gì? Công dụng, cách dùng và lưu ý" data-wpel-link="internal">
+                    <picture class="card-image wp-post-image" loading="lazy">
+                        <source type="image/webp"
+                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-300x157.png.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-1024x535.png.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-768x401.png.webp 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin.png.webp 1200w"
+                            sizes="(max-width: 300px) 100vw, 300px">
+                        <img width="300" height="157"
+                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-300x157.png"
+                            alt="Feroglobin" loading="lazy" sizes="(max-width: 300px) 100vw, 300px"
+                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-300x157.png 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-1024x535.png 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-768x401.png 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin.png 1200w"
+                            class="lazyloaded" data-ll-status="loaded">
+                    </picture>
+                    <noscript>
+                        <picture class="card-image wp-post-image" loading="lazy">
+                            <source type="image/webp"
+                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-300x157.png.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-1024x535.png.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-768x401.png.webp 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin.png.webp 1200w"
+                                sizes="(max-width: 300px) 100vw, 300px" />
+                            <img width="300" height="157"
+                                src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-300x157.png"
+                                alt="Feroglobin" loading="lazy"
+                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-300x157.png 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-1024x535.png 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin-768x401.png 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/06/Feroglobin.png 1200w"
+                                sizes="(max-width: 300px) 100vw, 300px" />
+                        </picture>
+                    </noscript>
+                </a>
+                <div class="block-card-body">
+                    <div class="card-content">
+                        <span class="post-categories"><span class="screen-reader-text">Posted in</span><a
+                                href="https://youmed.vn/tin-tuc/duoc/thuc-pham-chuc-nang/" rel="category tag"
+                                data-wpel-link="internal">Thực phẩm chức năng</a></span>
+                        <h3 class="post-title font-serif">
+                            <a href="https://youmed.vn/tin-tuc/fenoglobin/"
+                                title="Thuốc bổ máu Fenoglobin là gì? Công dụng, cách dùng và lưu ý"
+                                data-wpel-link="internal">
+                                Thuốc bổ máu Fenoglobin là gì? Công dụng, cách dùng và lưu ý </a>
+                        </h3>
+                    </div>
+                    <div class="content-author">
+                        <div class="article-author"><a class="url fn n"
+                                href="https://youmed.vn/tin-tuc/bac-si/duoc-si-phan-tieu-long/"
+                                data-wpel-link="internal"><span class="author vcard">Dược sĩ PHAN TIỂU
+                                    LONG</span></a></div><time class="published-date"
+                            datetime="2022-05-23T09:31:21+07:00">Ngày đăng: 2 ngày trước</time>
+                    </div>
+                </div>
+            </article>
+            <article class="block-card article-pinned block-quare">
+                <a href="https://youmed.vn/tin-tuc/dau-hat-cai/"
+                    title="Dầu hạt cải: công dụng đối với sức khỏe và cách dùng hiệu quả" data-wpel-link="internal">
+                    <picture class="card-image wp-post-image" loading="lazy">
+                        <source type="image/webp"
+                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-768x401.jpg.webp 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai.jpg.webp 1200w"
+                            sizes="(max-width: 300px) 100vw, 300px">
+                        <img width="300" height="157"
+                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-300x157.jpg"
+                            alt="Dầu hạt cải" loading="lazy" sizes="(max-width: 300px) 100vw, 300px"
+                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-768x401.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai.jpg 1200w"
+                            class="lazyloaded" data-ll-status="loaded">
+                    </picture>
+                    <noscript>
+                        <picture class="card-image wp-post-image" loading="lazy">
+                            <source type="image/webp"
+                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-768x401.jpg.webp 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai.jpg.webp 1200w"
+                                sizes="(max-width: 300px) 100vw, 300px" />
+                            <img width="300" height="157"
+                                src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-300x157.jpg"
+                                alt="Dầu hạt cải" loading="lazy"
+                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai-768x401.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2022/05/dau-hat-cai.jpg 1200w"
+                                sizes="(max-width: 300px) 100vw, 300px" />
+                        </picture>
+                    </noscript>
+                </a>
+                <div class="block-card-body">
+                    <div class="card-content">
+                        <span class="post-categories"><span class="screen-reader-text">Posted in</span><a
+                                href="https://youmed.vn/tin-tuc/y-hoc-co-truyen/duoc-lieu/" rel="category tag"
+                                data-wpel-link="internal">Dược liệu</a></span>
+                        <h3 class="post-title font-serif">
+                            <a href="https://youmed.vn/tin-tuc/dau-hat-cai/"
+                                title="Dầu hạt cải: công dụng đối với sức khỏe và cách dùng hiệu quả"
+                                data-wpel-link="internal">
+                                Dầu hạt cải: công dụng đối với sức khỏe và cách dùng hiệu quả </a>
+                        </h3>
+                    </div>
+                    <div class="content-author">
+                        <div class="article-author"><a class="url fn n"
+                                href="https://youmed.vn/tin-tuc/bac-si/bac-si-nguyen-thi-le-quyen/"
+                                data-wpel-link="internal"><span class="author vcard">Bác sĩ NGUYỄN THỊ LỆ
+                                    QUYÊN</span></a></div><time class="published-date"
+                            datetime="2022-06-01T16:42:08+07:00">Ngày đăng: 6 ngày trước</time>
+                    </div>
+                </div>
+            </article>*@
+        </section>
+        <section id="ym_medical_dictionary_widget-3" class="widget section medical-dictionary">
+            <div class="section-header">
+                <h2>Tim kiếm bài viết</h2>
+            </div>
+            <div class="tab-dictionary">
+               @* <div id="medicalTabs" role="tablist" class="tabs-with-selector">
+                    <div id="tab-medicine" class="tab-control selected" role="tab" aria-controls="medicine-content">
+                        Thuốc</div>
+                    <div id="tab-medicinal-herbs" class="tab-control" role="tab"
+                        aria-controls="medicinal-herbs-content">Dược Liệu</div>
+                    <div id="tab-pathological" class="tab-control" role="tab" aria-controls="pathological-content">
+                        Bệnh</div>
+                    <div id="tab-body" class="tab-control" role="tab" aria-controls="body-content">Cơ Thể</div>
+                </div>*@
+                <div id="medicalPanels">
+                    <div id="medicine-content" class="tab-content selected" role="tabpanel"
+                        aria-labelledby="tab-medicine">
+                        <form class="search-form" asp-action="SearchPost" asp-controller="Post" method="get">
+                            <input type="search"  value="@ViewBag.Keyword" name="keyword" placeholder="Tìm kiếm bài viết...">
+                            <button type="submit" class="search-submit">
+                                <svg class="svg-icon " width="24" height="24" aria-hidden="true" role="img"
+                                    focusable="false" fill="none">
+                                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg> <span class="screen-reader-text">Search</span>
+                            </button>
+                        </form>
+                        @*<h3>Tra cứu thuốc bằng chữ cái đầu tiên:</h3>
+                        <div class="az-letters">
+                            <ul class="az-links">
+                                <li class="first odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-A-1"
+                                        data-wpel-link="internal"><span>A</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-B-1"
+                                        data-wpel-link="internal"><span>B</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-C-1"
+                                        data-wpel-link="internal"><span>C</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-D-1"
+                                        data-wpel-link="internal"><span>D</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-Đ-1"
+                                        data-wpel-link="internal"><span>Đ</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-E-1"
+                                        data-wpel-link="internal"><span>E</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-F-1"
+                                        data-wpel-link="internal"><span>F</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-G-1"
+                                        data-wpel-link="internal"><span>G</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-H-1"
+                                        data-wpel-link="internal"><span>H</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-I-1"
+                                        data-wpel-link="internal"><span>I</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-J-1"
+                                        data-wpel-link="internal"><span>J</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-K-1"
+                                        data-wpel-link="internal"><span>K</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-L-1"
+                                        data-wpel-link="internal"><span>L</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-M-1"
+                                        data-wpel-link="internal"><span>M</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-N-1"
+                                        data-wpel-link="internal"><span>N</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-O-1"
+                                        data-wpel-link="internal"><span>O</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-P-1"
+                                        data-wpel-link="internal"><span>P</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-Q-1"
+                                        data-wpel-link="internal"><span>Q</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-R-1"
+                                        data-wpel-link="internal"><span>R</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-S-1"
+                                        data-wpel-link="internal"><span>S</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-T-1"
+                                        data-wpel-link="internal"><span>T</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-U-1"
+                                        data-wpel-link="internal"><span>U</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-V-1"
+                                        data-wpel-link="internal"><span>V</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-W-1"
+                                        data-wpel-link="internal"><span>W</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-X-1"
+                                        data-wpel-link="internal"><span>X</span></a></li>
+                                <li class="even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-Y-1"
+                                        data-wpel-link="internal"><span>Y</span></a></li>
+                                <li class="odd has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-Z-1"
+                                        data-wpel-link="internal"><span>Z</span></a></li>
+                                <li class="last even has-posts"><a
+                                        href="https://youmed.vn/tin-tuc/duoc/#a-z-listing-letter-_-1"
+                                        data-wpel-link="internal"><span>#</span></a></li>
+                            </ul>
+                        </div>*@
+                        <div class="medical-posts scroll scroll-medium">
+                            @foreach(var item in Model.Items.Where(x=>x.Status == Status.Active).Skip(7).Take(4))
+                            {
+                                <article id="post-64186" class="block-card">
+                                    <a  asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                        title="@item.Title"
+                                        data-wpel-link="internal">
+                                        <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                            <source type="image/webp"
+                                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1000w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w"
+                                                sizes="(max-width: 1000px) 100vw, 1000px">
+                                            <img width="1000" height="525"
+                                                src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                                alt="Thuốc Bioflora (saccharomyces boulardii) - Ngăn ngừa và điều trị tiêu chảy hiệu quả"
+                                                loading="lazy" sizes="(max-width: 1000px) 100vw, 1000px"
+                                                srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1000w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                                class="lazyloaded" data-ll-status="loaded">
+                                        </picture>
+                                        <noscript>
+                                            <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                                <source type="image/webp"
+                                                    srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1000w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w"
+                                                    sizes="(max-width: 1000px) 100vw, 1000px" />
+                                                <img width="1000" height="525"
+                                                    src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                                    alt="@item.Title"
+                                                    loading="lazy"
+                                                    srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 1000w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 300w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 768w"
+                                                    sizes="(max-width: 1000px) 100vw, 1000px" />
+                                            </picture>
+                                        </noscript>
+                                    </a>
+                                    <div class="block-card-body">
+                                        <a class="post-title line-clamp-2 font-serif font-bold"
+                                           asp-action="DetailtPost" asp-controller="Post" asp-route-id="@item.Id"
+                                            data-wpel-link="internal">@item.Title</a>
+                                        <div class="content-author">
+                                            <div class="article-author"><a class="url fn n"
+                                                    asp-action="Index" asp-controller="Doctor" asp-route-id="@item.Doctors.UserId"
+                                                    data-wpel-link="internal"><span class="author vcard">@(item.Doctors.LastName+" "+item.Doctors.FirstName)</span></a></div>
+                                        </div>
+                                    </div>
+                                </article>
+                            }
+                            @*<article id="post-46125" class="block-card">
+                                <a href="https://youmed.vn/tin-tuc/rocket-1h/"
+                                    title="Rocket 1h là gì? Rocket 1h có tác dụng gì? Khám phá cách sử dụng"
+                                    data-wpel-link="internal">
+                                    <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-768x401.jpg.webp 768w"
+                                            sizes="(max-width: 1200px) 100vw, 1200px">
+                                        <img width="1200" height="627"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh.jpg"
+                                            alt="Rocket-1-tang-cuong-sinh-luc-phai-manh" loading="lazy"
+                                            sizes="(max-width: 1200px) 100vw, 1200px"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-768x401.jpg 768w"
+                                            class="lazyloaded" data-ll-status="loaded">
+                                    </picture>
+                                    <noscript>
+                                        <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                            <source type="image/webp"
+                                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh.jpg.webp 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-300x157.jpg.webp 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-1024x535.jpg.webp 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-768x401.jpg.webp 768w"
+                                                sizes="(max-width: 1200px) 100vw, 1200px" />
+                                            <img width="1200" height="627"
+                                                src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh.jpg"
+                                                alt="Rocket-1-tang-cuong-sinh-luc-phai-manh" loading="lazy"
+                                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh.jpg 1200w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-300x157.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-1024x535.jpg 1024w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/05/Rocket-1-tang-cuong-sinh-luc-phai-manh-768x401.jpg 768w"
+                                                sizes="(max-width: 1200px) 100vw, 1200px" />
+                                        </picture>
+                                    </noscript>
+                                </a>
+                                <div class="block-card-body">
+                                    <a class="post-title line-clamp-2 font-serif font-bold"
+                                        href="https://youmed.vn/tin-tuc/rocket-1h/" data-wpel-link="internal">Rocket
+                                        1h là gì? Rocket 1h có tác dụng gì? Khám phá cách sử dụng</a>
+                                    <div class="content-author">
+                                        <div class="article-author"><a class="url fn n"
+                                                href="https://youmed.vn/tin-tuc/bac-si/duoc-si-phan-tieu-long/"
+                                                data-wpel-link="internal"><span class="author vcard">Dược sĩ PHAN
+                                                    TIỂU LONG</span></a></div><time class="published-date"
+                                            datetime="2022-04-13T12:01:58+07:00">Ngày đăng: 12 Th5
+                                            2020</time>
+                                    </div>
+                                </div>
+                            </article>
+                            <article id="post-64894" class="block-card">
+                                <a href="https://youmed.vn/tin-tuc/cao-sao-vang/"
+                                    title="Cao sao vàng là gì? Khám phá tác dụng của cao sao vàng"
+                                    data-wpel-link="internal">
+                                    <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1.jpg.webp 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1-300x158.jpg.webp 300w"
+                                            sizes="(max-width: 1000px) 100vw, 1000px">
+                                        <img width="1000" height="525"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1.jpg"
+                                            alt="Cao Sao Vàng – thần dược đa công dụng một thời của Việt Nam"
+                                            loading="lazy" sizes="(max-width: 1000px) 100vw, 1000px"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1.jpg 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1-300x158.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1-768x403.jpg 768w"
+                                            class="lazyloaded" data-ll-status="loaded">
+                                    </picture>
+                                    <noscript>
+                                        <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                            <source type="image/webp"
+                                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1.jpg.webp 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1-300x158.jpg.webp 300w"
+                                                sizes="(max-width: 1000px) 100vw, 1000px" />
+                                            <img width="1000" height="525"
+                                                src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1.jpg"
+                                                alt="Cao Sao Vàng – thần dược đa công dụng một thời của Việt Nam"
+                                                loading="lazy"
+                                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1.jpg 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1-300x158.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2020/06/cao-sao-vang-2-1-768x403.jpg 768w"
+                                                sizes="(max-width: 1000px) 100vw, 1000px" />
+                                        </picture>
+                                    </noscript>
+                                </a>
+                                <div class="block-card-body">
+                                    <a class="post-title line-clamp-2 font-serif font-bold"
+                                        href="https://youmed.vn/tin-tuc/cao-sao-vang/" data-wpel-link="internal">Cao
+                                        sao vàng là gì? Khám phá tác dụng của cao sao vàng</a>
+                                    <div class="content-author">
+                                        <div class="article-author"><a class="url fn n"
+                                                href="https://youmed.vn/tin-tuc/bac-si/duoc-si-tran-van-thy/"
+                                                data-wpel-link="internal"><span class="author vcard">Dược sĩ TRẦN
+                                                    VÂN THY</span></a></div>
+                                    </div>
+                                </div>
+                            </article>
+                            <article id="post-6412" class="block-card">
+                                <a href="https://youmed.vn/tin-tuc/thuoc-augmentin-amoxicillin-acid-clavulanic/"
+                                    title="Bạn biết gì về thuốc kháng sinh Augmentin?" data-wpel-link="internal">
+                                    <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin.jpg.webp 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin-300x158.jpg.webp 300w"
+                                            sizes="(max-width: 1000px) 100vw, 1000px">
+                                        <img width="1000" height="525"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin.jpg"
+                                            alt="Bạn biết gì về thuốc kháng sinh Augmentin" loading="lazy"
+                                            sizes="(max-width: 1000px) 100vw, 1000px"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin.jpg 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin-300x158.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin-768x403.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin-640x336.jpg 640w"
+                                            class="lazyloaded" data-ll-status="loaded">
+                                    </picture>
+                                    <noscript>
+                                        <picture class="card-image img-fluid wp-post-image" loading="lazy">
+                                            <source type="image/webp"
+                                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin.jpg.webp 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin-300x158.jpg.webp 300w"
+                                                sizes="(max-width: 1000px) 100vw, 1000px" />
+                                            <img width="1000" height="525"
+                                                src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin.jpg"
+                                                alt="Bạn biết gì về thuốc kháng sinh Augmentin" loading="lazy"
+                                                srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin.jpg 1000w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin-300x158.jpg 300w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin-768x403.jpg 768w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2019/10/Bạn-biết-gì-về-thuốc-kháng-sinh-Augmentin-640x336.jpg 640w"
+                                                sizes="(max-width: 1000px) 100vw, 1000px" />
+                                        </picture>
+                                    </noscript>
+                                </a>
+                                <div class="block-card-body">
+                                    <a class="post-title line-clamp-2 font-serif font-bold"
+                                        href="https://youmed.vn/tin-tuc/thuoc-augmentin-amoxicillin-acid-clavulanic/"
+                                        data-wpel-link="internal">Bạn biết gì về thuốc kháng sinh Augmentin?</a>
+                                    <div class="content-author">
+                                        <div class="article-author"><a class="url fn n"
+                                                href="https://youmed.vn/tin-tuc/bac-si/duoc-si-tran-van-thy/"
+                                                data-wpel-link="internal"><span class="author vcard">Dược sĩ TRẦN
+                                                    VÂN THY</span></a></div>
+                                    </div>
+                                </div>
+                            </article>*@
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+        <section id="ym_categories_image_widget-3" class="widget section categories-image">
+            <div class="section-header">
+                <h2>Chủ Đề Được Quan Tâm</h2>
+            </div>
+            <div class="categories-block">
+                <ul class="categories-list">
+                    @foreach(var item in menus){
+
+                        <li class="category-item">
+                            <a asp-action="Topic" asp-controller="Post" asp-route-id="@item.Id" title="@item.Name"
+                                class="category-link" data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 233w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                        alt="" sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 233w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 233w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="@(Configuration["BaseAddress"] + "/img/" + item.Image)"
+                                            alt=""
+                                            srcset="@(Configuration["BaseAddress"] + "/img/" + item.Image) 233w, @(Configuration["BaseAddress"] + "/img/" + item.Image) 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">@item.Name</h3>
+                            </a>
+                        </li>
+                    }
+                   @* <div>
+
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/rang-ham-mat/cham-soc-rang-mieng/" title="Chăm sóc răng"
+                                class="category-link" data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang.png"
+                                        alt="" sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/cham-soc-rang-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Chăm sóc răng</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/dinh-duong/" title="Dinh Dưỡng" class="category-link"
+                                data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong.png" alt=""
+                                        sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dinh-duong-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Dinh Dưỡng</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/noi-tiet/dai-thao-duong/" title="Đái tháo đường"
+                                class="category-link" data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong.png"
+                                        alt="" sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/dai-thao-duong-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Đái tháo đường</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/suc-khoe-tinh-duc/" title="Sức khỏe tình dục"
+                                class="category-link" data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc.png"
+                                        alt="" sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/suc-khoe-tinh-duc-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Sức khỏe tình dục</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/tim-mach/tang-huyet-ap/" title="Huyết áp"
+                                class="category-link" data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach.png" alt=""
+                                        sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tim-mach-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Huyết áp</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/bi-quyet-song-khoe/thoi-quen-cham-soc-suc-khoe/"
+                                title="Thói quen chăm sóc sức khoẻ" class="category-link" data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song.png"
+                                        alt="" sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/thoi-quen-song-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Thói quen chăm sóc sức khoẻ</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/ung-buou/ung-thu/" title="Ung Thư" class="category-link"
+                                data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu.png" alt=""
+                                        sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/ung-thu-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Ung Thư</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/tieu-hoa/da-day/" title="Dạ dày" class="category-link"
+                                data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tieu-hoa.png.webp 233w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tieu-hoa.png" alt=""
+                                        sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tieu-hoa.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tieu-hoa-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tieu-hoa.png.webp 233w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tieu-hoa.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tieu-hoa.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/tieu-hoa-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Dạ dày</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/the-duc-the-thao/" title="Thể dục thể thao"
+                                class="category-link" data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang.png" alt=""
+                                        sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/voc-dang-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Thể dục thể thao</h3>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="https://youmed.vn/tin-tuc/than-kinh/" title="Thần kinh" class="category-link"
+                                data-wpel-link="internal">
+                                <picture class="category-image">
+                                    <source type="image/webp"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh-150x150.png.webp 150w"
+                                        sizes="(max-width: 233px) 100vw, 233px">
+                                    <img width="233" height="233"
+                                        src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh.png" alt=""
+                                        sizes="(max-width: 233px) 100vw, 233px"
+                                        srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh-150x150.png 150w"
+                                        class="lazyloaded" data-ll-status="loaded">
+                                </picture>
+                                <noscript>
+                                    <picture class="category-image">
+                                        <source type="image/webp"
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh.png.webp 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh-150x150.png.webp 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                        <img width="233" height="233"
+                                            src="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh.png"
+                                            alt=""
+                                            srcset="https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh.png 233w, https://cdn.youmed.vn/tin-tuc/wp-content/uploads/2021/06/than-kinh-150x150.png 150w"
+                                            sizes="(max-width: 233px) 100vw, 233px" />
+                                    </picture>
+                                </noscript>
+                                <h3 class="font-serif">Thần kinh</h3>
+                            </a>
+                        </li>
+                    </div>*@
+                </ul>
+            </div>
+        </section>
+        @*<section id="ym_our_promise_widget-3" class="widget section our-promise">
+            <div class="section-header">
+                <h2>Cam kết từ YouMed</h2>
+            </div>
+            <div class="our-promise-wrapper">
+                <div class="our-promise-intro">
+                    <h3>Tạo nên một nguồn thông tin sức khoẻ đáng tin cậy, dễ đọc, dễ hiểu cho mọi đối tượng độc giả
+                    </h3>
+                    <div class="btn-our-promise">Cam kết của chúng tôi <svg class="svg-icon " width="24" height="24"
+                            aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"></path>
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                        </svg></div>
+                </div>
+                <div class="our-promise-list">
+                    <a href="https://youmed.vn/tin-tuc/doi-ngu-bien-tap-vien/" class="promise-item font-serif"
+                        data-wpel-link="internal">
+                        <img src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/images/icon-01.svg"
+                            width="125" height="125" alt="" loading="lazy" class="lazyloaded"
+                            data-ll-status="loaded"><noscript><img
+                                src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/images/icon-01.svg"
+                                width="125" height="125" alt="" loading="lazy"></noscript>
+                        <p>Biên soạn bởi <br>Bác sĩ và Dược sĩ</p>
+                    </a>
+                    <a href="https://youmed.vn/tin-tuc/quy-trinh-bien-tap/" class="promise-item font-serif"
+                        data-wpel-link="internal">
+                        <img src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/images/icon-02.svg"
+                            width="125" height="125" alt="" loading="lazy" class="lazyloaded"
+                            data-ll-status="loaded"><noscript><img
+                                src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/images/icon-02.svg"
+                                width="125" height="125" alt="" loading="lazy"></noscript>
+                        <p>Chính sách biên tập nội dung minh bạch</p>
+                    </a>
+                    <a href="https://youmed.vn/tin-tuc/ban-dieu-hanh-youmed/" class="promise-item font-serif"
+                        data-wpel-link="internal">
+                        <img src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/images/icon-03.svg"
+                            width="125" height="125" alt="" loading="lazy" class="lazyloaded"
+                            data-ll-status="loaded"><noscript><img
+                                src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/images/icon-03.svg"
+                                width="125" height="125" alt="" loading="lazy"></noscript>
+                        <p>Thành viên ban <br>điều hành</p>
+                    </a>
+                    <a href="https://youmed.vn/tin-tuc/de-dat-duoc-chung-chi-quoc-te-hon-health-on-the-net-youmed-da-vuot-qua-8-dieu-kien-gi/"
+                        class="promise-item font-serif" data-wpel-link="internal">
+                        <img src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/images/icon-04.svg"
+                            width="125" height="125" alt="" loading="lazy" class="lazyloaded"
+                            data-ll-status="loaded"><noscript><img
+                                src="https://cdn.youmed.vn/tin-tuc/wp-content/themes/amp/assets/images/icon-04.svg"
+                                width="125" height="125" alt="" loading="lazy"></noscript>
+                        <p>Được chứng nhận <br>bởi HON</p>
+                    </a>
+                </div>
+            </div>
+        </section>*@
+    </div>
+</main>
+

@@ -1,0 +1,800 @@
+﻿@using DoctorManagement.ViewModels.System.Patient
+
+@model DoctorManagement.ViewModels.System.Patient.RegisterEnterOTPRequest
+@{
+    ViewData["Title"] = "RegisterOTP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    RegisterPatientSession patientSession = (RegisterPatientSession) ViewBag.RegisterPatientSession;
+}
+@section Stylesheet{
+    <style>
+        .root-layout[_ngcontent-serverApp-c55] {
+            background-color: #f6f6f6
+        }
+    </style>
+    <style>
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @@media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @@media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c54] .ant-collapse-content-box {
+            padding: 0 !important
+        }
+
+        nz-collapse-panel[_ngcontent-serverApp-c54] {
+            padding: 0 !important
+        }
+
+        [_nghost-serverApp-c54] .ant-collapse-header {
+            cursor: pointer !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 600 !important;
+            color: currentColor !important
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c54] .ant-collapse-header {
+                cursor: auto !important
+            }
+
+            nz-collapse-panel[_ngcontent-serverApp-c54] {
+                border-style: none !important
+            }
+        }
+
+        a[_ngcontent-serverApp-c54]:hover {
+            color: currentColor
+        }
+    </style>
+    <style>
+        .wrapper-main[_ngcontent-serverApp-c67] {
+            background: linear-gradient(90deg, #00c6fb 0%, #0758d8 98.74%)
+        }
+
+        @@media only screen and (max-width: 767px) {
+            .banner-navigation[_ngcontent-serverApp-c67] {
+                background: white
+            }
+        }
+
+        .selected[_ngcontent-serverApp-c67] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        .see-more-box[_ngcontent-serverApp-c192] {
+            background: linear-gradient(0deg, #ffffff 50%, rgba(255, 255, 255, 0) 88.64%);
+            z-index: 3
+        }
+
+        .expanded[_ngcontent-serverApp-c192] {
+            height: 850px;
+            transition: height 1.25s linear
+        }
+
+        .not-expanded[_ngcontent-serverApp-c192] {
+            height: auto
+        }
+    </style>
+    <style>
+        [nz-carousel-content][_ngcontent-serverApp-c68] {
+            overflow: hidden
+        }
+    </style>
+    <style>
+        .main-search[_ngcontent-serverApp-c64] {
+            margin: 0;
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: .5rem;
+            border-color: transparent;
+            padding: .75rem 2.25rem .75rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+
+        .main-search[_ngcontent-serverApp-c64]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .main-search[_ngcontent-serverApp-c64]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            outline: 2px solid transparent;
+            outline-offset: 2px
+        }
+
+        @@media (min-width: 782px) {
+            .main-search[_ngcontent-serverApp-c64] {
+                padding-right: .75rem;
+                padding-left: 3rem
+            }
+        }
+
+        .main-search[_ngcontent-serverApp-c64]::-webkit-calendar-picker-indicator {
+            display: none !important
+        }
+    </style>
+    <style>
+        .bookmark_hospital[_ngcontent-serverApp-c66]::-webkit-scrollbar {
+            background: transparent;
+            width: 0px
+        }
+    </style>
+    <style>
+        .typical-doctor-card[_ngcontent-serverApp-c189] {
+            box-shadow: 0 1px 2px #0000001a, 0 1px 1px #0000000f
+        }
+
+        .btn-booking-primary[_ngcontent-serverApp-c189] {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            width: 124px;
+            height: 41px;
+            left: 0px;
+            top: 0px;
+            background: #eff6ff;
+            border: 1px solid #eff6ff;
+            box-sizing: border-box;
+            box-shadow: 0 1px 1px #0000000d;
+            border-radius: 4px;
+            flex: none;
+            order: 0;
+            align-self: stretch;
+            flex-grow: 0
+        }
+
+        .limit-line-break[_ngcontent-serverApp-c189] {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            line-height: 16px;
+            max-height: 32px;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c213] .ant-tabs-nav-list {
+            width: 100%;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c213] .ant-tabs-nav-list .tab-link:hover {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c213] .ant-tabs-nav-list .ant-tabs-tab {
+            width: 50%;
+            justify-content: center
+        }
+
+        [_nghost-serverApp-c213] .ant-tabs-nav-list .ant-tabs-tab .ant-tabs-tab-btn {
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500
+        }
+
+        [_nghost-serverApp-c213] .ant-tabs-nav-list .ant-tabs-tab .ant-tabs-tab-btn:hover {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c213] .ant-tabs-nav-list .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .form-control[_ngcontent-serverApp-c213] {
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c213]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c213]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-label[_ngcontent-serverApp-c213] {
+            margin-bottom: .25rem;
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c213] {
+            margin-right: 0
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c212] {
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: 0;
+            border-top-right-radius: .375rem;
+            border-bottom-right-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem
+        }
+
+        .form-control[_ngcontent-serverApp-c212]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c212]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-label[_ngcontent-serverApp-c212] {
+            margin-bottom: .25rem;
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c212] {
+            flex-direction: column;
+            margin: 0
+        }
+    </style>
+    <style type="text/css"></style>
+    <style>
+        [disabled][_ngcontent-serverApp-c218] {
+            opacity: .4
+        }
+
+        [_nghost-serverApp-c218] .ant-tabs-nav-list {
+            width: 100%
+        }
+
+        [_nghost-serverApp-c218] .ant-tabs-tab {
+            width: calc(100% / 3);
+            justify-content: center;
+            cursor: default !important
+        }
+
+        [_nghost-serverApp-c218] .ant-tabs-tab-btn {
+            font-weight: 600;
+            line-height: 17px;
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [disabled][_ngcontent-serverApp-c215] {
+            opacity: .4
+        }
+
+        @@media only screen and (max-width: 767px) {
+            [_nghost-serverApp-c215] .otp-input {
+                width: 40px !important;
+                height: 44px !important
+            }
+        }
+    </style>
+    <style>
+        [disabled][_ngcontent-serverApp-c216] {
+            opacity: .4
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c216] {
+            flex-direction: column
+        }
+
+        .ant-row[_ngcontent-serverApp-c216] {
+            margin: 0
+        }
+    </style>
+    <style>
+        .otp-input[_ngcontent-serverApp-c214] {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            border: solid 1px #c5c5c5;
+            text-align: center;
+            font-size: 32px
+        }
+
+        .ng-otp-input-wrapper[_ngcontent-serverApp-c214] .otp-input[_ngcontent-serverApp-c214]:not(:last-child) {
+            margin-right: 8px
+        }
+
+        @@media screen and (max-width: 767px) {
+            .otp-input[_ngcontent-serverApp-c214] {
+                width: 40px;
+                font-size: 24px;
+                height: 40px
+            }
+        }
+
+        @@media screen and (max-width: 420px) {
+            .otp-input[_ngcontent-serverApp-c214] {
+                width: 30px;
+                font-size: 18px;
+                height: 30px
+            }
+        }
+    </style>
+}
+<app-register _nghost-serverapp-c218="" class="ng-star-inserted">
+     <nz-spin _ngcontent-serverapp-c218="" class="ant-spin-nested-loading">
+                    
+                    
+                    <div class="ant-spin-container ng-star-inserted">
+                        <div _ngcontent-serverapp-c218="" class="w-full">
+                            <div _ngcontent-serverapp-c218=""
+                                class="md:max-w-[1280px] md:mx-auto md:flex md:flex-row md:justify-center md:items-center md:gap-10 md:py-[60px]">
+                                <div _ngcontent-serverapp-c218="" class="p-6 pb-[60px] md:p-0">
+                                    <nz-tabset _ngcontent-serverapp-c218=""
+                                        class="ant-tabs md:w-[800px] md:p-6 md:rounded-lg md:border-solid md:border md:border-gray-100 md:shadow-sm ant-tabs-top ant-tabs-default">
+                                        <nz-tabs-nav role="tablist" class="ant-tabs-nav ng-star-inserted">
+                                            <div class="ant-tabs-nav-wrap">
+                                                <div nztabscrolllist="" class="ant-tabs-nav-list"
+                                                    style="transform: translate(0px, 0px);">
+                                                    <div
+                                                        class="ant-tabs-tab ant-tabs-tab-active ant-tabs-tab-disabled ng-star-inserted">
+                                                        <div role="tab" nztabnavitem="" cdkmonitorelementfocus=""
+                                                            class="ant-tabs-tab-btn" aria-disabled="true"
+                                                            aria-selected="true" aria-controls="nz-tabs-1-tab-0">1.Xác
+                                                            thực
+                                                            
+                                                            
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div class="ant-tabs-tab ant-tabs-tab-disabled ng-star-inserted">
+                                                        <div role="tab" nztabnavitem="" cdkmonitorelementfocus=""
+                                                            class="ant-tabs-tab-btn" aria-disabled="true"
+                                                            aria-selected="false" aria-controls="nz-tabs-1-tab-1">2.Mật
+                                                            khẩu
+                                                            
+                                                            
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div class="ant-tabs-tab ant-tabs-tab-disabled ng-star-inserted">
+                                                        <div role="tab" nztabnavitem="" cdkmonitorelementfocus=""
+                                                            class="ant-tabs-tab-btn" aria-disabled="true"
+                                                            aria-selected="false" aria-controls="nz-tabs-1-tab-2">3.Tạo
+                                                            hồ sơ
+                                                            
+                                                            
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div nz-tabs-ink-bar=""
+                                                        class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
+                                                        style="left: 0px; width: 229px;"></div>
+                                                </div>
+                                            </div>
+                                            <nz-tab-nav-operation
+                                                class="ant-tabs-nav-operations ant-tabs-nav-operations-hidden"><button
+                                                    nz-dropdown="" type="button" tabindex="-1" aria-hidden="true"
+                                                    nzoverlayclassname="nz-tabs-dropdown"
+                                                    class="ant-dropdown-trigger ant-tabs-nav-more"><i nz-icon=""
+                                                        nztype="ellipsis" class="anticon anticon-ellipsis"><svg
+                                                            viewBox="64 64 896 896" focusable="false"
+                                                            fill="currentColor" width="1em" height="1em"
+                                                            data-icon="ellipsis" aria-hidden="true">
+                                                            <path
+                                                                d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z">
+                                                            </path>
+                                                        </svg></i></button>
+                                                
+                                                
+                                                
+                                            </nz-tab-nav-operation>
+                                            
+                                        </nz-tabs-nav>
+                                        
+                                        <div class="ant-tabs-content-holder">
+                                            <div class="ant-tabs-content ant-tabs-content-top ant-tabs-content-animated"
+                                                style="margin-left: 0%;">
+                                                <div nz-tab-body=""
+                                                    class="ant-tabs-tabpane ant-tabs-tabpane-active ng-star-inserted"
+                                                    tabindex="0" aria-hidden="false">
+                                                    <app-verify-opt _ngcontent-serverapp-c218=""
+                                                        _nghost-serverapp-c215="" class="ng-star-inserted">
+                                                        <form _ngcontent-serverapp-c215="" class="border-bottom" asp-action="RegisterEnterOTP" method="post"> 
+                                                            <div _ngcontent-serverapp-c215=""
+                                                                class="wrapper-otp flex flex-col justify-center items-center">
+                                                                <p _ngcontent-serverapp-c215=""
+                                                                    class="text-sm-w500 my-6">Nhập mã OTP @*@patientSession.NoOTP*@ vừa được gửi
+                                                                    đến số ... @patientSession.Email</p>
+                                                                <ng-otp-input _ngcontent-serverapp-c215=""
+                                                                    _nghost-serverapp-c214="">
+                                                                    <div _ngcontent-serverapp-c214=""
+                                                                        class="ng-otp-input-wrapper wrapper ng-star-inserted"
+                                                                        id="c_yooi3bd79a8l2onbgdc">
+                                                                            <input asp-for="Otp_0" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-pristine ng-valid ng-star-inserted ng-touched"
+                                                                            id="otp_0_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_1" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_1_yooi3bd79a8l2onbgdc" type="text" 
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_2" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_2_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_3" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_3_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_4" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_4_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                            <input asp-for="Otp_5" maxlength="1" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                            _ngcontent-serverapp-c214=""
+                                                                            autocomplete="one-time-code"
+                                                                            class="otp-input ng-untouched ng-pristine ng-valid ng-star-inserted"
+                                                                            id="otp_5_yooi3bd79a8l2onbgdc" type="text"
+                                                                            placeholder="" pattern="\d*">
+                                                                        
+                                                                    </div>
+                                                                    <span 
+                                                                                class="text-danger ant-form-item-children-icon ng-tns-c210-10">
+                                                                                
+                                                                            </span>
+                                                                </ng-otp-input>
+                                                            </div>
+                                                            <div _ngcontent-serverapp-c215=""
+                                                                class="flex justify-center">
+                                                                <input type="hidden" asp-for="Email" />
+                                                                <button id="btn-otp" disabled=""
+                                                                    _ngcontent-serverapp-c215="" nz-button=""
+                                                                    class="w-full md:w-auto md:px-10 button button--login--form hover:opacity-90 mt-10 mb-6"
+                                                                    > Tiếp tục</button></div>
+                                                        </form>
+                                                        <div _ngcontent-serverapp-c215=""
+                                                            class="text-sm-w500 mt-6 mb-[60px] text-center"> Không nhận
+                                                            được mã OTP?<span _ngcontent-serverapp-c215="" onclick="resetOtp()"
+                                                                class="text-primary cursor-pointer" id="time" data-id="" >Thử lại (02:00s)
+                                                            </span></div>
+                                                    </app-verify-opt>
+                                                    
+                                                    
+                                                    
+                                                </div>
+                                                <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
+                                                    tabindex="-1" aria-hidden="true"
+                                                    style="visibility: hidden; height: 0px;">
+                                                    
+                                                </div>
+                                                <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
+                                                    tabindex="-1" aria-hidden="true"
+                                                    style="visibility: hidden; height: 0px;">
+                                                    
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </nz-tabset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </nz-spin>
+</app-register>
+@section Alert{
+    <div class="cdk-global-overlay-wrapper" dir="ltr">
+      @if (TempData["AlertMessage"] != null)
+      {
+          <div id="cdk-overlay-9" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
+            <nz-message-container>
+              <div class="ant-message" style="top: 24px;">
+                <nz-message class="ng-tns-c43-75 ng-star-inserted">
+                  <div class="ant-message-notice ng-tns-c43-75 ng-trigger ng-trigger-moveUpMotion">
+                    <div class="ant-message-notice-content ng-tns-c43-75">
+                      <div class="ant-message-custom-content ng-tns-c43-75 ant-message-@TempData["AlertType"]">
+                          @if(TempData["AlertType"]=="success"){
+
+                              <i nz-icon="" nztype="check-circle" class="anticon ng-tns-c43-75 anticon-check-circle ng-star-inserted" style="">
+                                <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                                    class="ng-tns-c43-75" data-icon="check-circle" aria-hidden="true">
+                                    <path
+                                      d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z">
+                                    </path>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                              </i>
+                          }else{
+                             <i nz-icon="" nztype="close-circle"
+                                class="anticon ng-tns-c43-5 anticon-close-circle ng-star-inserted" style=""><svg
+                                    viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em"
+                                    height="1em" class="ng-tns-c43-5" data-icon="close-circle"
+                                    aria-hidden="true">
+                                    <path
+                                        d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 .3L512 465.6l-99.3-118.4-66.1-.3c-4.4 0-8 3.5-8 8 0 1.9.7 3.7 1.9 5.2l130.1 155L340.5 670a8.32 8.32 0 00-1.9 5.2c0 4.4 3.6 8 8 8l66.1-.3L512 564.4l99.3 118.4 66 .3c4.4 0 8-3.5 8-8 0-1.9-.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z">
+                                    </path>
+                                    <path
+                                        d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                             </i>
+
+                          }
+                        <span class="ng-tns-c43-75 ng-star-inserted" style="">@TempData["AlertMessage"]</span>
+                      </div>
+                    </div>
+                  </div>
+                </nz-message>
+              </div>
+            </nz-message-container>
+          </div>
+            
+      } 
+    </div>
+    
+}
+@section JavaScript{
+    <script>
+       
+        const otpInput = document.querySelectorAll('.ng-otp-input-wrapper .otp-input');
+   
+        var $submit = $('#btn-otp');
+        var $time = $('#time');
+        var timeHtml =document.getElementById("time");
+        
+        otpInput.forEach((input) => {
+            input.addEventListener('keyup', (e) => {
+                const element = e.target;
+        
+                if (element.value.match(/\d/)) {
+                    //yourInputNumber += element.value;
+                    //alertText('.wrapper-otp .text-danger', '');
+
+                    if (element.nextElementSibling) {
+                        element.nextElementSibling.focus();
+                    }
+                    var checktime = timeHtml.innerHTML;
+                    if(checktime == "Thử lại (00:00s)")
+                    {
+                        $submit.attr("disabled", true);
+                    }else{
+                        $submit.removeAttr("disabled");
+                    }
+                    
+                } else {
+                    $submit.attr("disabled", true);
+                    //alertText(
+                     //   '.wrapper-otp .text-danger',
+                      //  'Nhập một số vào mỗi trường'
+                    //);
+            
+                }
+                var inputOtp = document.querySelectorAll(".ng-otp-input-wrapper .otp-input");
+                inputOtp.forEach(function(item) {
+                        if(item.value == "" ) $submit.attr("disabled", true);
+                })
+            });
+        });
+        function alertText(element, text) {
+            document.querySelector(`${element}`).textContent = text;
+        }
+
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = "Thử lại (" + minutes + ":" + seconds + "s)";
+                
+                if (--timer < 0) {
+                    timer = 0;
+                    $submit.attr("disabled", true);
+                }
+            }, 1000);
+        }
+        function resetOtp() {
+          var fiveMinutes = 60 * 2, elem = document.querySelector('#time');
+          if (elem) {
+              var checktime = timeHtml.innerHTML;
+              if(checktime == "Thử lại (00:00s)")
+              {
+                  var empId = $("#PhoneNumber").val();
+                  $.ajax({
+                    url: "/Login/ResetOtp",
+                    data: { phoneNumber: empId},
+                    dataType: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.response == 1) {
+                              elem.innerHTML = "Không cho phép đặt khám";
+                              startTimer(fiveMinutes, elem);
+                        } else if (result.response == 2) {
+                              elem.innerHTML = "Cho phép đặt khám";
+                        }else{
+                            elem.innerHTML = "Không thực hiện được chức năng này.";
+                        }
+                    }
+                  })
+                  
+              }
+              
+          }
+        }
+
+        window.onload = function () {
+            var fiveMinutes = 60 * 2,
+                display = document.querySelector('#time');
+            startTimer(fiveMinutes, display);
+        };
+    </script>
+}
+

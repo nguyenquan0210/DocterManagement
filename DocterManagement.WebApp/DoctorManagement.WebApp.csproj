@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\wp-includes\js\jquery\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\img\booking\logo.svg" />
+    <None Include="wwwroot\img\booking\png\app_download.webp" />
+    <None Include="wwwroot\img\booking\png\Decor.webp" />
+    <None Include="wwwroot\img\booking\png\Doctor\Feature1.webp" />
+    <None Include="wwwroot\img\booking\png\Doctor\Feature2.webp" />
+    <None Include="wwwroot\img\booking\png\Home\Feature1.webp" />
+    <None Include="wwwroot\img\booking\png\Home\Feature2.webp" />
+    <None Include="wwwroot\img\booking\png\Home\Feature3.webp" />
+    <None Include="wwwroot\img\booking\png\ip13.webp" />
+    <None Include="wwwroot\img\booking\svg\apple-store.svg" />
+    <None Include="wwwroot\img\booking\svg\arrow-down.svg" />
+    <None Include="wwwroot\img\booking\svg\boldWarning2.svg" />
+    <None Include="wwwroot\img\booking\svg\Clinic.svg" />
+    <None Include="wwwroot\img\booking\svg\dadangky.svg" />
+    <None Include="wwwroot\img\booking\svg\Doctor.svg" />
+    <None Include="wwwroot\img\booking\svg\facebook.svg" />
+    <None Include="wwwroot\img\booking\svg\Family-Block.svg" />
+    <None Include="wwwroot\img\booking\svg\google-play.svg" />
+    <None Include="wwwroot\img\booking\svg\Hide.svg" />
+    <None Include="wwwroot\img\booking\svg\hospital.svg" />
+    <None Include="wwwroot\img\booking\svg\hospital_blue.svg" />
+    <None Include="wwwroot\img\booking\svg\iconCheck.svg" />
+    <None Include="wwwroot\img\booking\svg\Laboratory.svg" />
+    <None Include="wwwroot\img\booking\svg\like.svg" />
+    <None Include="wwwroot\img\booking\svg\linkedin.svg" />
+    <None Include="wwwroot\img\booking\svg\News.svg" />
+    <None Include="wwwroot\img\booking\svg\prizes.svg" />
+    <None Include="wwwroot\img\booking\svg\rounded_full.svg" />
+    <None Include="wwwroot\img\booking\svg\route.svg" />
+    <None Include="wwwroot\img\booking\svg\routing.svg" />
+    <None Include="wwwroot\img\booking\svg\search-normal-blue.svg" />
+    <None Include="wwwroot\img\booking\svg\shield-security.svg" />
+    <None Include="wwwroot\img\booking\svg\Store.svg" />
+    <None Include="wwwroot\img\booking\svg\sun-fog.svg" />
+    <None Include="wwwroot\img\booking\svg\sun.svg" />
+    <None Include="wwwroot\img\booking\svg\teacher.svg" />
+    <None Include="wwwroot\img\booking\svg\unlock.svg" />
+    <None Include="wwwroot\img\booking\svg\us.svg" />
+    <None Include="wwwroot\img\booking\svg\vietnam.svg" />
+    <None Include="wwwroot\img\booking\svg\wallet-minus.svg" />
+    <None Include="wwwroot\img\booking\svg\x.svg" />
+    <None Include="wwwroot\img\booking\svg\youtube.svg" />
+    <None Include="wwwroot\img\booking\svg\zalo.svg" />
+    <None Include="wwwroot\img\home2\icon\010-heart.svg" />
+    <None Include="wwwroot\img\home2\icon\011-kidneys.svg" />
+    <None Include="wwwroot\img\home2\icon\025-spine.svg" />
+    <None Include="wwwroot\img\home2\icon\027-stomach.svg" />
+    <None Include="wwwroot\img\home2\icon\child.svg" />
+    <None Include="wwwroot\img\home2\icon\pregnant.svg" />
+    <None Include="wwwroot\img\placeholder.webp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DocterManagement.ApiIntegration\DoctorManagement.ApiIntegration.csproj" />
+    <ProjectReference Include="..\DocterManagement.ViewModels\DoctorManagement.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\img\booking\logo.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

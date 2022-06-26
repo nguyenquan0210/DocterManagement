@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DocterManagement.Data.Enums
+namespace DoctorManagement.Data.Enums
 {
     public enum StatusIllness
     {
         heavy,
         central,
-        light
+        light, 
+        Other
     }
 }

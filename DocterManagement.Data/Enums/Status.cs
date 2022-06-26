@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DocterManagement.Data.Enums
+namespace DoctorManagement.Data.Enums
 {
     public enum Status
     {
-        InActive,
-        Active
+        NotActivate,
+        Active, 
+        InActive
     }
 }

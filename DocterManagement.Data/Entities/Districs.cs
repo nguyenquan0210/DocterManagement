@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DocterManagement.Data.Entities
+namespace DoctorManagement.Data.Entities
 {
     public class Districs
     {
@@ -12,7 +12,7 @@ namespace DocterManagement.Data.Entities
         public string Name { get; set; }
         public int SortOrder { get; set; }
         
-        public List<Wards> Wards { get; set; }
+        //public List<Locations> Wards { get; set; }
 
     }
 }

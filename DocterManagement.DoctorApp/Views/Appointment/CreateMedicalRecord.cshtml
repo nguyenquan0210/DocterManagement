@@ -1,0 +1,634 @@
+﻿@using DoctorManagement.Data.Enums
+@using DoctorManagement.ViewModels.Catalog.Appointment
+@using DoctorManagement.ViewModels.Catalog.MedicalRecords
+@model DoctorManagement.ViewModels.Catalog.MedicalRecords.MedicalRecordCreateRequest
+
+@{
+    ViewData["Title"] = "CreateMedicalRecord";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var appointment = (AppointmentVm)ViewBag.Appointment;
+    var medicines = (List<MedicineCreate>)ViewBag.Medicine;
+    var services = (List<ServiceCreate>)ViewBag.Service;
+}
+<link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+@section Header{
+    <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li class="breadcrumb-item text-sm">
+            <a class="opacity-3 text-dark" href="javascript:;">
+                <svg width="12px" height="12px" class="mb-1" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <title>Bác Sĩ </title>
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-1716.000000, -439.000000)" fill="#252f40" fill-rule="nonzero">
+                            <g transform="translate(1716.000000, 291.000000)">
+                                <g transform="translate(0.000000, 148.000000)">
+                                    <path d="M46.7199583,10.7414583 L40.8449583,0.949791667 C40.4909749,0.360605034 39.8540131,0 39.1666667,0 L7.83333333,0 C7.1459869,0 6.50902508,0.360605034 6.15504167,0.949791667 L0.280041667,10.7414583 C0.0969176761,11.0460037 -1.23209662e-05,11.3946378 -1.23209662e-05,11.75 C-0.00758042603,16.0663731 3.48367543,19.5725301 7.80004167,19.5833333 L7.81570833,19.5833333 C9.75003686,19.5882688 11.6168794,18.8726691 13.0522917,17.5760417 C16.0171492,20.2556967 20.5292675,20.2556967 23.494125,17.5760417 C26.4604562,20.2616016 30.9794188,20.2616016 33.94575,17.5760417 C36.2421905,19.6477597 39.5441143,20.1708521 42.3684437,18.9103691 C45.1927731,17.649886 47.0084685,14.8428276 47.0000295,11.75 C47.0000295,11.3946378 46.9030823,11.0460037 46.7199583,10.7414583 Z"></path>
+                                    <path d="M39.198,22.4912623 C37.3776246,22.4928106 35.5817531,22.0149171 33.951625,21.0951667 L33.92225,21.1107282 C31.1430221,22.6838032 27.9255001,22.9318916 24.9844167,21.7998837 C24.4750389,21.605469 23.9777983,21.3722567 23.4960833,21.1018359 L23.4745417,21.1129513 C20.6961809,22.6871153 17.4786145,22.9344611 14.5386667,21.7998837 C14.029926,21.6054643 13.533337,21.3722507 13.0522917,21.1018359 C11.4250962,22.0190609 9.63246555,22.4947009 7.81570833,22.4912623 C7.16510551,22.4842162 6.51607673,22.4173045 5.875,22.2911849 L5.875,44.7220845 C5.875,45.9498589 6.7517757,46.9451667 7.83333333,46.9451667 L19.5833333,46.9451667 L19.5833333,33.6066734 L27.4166667,33.6066734 L27.4166667,46.9451667 L39.1666667,46.9451667 C40.2482243,46.9451667 41.125,45.9498589 41.125,44.7220845 L41.125,22.2822926 C40.4887822,22.4116582 39.8442868,22.4815492 39.198,22.4912623 Z"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+            </a>
+        </li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý đặt khám</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tạo hồ sơ bệnh</li>
+    </ol>
+    <h6 class="font-weight-bolder mb-0">Tạo hồ sơ bệnh theo lịch hẹn</h6>
+}
+@section Search{
+	<form asp-action="Index"  method="get">
+		<div class="input-group">
+			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
+			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
+		</div>
+	</form>
+}
+<style>
+    .swal2-validation-message {
+         display: none;
+    }
+    .form-section__form-group.error .swal2-validation-message {
+        display: block;
+    }
+</style>
+<div class="container-fluid my-3 py-3">
+    <div class="row mb-5">
+        <div class="col-lg-12 mt-lg-0 mt-4">
+                <div class="card mt-4" id="basic-info">
+                    <div class="card-header">
+                        <div class="d-lg-flex">
+                            <div>
+                                 <h5>Tạo hồ sơ bệnh</h5>
+                                <p class="text-sm mb-0">
+                                    Tạo hồ sơ bệnh theo lịch hẹn.
+                                </p>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                           
+                                <div class="ms-auto my-auto">
+                                
+                                 
+                                     
+                                      <span class="badge 
+                                            @(appointment.Status==StatusAppointment.approved?"badge-dark":
+                                                                appointment.Status==StatusAppointment.cancel?"badge-danger":
+                                                                appointment.Status==StatusAppointment.complete?"badge-success":"badge-warning")
+                                            badge-sm" >
+                                                @(appointment.Status==StatusAppointment.approved?"Đợi khám":
+                                                                appointment.Status==StatusAppointment.cancel?"Đã hủy":
+                                                                appointment.Status==StatusAppointment.complete?"Đã khám":"lịch khám quá hạn")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="card-body pt-0">
+                    <div class="row">
+                      
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-2">
+                                    <label class="form-label mt-4">Mã bệnh nhân</label>
+                                    <p  class="multisteps-form__input form-control" > @appointment.Patient.No</p>
+
+                                </div>
+                                <div class="col-3">
+                                   <label class="form-label mt-4">Tên bệnh nhân</label>
+                                    <p  class="multisteps-form__input form-control" > @appointment.Patient.Name</p>
+
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label mt-4">Email</label>
+                                    <p  class="multisteps-form__input form-control" > @appointment.Patient.RelativeEmail</p>
+
+                                </div>
+                                <div class="col-3">
+                                   <label class="form-label mt-4">Số điện thoại</label>
+                                    <p  class="multisteps-form__input form-control" > @appointment.Patient.RelativePhone</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                </div>
+                <div class="card mt-4" id="basic-info">
+                    <div class="card-header">
+                        <div class="d-lg-flex">
+                            <div>
+                                 <h5>Thông tin nộp phí</h5>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                           
+                                <div class="ms-auto my-auto">
+                                
+                                 
+                                     
+                                      <span class="badge  badge-success  badge-sm" >
+                                              STT:  @appointment.Stt</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="CreateMedicalRecord" method="post" >
+                        <div class="card-body pt-0">
+                            <div class="row">
+                                <div class="col-12">
+                            
+                                    <div class="row">
+                               
+                                        <div class="col-2">
+                                           <label class="form-label mt-4">Mã đặt khám</label>
+                                            <p  class="multisteps-form__input form-control" > @appointment.No</p>
+
+                                        </div>
+                                         <div class="col-2">
+                                            <label  class="form-label mt-4">Ngày khám</label>
+                                            <p  class="multisteps-form__input form-control" > @(appointment.Schedule.CheckInDate.DayOfWeek +", "+ appointment.Schedule.CheckInDate.ToShortDateString())</p>
+
+                                        </div>
+                                        <div class="col-2">
+                                            <label  class="form-label mt-4">Giời khám</label>
+                                            <p  class="multisteps-form__input form-control" > @(appointment.SlotSchedule.FromTime.ToString().Substring(0,5)+"-"+appointment.SlotSchedule.ToTime.ToString().Substring(0,5))</p>
+
+                                        </div>
+                                       <div class="col-6">
+                                           <label class="form-label mt-4">Đặt khám từ</label>
+                                            <p  class="multisteps-form__input form-control" > @(appointment.IsDoctor==true?"đặt khám theo bác sĩ":"đặt khám theo phòng khám")</p>
+
+                                        </div>
+                                    </div>
+                            
+                                   
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                            
+                                    <div class="row">
+                               
+                                        <div class="col-8">
+                                            <label asp-for="Diagnose" class="form-label mt-4"></label>
+                                            <textarea asp-for="Diagnose"  class="multisteps-form__input form-control" ></textarea>
+                                            <span asp-validation-for="Diagnose" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <label asp-for="StatusIllness" class="form-label mt-4"></label>
+                                            <select asp-for="StatusIllness" oninvalid="@StatusIllness.Other" asp-items="@ViewBag.Status" class= "multisteps-form__input form-control" >
+                                            </select>
+                                            <span asp-validation-for="StatusIllness" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-12">
+                                            <label asp-for="Note" class="form-label mt-4"></label>
+                                            <textarea asp-for="Note" class="multisteps-form__input form-control" >  </textarea>
+                                            <span asp-validation-for="Note" class="text-danger"></span>
+                                        </div>
+                                   
+                                    </div>
+                            
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="d-lg-flex">
+
+                                                <label asp-for="Medicine" class="form-label mt-4"></label>
+                                                <div class="ms-auto my-auto  mt-4 ">
+                           
+                                                    <div class="ms-auto my-auto">
+                                
+                                 
+                                     
+                                                          <button class="btn btn-icon btn-2 btn-success" type="button" onclick="AddMedicine()">
+	                                                        <span class="btn-inner--icon"><i class='bx bx-plus-medical' style='color:#ffffff'  ></i></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="table-medicine" class="table-responsive @(medicines.Count() == 0 ?"delete_none":"")">
+                                              <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                               
+                                                <div class="dataTable-container">
+                                                  <table class="table table-flush dataTable-table" id="datatable-search">
+                                                    <thead class="thead-light">
+                                                      <tr>
+                                                        <th data-sortable="" style="width: 3%;"><a href="#" class="dataTable-sorter">Stt</a></th>
+                                                        <th data-sortable="" style="width: 15.701%;"><a href="#" class="dataTable-sorter">Tên thuốc</a></th>
+                                                        <th data-sortable="" style="width: 10.701%;"><a href="#" class="dataTable-sorter">Cách dùng</a></th>
+                                                        <th data-sortable="" style="width: 12%;"><a href="#" class="dataTable-sorter">Số lượng</a></th>
+                                                        <th data-sortable="" style="width: 8%;"><a href="#" class="dataTable-sorter">Sáng</a></th>
+                                                        <th data-sortable="" style="width: 8%;"><a href="#" class="dataTable-sorter">Trưa</a></th>
+                                                        <th data-sortable="" style="width: 8%;"><a href="#" class="dataTable-sorter">Chiều</a></th>
+                                                        <th data-sortable="" style="width: 8%;"><a href="#" class="dataTable-sorter">Tối</a></th>
+                                                        <th data-sortable="" style="width: 10%;"><a href="#" class="dataTable-sorter">Giá tiền</a></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id="item-medicine">
+                                                        @{var i =0;}
+                                                        @foreach(var item in medicines){
+
+                                                          <tr id="row-medicine-@i">
+                                                            <td>
+                                                              <div class="d-flex align-items-center">
+                                                               
+                                                                <p class="text-xs font-weight-bold ms-2 mb-0">@(i+1)</p>
+                                                              </div>
+                                                            </td>
+                                                            <td class="font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Name</span>
+                                                              <input type="hidden" asp-for="Medicine[i].Name" value="@item.Name" />
+                                                              <input type="hidden" asp-for="Medicine[i].MedicineId" value="@item.MedicineId"  />
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Use</span>
+                                                              <input type="hidden" asp-for="Medicine[i].Use" value="@item.Use" />
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                <div class="input-group">
+                                                                  <input asp-for="Medicine[i].Qty" value="@item.Qty" class="form-control">
+                                                                  <span class="input-group-text" >@item.Unit</span>
+                                                                </div>
+                                                                
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                <input asp-for="Medicine[i].Morning" value="@item.Morning" class="multisteps-form__input form-control" />
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <input asp-for="Medicine[i].Noon" value="@item.Noon" class="multisteps-form__input form-control" />
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <input asp-for="Medicine[i].Afternoon" value="@item.Afternoon" class="multisteps-form__input form-control" />
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <input asp-for="Medicine[i].Night" value="@item.Night" class="multisteps-form__input form-control" />
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <input type="hidden" asp-for="Medicine[i].Price" value="@item.Price" />
+                                                              <input type="hidden" asp-for="Medicine[i].TotalAmount" value="@item.TotalAmount" />
+                                                              
+                                                              <div class="d-flex align-items-center">
+                                                                  
+                                                                  <span class="my-2 me-2 text-xs">@item.TotalAmountString</span>
+                                                                  <button id="remove-item-medicine-@i" type="button" onclick="removeitemmedicine(@i)" data-id="@item.MedicineId" class="btn btn-icon-only btn-rounded btn-outline-danger mb-0  btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                                              </div>
+                                                              
+                                                            </td>
+                                                          </tr>
+                                                          i++;
+                                                        }
+          
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                                
+                                              </div>
+                                            </div>
+                                        </div>
+                                        
+                               
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="d-lg-flex">
+
+                                                <label asp-for="Service" class="form-label mt-4"></label>
+                                                <div class="ms-auto my-auto  mt-4 ">
+                           
+                                                    <div class="ms-auto my-auto">
+                                                          <button class="btn btn-icon btn-2 btn-primary" type="button" onclick="AddService()">
+	                                                        <span class="btn-inner--icon"><i class='bx bx-plus-medical' style='color:#ffffff'></i></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="table-service" class="table-responsive @(services.Count() == 0 ?"delete_none":"")" >
+                                              <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                               
+                                                <div class="dataTable-container">
+                                                  <table class="table table-flush dataTable-table" id="datatable-search">
+                                                    <thead class="thead-light">
+                                                      <tr>
+                                                        <th data-sortable="" style="width: 5%;"><a href="#" class="dataTable-sorter">Stt</a></th>
+                                                        <th data-sortable="" style="width: 16.3715%;"><a href="#" class="dataTable-sorter">Tên dịch vụ</a></th>
+                                                        <th data-sortable="" style="width: 10%;"><a href="#" class="dataTable-sorter">Số lượng</a></th>
+                                                        <th data-sortable="" style="width: 10%;"><a href="#" class="dataTable-sorter">Đơn Giá</a></th>
+                                                        <th data-sortable="" style="width: 10.8587%;"><a href="#" class="dataTable-sorter">Tổng tiền</a></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id="item-service">
+                                                        @{i=0;}
+                                                        @foreach(var item in services){
+
+                                                          <tr id="row-service-@i">
+                                                            <td>
+                                                              <div class="d-flex align-items-center">
+                                                                <p class="text-xs font-weight-bold ms-2 mb-0">@(i+1)</p>
+                                                              </div>
+                                                            </td>
+                                                            <td class="font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Name</span>
+                                                              <input type="hidden" asp-for="Service[i].Name" value="@item.Name" />
+                                                              <input type="hidden" asp-for="Service[i].ServiceId" value="@item.ServiceId"  />
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                <div class="input-group">
+                                                                  <input asp-for="Service[i].Qty" value="@item.Qty" class="form-control">
+                                                                  <span class="input-group-text" >@item.Unit</span>
+                                                                </div>
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                  <span class="my-2 text-xs">@item.Price</span>
+                                                                    <input type="hidden" asp-for="Service[i].Price" value="@item.Price" />
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <input type="hidden" asp-for="Service[i].TotalAmount" value="@item.TotalAmount" />
+                                                              <div class="d-flex align-items-center">
+                                                                  
+                                                                  <span class="my-2 me-4 text-xs">@item.TotalAmountString</span>
+                                                                  <button id="remove-item-service-@i" type="button" onclick="removeitemservice(@i)" data-id="@item.ServiceId" class="btn btn-icon-only btn-rounded btn-outline-danger mb-0  btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                                              </div>
+                                                            </td>
+                                                          </tr>
+                                                          i++;
+                                                        }
+          
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                                
+                                              </div>
+                                            </div>
+                                        </div>
+                                        
+                               
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="AppointmentId" value="@appointment.Id" />
+                            <button class="btn bg-gradient-danger btn-sm float-end mt-6 mb-3">Tạo</button>
+                        </div>
+
+                    </form>
+                </div>
+        </div>
+    </div>
+    <input type="hidden" id="countmedicine" />
+    <div id="ShowAddMedicine" onclick="EnableQuesion()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-warning swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
+                
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">Thêm đơn thuốc</h2>
+            <div id="quesion" class="swal2-html-container" style="display: block; z-index:2; text-align:left">
+                <div class="row">
+                    <div class="col-12">
+                        <label  class="control-label mt-4  ">Toa thuốc</label>
+                        <select  id ="MedicineSeleted" class="multisteps-form__input form-control" asp-items="@ViewBag.MedicineSeleted" style="margin: 0 20px">
+                            <option value="">--Chọn toa thuốc--</option>
+                        </select>
+
+                    </div>
+                    <div class="col-6">
+                        <label  class="control-label mt-4  ">Cách dùng</label>
+                        <input id ="MedicineUse" class="multisteps-form__input form-control" />
+
+                    </div>
+                    <div class="col-6">
+                        <label  class="control-label mt-4  ">Số lượng</label>
+                        <input id ="MedicineQty" class="multisteps-form__input form-control" onkeypress="return /[0-9]/i.test(event.key)"/>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <label  class="control-label mt-4  ">Sáng</label>
+                        <input id ="MedicineMorning" class="multisteps-form__input form-control" onkeypress="return /[0-9]/i.test(event.key)"/>
+
+                    </div>
+                    <div class="col-3">
+                        <label  class="control-label mt-4  ">Trưa</label>
+                        <input id ="MedicineNoon" class="multisteps-form__input form-control" onkeypress="return /[0-9]/i.test(event.key)"/>
+
+                    </div>
+                    <div class="col-3">
+                        <label  class="control-label mt-4  ">Chiều</label>
+                        <input id ="MedicineAfternoon" class="multisteps-form__input form-control" onkeypress="return /[0-9]/i.test(event.key)"/>
+
+                    </div>
+                    <div class="col-3">
+                        <label  class="control-label mt-4  ">Tối</label>
+                        <input id ="MedicineNight" class="multisteps-form__input form-control" onkeypress="return /[0-9]/i.test(event.key)"/>
+
+                    </div>
+                </div>
+            </div>
+            <div class="swal2-actions">
+                <div class="swal2-loader"></div>
+                <button type="button" class="swal2-cancel btn bg-gradient-danger" aria-label="" onclick="Canceled()" style="display: inline-block;">Thoát</button>
+                <button id="submitMedicine" type="button" class="swal2-confirm btn bg-gradient-success" aria-label="" onclick="submitMedicine()" style="display: inline-block;">Thêm</button>
+            </div>
+        </div>
+    </div>
+    <div id="ShowAddService" onclick="EnableQuesion()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-warning swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
+                
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">Thêm dịch vụ</h2>
+            <div id="quesion" class="swal2-html-container" style="display: block; z-index:2; text-align:left">
+                <div class="row">
+                    <div class="col-8">
+                        <label  class="control-label mt-4  ">Dịch vụ</label>
+                        <select  id ="ServiceSeleted" class="multisteps-form__input form-control" asp-items="@ViewBag.ServiceSeleted" style="margin: 0 20px">
+                            <option value="">--Chọn dịch vụ--</option>
+                        </select>
+
+                    </div>
+                    <div class="col-4">
+                        <label  class="control-label mt-4  ">Số lượng</label>
+                        <input id ="ServiceQty" value="1" class="multisteps-form__input form-control" onkeypress="return /[0-9]/i.test(event.key)"/>
+
+                    </div>
+
+                </div>
+                
+            </div>
+            <div class="swal2-actions">
+                <div class="swal2-loader"></div>
+                <button type="button" class="swal2-cancel btn bg-gradient-danger" aria-label="" onclick="Canceled()" style="display: inline-block;">Thoát</button>
+                <button id="submitService" type="button" class="swal2-confirm btn bg-gradient-success" aria-label="" onclick="submitService()" style="display: inline-block;">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section jsFooter{
+   <script>
+       if (document.getElementById('MedicineSeleted')) {
+            var MedicineSeleted = document.getElementById('MedicineSeleted');
+            const example = new Choices(MedicineSeleted, {
+                        searchEnabled: true
+                    });
+        }
+        if (document.getElementById('ServiceSeleted')) {
+            var ServiceSeleted = document.getElementById('ServiceSeleted');
+            const example = new Choices(ServiceSeleted, {
+                        searchEnabled: true
+                    });
+        }
+       if (document.getElementById('StatusIllness')) {
+            var statusIllness = document.getElementById('StatusIllness');
+            const example = new Choices(statusIllness, {
+                        searchEnabled: false
+                    });
+        }
+   </script>
+   <script>
+       
+       
+        function Canceled() {
+            $("#ShowAddService").addClass("delete_none");
+            $("#ShowAddMedicine").addClass("delete_none");
+        }
+       function AddMedicine(){
+           $('#ShowAddMedicine').removeClass('delete_none');
+       }
+       function AddService(){
+           $('#ShowAddService').removeClass('delete_none');
+       }
+       function submitService(){
+           var ServiceQty = $("#ServiceQty").val();
+           var ServiceSeleted = $("#ServiceSeleted").val();
+           var AppointmentId = $("#AppointmentId").val();
+          
+            $.ajax({
+                url: "/Appointment/AddService",
+                data: { ServiceId: ServiceSeleted, Qty: ServiceQty, 
+                    AppointmentId: AppointmentId },
+                dataType: "json",
+                type: "POST",
+                success: function (result) {
+                    $('#table-service').removeClass('delete_none');
+                    $('#ShowAddService').addClass('delete_none');
+                    $('#item-service tr').empty();
+                    var x = '';
+                            for (var i = 0; i < result.length; i++) {
+                                 x += '<tr id="row-service-'+i+'"> ';
+                                 x += '<td><div class="d-flex align-items-center"><p class="text-xs font-weight-bold ms-2 mb-0">'+(i+1)+'</p></div></td>';
+                                x += '<td class="font-weight-bold"><span class="my-2 text-xs">' + result[i].name +'</span><input type="hidden" value="' + result[i].name +'" id="Service_'+i+'__Name" name="Service['+i+'].Name"><input type="hidden" value="' + result[i].serviceId +'" data-val="true" data-val-required="The ServiceId field is required." id="Service_' + i +'__ServiceId" name="Service[' + i +'].ServiceId"></td>';
+                                x += '<td class="text-xs font-weight-bold"><div class="d-flex align-items-center"><div class="input-group"><input value="'+ result[i].qty +'" class="form-control" type="number" data-val="true" data-val-required="The Qty field is required." id="Service_'+i+'__Qty" name="Service['+i+'].Qty" onfocus="focused(this)" onfocusout="defocused(this)"><span class="input-group-text">' + result[i].unit +'</span></div></div></td>';
+                                x += '<td class="font-weight-bold"><span class="my-2 text-xs">' + result[i].price +'</span><input type="hidden" value="' + result[i].price +'" id="Service_'+i+'__Price" name="Service['+i+'].Price"></td>';
+                                x += '<td class="font-weight-bold"><div class="d-flex align-items-center"><span class="my-2 me-4 text-xs">' + result[i].totalAmountString +'</span><button id="remove-item-service-'+i+'" type="button" onclick="removeitemservice('+i+')" data-id="' + result[i].serviceId +'" class="btn btn-icon-only btn-rounded btn-outline-danger mb-0  btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-times" aria-hidden="true"></i></button></div><input type="hidden" value="' + result[i].totalAmount +'" id="Service_'+i+'__Name" name="Service['+i+'].TotalAmount"></td></tr> ';
+                            }
+                            $('#item-service').html(x);
+
+                }
+            });
+       }
+       function submitMedicine(){
+           var MedicineQty = $("#MedicineQty").val();
+           var MedicineSeleted = $("#MedicineSeleted").val();
+           var MedicineMorning = $("#MedicineMorning").val();
+           var MedicineNoon = $("#MedicineNoon").val();
+           var MedicineAfternoon = $("#MedicineAfternoon").val();
+           var MedicineNight = $("#MedicineNight").val();
+           var MedicineUse = $("#MedicineUse").val();
+           var AppointmentId = $("#AppointmentId").val();
+
+            $.ajax({
+                url: "/Appointment/AddMedicine",
+                data: { MedicineId: MedicineSeleted, Qty: MedicineQty, Morning: MedicineMorning, Noon: MedicineNoon,
+                Afternoon: MedicineAfternoon, Night: MedicineNight, Use: MedicineUse, AppointmentId: AppointmentId },
+                dataType: "json",
+                type: "POST",
+                success: function (result) {
+                    $('#table-medicine').removeClass('delete_none');
+                    $('#ShowAddMedicine').addClass('delete_none');
+                    $('#item-medicine tr').empty();
+                    var s = '';
+                            for (var i = 0; i < result.length; i++) {
+                                 s += '<tr id="row-medicine-'+i+'"> ';
+                                s += '<td><div class="d-flex align-items-center"><p class="text-xs font-weight-bold ms-2 mb-0">'+(i+1)+'</p></div></td>';
+                                s += '<td class="font-weight-bold"><span class="my-2 text-xs">' + result[i].name +'</span><input type="hidden" value="' + result[i].name +'" id="Medicine_'+i+'__Name" name="Medicine['+i+'].Name"><input type="hidden" value="' + result[i].medicineId +'" data-val="true" data-val-required="The MedicineId field is required." id="Medicine_' + i +'__MedicineId" name="Medicine[' + i +'].MedicineId"></td>';
+                                s += '<td class="font-weight-bold"><span class="my-2 text-xs">' + result[i].use +'</span><input type="hidden" value="' + result[i].use +'" id="Medicine_'+i+'__Use" name="Medicine['+i+'].Use"></td>';
+                                s += '<td class="text-xs font-weight-bold"><div class="d-flex align-items-center"><div class="input-group"><input value="'+ result[i].qty +'" class="form-control" type="number" data-val="true" data-val-required="The Qty field is required." id="Medicine_'+i+'__Qty" name="Medicine['+i+'].Qty" onfocus="focused(this)" onfocusout="defocused(this)"><span class="input-group-text">' + result[i].unit +'</span></div></div></td>';
+                                s += '<td class="text-xs font-weight-bold"><div class="d-flex align-items-center"><input value="' + result[i].morning +'" class="multisteps-form__input form-control" type="number" id="Medicine_'+i+'__Morning" name="Medicine['+i+'].Morning" onfocus="focused(this)" onfocusout="defocused(this)"></div></td>';
+                                s += '<td class="text-xs font-weight-bold"><div class="d-flex align-items-center"><input value="' + result[i].noon +'" class="multisteps-form__input form-control" type="number" id="Medicine_'+i+'__Noon" name="Medicine['+i+'].Noon" onfocus="focused(this)" onfocusout="defocused(this)"></div></td>';
+                                s += '<td class="text-xs font-weight-bold"><div class="d-flex align-items-center"><input value="' + result[i].afternoon +'" class="multisteps-form__input form-control" type="number" id="Medicine_'+i+'__Afternoon" name="Medicine['+i+'].Afternoon" onfocus="focused(this)" onfocusout="defocused(this)"></div></td>';
+                                s += '<td class="text-xs font-weight-bold"><div class="d-flex align-items-center"><input value="' + result[i].night +'" class="multisteps-form__input form-control" type="number" id="Medicine_'+i+'__Night" name="Medicine['+i+'].Night" onfocus="focused(this)" onfocusout="defocused(this)"></div></td>';
+                                s += '<td class="font-weight-bold"><div class="d-flex align-items-center"><span class="my-2 me-2 text-xs">' + result[i].totalAmountString +'</span><button id="remove-item-medicine-'+i+'" type="button" onclick="removeitemmedicine('+i+')" data-id="' + result[i].medicineId +'" class="btn btn-icon-only btn-rounded btn-outline-danger mb-0  btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-times" aria-hidden="true"></i></button></div><input type="hidden" value="' + result[i].totalAmount +'" id="Medicine_'+i+'__TotalAmount" name="Medicine['+i+'].TotalAmount"><input type="hidden" value="' + result[i].price +'" id="Medicine_'+i+'__Price" name="Medicine['+i+'].Price"></td></tr> ';
+                            }
+                            $('#item-medicine').html(s);
+
+                }
+            });
+       }
+
+       function removeitemmedicine(i){
+           var empId = $("#remove-item-medicine-"+i).attr("data-id");
+           
+           $.ajax({
+                url: "/Appointment/RemoveMedicine",
+                data: { Id: empId},
+                dataType: "json",
+                type: "Get",
+                success: function (result) {
+                     $("#row-medicine-" + i).remove();
+
+                }
+            })
+       }
+        function removeitemservice(i){
+           var empId = $("#remove-item-service-"+i).attr("data-id");
+           
+           $.ajax({
+                url: "/Appointment/RemoveService",
+                data: { Id: empId},
+                dataType: "json",
+                type: "Get",
+                success: function (result) {
+                     $("#row-service-" + i).remove();
+
+                }
+            })
+       }
+   </script>
+   <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
+   <script>
+        var allEditors = document.querySelectorAll(".classic-editor");
+        allEditors.forEach(function(userItem) {
+          ClassicEditor
+            .create( userItem, {
+                toolbar:[
+                    'heading', '|',
+                    'fontfamily', 'fontsize', '|',
+                    'alignment', '|',
+                    'fontColor', 'fontBackgroundColor', '|',
+                    'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
+                    'link', '|',
+                    'outdent', 'indent', '|',
+                    'bulletedList', 'numberedList', 'todoList', '|',
+                    'code', 'codeBlock', '|',
+                    'insertTable', '|',
+                    'uploadImage', 'blockQuote', '|',
+                    'undo', 'redo'
+                ],
+        
+            } )
+            .catch( error => {
+                console.log( error );
+            } );
+        });
+     
+    </script>
+   
+    <script>
+        var menu_bd = document.getElementById("menu-appointment");
+        menu_bd.classList.add("active");
+        menu_bd.classList.remove("collapsed");
+       
+    </script>
+}

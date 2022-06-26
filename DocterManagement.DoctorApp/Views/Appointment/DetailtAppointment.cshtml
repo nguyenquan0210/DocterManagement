@@ -1,0 +1,508 @@
+﻿@using DoctorManagement.Data.Enums
+@model DoctorManagement.ViewModels.Catalog.Appointment.AppointmentVm
+
+@{
+    ViewData["Title"] = "DetailtAppointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Header{
+    <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li class="breadcrumb-item text-sm">
+            <a class="opacity-3 text-dark" href="javascript:;">
+                <svg width="12px" height="12px" class="mb-1" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <title>Bác Sĩ </title>
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-1716.000000, -439.000000)" fill="#252f40" fill-rule="nonzero">
+                            <g transform="translate(1716.000000, 291.000000)">
+                                <g transform="translate(0.000000, 148.000000)">
+                                    <path d="M46.7199583,10.7414583 L40.8449583,0.949791667 C40.4909749,0.360605034 39.8540131,0 39.1666667,0 L7.83333333,0 C7.1459869,0 6.50902508,0.360605034 6.15504167,0.949791667 L0.280041667,10.7414583 C0.0969176761,11.0460037 -1.23209662e-05,11.3946378 -1.23209662e-05,11.75 C-0.00758042603,16.0663731 3.48367543,19.5725301 7.80004167,19.5833333 L7.81570833,19.5833333 C9.75003686,19.5882688 11.6168794,18.8726691 13.0522917,17.5760417 C16.0171492,20.2556967 20.5292675,20.2556967 23.494125,17.5760417 C26.4604562,20.2616016 30.9794188,20.2616016 33.94575,17.5760417 C36.2421905,19.6477597 39.5441143,20.1708521 42.3684437,18.9103691 C45.1927731,17.649886 47.0084685,14.8428276 47.0000295,11.75 C47.0000295,11.3946378 46.9030823,11.0460037 46.7199583,10.7414583 Z"></path>
+                                    <path d="M39.198,22.4912623 C37.3776246,22.4928106 35.5817531,22.0149171 33.951625,21.0951667 L33.92225,21.1107282 C31.1430221,22.6838032 27.9255001,22.9318916 24.9844167,21.7998837 C24.4750389,21.605469 23.9777983,21.3722567 23.4960833,21.1018359 L23.4745417,21.1129513 C20.6961809,22.6871153 17.4786145,22.9344611 14.5386667,21.7998837 C14.029926,21.6054643 13.533337,21.3722507 13.0522917,21.1018359 C11.4250962,22.0190609 9.63246555,22.4947009 7.81570833,22.4912623 C7.16510551,22.4842162 6.51607673,22.4173045 5.875,22.2911849 L5.875,44.7220845 C5.875,45.9498589 6.7517757,46.9451667 7.83333333,46.9451667 L19.5833333,46.9451667 L19.5833333,33.6066734 L27.4166667,33.6066734 L27.4166667,46.9451667 L39.1666667,46.9451667 C40.2482243,46.9451667 41.125,45.9498589 41.125,44.7220845 L41.125,22.2822926 C40.4887822,22.4116582 39.8442868,22.4815492 39.198,22.4912623 Z"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+            </a>
+        </li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý đặt khám</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết đặt khám</li>
+    </ol>
+    <h6 class="font-weight-bolder mb-0">Thông tin chi tiết lịch hẹn</h6>
+}
+@section Search{
+	<form asp-action="Index"  method="get">
+		<div class="input-group">
+			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
+			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
+		</div>
+	</form>
+}
+<style>
+    .swal2-validation-message {
+         display: none;
+    }
+    .form-section__form-group.error .swal2-validation-message {
+        display: block;
+    }
+</style>
+<div class="container-fluid my-3 py-3">
+    <div class="row mb-5">
+        <div class="col-lg-12 mt-lg-0 mt-4">
+                <div class="card mt-4" id="basic-info">
+                    <div class="card-header">
+                        <div class="d-lg-flex">
+                            <div>
+                                 <h5>Thông tin bênh nhân</h5>
+                                <p class="text-sm mb-0">
+                                    
+                                </p>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                           
+                                <div class="ms-auto my-auto">
+                                      <span class="badge 
+                                            @(Model.Status==StatusAppointment.approved?"badge-dark":
+                                                                Model.Status==StatusAppointment.cancel?"badge-danger":
+                                                                Model.Status==StatusAppointment.complete?"badge-success":"badge-warning")
+                                            badge-sm" >
+                                                @(Model.Status==StatusAppointment.approved?"Đợi khám":
+                                                                Model.Status==StatusAppointment.cancel?"Đã hủy":
+                                                                Model.Status==StatusAppointment.complete?"Đã khám":"Lịch khám quá hạn")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="card-body pt-0">
+                    <div class="row">
+                      
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-2">
+                                    <label asp-for="Patient.No" class="form-label mt-4"></label>
+                                    <p  class="multisteps-form__input form-control" > @Model.Patient.No</p>
+
+                                </div>
+                                <div class="col-3">
+                                   <label asp-for="Patient.Name" class="form-label mt-4"></label>
+                                    <p  class="multisteps-form__input form-control" > @Model.Patient.Name</p>
+
+                                </div>
+                                <div class="col-4">
+                                    <label asp-for="Patient.RelativeEmail" class="form-label mt-4"></label>
+                                    <p  class="multisteps-form__input form-control" > @Model.Patient.RelativeEmail</p>
+
+                                </div>
+                                <div class="col-3">
+                                   <label asp-for="Patient.RelativePhone" class="form-label mt-4"></label>
+                                    <p  class="multisteps-form__input form-control" > @Model.Patient.RelativePhone</p>
+
+                                </div>
+                            </div>
+                          
+                        </div>
+                    </div>
+                    <a asp-action="Detailt" asp-controller="Patient" asp-route-id="@Model.Patient.Id"  class="btn float-end bg-gradient-info btn-sm mt-6 mb-0">Xem chi tiết</a>
+                    
+                        </div>
+                </div>
+                <div class="card mt-4" id="basic-info">
+                    <div class="card-header">
+                        <div class="d-lg-flex">
+                            <div>
+                                 <h5>Thông tin lịch khám</h5>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                           
+                                <div class="ms-auto my-auto">
+                                
+                                 
+                                     
+                                      <span class="badge  badge-success  badge-sm" >
+                                              STT:  @Model.Stt</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="row">
+                            <div class="col-12">
+                            
+                                <div class="row">
+                               
+                                    <div class="col-3">
+                                       <label asp-for="No" class="form-label mt-4"></label>
+                                        <p  class="multisteps-form__input form-control" > @Model.No</p>
+
+                                    </div>
+                                     <div class="col-3">
+                                        <label asp-for="Schedule.CheckInDate" class="form-label mt-4"></label>
+                                        <p  class="multisteps-form__input form-control" > @(Model.Schedule.CheckInDate.DayOfWeek +", "+ Model.Schedule.CheckInDate.ToShortDateString())</p>
+
+                                    </div>
+                                    <div class="col-3">
+                                        <label asp-for="SlotSchedule.FromTime" class="form-label mt-4"></label>
+                                        <p  class="multisteps-form__input form-control" > @(Model.SlotSchedule.FromTime.ToString().Substring(0,5)+"-"+Model.SlotSchedule.ToTime.ToString().Substring(0,5))</p>
+
+                                    </div>
+                                   <div class="col-3">
+                                       <label asp-for="IsDoctor" class="form-label mt-4"></label>
+                                        <p  class="multisteps-form__input form-control" > @(Model.IsDoctor==true?"đặt khám theo bác sĩ":"đặt khám theo phòng khám")</p>
+
+                                    </div>
+                                </div>
+                            
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label asp-for="CreatedAt" class="form-label mt-4"></label>
+                                        <p  class="multisteps-form__input form-control" > @Model.CreatedAt</p>
+
+                                    </div>
+                               
+                                    <div class="col-8">
+                                       <label asp-for="Note" class="form-label mt-4"></label>
+                                        <p  class="multisteps-form__input form-control" > @Model.Note</p>
+
+                                    </div>
+                                    @if(Model.Status == StatusAppointment.cancel)
+                                    {
+                                         <div class="col-12">
+                                           <label asp-for="CancelReason" class="form-label mt-4"></label>
+                                            <p  class="multisteps-form__input form-control" > @Model.CancelReason</p>
+
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        
+                            <div class="row">
+                                @if(Model.Status == StatusAppointment.approved)
+                                {
+                                
+                                    <div class="col-12">
+                                       
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <button onclick="CanceledServiveFee()" class="btn bg-gradient-danger btn-sm float-end mt-6 mb-0">Hủy</button>
+                                                </div>
+                                                <div class="col-4">
+                                                    <a style="margin:0 20px" asp-action="CreateMedicalRecord" asp-route-id="@Model.Id"  class="btn float-end bg-gradient-info btn-sm mt-6 mb-0">Tạo phiếu khám</a>
+                                                </div>
+                                            </div>
+                                       
+                                    </div>
+                                }
+                            </div>
+                       
+                   
+                    
+                           </div>
+                </div>
+                @if(Model.MedicalRecord.Id != new Guid()){
+
+                    <div class="card mt-4" id="basic-info">
+                        <div class="card-header">
+                            <div class="d-lg-flex">
+                                <div>
+                                     <h5>Kết quả khám bệnh</h5>
+                                </div>
+                                @*<div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                           
+                                    <div class="ms-auto my-auto">
+                                
+                                 
+                                     
+                                          <span class="badge  badge-success  badge-sm" >
+                                                  STT:  @Model.Stt</span>
+                                    </div>
+                                </div>*@
+                            </div>
+                        </div>
+                   
+                        <div class="card-body pt-0 ">
+                             <div class="row">
+                                <div class="col-12">
+                            
+                                    <div class="row">
+                               
+                                        <div class="col-8">
+                                            <label asp-for="MedicalRecord.Diagnose" class="form-label mt-4"></label>
+                                            <p  class="multisteps-form__input form-control" > @Model.MedicalRecord.Diagnose</p>
+                                            <span asp-validation-for="MedicalRecord.Diagnose" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <label asp-for="MedicalRecord.StatusIllness" class="form-label mt-4"></label>
+                                            <p  class="multisteps-form__input form-control" > @Model.MedicalRecord.StatusIllness</p>
+                                            <span asp-validation-for="MedicalRecord.StatusIllness" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-12">
+                                            <label asp-for="Note" class="form-label mt-4"></label>
+                                            <p  class="multisteps-form__input form-control" > @Model.MedicalRecord.Note</p>
+                                            <span asp-validation-for="Note" class="text-danger"></span>
+                                        </div>
+                                   
+                                    </div>
+                            
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="d-lg-flex">
+
+                                                <label asp-for="MedicalRecord.Medicine" class="form-label mt-4"></label>
+                                                <div class="ms-auto my-auto  mt-4 ">
+                           
+                                                    <div class="ms-auto my-auto">
+                                
+                                 
+                                     
+                                                          
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="table-medicine" class="table-responsive @(Model.MedicalRecord.Medicine.Count() == 0 ?"delete_none":"")">
+                                              <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                               
+                                                <div class="dataTable-container">
+                                                  <table class="table table-flush dataTable-table" id="datatable-search">
+                                                    <thead class="thead-light">
+                                                      <tr>
+                                                        <th data-sortable="" style="width: 3%;"><a href="#" class="dataTable-sorter">Stt</a></th>
+                                                        <th data-sortable="" style="width: 15.701%;"><a href="#" class="dataTable-sorter">Tên thuốc</a></th>
+                                                        <th data-sortable="" style="width: 8.701%;"><a href="#" class="dataTable-sorter">Cách dùng</a></th>
+                                                        <th data-sortable="" style="width: 10%;"><a href="#" class="dataTable-sorter">Số lượng</a></th>
+                                                        <th data-sortable="" style="width: 8%;"><a href="#" class="dataTable-sorter">Giá</a></th>
+                                                        <th data-sortable="" style="width: 6%;"><a href="#" class="dataTable-sorter">Sáng</a></th>
+                                                        <th data-sortable="" style="width: 6%;"><a href="#" class="dataTable-sorter">Trưa</a></th>
+                                                        <th data-sortable="" style="width: 6%;"><a href="#" class="dataTable-sorter">Chiều</a></th>
+                                                        <th data-sortable="" style="width: 6%;"><a href="#" class="dataTable-sorter">Tối</a></th>
+                                                        <th data-sortable="" style="width: 10%;"><a href="#" class="dataTable-sorter">Tổng tiền</a></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id="item-medicine">
+                                                        @{var i =0;}
+                                                        @foreach(var item in Model.MedicalRecord.Medicine){
+
+                                                          <tr>
+                                                            <td>
+                                                              <div class="d-flex align-items-center">
+                                                               
+                                                                <p class="text-xs font-weight-bold ms-2 mb-0">@(i+1)</p>
+                                                              </div>
+                                                            </td>
+                                                            <td class="font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Name</span>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Use</span>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                <div class="input-group">
+                                                                  <input readonly value="@item.Qty" class="form-control">
+                                                                  <span class="input-group-text" >@item.Unit</span>
+                                                                </div>
+                                                                
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                <span class="my-2 text-xs">@item.Price.Value.ToString("#,###,###")</span>
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                <span class="my-2 text-xs">@item.Morning</span>
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Noon</span>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Afternoon</span>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Night</span>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.TotalAmountString</span>
+                                                            </td>
+                                                          </tr>
+                                                          i++;
+                                                        }
+          
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                                
+                                              </div>
+                                            </div>
+                                        </div>
+                                        
+                               
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="d-lg-flex">
+
+                                                <label asp-for="MedicalRecord.Service" class="form-label mt-4"></label>
+                                                <div class="ms-auto my-auto  mt-4 ">
+                           
+                                                    <div class="ms-auto my-auto">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="table-service" class="table-responsive @(Model.MedicalRecord.Service.Count() == 0 ?"delete_none":"")" >
+                                              <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                               
+                                                <div class="dataTable-container">
+                                                  <table class="table table-flush dataTable-table" id="datatable-search">
+                                                    <thead class="thead-light">
+                                                      <tr>
+                                                        <th data-sortable="" style="width: 5%;"><a href="#" class="dataTable-sorter">Stt</a></th>
+                                                        <th data-sortable="" style="width: 16.3715%;"><a href="#" class="dataTable-sorter">Tên dịch vụ</a></th>
+                                                        <th data-sortable="" style="width: 10%;"><a href="#" class="dataTable-sorter">Số lượng</a></th>
+                                                        <th data-sortable="" style="width: 10%;"><a href="#" class="dataTable-sorter">Đơn Giá</a></th>
+                                                        <th data-sortable="" style="width: 10.8587%;"><a href="#" class="dataTable-sorter">Tổng tiền</a></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id="item-service">
+                                                        @{i=0;}
+                                                        @foreach(var item in Model.MedicalRecord.Service){
+
+                                                          <tr>
+                                                            <td>
+                                                              <div class="d-flex align-items-center">
+                                                                <p class="text-xs font-weight-bold ms-2 mb-0">@(i+1)</p>
+                                                              </div>
+                                                            </td>
+                                                            <td class="font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.Name</span>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                <div class="input-group">
+                                                                  <input readonly value="@item.Qty" class="form-control">
+                                                                  <span class="input-group-text" >@item.Unit</span>
+                                                                </div>
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <div class="d-flex align-items-center">
+                                                                  <span class="my-2 text-xs">@item.Price.Value.ToString("#,###,###")</span>
+                                                              </div>
+                                                            </td>
+                                                            <td class="text-xs font-weight-bold">
+                                                              <span class="my-2 text-xs">@item.TotalAmountString</span>
+                                                            </td>
+                                                          </tr>
+                                                          i++;
+                                                        }
+          
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                                
+                                              </div>
+                                            </div>
+                                        </div>
+                                        
+                               
+                                    </div>
+                                </div>
+                            </div>
+                            
+                                <div class="row">
+                                        <div class="col-12">
+                                            @if(Model.Status == StatusAppointment.complete)
+                                            {
+                                                <a style="margin:0 20px" asp-action="PrintAppointment" asp-route-id="@Model.Id"  class="btn bg-gradient-info btn-sm mt-6 mb-0">In phiếu</a>
+                                            }
+                                        </div>
+                                </div>
+                        </div>
+                    </div>
+                }
+        </div>
+    </div>
+    <div id="myModel" class="swal2-container swal2-center swal2-backdrop-show delete_none " style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container"
+            class="swal2-popup swal2-modal swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true"
+            style="display: grid;"><button type="button" class="swal2-close" aria-label="Đóng hộp thoại này"
+                style="display: none;">
+                <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;">×</font>
+                </font>
+            </button>
+            <ul class="swal2-progress-steps" style="display: none;"></ul>
+            <div class="swal2-icon" style="display: none;"></div><img class="swal2-image" style="display: none;">
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">
+                <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;">Lý do hủy duyệt</font>
+                </font>
+            </h2>
+            <form asp-action="CanceledAppointment" method="post" id="canceled">
+                <div class="form-section__form-group ">
+
+                    <label class="swal2-checkbox" style="width:85%">Lý do hủy</label>
+            
+                    <textarea name="CancelReason" id="CancelReason" autocapitalize="off" class="swal2-textarea" style="width:85%"></textarea>
+           
+                    <div class="swal2-validation-message" id="swal2-validation-message" ></div>
+                </div>
+                <input type="hidden" name="Id" value ="@Model.Id" />
+                <input type="hidden" name="checked" value ="doctor" />
+                <div class="swal2-actions">
+                    <div class="swal2-loader"></div><a onclick="CanceledServiveFee()"  class="swal2-confirm btn bg-gradient-info"
+                        aria-label="" style="display: inline-block;    margin-left: 10px;  margin-right: 10px;">
+                        <font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">Đóng</font>
+                        </font>
+                    </a>
+                    <button class="swal2-cancel btn bg-gradient-danger" aria-label=""
+                        style="display: inline-block;">
+                      Hủy
+                    </button>
+                </div>
+            </form>
+           
+        </div>
+    </div>
+</div>
+
+@section jsFooter{
+   <script>
+        $(function () {
+            $(document).on("click", function (e) {
+                 if ($(e.target).is("#myModel") === true) {
+                        $("#myModel").removeClass("delete_block");
+                    }
+            });
+        });
+        var cel = document.getElementById("myModel");
+
+       
+        function CanceledServiveFee() {
+            document.getElementById("myModel").classList.toggle('delete_block');
+           
+        }
+       
+   </script>
+   <script src="~/js/Validator.js"></script>
+   <script>
+        Validator({
+	        form: "#canceled",
+	        formGroup: ".form-section__form-group",
+	        errorMessage: ".swal2-validation-message",
+	        rules: [
+                Validator.isRequired('#CancelReason', 'Vui lòng nhập lý do hủy.')
+	        ]
+        })
+    </script>
+    <script>
+       var menu_bd = document.getElementById("menu-appointment");
+        menu_bd.classList.add("active");
+        menu_bd.classList.remove("collapsed");
+    </script>
+}

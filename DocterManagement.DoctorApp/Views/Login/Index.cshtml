@@ -1,0 +1,110 @@
+﻿@model DoctorManagement.ViewModels.System.Users.LoginRequest
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/img/News_free-file.png">
+    <link rel="icon" type="image/png" href="~/img/News_free-file.png">
+    <title>
+        Đăng Nhập
+    </title>
+    <!-- Extra details for Live View on GitHub Pages -->
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Nucleo Icons -->
+    <link href="~/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="~/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="~/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- CSS Files -->
+
+    <link id="pagestyle" href="~/css/soft-ui-dashboard.min.css?v=1.0.2" rel="stylesheet" />
+    <!-- Anti-flicker snippet (recommended)  -->
+    <style>
+        .async-hide {
+            opacity: 0 !important
+        }
+    </style>
+
+</head>
+
+<body class="">
+
+    <main class="main-content main-content-bg mt-0">
+        <section>
+            <div class="page-header min-vh-75">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+                            <div class="card card-plain mt-8">
+                                <div class="card-header pb-0 text-start">
+                                    <h3 class="font-weight-bolder text-success  text-gradient">Chào mừng trở lại</h3>
+                                    <p class="mb-0">Nhập email và mật khẩu của bạn để đăng nhập</p>
+                                </div>
+                                <div class="card-body">
+                                    <form asp-action="Index" asp-controller="Login" method="post">
+                                        <div asp-validation-summary="All" class="text-danger"></div>
+                                        <label>Tên đăng nhập</label>
+                                        <div class="mb-3">
+                                            <input class="form-control" asp-for="UserName" type="text" placeholder="Tên đăng nhập" value="nguyenquanute0210">
+                                        </div>
+                                        <label>Mật khẩu</label>
+                                        <div class="mb-3">
+                                            <input class="form-control" asp-for="Password" type="password" placeholder="Password" value="Quax2h1408$">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input"  asp-for="RememberMe" type="checkbox" >
+                                            <label class="form-check-label" for="rememberMe">Nhớ mật khẩu</label>
+                                        </div>
+                                        <div class="text-center">
+                                            <button class="btn bg-gradient-success  w-100 mt-4 mb-0">Đăng nhập</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                                    <p class="mb-4 text-sm mx-auto">
+                                        Không có tài khoản?
+                                        <a asp-action="ForgotPassword" target="_blank" class="text-info text-gradient font-weight-bold">Gửi mail</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
+                                <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image: url('../../img/curved-images/curved9.jpg')"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="position-fixed bottom-1 end-1 z-index-2" style="top:100px;">
+                        @if (TempData["AlertMessage"] != null)
+                           {
+                                 <div class="toast fade show p-2 bg-gradient-@TempData["AlertType"]" role="alert" aria-live="assertive" id="@TempData["AlertId"]" aria-atomic="true">
+                                  <div class="toast-header bg-transparent border-0">
+                                    <i class="ni ni-check-bold text-white me-2"></i>
+                                    <span class="me-auto text-white font-weight-bold">Cập nhật thông tin</span>
+                                    <small class="text-white">vừa xong</small>
+                                    <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+                                  </div>
+                                  <hr class="horizontal dark m-0">
+                                  <div class="toast-body text-white">
+                                    @TempData["AlertMessage"]
+                                  </div>
+                                </div>
+                           } 
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

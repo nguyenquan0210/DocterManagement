@@ -1,0 +1,1657 @@
+﻿@using DoctorManagement.Data.Enums
+@model DoctorManagement.ViewModels.System.Patient.RegisterEnterProfileRequest
+@{
+    ViewData["Title"] = "RegisterEnterProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Stylesheet{
+    <style>
+        .root-layout[_ngcontent-serverApp-c55] {
+            background-color: #f6f6f6
+        }
+    </style>
+    <style>
+        .offcanvas-backdrop[_ngcontent-serverApp-c50] {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 30;
+            height: 100vh;
+            width: 100vw;
+            background-color: #1f293799
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
+                background-color: inherit
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: none;
+            border-radius: 0;
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+            padding: 1.5rem;
+            font-weight: 400
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity))
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+                display: block
+            }
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
+            display: flex;
+            border-radius: .5rem;
+            padding: 1rem
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50]:hover {
+            background-color: #1a76e30d;
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+            display: none !important
+        }
+
+        @@media (min-width: 782px) {
+            #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
+                display: flex !important
+            }
+        }
+
+        @@media (max-width: 782px) {
+            .collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+
+        .accordion-button[_ngcontent-serverApp-c50]:not(.collapsed) .collapse-control[_ngcontent-serverApp-c50] {
+            --tw-rotate: 180deg;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+
+        @@media (min-width: 782px) {
+            .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50] {
+                position: relative
+            }
+
+            .dropdown-toggle[_ngcontent-serverApp-c50]:after {
+                border-color: #2c2c2c;
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                content: "";
+                display: flex;
+                height: 6px;
+                margin-top: -3px;
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: rotate(45deg);
+                transform-origin: 75% 75%;
+                transition: transform .1s ease;
+                width: 6px
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        [_nghost-serverApp-c54] .ant-collapse-content-box {
+            padding: 0 !important
+        }
+
+        nz-collapse-panel[_ngcontent-serverApp-c54] {
+            padding: 0 !important
+        }
+
+        [_nghost-serverApp-c54] .ant-collapse-header {
+            cursor: pointer !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            font-size: .875rem !important;
+            line-height: 1.25rem !important;
+            font-weight: 600 !important;
+            color: currentColor !important
+        }
+
+        @@media (min-width: 782px) {
+            [_nghost-serverApp-c54] .ant-collapse-header {
+                cursor: auto !important
+            }
+
+            nz-collapse-panel[_ngcontent-serverApp-c54] {
+                border-style: none !important
+            }
+        }
+
+        a[_ngcontent-serverApp-c54]:hover {
+            color: currentColor
+        }
+    </style>
+    <style>
+        [disabled][_ngcontent-serverApp-c149] {
+            opacity: .4
+        }
+
+        [_nghost-serverApp-c149] .ant-tabs-nav-list {
+            width: 100%
+        }
+
+        [_nghost-serverApp-c149] .ant-tabs-tab {
+            width: calc(100% / 3);
+            justify-content: center;
+            cursor: default !important
+        }
+
+        [_nghost-serverApp-c149] .ant-tabs-tab-btn {
+            font-weight: 600;
+            line-height: 17px;
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity))
+        }
+    </style>
+    <style>
+        [disabled][_ngcontent-serverApp-c146] {
+            opacity: .4
+        }
+
+        @@media only screen and (max-width: 767px) {
+            [_nghost-serverApp-c146] .otp-input {
+                width: 40px !important;
+                height: 44px !important
+            }
+        }
+    </style>
+    <style>
+        [disabled][_ngcontent-serverApp-c147] {
+            opacity: .4
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c147] {
+            flex-direction: column
+        }
+
+        .ant-row[_ngcontent-serverApp-c147] {
+            margin: 0
+        }
+    </style>
+    <style>
+        .otp-input[_ngcontent-serverApp-c72] {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            border: solid 1px #c5c5c5;
+            text-align: center;
+            font-size: 32px
+        }
+
+        .ng-otp-input-wrapper[_ngcontent-serverApp-c72] .otp-input[_ngcontent-serverApp-c72]:not(:last-child) {
+            margin-right: 8px
+        }
+
+        @@media screen and (max-width: 767px) {
+            .otp-input[_ngcontent-serverApp-c72] {
+                width: 40px;
+                font-size: 24px;
+                height: 40px
+            }
+        }
+
+        @@media screen and (max-width: 420px) {
+            .otp-input[_ngcontent-serverApp-c72] {
+                width: 30px;
+                font-size: 18px;
+                height: 30px
+            }
+        }
+    </style>
+    <style type="text/css"></style>
+    <style>
+        [_nghost-serverApp-c155] .ant-tabs-nav-list {
+            width: 100%;
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .tab-link:hover {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .ant-tabs-tab {
+            width: 50%;
+            justify-content: center
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .ant-tabs-tab .ant-tabs-tab-btn {
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .ant-tabs-tab .ant-tabs-tab-btn:hover {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        [_nghost-serverApp-c155] .ant-tabs-nav-list .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+            --tw-text-opacity: 1;
+            color: rgb(26 118 227 / var(--tw-text-opacity))
+        }
+
+        .form-control[_ngcontent-serverApp-c155] {
+            display: block;
+            width: 100%;
+            border-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem;
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .form-control[_ngcontent-serverApp-c155]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c155]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-label[_ngcontent-serverApp-c155] {
+            margin-bottom: .25rem;
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c155] {
+            margin-right: 0
+        }
+    </style>
+    <style>
+        .form-control[_ngcontent-serverApp-c154] {
+            display: block;
+            width: 100%;
+            flex: 1 1 0%;
+            border-radius: 0;
+            border-top-right-radius: .375rem;
+            border-bottom-right-radius: .375rem;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity));
+            padding: .5rem .75rem
+        }
+
+        .form-control[_ngcontent-serverApp-c154]::placeholder {
+            font-size: .875rem;
+            line-height: 1.25rem
+        }
+
+        .form-control[_ngcontent-serverApp-c154]:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(26 118 227 / var(--tw-border-opacity));
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(26 118 227 / var(--tw-ring-opacity))
+        }
+
+        .form-label[_ngcontent-serverApp-c154] {
+            margin-bottom: .25rem;
+            display: block;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 500;
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity))
+        }
+
+        .ant-form-item[_ngcontent-serverApp-c154] {
+            flex-direction: column;
+            margin: 0
+        }
+    </style>
+    <style>
+        [disabled][_ngcontent-serverApp-c148] {
+            opacity: .4
+        }
+
+        [_nghost-serverApp-c148] .ant-select-selector {
+            height: 44px !important;
+            align-items: center !important;
+            border-radius: 4px !important
+        }
+
+        [_nghost-serverApp-c148] .ant-select-selection-search {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important
+        }
+
+        .ant-radio-group[_ngcontent-serverApp-c148] {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem
+        }
+
+        .ant-radio-wrapper[_ngcontent-serverApp-c148] {
+            height: 100%;
+            width: 50%;
+            margin: 0;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: row;
+            justify-items: center;
+            align-items: center;
+            padding-left: 1rem
+        }
+
+        [_nghost-serverApp-c148] .ant-radio {
+            top: 0rem
+        }
+    </style>
+    <style>
+        cdk-virtual-scroll-viewport {
+            display: block;
+            position: relative;
+            overflow: auto;
+            contain: strict;
+            transform: translateZ(0);
+            will-change: scroll-position;
+            -webkit-overflow-scrolling: touch
+        }
+
+        .cdk-virtual-scroll-content-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            contain: content
+        }
+
+        [dir=rtl] .cdk-virtual-scroll-content-wrapper {
+            right: 0;
+            left: auto
+        }
+
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper {
+            min-height: 100%
+        }
+
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]) {
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: 0;
+            margin-right: 0;
+            border-left-width: 0;
+            border-right-width: 0;
+            outline: none
+        }
+
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper {
+            min-width: 100%
+        }
+
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),
+        .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]) {
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            border-top-width: 0;
+            border-bottom-width: 0;
+            outline: none
+        }
+
+        .cdk-virtual-scroll-spacer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 1px;
+            width: 1px;
+            transform-origin: 0 0
+        }
+
+        [dir=rtl] .cdk-virtual-scroll-spacer {
+            right: 0;
+            left: auto;
+            transform-origin: 100% 0
+        }
+    </style>
+    <style>
+        .select {
+          position: relative;
+          font-family: Arial;
+          border-radius: 0.25rem;
+          width:100%;
+          padding: 1px 0;
+          margin-bottom:2px;
+        }
+        .custom-select {
+          position: relative;
+          font-family: Arial;
+        }
+
+        .custom-select select {
+          display: none; /*hide original SELECT element: */
+        }
+
+        .select-selected {
+          background-color: DodgerBlue;
+        }
+
+        /* Style the arrow inside the select element: */
+        .select-selected:after {
+          position: absolute;
+          content: "";
+          top: 20px;
+          right: 20px;
+          width: 0;
+          height: 0;
+          border: 6px solid transparent;
+          border-color: #fff transparent transparent transparent;
+        }
+
+        /* Point the arrow upwards when the select box is open (active): */
+        .select-selected.select-arrow-active:after {
+          border-color: transparent transparent #fff transparent;
+          top: 7px;
+        }
+
+        /* style the items (options), including the selected item: */
+        .select-items div,.select-selected {
+          color: #ffffff;
+          padding: 10px 16px;
+          border: 1px solid transparent;
+          border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+          cursor: pointer;
+          border-radius: 0.25rem;
+        }
+
+        /* Style items (options): */
+        .select-items {
+          position: absolute;
+          background-color: DodgerBlue;
+          top: 100%;
+          left: 0;
+          right: 0;
+          z-index: 99;
+          overflow-y: auto;
+            max-height: 200px;
+        }
+
+        /* Hide the items when the select box is closed: */
+        .select-hide {
+          display: none;
+        }
+
+        .select-items div:hover, .same-as-selected {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <style>
+        /* The container */
+        .container {
+          display: block;
+          position: relative;
+          padding-left: 35px;
+          margin: 12px;
+          cursor: pointer;
+          font-size: 22px;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          width:30%;
+          float:left;
+        }
+
+        /* Hide the browser's default radio button */
+        .container input {
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+        }
+
+        /* Create a custom radio button */
+        .checkmark {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 25px;
+          width: 25px;
+          background-color: #eee;
+          border-radius: 50%;
+        }
+
+        /* On mouse-over, add a grey background color */
+        .container:hover input ~ .checkmark {
+          background-color: #ccc;
+        }
+
+        /* When the radio button is checked, add a blue background */
+        .container input:checked ~ .checkmark {
+          background-color: #2196F3;
+        }
+
+        /* Create the indicator (the dot/circle - hidden when not checked) */
+        .checkmark:after {
+          content: "";
+          position: absolute;
+          display: none;
+        }
+
+        /* Show the indicator (dot/circle) when checked */
+        .container input:checked ~ .checkmark:after {
+          display: block;
+        }
+
+        /* Style the indicator (dot/circle) */
+        .container .checkmark:after {
+ 	        top: 9px;
+	        left: 9px;
+	        width: 8px;
+	        height: 8px;
+	        border-radius: 50%;
+	        background: white;
+        }
+        .form-section__form-message {
+            display: none;
+            padding-top: 4px;
+            color: #f33a58;
+            font-size: 0.9rem;
+            line-height: 16px;
+            transition: all .3s linear;
+        }
+    </style>
+    <style>
+        .flatpickr-calendar {
+            background: transparent;
+            opacity: 0;
+            display: none;
+            text-align: center;
+            visibility: hidden;
+            padding: 0;
+            animation: none;
+            direction: ltr;
+            border: 0;
+            font-size: 14px;
+            line-height: 24px;
+            border-radius: 5px;
+            position: absolute;
+            width: 307.875px;
+            box-sizing: border-box;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            background: #fff;
+            -webkit-box-shadow: 0 8px 26px -4px hsl(0deg 0% 8% / 15%), 0 8px 9px -5px hsl(0deg 0% 8% / 6%);
+        }
+        .flatpickr-calendar.inline, .flatpickr-calendar.open {
+            opacity: 1;
+            max-height: 640px;
+            visibility: visible;
+        }
+        .flatpickr-calendar.open {
+            display: inline-block;
+            z-index: 99999;
+        }
+        .flatpickr-calendar.open {
+            margin-left: -38px;
+            margin-top: 4px;
+        }
+        .flatpickr-calendar.animate.open {
+            animation: k .3s cubic-bezier(.23,1,.32,1);
+        }
+        .flatpickr-calendar:after, .flatpickr-calendar:before {
+            position: absolute;
+            display: block;
+            pointer-events: none;
+            border: solid transparent;
+            content: "";
+            height: 0;
+            width: 0;
+            left: 22px;
+        }
+        .flatpickr-calendar:before {
+            border-width: 5px;
+            margin: 0 -5px;
+        }
+        .flatpickr-calendar:after {
+            border-width: 4px;
+            margin: 0 -4px;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            bottom: 100%;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            border-bottom-color: #fff;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            bottom: 100%;
+        }
+        .flatpickr-calendar.arrowTop:after, .flatpickr-calendar.arrowTop:before {
+            border-bottom-color: #fff;
+        }
+        .flatpickr-months {
+            display: -ms-flexbox;
+            display: flex;
+        }
+        .flatpickr-months .flatpickr-next-month, .flatpickr-months .flatpickr-prev-month {
+            text-decoration: none;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            height: 34px;
+            padding: 10px;
+            z-index: 3;
+            color: rgba(0,0,0,.9);
+            fill: rgba(0,0,0,.9);
+        }
+        .flatpickr-months .flatpickr-next-month.flatpickr-prev-month, .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month {
+            left: 0;
+        }
+        .flatpickr-months .flatpickr-next-month svg, .flatpickr-months .flatpickr-prev-month svg {
+            width: 14px;
+            height: 14px;
+        }
+        .flatpickr-months .flatpickr-next-month svg path, .flatpickr-months .flatpickr-prev-month svg path {
+            transition: fill .1s;
+            fill: inherit;
+        }
+        .flatpickr-months .flatpickr-month {
+            background: transparent;
+            color: rgba(0,0,0,.9);
+            fill: rgba(0,0,0,.9);
+            height: 34px;
+            line-height: 1;
+            text-align: center;
+            position: relative;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            overflow: hidden;
+            -ms-flex: 1;
+            flex: 1;
+        }
+        .flatpickr-current-month {
+            font-size: 135%;
+            line-height: inherit;
+            font-weight: 300;
+            color: inherit;
+            position: absolute;
+            width: 75%;
+            left: 12.5%;
+            padding: 7.48px 0 0;
+            line-height: 1;
+            height: 34px;
+            display: inline-block;
+            text-align: center;
+            transform: translateZ(0);
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            appearance: menulist;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-sizing: border-box;
+            color: inherit;
+            cursor: pointer;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: 300;
+            height: auto;
+            line-height: inherit;
+            margin: -1px 0 0;
+            outline: none;
+            padding: 0 0 0 0.5ch;
+            position: relative;
+            vertical-align: initial;
+            -webkit-box-sizing: border-box;
+            -webkit-appearance: menulist;
+            -moz-appearance: menulist;
+            width: auto;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+            background-color: transparent;
+            outline: none;
+            padding: 0;
+        }
+        .numInputWrapper {
+            position: relative;
+            height: auto;
+        }
+        .flatpickr-current-month .numInputWrapper {
+            width: 6ch;
+            width: 7ch\0;
+            display: inline-block;
+        }
+        .numInputWrapper input, .numInputWrapper span {
+            display: inline-block;
+        }
+        .numInputWrapper input {
+            width: 100%;
+        }
+        .flatpickr-current-month input.cur-year {
+            background: transparent;
+            box-sizing: border-box;
+            color: inherit;
+            cursor: text;
+            padding: 0 0 0 0.5ch;
+            margin: 0;
+            display: inline-block;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: 300;
+            line-height: inherit;
+            height: auto;
+            border: 0;
+            border-radius: 0;
+            vertical-align: initial;
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        .numInputWrapper input, .numInputWrapper span {
+            display: inline-block;
+        }
+        .numInputWrapper span {
+            position: absolute;
+            right: 0;
+            width: 14px;
+            padding: 0 4px 0 2px;
+            height: 50%;
+            line-height: 50%;
+            opacity: 0;
+            cursor: pointer;
+            border: 1px solid rgba(57,57,57,.15);
+            box-sizing: border-box;
+        }
+        .numInputWrapper span.arrowUp {
+            top: 0;
+            border-bottom: 0;
+        }
+        .flatpickr-calendar .numInputWrapper span {
+            border: none;
+            border-bottom: 1px solid rgba(57,57,57,.15);
+        }
+        *, :after, :before {
+            box-sizing: border-box;
+        }
+        .numInputWrapper span:after {
+            display: block;
+            content: "";
+            position: absolute;
+        }
+        .numInputWrapper span.arrowUp:after {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 4px solid rgba(57,57,57,.6);
+            top: 26%;
+        }
+        .flatpickr-current-month .numInputWrapper span.arrowUp:after {
+            border-bottom-color: rgba(0,0,0,.9);
+        }
+        .numInputWrapper span.arrowDown {
+            top: 50%;
+        }
+        .numInputWrapper span.arrowDown:after {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid rgba(57,57,57,.6);
+            top: 40%;
+        }
+        .flatpickr-current-month .numInputWrapper span.arrowDown:after {
+            border-top-color: rgba(0,0,0,.9);
+        }
+        .flatpickr-months .flatpickr-next-month.flatpickr-next-month, .flatpickr-months .flatpickr-prev-month.flatpickr-next-month {
+            right: 0;
+        }
+        .flatpickr-innerContainer {
+            display: block;
+            display: -ms-flexbox;
+            display: flex;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .flatpickr-calendar .flatpickr-innerContainer {
+            margin-top: 15px!important;
+        }
+        .flatpickr-rContainer {
+            display: inline-block;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .flatpickr-weekdays {
+            background: transparent;
+            text-align: center;
+            overflow: hidden;
+            width: 100%;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            height: 28px;
+        }
+        .flatpickr-days {
+            position: relative;
+            overflow: hidden;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: start;
+            align-items: flex-start;
+            width: 307.875px;
+        }
+        .flatpickr-weekdays .flatpickr-weekdaycontainer {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex: 1;
+            flex: 1;
+        }
+        span.flatpickr-weekday {
+            cursor: default;
+            font-size: 90%;
+            background: transparent;
+            color: rgba(0,0,0,.54);
+            line-height: 1;
+            margin: 0;
+            text-align: center;
+            display: block;
+            -ms-flex: 1;
+            flex: 1;
+            font-weight: bolder;
+        }
+        .dayContainer {
+            padding: 0;
+            outline: 0;
+            text-align: left;
+            width: 307.875px;
+            min-width: 307.875px;
+            max-width: 307.875px;
+            box-sizing: border-box;
+            display: inline-block;
+            display: -ms-flexbox;
+            display: flex;
+            flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            -ms-flex-pack: justify;
+            justify-content: space-around;
+            transform: translateZ(0);
+            opacity: 1;
+        }
+        .flatpickr-day {
+            background: none;
+            border: 1px solid transparent;
+            border-radius: 150px;
+            box-sizing: border-box;
+            color: #393939;
+            cursor: pointer;
+            font-weight: 400;
+            width: 14.2857143%;
+            -ms-flex-preferred-size: 14.2857143%;
+            flex-basis: 14.2857143%;
+            max-width: 39px;
+            height: 39px;
+            line-height: 39px;
+            margin: 0;
+            display: inline-block;
+            position: relative;
+            -ms-flex-pack: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .flatpickr-day.today {
+            border-color: #959ea9;
+        }
+        .flatpickr-calendar .flatpickr-day.endRange, .flatpickr-calendar .flatpickr-day.selected, .flatpickr-calendar .flatpickr-day.startRange, .flatpickr-calendar .flatpickr-day.today {
+            background: #cb0c9f!important;
+            color: #fff;
+            border: none;
+        }
+        .flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover, .flatpickr-day.nextMonthDay, .flatpickr-day.notAllowed, .flatpickr-day.notAllowed.nextMonthDay, .flatpickr-day.notAllowed.prevMonthDay, .flatpickr-day.prevMonthDay {
+            color: rgba(57,57,57,.3);
+            background: transparent;
+            border-color: transparent;
+            cursor: default;
+        }
+        .flatpickr-day.inRange, .flatpickr-day.nextMonthDay.inRange, .flatpickr-day.nextMonthDay.today.inRange, .flatpickr-day.nextMonthDay:focus, .flatpickr-day.nextMonthDay:hover, .flatpickr-day.prevMonthDay.inRange, .flatpickr-day.prevMonthDay.today.inRange, .flatpickr-day.prevMonthDay:focus, .flatpickr-day.prevMonthDay:hover, .flatpickr-day.today.inRange, .flatpickr-day:focus, .flatpickr-day:hover {
+            cursor: pointer;
+            outline: 0;
+            background: #e6e6e6;
+            border-color: #e6e6e6;
+        }
+        .flatpickr-calendar .flatpickr-day.inRange, .flatpickr-calendar .flatpickr-day:not(.selected):focus, .flatpickr-calendar .flatpickr-day:not(.selected):hover {
+            background: rgba(94,114,228,.28);
+            border: none;
+        }
+    </style>
+    <style>
+        [type=radio]:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            --tw-ring-inset: var(--tw-empty, );
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: #3b82f680;
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);
+        }
+        .form-section__form-group {
+	        margin-bottom: 16px;
+	        display: flex;
+	        flex-direction: column;
+            position:relative;
+        }
+
+        .form-section__form-label {
+	        font-size: 1.4rem;
+	        font-weight: 700;
+	        line-height: 18px;
+	        color: #333;
+	        padding-bottom: 6px;
+        }
+
+        .form-section__form-input-wrap {
+	        position: relative;
+	        display: flex;
+	        align-items: center;
+        }
+
+        input[name=fullName] {
+	        text-transform: capitalize;
+        }
+
+        input[type=radio],
+        input[type=checkbox] {
+	        margin-right: 5px;
+	        cursor: pointer;
+        }
+
+        input[type=radio] ~ .form-section__form-label,
+        input[type=checkbox] ~ .form-section__form-label {
+	        padding-bottom: 0;
+        }
+
+        /*.form-section__form-input {
+	        height: 40px;
+	        max-width: 100%;
+	        width: 100%;
+	        padding: 8px 12px;
+	        border: 1px solid #b3b3b3;
+	        border-radius: 3px;
+	        outline: none;
+	        color: #333;
+	        font-family: inherit;
+	        transition: all .3s linear;
+        }
+
+        .form-section__form-input:focus,
+        .form-section__form-input:hover {
+	        border-color: #1dbfaf;
+        }
+
+        .form-section__form-group.error .form-section__form-input:hover {
+	        background-color: #fdebee;
+        }
+        .form-section__form-group.error .form-section__form-input {
+            background-color: #fdebee;
+            border-color: #f33a58;
+        }
+        .form-section__form-input::placeholder {
+	        color: #b7b7b7;
+        }*/
+
+        .form-section__form-error-icon {
+	        display: none;
+	        position: absolute;
+	        top: 0;
+	        right: 10px;
+	        height: 100%;
+	        align-items: center;
+	        transform-origin: 50% 0;
+	        transition: transform .3s linear 1s;
+        }
+
+        @@keyframes bellAni {
+	        0% {
+		        transform: rotate(-20deg);
+	        }
+
+	        20% {
+		        transform: rotate(20deg);
+	        }
+
+	        40% {
+		        transform: rotate(-20deg);
+	        }
+
+	        60% {
+		        transform: rotate(20deg);
+	        }
+
+	        80% {
+		        transform: rotate(-20deg);
+	        }
+
+	        100% {
+		        transform: rotate(0);
+	        }
+        }
+
+        .form-section__form-group-icon {
+	        cursor: pointer;
+	        position: absolute;
+	        top: 50%;
+	        right: 10px;
+	        font-size: 1.4rem;
+	        color: #009090;
+	        transform: translateY(-50%);
+        }
+
+        .form-section__form-group-icon i:last-child {
+	        display: none;
+        }
+
+        .form-section__form-group-icon.hidden i:first-child {
+	        display: none;
+        }
+
+        .form-section__form-group-icon.hidden i:last-child {
+	        display: inline;
+        }
+
+        
+        .form-section__form-checkList {
+	        margin-top: 16px;
+	        list-style: none;
+        }
+
+        .form-section__form-checkList.hidden {
+	        display: none;
+        }
+
+        .form-section__form-checkItem {
+	        padding: 3px 0;
+	        font-size: 1.4rem;
+	        color: grey;
+        }
+
+        .form-section__form-checkItem.checked {
+	        color: #283033;
+        }
+
+        .form-section__form-checkItem i:last-child {
+	        display: none;
+        }
+
+        .form-section__form-checkItem.checked i:first-child {
+	        display: none;
+        }
+
+        .form-section__form-checkItem.checked i:last-child {
+	        display: inline-block;
+	        color: inherit;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-input {
+	        background-color: #fdebee;
+	        border-color: #f33a58;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-message {
+	        display: block;
+            position: absolute;
+            top: 65px;
+        }
+
+        .form-section__form-group.error
+        .form-section__form-error-icon {
+	        display: flex;
+	        animation: bellAni .8s linear forwards;
+        }
+
+        .form-section__form-submit {
+	        font-size: 1.4rem;
+	        font-weight: 600;
+	        outline: none;
+	        border: none;
+	        border-radius: 5px;
+	        padding: 12px 16px;
+	        color: #fdebee;
+	        background-color: #1dbfaf;
+	        transition: all .3s linear;
+        }
+
+        .form-section__form-submit:hover {
+	        cursor: pointer;
+	        background-color: #009090;
+        }
+
+        /* form section avatar */
+
+        .form-section__form-show-img {
+	        margin-top: 20px;
+	        padding-top: 50%;
+	        width: 50%;
+	        height: 0;
+	        background-position: center;
+	        background-size: cover;
+	        background-repeat: no-repeat;
+	        transition: .5s ease;
+        }
+
+        .form-section__form-show-img.hidden {
+	        padding-top: 0;
+        }
+
+        .form-section__form-img {
+	        width: 100%;
+	        height: auto;
+        }
+
+        /*form section footer*/
+
+        .form-section__footer {
+	        font-size: 1.4rem;
+	        color: #333;
+	        font-weight: 400;
+	        text-align: center;
+        }
+
+        .form-section__footer-link {
+	        color: #1dbfaf;
+	        text-decoration: none;
+	        font-weight: 600;
+        }
+
+        .form-section__footer-link:hover {
+	        text-decoration: underline;
+        }
+
+        /*footer*/
+
+        .copyright {
+	        width: 100%;
+	        margin-top: 10px;
+	        color: #333;
+	        text-align: center;
+	        font-size: 1.4rem;
+        }
+
+        .copyright-icon {
+	        color: #ff0000;
+        }
+
+        .copyright-icon--coding,
+        .copyright-author {
+	        color: #09e609;
+        }
+
+        .copyright-author {
+	        font-weight: 600;
+        }
+    </style>
+
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<app-register _nghost-serverapp-c149="" class="ng-star-inserted">
+                <nz-spin _ngcontent-serverapp-c149="" class="ant-spin-nested-loading">
+                    
+                    
+                    <div class="ant-spin-container ng-star-inserted">
+                        <div _ngcontent-serverapp-c149="" class="w-full">
+                            <div _ngcontent-serverapp-c149=""
+                                class="md:max-w-[1280px] md:mx-auto md:flex md:flex-row md:justify-center md:items-center md:gap-10 md:py-[60px]">
+                                <div _ngcontent-serverapp-c149="" class="p-6 pb-[60px] md:p-0">
+                                    <nz-tabset _ngcontent-serverapp-c149=""
+                                        class="ant-tabs md:w-[800px] md:p-6 md:rounded-lg md:border-solid md:border md:border-gray-100 md:shadow-sm ant-tabs-top ant-tabs-default">
+                                        <nz-tabs-nav role="tablist" class="ant-tabs-nav ng-star-inserted">
+                                            <div class="ant-tabs-nav-wrap">
+                                                <div nztabscrolllist="" class="ant-tabs-nav-list"
+                                                    style="transform: translate(0px, 0px);">
+                                                    <div class="ant-tabs-tab ant-tabs-tab-disabled ng-star-inserted">
+                                                        <div role="tab" nztabnavitem="" cdkmonitorelementfocus=""
+                                                            class="ant-tabs-tab-btn" aria-disabled="true"
+                                                            aria-selected="false" aria-controls="nz-tabs-2-tab-0">1.Xác
+                                                            thực
+                                                        </div>
+                                                    </div>
+                                                    <div class="ant-tabs-tab ant-tabs-tab-disabled ng-star-inserted">
+                                                        <div role="tab" nztabnavitem="" cdkmonitorelementfocus=""
+                                                            class="ant-tabs-tab-btn" aria-disabled="true"
+                                                            aria-selected="false" aria-controls="nz-tabs-2-tab-1">2.Mật
+                                                            khẩu
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        class="ant-tabs-tab ant-tabs-tab-disabled ng-star-inserted ant-tabs-tab-active">
+                                                        <div role="tab" nztabnavitem="" cdkmonitorelementfocus=""
+                                                            class="ant-tabs-tab-btn" aria-disabled="true"
+                                                            aria-selected="true" aria-controls="nz-tabs-2-tab-2">3.Tạo
+                                                            hồ sơ
+                                                        </div>
+                                                    </div>
+                                                    <div nz-tabs-ink-bar=""
+                                                        class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
+                                                        style="left: 522px; width: 228px;"></div>
+                                                </div>
+                                            </div>
+                                            <nz-tab-nav-operation
+                                                class="ant-tabs-nav-operations ant-tabs-nav-operations-hidden"><button
+                                                    nz-dropdown="" type="button" tabindex="-1" aria-hidden="true"
+                                                    nzoverlayclassname="nz-tabs-dropdown"
+                                                    class="ant-dropdown-trigger ant-tabs-nav-more"><i nz-icon=""
+                                                        nztype="ellipsis" class="anticon anticon-ellipsis"><svg
+                                                            viewBox="64 64 896 896" focusable="false"
+                                                            fill="currentColor" width="1em" height="1em"
+                                                            data-icon="ellipsis" aria-hidden="true">
+                                                            <path
+                                                                d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z">
+                                                            </path>
+                                                        </svg></i></button>
+                                            </nz-tab-nav-operation>
+                                        </nz-tabs-nav>
+                                        <div class="ant-tabs-content-holder">
+                                            <div class="ant-tabs-content ant-tabs-content-top ant-tabs-content-animated"
+                                                style="margin-left: -200%;">
+                                                <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
+                                                    tabindex="-1" aria-hidden="true"
+                                                    style="visibility: hidden; height: 0px;">
+                                                </div>
+                                                <div nz-tab-body="" class="ant-tabs-tabpane ng-star-inserted"
+                                                    tabindex="-1" aria-hidden="true"
+                                                    style="visibility: hidden; height: 0px;">
+                                                </div>
+                                                <div nz-tab-body=""
+                                                    class="ant-tabs-tabpane ng-star-inserted ant-tabs-tabpane-active"
+                                                    tabindex="0" aria-hidden="false" style="">
+                                                    <app-create-patient _ngcontent-serverapp-c149=""
+                                                        _nghost-serverapp-c148="" class="ng-star-inserted">
+                                                        <div _ngcontent-serverapp-c148="" class="full">
+                                                            <div _ngcontent-serverapp-c148="">
+                                                                <p _ngcontent-serverapp-c148=""
+                                                                    class="font-medium text-sm text-gray-800 leading-17 m-0 py-6">
+                                                                    Tạo hồ sơ y tế đầy đủ thông tin sẽ hỗ trợ việc khám
+                                                                    chữa bệnh của bạn tốt hơn.</p>
+                                                            </div>
+                                                            <form asp-action="RegisterEnterProfile" method="post" id="form-register"
+                                                                class=" ant-form ant-form-horizontal ng-touched ng-dirty ">
+                                                                <div  class="flex flex-col md:flex-row md:gap-6 ant-form ant-form-horizontal ng-touched ng-dirty ng-valid ">
+                            
+                                                                    <div _ngcontent-serverapp-c148=""
+                                                                        class="flex flex-col gap-6 md:w-1/2">
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="border-bottom font-medium text-base text-gray-800 leading-19 pb-2">
+                                                                            Thông tin hồ sơ</div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Họ và tên
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div>
+                                                                            <input _ngcontent-serverapp-c148="" asp-for="Name"
+                                                                                 nz-input=""
+                                                                                placeholder="Họ và tên"
+                                                                                class="h-11 rounded ant-input ng-touched ng-dirty ng-valid form-section__form-input">
+                                                                                <span asp-validation-for="Name" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Số điện
+                                                                                thoại <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div>
+                                                                            <input _ngcontent-serverapp-c148=""
+                                                                                asp-for="RelativePhone" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                                placeholder="Số điện thoại" maxlength="10"
+                                                                                class="h-11 rounded ant-input ng-untouched ng-pristine ng-valid form-section__form-input">
+                                                                                <span asp-validation-for="RelativePhone" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Ngày sinh
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div>
+                                                                            <nz-date-picker _ngcontent-serverapp-c148=""
+                                                                                formcontrolname="birthDay"
+                                                                                nzplaceholder="Ngày tháng năm sinh"
+                                                                                class="w-full h-11 rounded ng-tns-c88-24 ant-picker ng-star-inserted ng-touched ng-dirty ng-valid">
+                                                                                <div
+                                                                                    class="ng-tns-c88-24 ant-picker-input ng-star-inserted">
+                                                                                    <input autocomplete="off" asp-for="Dob" type="date"
+                                                                                        class="ng-tns-c88-24 ng-valid ng-dirty ng-touched datetimepicker form-section__form-input"
+                                                                                        placeholder="Ngày tháng năm sinh"
+                                                                                        size="12">
+                                                                                   
+                                                                                </div>
+                                                                            </nz-date-picker>
+                                                                            <span asp-validation-for="Dob" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Số CMND
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div><input _ngcontent-serverapp-c148="" onkeypress="return /[0-9]/i.test(event.key)"
+                                                                                asp-for="IdentityCard"
+                                                                                placeholder="Số CMND"
+                                                                                class="h-11 rounded ant-input ng-valid ng-touched ng-dirty form-section__form-input">
+                                                                                <span asp-validation-for="IdentityCard" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148="" style="display:table-footer-group;"
+                                                                            class="flex flex-col gap-1">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Giới tính
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div>
+                                                                            <label class="container">Nam
+                                                                              <input type="radio" asp-for="Gender" value="@Gender.Male" />
+                                                                              <span class="checkmark"></span>
+                                                                            </label>
+                                                                            <label class="container">Nữ
+                                                                              <input type="radio" asp-for="Gender" value="@Gender.Female" />
+                                                                              <span class="checkmark"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                    <div _ngcontent-serverapp-c148=""
+                                                                        class="flex flex-col gap-6 md:w-1/2">
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="border-bottom font-medium text-base text-gray-800 leading-19 pb-2">
+                                                                            Thông tin bổ sung</div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Tỉnh /
+                                                                                Thành phố
+                                                                            <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span></div>
+                                                                            
+                                                                                <select class="select select form-section__form-input"
+                                                                                    asp-for="ProvinceId" asp-items="ViewBag.Province"
+                                                                              
+                                                                                    nzplaceholder="Chọn thành phố">
+                                                                                   <option value="">--- Chọn Thành Phố ---</option>
+                                                                                </select>
+                                                                                
+                                                                           
+                                                                            <span asp-validation-for="ProvinceId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Quận /
+                                                                                Huyện
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div>
+                                                                           
+                                                                                <select asp-for="DistrictId" asp-items="ViewBag.District" class=" form-section__form-input"
+                                                                                    nzplaceholder="Chọn quận huyện của bạn"
+                                                                                    >
+                                                                                    <option value="">--- Chọn Quận/Huyện ---</option>
+                                                                                </select>
+                                                                                
+                                                                            <span asp-validation-for="DistrictId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148="" class="text-sm-w500 text-gray-700">Phường /Xã
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div>
+                                                                            
+                                                                                <select asp-for="SubDistrictId" asp-items="ViewBag.SubDistrict" class=" form-section__form-input"
+                                                                                    nzplaceholder="Chọn phường xã của bạn">
+                                                                                   <option value="">--- Chọn Phường/Xã ---</option>
+                                                                                </select>
+                                                                                <span asp-validation-for="SubDistrictId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                            
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group">
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Địa chỉ
+                                                                                cụ thể
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div><input
+                                                                                _ngcontent-serverapp-c148=""
+                                                                                asp-for="Address" 
+                                                                                placeholder="Số nhà, tên đường"
+                                                                                class="h-11 rounded ant-input ng-valid ng-touched ng-dirty form-section__form-input">
+                                                                                <span asp-validation-for="Address" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group" >
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Dân tộc
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div>
+                                                                            
+                                                                                <select class="select form-section__form-input"
+                                                                                    asp-for="EthnicGroupId" asp-items="ViewBag.Ethnics" 
+                                                                              
+                                                                                    nzplaceholder="Chọn dân tộc">
+                                                                                   <option value="">--- Chọn dân tộc ---</option>
+                                                                                </select>
+                                                                                
+                                                                            <span asp-validation-for="EthnicGroupId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <input type="hidden" asp-for="Password" />
+                                                                <input type="hidden" asp-for="Email" />
+                                                              <div _ngcontent-serverapp-c148="" class="py-6 flex md:justify-end"><button _ngcontent-serverapp-c148="" nz-button="" class="w-full md:w-auto md:px-10 button button--login--form hover:opacity-90" >Hoàn tất</button></div>
+                                                            </form>
+                                                            
+                                                        </div>
+                                                    </app-create-patient>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </nz-tabset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </nz-spin>
+</app-register>
+@section Alert{
+    <div class="cdk-global-overlay-wrapper" dir="ltr">
+      @if (TempData["AlertMessage"] != null)
+      {
+          <div id="cdk-overlay-9" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
+            <nz-message-container>
+              <div class="ant-message" style="top: 24px;">
+                <nz-message class="ng-tns-c43-75 ng-star-inserted">
+                  <div class="ant-message-notice ng-tns-c43-75 ng-trigger ng-trigger-moveUpMotion">
+                    <div class="ant-message-notice-content ng-tns-c43-75">
+                      <div class="ant-message-custom-content ng-tns-c43-75 ant-message-@TempData["AlertType"]">
+                          @if(TempData["AlertType"]=="success"){
+
+                              <i nz-icon="" nztype="check-circle" class="anticon ng-tns-c43-75 anticon-check-circle ng-star-inserted" style="">
+                                <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                                    class="ng-tns-c43-75" data-icon="check-circle" aria-hidden="true">
+                                    <path
+                                      d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z">
+                                    </path>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                              </i>
+                          }else{
+                             <i nz-icon="" nztype="close-circle"
+                                class="anticon ng-tns-c43-5 anticon-close-circle ng-star-inserted" style=""><svg
+                                    viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em"
+                                    height="1em" class="ng-tns-c43-5" data-icon="close-circle"
+                                    aria-hidden="true">
+                                    <path
+                                        d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 .3L512 465.6l-99.3-118.4-66.1-.3c-4.4 0-8 3.5-8 8 0 1.9.7 3.7 1.9 5.2l130.1 155L340.5 670a8.32 8.32 0 00-1.9 5.2c0 4.4 3.6 8 8 8l66.1-.3L512 564.4l99.3 118.4 66 .3c4.4 0 8-3.5 8-8 0-1.9-.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z">
+                                    </path>
+                                    <path
+                                        d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                             </i>
+
+                          }
+                        <span class="ng-tns-c43-75 ng-star-inserted" style="">@TempData["AlertMessage"]</span>
+                      </div>
+                    </div>
+                  </div>
+                </nz-message>
+              </div>
+            </nz-message-container>
+          </div>
+            
+      } 
+    </div>
+    
+}
+@section JavaScript{
+    <script src="~/js/plugins/flatpickr.min.js"></script>
+    
+    <script>
+        if (document.querySelector('.datetimepicker')) {
+            flatpickr('.datetimepicker', {
+                allowInput: false,
+                maxDate: new Date().fp_incr(-6570),
+                // sideBySide: true,
+                dateFormat: "d/m/Y",
+            }); // flatpickr
+        }
+    </script>
+    
+    <script>
+        var DistrictId = "";
+        var ProvinceId = "";
+        $(document).ready(function () {
+            $("#ProvinceId").change(function () {
+                $('#DistrictId option').remove();
+                ProvinceId = $('#ProvinceId option:selected').val();
+                if (ProvinceId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Login/GetDistrict?ProvinceId= + ' + ProvinceId, 
+                        success: function (result) {
+                            var s = '<option value="" >-- Chọn Quận Huyện --</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#DistrictId').html(s);
+                        }
+                    })
+                }
+            })
+             $("#DistrictId").change(function () {
+                //$('#sdistric div.choices div.choices__list--dropdown div.choices__list div.choices__item').remove();
+                $('#sfeature div.choices').remove();
+                $('#sdistric #sfeature').html('<select  class="multisteps-form__input form-control" data-val="true" data-val-required="The SubDistrictId field is required." id="SubDistrictId" name="SubDistrictId"></select>');
+                DistrictId = $('#DistrictId option:selected').val();
+                if (DistrictId != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Login/GetSubDistrict?DistrictId= + ' + DistrictId, 
+                        success: function (result) {
+                            var s = '<option value="">-- Chọn Phường Xã --</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option  value="' + result[i].value +'">' + result[i].text + '</option>';
+                            }
+                            $('#SubDistrictId').html(s);
+                        }
+                    })
+                }
+            })
+           
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <script>
+         $(document).ready(function () {
+              $('.select').selectize({
+                  sortField: 'text'
+              });
+          });
+    </script>
+    <script src="~/js/Validator1.js"></script>
+    <script>
+        Validator({
+	        form: "#form-register",
+	        formGroup: ".form-section__form-group",
+	        errorMessage: ".form-section__form-message",
+	        rules: [
+                Validator.isRequired('#Name', 'Vui lòng nhập họ tên.'),
+                Validator.isRequired('#RelativePhone', 'Vui lòng nhập số điện thoại thuộc hồ sơ này.'),
+                Validator.isRequired('#Dob', 'Vui lòng nhập ngày sinh.'),
+                Validator.isRequired('#IdentityCard', 'Vui lòng nhập căn cước công dân.'),
+                Validator.isRequired('#EthnicGroupId', 'Vui lòng chọn dân tộc.'),
+		        Validator.isRequired('#ProvinceId', 'Vui lòng chọn thành phố.'),
+		        Validator.isRequired('#DistrictId', 'Vui lòng chọn quận huyện.'),
+		        Validator.isRequired('#SubDistrictId', 'Vui lòng chọn phường xã.'),
+		        Validator.isRequired('#Address', 'Vui lòng nhập địa chỉ cụ thể'),
+		      
+	        ]
+        })
+    </script>
+}
+
