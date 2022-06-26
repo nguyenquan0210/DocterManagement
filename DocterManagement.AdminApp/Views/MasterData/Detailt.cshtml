@@ -29,10 +29,10 @@
 			</svg>
 		</a>
 	</li>
-	<li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý phòng khám</a></li>
-	<li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết phòng khám</li>
+	<li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý thông tin quản trị</a></li>
+	<li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết thông tin quản trị</li>
 </ol>
-<h6 class="font-weight-bolder mb-0">Chi tiết phòng khám, các bác sĩ chuyên khoa liên quan</h6>
+<h6 class="font-weight-bolder mb-0">Chi tiết thông tin liên hệ quản trị</h6>
 }
 @section Search{
 <form asp-action="Index" method="get">
@@ -51,9 +51,9 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Chi tiết Thông tin liên hệ</h5>
+                            <h5 class="mb-0">Thông tin liên hệ</h5>
                             <p class="text-sm mb-0">
-                                Thông tin liên hệ.
+                                Chi tiết thông tin liên hệ.
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
@@ -119,19 +119,45 @@
 
                                 <p class="btnd btn btn-sm btn-outline-dark mb-0">@Model.FullAddress</p>
                             </div>
+                            <hr class="horizontal dark" />
+                            <div class="d-flex">
+                                <p class="my-auto w-20 btn-outline-dark">@Html.DisplayNameFor(model => model.AccountBankName)</p><p class="my-auto">:</p>
+                                <p class="text-secondary text-sm  my-auto me-3"></p>
+
+                                <p class="btnd btn btn-sm btn-outline-dark mb-0">@Model.AccountBankName</p>
+                            </div>
+                            <hr class="horizontal dark" />
+                            <div class="d-flex">
+                                <p class="my-auto w-20 btn-outline-dark">@Html.DisplayNameFor(model => model.AccountBank)</p><p class="my-auto">:</p>
+                                <p class="text-secondary text-sm  my-auto me-3"></p>
+
+                                <p class="btnd btn btn-sm btn-outline-dark mb-0">@Model.AccountBank</p>
+                            </div>
+                            <hr class="horizontal dark" />
+                            <div class="d-flex">
+                                <p class="my-auto w-20 btn-outline-dark">@Html.DisplayNameFor(model => model.ServiceFee)</p><p class="my-auto">:</p>
+                                <p class="text-secondary text-sm  my-auto me-3"></p>
+
+                                <p class="btnd btn btn-sm btn-outline-dark mb-0">@Model.ServiceFee</p>
+                            </div>
+                            <hr class="horizontal dark" />
+                            <div class="d-flex">
+                                <p class="my-auto w-20 btn-outline-dark">@Html.DisplayNameFor(model => model.Content)</p><p class="my-auto">:</p>
+                                <p class="text-secondary text-sm  my-auto me-3"></p>
+
+                                <p class="btnd btn btn-sm btn-outline-dark mb-0">@Model.Content</p>
+                            </div>
                             <hr class="horizontal dark">
                             <div class="d-flex">
                                 <p class="my-auto w-20 btn-outline-dark">@Html.DisplayNameFor(model => model.Image)</p><p class="my-auto">:</p>
                                 <p class="text-secondary text-sm  my-auto me-3"></p>
 
-                                <p class="btn btn-sm btn-outline-dark mb-0"><img src="@(Configuration["BaseAddress"] + "/img/masterdata-content/" +  Model.Image)" /></p>
+                                <p class="btn btn-sm btn-outline-dark mb-0"><img src="@(Configuration["BaseAddress"] + "/img/" +  Model.Image)" /></p>
                             </div>
                            
 
                         </div>
                     </div>
-
-
 
 
 
@@ -153,9 +179,13 @@
 	var menu_bd = document.getElementById("menu-masterdata");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a-info");
+        var a_xbd = document.getElementById("a_information");
         a_xbd.classList.add("active");
-        var usersExample = document.getElementById("masterdata");
+        var a_acc = document.getElementById("a-info");
+        a_acc.classList.add("active");
+        var dashboardsExamples = document.getElementById("masterdata");
+        dashboardsExamples.classList.add("show");
+        var usersExample = document.getElementById("information");
         usersExample.classList.add("show");
 </script>
 }

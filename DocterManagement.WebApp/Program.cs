@@ -29,7 +29,11 @@ builder.Services.AddTransient<ISpecialityApiClient, SpecialityApiClient>();
 builder.Services.AddTransient<ILocationApiClient, LocationApiClient>();
 builder.Services.AddTransient<IScheduleApiClient, ScheduleApiClient>();
 builder.Services.AddTransient<IDoctorApiClient, DoctorApiClient>();
+builder.Services.AddTransient<IMasterDataApiClient, MasterDataApiClient>();
 builder.Services.AddTransient<IAppointmentApiClient, AppointmentApiClient>();
+builder.Services.AddTransient<IContactApiClient, ContactApiClient>();
+builder.Services.AddTransient<IPostApiClient, PostApiClient>();
+builder.Services.AddTransient<IStatisticApiClient, StatisticApiClient>();
 
 IMvcBuilder builde = builder.Services.AddRazorPages();
 

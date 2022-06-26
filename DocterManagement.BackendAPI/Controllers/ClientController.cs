@@ -68,8 +68,8 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// Lấy tất cả danh sách người dùng theo vai trò
         /// </summary>
         /// 
-        [HttpGet("get-all-user/{role}")]
-        public async Task<ActionResult<ApiResult<List<UserVm>>>> GetAllUser(string role)
+        [HttpGet("get-all-user")]
+        public async Task<ActionResult<ApiResult<List<UserVm>>>> GetAllUser(string? role)
         {
             var user = await _doctorService.GetAllUser(role);
             return Ok(user);

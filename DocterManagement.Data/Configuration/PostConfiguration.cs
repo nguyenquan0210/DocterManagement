@@ -17,9 +17,12 @@ namespace DoctorManagement.Data.Configuration
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Title).IsRequired().HasMaxLength(150);
-            builder.Property(x => x.Description).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.Image).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.Content).IsRequired().HasMaxLength(int.MaxValue);
+            builder.Property(x => x.Description).IsRequired().HasMaxLength(int.MaxValue);
 
             builder.HasOne(x => x.Doctors).WithMany(x => x.Posts).HasForeignKey(x => x.DoctorId);
+            builder.HasOne(x => x.MainMenus).WithMany(x => x.Posts).HasForeignKey(x => x.TopicId);
 
         }
     }

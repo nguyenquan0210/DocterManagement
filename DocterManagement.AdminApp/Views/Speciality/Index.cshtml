@@ -50,7 +50,7 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả danh sách chuyên khoa</h5>
+                            <h5 class="mb-0">Danh sách chuyên khoa</h5>
                             <p class="text-sm mb-0">
                                 
                             </p>
@@ -107,7 +107,7 @@
                                                 <h6 class="ms-3 my-auto">@item.Title</h6>
                                             </div>
                                         </td>
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.Description</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@( item.Description!=null? (item.Description.Length>30?item.Description.Substring(0,29)+"...":item.Description):"")</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.SortOrder</h6></td>
                                         
                                         <td>
@@ -120,7 +120,7 @@
                                             <a  asp-action = "Update" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
                                                 <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
-                                            <a id = "Speciality_@i" onclick="ConfirmDelete("@i")" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
+                                            <a id = "Speciality_@i" onclick="ConfirmStatus(@i)" data-id="@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xóa">
                                                 <i class="fas fa-trash text-secondary"></i>
                                             </a>
                                         </td>
@@ -211,23 +211,6 @@
                 fixedHeight: false,
                 paging: false
             });
-
-            document.querySelectorAll(".export").forEach(function (el) {
-                el.addEventListener("click", function (e) {
-                    var type = el.dataset.type;
-
-                    var data = {
-                        type: type,
-                        filename: "soft-ui-" + type,
-                    };
-
-                    if (type === "csv") {
-                        data.columnDelimiter = "|";
-                    }
-
-                    dataTableSearch.export(data);
-                });
-            });
         };
     </script>
     <script>
@@ -259,7 +242,7 @@
             $("#hiddenEmployeeId").val(SpecialityId);
             document.getElementById("myModel").classList.toggle('delete_none');
             document.getElementById("myModel").classList.toggle('delete_block');
-            $("#quesion").html("Bạn có muốn tạm dừng hoạt động tài khoản này?");
+            $("#quesion").html("Bạn có muốn tạm ẩn chuyên khoa này?");
             $("#okok").html("Có, ẩn nó!");
         }
 

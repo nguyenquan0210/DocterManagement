@@ -1,8 +1,11 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Clinic;
+using DoctorManagement.ViewModels.System.Statistic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.DoctorApp.Controllers
 {
@@ -11,22 +14,60 @@ namespace DoctorManagement.DoctorApp.Controllers
         private readonly IClinicApiClient _clinicApiClient;
         private readonly IConfiguration _configuration;
         private readonly IUserApiClient _userApiClient;
-        private readonly ILocationApiClient _locationApiClient;     
-
+        private readonly ILocationApiClient _locationApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.DoctorApp.Controllers.Clinic";
         public ClinicController(IClinicApiClient clinicApiClient, IUserApiClient userApiClient,
-            IConfiguration configuration, ILocationApiClient locationApiClient)
+            IConfiguration configuration, ILocationApiClient locationApiClient, IStatisticApiClient statisticApiClient)
         {
+            _statisticApiClient = statisticApiClient;
             _clinicApiClient = clinicApiClient;
             _configuration = configuration;
             _userApiClient = userApiClient;
             _locationApiClient = locationApiClient;
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Update(string userName)
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
         {
-            var user = await _userApiClient.GetByUserName(userName);
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
+
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name,
+                    Usertemporary = User.Identity.Name,
+                    Type = "doctor",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
+
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update()
+        {
+            var user = await _userApiClient.GetByUserName(User.Identity.Name);
             var result = await _clinicApiClient.GetById(user.Data.DoctorVm.GetClinic.Id);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "GET",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             //var doctor = await _ClinicApiClient.Get
             if (result.IsSuccessed)
             {
@@ -45,7 +86,8 @@ namespace DoctorManagement.DoctorApp.Controllers
                     Status = clinic.Status,
                     Description = clinic.Description,
                     LocationId = clinic.LocationVm.Id,
-                    DistrictId = clinic.LocationVm.District.Id
+                    DistrictId = clinic.LocationVm.District.Id,
+                    Images = clinic.Images,
                 };
                 return View(updateRequest);
             }
@@ -75,48 +117,59 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return View();
 
             var result = await _clinicApiClient.Update(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "Post",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin phòng khám " + request.Name + " thành công.";
                 TempData["AlertType"] = "alert-success";
-                return RedirectToAction("Update");
+                return RedirectToAction("Detailt");
             }
-
-            ModelState.AddModelError("", result.Message);
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> Detailt(string userName)
+        public async Task<IActionResult> Detailt()
         {
-            var user = await _userApiClient.GetByUserName(userName);
+            var user = await _userApiClient.GetByUserName(User.Identity.Name);
+            if(user.Data.DoctorVm.IsPrimary == false) return RedirectToAction("Error", "Home");
             var result = await _clinicApiClient.GetById(user.Data.DoctorVm.GetClinic.Id);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Detailt",
+                MethodName = "GET",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 var clinicdata = result.Data;
                 ViewBag.Img = clinicdata.ImgLogo;
                 ViewBag.Imgs = clinicdata.Images;
                 ViewBag.Status = clinicdata.Status == Status.NotActivate ? "Ngừng hoạt động" : clinicdata.Status == Status.Active ? "Hoạt động" : "không hoạt động";
-                var clinic = new ClinicVm()/*_mapper.Map<ClinicVm>(clinicdata);*/
-                {
-                    Name = clinicdata.Name,
-                    Id = clinicdata.Id,
-                    Description = clinicdata.Description,
-                    Address = clinicdata.Address,
-                    Status = clinicdata.Status, //== Status.Active ? true : false
-                    DoctorVms = clinicdata.DoctorVms,
-                    LocationVm = clinicdata.LocationVm,
-                    No = clinicdata.No,
-                };
-                return View(clinic);
+               
+                return View(clinicdata);
             }
             return RedirectToAction("Error", "Home");
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteImg(Guid imgId)
         {
             var result = await _clinicApiClient.DeleteImg(imgId);
             return Json(new { response = result });
         }
-       
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllImg(Guid clinicId)
+        {
+            var result = await _clinicApiClient.DeleteAllImg(clinicId);
+            return Json(new { response = result });
+        }
     }
 }

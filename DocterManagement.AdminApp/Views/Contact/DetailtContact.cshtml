@@ -23,10 +23,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý chuyên khoa</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm chuyên khoa</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý liên hệ</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết liên hệ</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm chuyên khoa</h6>
+    <h6 class="font-weight-bolder mb-0">Xem thông tin chi tiết liên hệ</h6>
 }
 @section Search{
 	<form asp-action="Index"  method="get">
@@ -42,13 +42,25 @@
 
            
                 <div class="card mt-4" id="basic-info">
+                   
                     <div class="card-header">
-                        <h5>Thông tin liên hệ</h5>
-                        <p class="text-sm mb-0">
-                            Chi tiết thông tin liên hệ
-                        </p>
+                        <div class="d-lg-flex">
+                            <div>
+                               <h5>Chi tiết liên hệ</h5>
+                                <p class="text-sm mb-0">
+                                    Thông tin chi tiết liên hệ.
+                                </p>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                           
+                                <div class="ms-auto my-auto">
+                                     <span class="badge badge-warning badge-sm" >đã xem</span>
+                              
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
-
                 <div class="card-body pt-0">
                     
                     <div class="row">

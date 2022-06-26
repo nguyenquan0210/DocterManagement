@@ -25,13 +25,13 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý chuyên khoa</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm chuyên khoa</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="ServiceFeePaging">Quản lý phí dịch vụ</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết thông tin thu phí</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm chuyên khoa</h6>
+    <h6 class="font-weight-bolder mb-0">Chi tiết thông tin thu phí dịch vụ</h6>
 }
 @section Search{
-	<form asp-action="Index"  method="get">
+	<form asp-action="ServiceFeePaging"  method="get">
 		<div class="input-group">
 			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
 			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
@@ -53,9 +53,9 @@
                     <div class="card-header">
                         <div class="d-lg-flex">
                             <div>
-                                 <h5>Thông tin khách hàng</h5>
+                                 <h5>Chi tiết thu phí</h5>
                                 <p class="text-sm mb-0">
-                                    Chi tiết thông tin liên hệ
+                                    Chi tiết thông tin thu phí dịch vụ
                                 </p>
                             </div>
                             <div class="ms-auto my-auto mt-lg-0 mt-4 ">
@@ -149,7 +149,9 @@
                             
                             <div class="col-2">
                                 <label asp-for="Image" class="form-label mt-4"></label>
-                                <img src="@(Configuration["BaseAddress"] + "/img/" + Model.Image)"  class="multisteps-form__input form-control" />
+                                <a href="@(Configuration["BaseAddress"] + "/img/annualservicefee-content/" + Model.Image)" target="_bank">
+                                    <img src="@(Configuration["BaseAddress"] + "/img/annualservicefee-content/" + Model.Image)"  class="multisteps-form__input form-control" />
+                                </a>
 
                             </div>
                         }
@@ -174,7 +176,8 @@
                                 </div>
                                <div class="col-6">
                                    <label asp-for="TuitionPaidFreeText" class="form-label mt-4"></label>
-                                    <input asp-for="TuitionPaidFreeNumBer" class="multisteps-form__input form-control" readonly /> 
+                                   <p  class="multisteps-form__input form-control" > @Model.TuitionPaidFreeText</p>
+                                    @*<input asp-for="TuitionPaidFreeText" class="multisteps-form__input form-control" readonly /> *@
 
                                 </div>
                             </div>
@@ -234,7 +237,7 @@
                                 <div class="@(Model.Status == StatusAppointment.pending||Model.Status == StatusAppointment.approved||Model.Status == StatusAppointment.cancel?"col-10":"col-12")">
                                     @if(Model.Status == StatusAppointment.complete)
                                     {
-                                        <a style="margin:0 20px" asp-action="PaymentServiceFeePDF" asp-route-id="@Model.Id"  class="btn bg-gradient-info btn-sm mt-6 mb-0">In phiếu</a>
+                                        <a target="_blank" style="margin:0 20px" asp-action="PaymentServiceFeePDF" asp-route-id="@Model.Id"  class="btn bg-gradient-info btn-sm mt-6 mb-0">In phiếu</a>
                                     }
                                     @if(Model.Type != "trực tiếp")
                                     {
@@ -335,8 +338,16 @@
         })
     </script>
     <script>
-        var menu_bd = document.getElementById("menu-contact");
+        var menu_bd = document.getElementById("menu_acc");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
+        var a_xbd = document.getElementById("a_acc");
+        a_xbd.classList.add("active");
+        var a_acc = document.getElementById("a_service");
+        a_acc.classList.add("active");
+        var dashboardsExamples = document.getElementById("QUANLYTAIKHOAN");
+        dashboardsExamples.classList.add("show");
+        var usersExample = document.getElementById("quanlynhanvien");
+        usersExample.classList.add("show");
     </script>
 }

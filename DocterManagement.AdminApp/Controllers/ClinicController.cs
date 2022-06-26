@@ -64,7 +64,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
            
-            ModelState.AddModelError("", result.Message);
+          
             return View(request);
         }
 
@@ -92,6 +92,7 @@ namespace DoctorManagement.AdminApp.Controllers
                     LocationId = clinic.LocationVm.Id,
                     DistrictId = clinic.LocationVm.District.Id,
                     Images = clinic.Images,
+                    MapUrl = clinic.MapUrl
                 };
                 return View(updateRequest);
             }
@@ -128,7 +129,7 @@ namespace DoctorManagement.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+          
             return View(request);
         }
         [HttpGet]
@@ -141,18 +142,8 @@ namespace DoctorManagement.AdminApp.Controllers
                 ViewBag.Img = clinicdata.ImgLogo;
                 ViewBag.Imgs = clinicdata.Images;
                 ViewBag.Status = clinicdata.Status == Status.NotActivate ? "Ngừng hoạt động" : clinicdata.Status == Status.Active ? "Hoạt động" : "không hoạt động";
-                var clinic = new ClinicVm()/*_mapper.Map<ClinicVm>(clinicdata);*/
-				{
-					Name = clinicdata.Name,
-                    Id = id,
-                    Description = clinicdata.Description,
-                    Address = clinicdata.Address,
-                    Status = clinicdata.Status, //== Status.Active ? true : false
-                    DoctorVms = clinicdata.DoctorVms,
-                    LocationVm = clinicdata.LocationVm,
-                    No = clinicdata.No,
-				};
-				return View(clinic);
+                
+				return View(clinicdata);
             }
             return RedirectToAction("Error", "Home");
         }

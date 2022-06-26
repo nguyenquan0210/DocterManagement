@@ -33,7 +33,7 @@ namespace DoctorManagement.Application.Catalog.Rate
             _context.Rates.Add(rates);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Đánh giá không thành công!");
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -99,7 +99,7 @@ namespace DoctorManagement.Application.Catalog.Rate
         public async Task<ApiResult<RatesVm>> GetById(Guid Id)
         {
             var rates = await _context.Rates.FindAsync(Id);
-            if (rates == null) throw new DoctorManageException($"Cannot find a rates with id: { Id}");
+            if (rates == null) return new ApiErrorResult<RatesVm>("Đánh giá không được xác nhân!");
             var rs = new RatesVm()
             {
                 Id = rates.Id,
@@ -116,14 +116,14 @@ namespace DoctorManagement.Application.Catalog.Rate
         public async Task<ApiResult<bool>> Update(RateUpdateRequest request)
         {
             var rates = await _context.Rates.FindAsync(request.Id);
-            if (rates == null) return new ApiSuccessResult<bool>(false);
+            if (rates == null) return new ApiErrorResult<bool>("Bài viết không được xác nhân!");
             rates.Title = request.Title;
             rates.Description = request.Description;
             rates.Rating = request.Rating;
 
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Cập nhật đánh gia không thành công!");
         }
     }
 }

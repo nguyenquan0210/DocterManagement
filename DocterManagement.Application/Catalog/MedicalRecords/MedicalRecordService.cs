@@ -26,17 +26,49 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             var medical = new MedicalRecord()
             {
                 Diagnose = request.Diagnose,
-                Note = request.Note,
+                Note = request.Note == null?"Null" : request.Note,
                 StatusIllness = request.StatusIllness,
-                Prescription = request.Prescription,
                 CreatedAt = DateTime.Now,
                 Status = Status.Active,
+                TotalAmount = (request.Service.Sum(x=>x.Price.Value)* request.Service.Sum(x => x.Qty)) + (request.Medicine != null? (request.Medicine.Sum(x => x.Price.Value)* request.Medicine.Sum(x => x.Qty)) :0),
                 AppointmentId = request.AppointmentId,
             };
+            medical.ServiceDetailts = new List<ServiceDetailts>();
+            var Service = request.Service.Select(x => new ServiceDetailts()
+            {
+                ServicesId = x.ServiceId,
+                Qty = x.Qty,
+                Price = x.Price.Value,
+                TotalAmount = x.Qty * x.Price.Value
+            });
+            medical.ServiceDetailts.AddRange(Service);
+            if (request.Medicine != null)
+            {
+                medical.MedicineDetailts = new List<MedicineDetailts>();
+                var medicine = request.Medicine.Select(x => new MedicineDetailts()
+                {
+                    MedicineId = x.MedicineId,
+                    Qty = x.Qty,
+                    Afternoon = x.Afternoon==null?0:x.Afternoon.Value,
+                    Noon = x.Noon==null?0:x.Noon.Value,
+                    Night = x.Night==null?0:x.Night.Value,
+                    Morning = x.Morning==null?0:x.Morning.Value,
+                    Use = x.Use,
+                    Price = x.Price.Value,
+                    TotalAmount = x.Qty * x.Price.Value
+                });
+                medical.MedicineDetailts.AddRange(medicine);
+            }
             _context.MedicalRecords.Add(medical);
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            if (rs != 0)
+            {
+                var appointment = await _context.Appointments.FindAsync(request.AppointmentId);
+                appointment.Status = StatusAppointment.complete;
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Tạo hồ sơ bệnh không thành công!");
         }
 
         public async Task<ApiResult<int>> Delete(Guid Id)
@@ -65,11 +97,10 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
             var rs = await query.Select(x => new MedicalRecordVm()
             {
                 Id = x.Id,
-                Date = x.CreatedAt,
+                CreateAt = x.CreatedAt,
                 AppointmentId = x.AppointmentId,
                 Diagnose = x.Diagnose,
                 Note = x.Note,
-                Prescription = x.Prescription,
                 StatusIllness = x.StatusIllness,
                 Status = x.Status
             }).ToListAsync();
@@ -91,11 +122,10 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
                 .Select(x => new MedicalRecordVm()
                 {
                     Id = x.Id,
-                    Date = x.CreatedAt,
+                    CreateAt = x.CreatedAt,
                     AppointmentId = x.AppointmentId,
                     Diagnose = x.Diagnose,
                     Note = x.Note,
-                    Prescription = x.Prescription,
                     StatusIllness = x.StatusIllness,
                     Status = x.Status
 
@@ -114,16 +144,15 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
         public async Task<ApiResult<MedicalRecordVm>> GetById(Guid Id)
         {
             var medicalRecords = await _context.MedicalRecords.FindAsync(Id);
-            if (medicalRecords == null) throw new DoctorManageException($"Cannot find a MedicalRecord with id: { Id}");
+            if (medicalRecords == null) new ApiErrorResult<MedicalRecordVm>("Hồ sơ bệnh không được xác nhận!");
             var rs = new MedicalRecordVm()
             {
                 Id = medicalRecords.Id,
-                Date = medicalRecords.CreatedAt,
+                CreateAt = medicalRecords.CreatedAt,
                 StatusIllness = medicalRecords.StatusIllness,
                 AppointmentId = medicalRecords.AppointmentId,
                 Diagnose = medicalRecords.Diagnose,
                 Note = medicalRecords.Note,
-                Prescription = medicalRecords.Prescription,
                 Status = medicalRecords.Status
             };
             return new ApiSuccessResult<MedicalRecordVm>(rs);
@@ -132,16 +161,15 @@ namespace DoctorManagement.Application.Catalog.MedicalRecords
         public async Task<ApiResult<bool>> Update(MedicalRecordUpdateRequest request)
         {
             var medical = await _context.MedicalRecords.FindAsync(request.Id);
-            if (medical == null) return new ApiSuccessResult<bool>(false);
+            if (medical == null) return new ApiErrorResult<bool>("Hồ sơ bệnh không được xác nhận!");
 
             medical.Status = request.Status;
-            medical.Prescription = request.Prescription;
             medical.Diagnose = request.Diagnose;
             medical.StatusIllness = request.StatusIllness;
             medical.Note = request.Note;
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Cập nhật hồ sơ bệnh không thành công!");
         }
     }
 }

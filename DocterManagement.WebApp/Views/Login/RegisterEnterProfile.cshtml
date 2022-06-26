@@ -473,7 +473,7 @@
           font-family: Arial;
           border-radius: 0.25rem;
           width:100%;
-          padding: 9px 16px;
+          padding: 1px 0;
           margin-bottom:2px;
         }
         .custom-select {
@@ -1022,7 +1022,7 @@
 	        padding-bottom: 0;
         }
 
-        .form-section__form-input {
+        /*.form-section__form-input {
 	        height: 40px;
 	        max-width: 100%;
 	        width: 100%;
@@ -1049,7 +1049,7 @@
         }
         .form-section__form-input::placeholder {
 	        color: #b7b7b7;
-        }
+        }*/
 
         .form-section__form-error-icon {
 	        display: none;
@@ -1245,6 +1245,7 @@
     </style>
 
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 <app-register _nghost-serverapp-c149="" class="ng-star-inserted">
                 <nz-spin _ngcontent-serverapp-c149="" class="ant-spin-nested-loading">
                     
@@ -1407,37 +1408,7 @@
                                                                               <span class="checkmark"></span>
                                                                             </label>
                                                                         </div>
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1 form-section__form-group">
-                                                                            <div _ngcontent-serverapp-c148=""
-                                                                                class="text-sm-w500 text-gray-700">Địa chỉ
-                                                                                email của bạn
-                                                                            <span _ngcontent-serverapp-c148=""
-                                                                                    class="text-red-500">*</span></div><input
-                                                                                _ngcontent-serverapp-c148=""
-                                                                                asp-for="Email" 
-                                                                                placeholder="Địa chỉ email của bạn"
-                                                                                class="h-11 rounded ant-input ng-touched ng-dirty ng-valid form-section__form-input">
-                                                                                <span asp-validation-for="Email" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
-                                                                        </div>
-                                                                        <div _ngcontent-serverapp-c148=""
-                                                                            class="flex flex-col gap-1 form-section__form-group" >
-                                                                            <div _ngcontent-serverapp-c148=""
-                                                                                class="text-sm-w500 text-gray-700">Dân tộc
-                                                                                <span _ngcontent-serverapp-c148=""
-                                                                                    class="text-red-500">*</span>
-                                                                            </div>
-                                                                            <div class=" custom-select  ">
-                                                                                <select class="form-section__form-input"
-                                                                                    asp-for="EthnicGroupId" asp-items="ViewBag.Ethnics" 
-                                                                              
-                                                                                    nzplaceholder="Chọn dân tộc">
-                                                                                   @*<option>--- Chọn dân tộc ---</option>*@
-                                                                                </select>
-                                                                                
-                                                                            </div>
-                                                                            <span asp-validation-for="EthnicGroupId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
-                                                                        </div>
+                                                                        
                                                                     </div>
                                                                     <div _ngcontent-serverapp-c148=""
                                                                         class="flex flex-col gap-6 md:w-1/2">
@@ -1452,7 +1423,7 @@
                                                                             <span _ngcontent-serverapp-c148=""
                                                                                     class="text-red-500">*</span></div>
                                                                             
-                                                                                <select class=" select form-section__form-input"
+                                                                                <select class="select select form-section__form-input"
                                                                                     asp-for="ProvinceId" asp-items="ViewBag.Province"
                                                                               
                                                                                     nzplaceholder="Chọn thành phố">
@@ -1471,7 +1442,7 @@
                                                                                     class="text-red-500">*</span>
                                                                             </div>
                                                                            
-                                                                                <select asp-for="DistrictId" asp-items="ViewBag.District" class=" select form-section__form-input"
+                                                                                <select asp-for="DistrictId" asp-items="ViewBag.District" class=" form-section__form-input"
                                                                                     nzplaceholder="Chọn quận huyện của bạn"
                                                                                     >
                                                                                     <option value="">--- Chọn Quận/Huyện ---</option>
@@ -1486,7 +1457,7 @@
                                                                                     class="text-red-500">*</span>
                                                                             </div>
                                                                             
-                                                                                <select asp-for="SubDistrictId" asp-items="ViewBag.SubDistrict" class=" select form-section__form-input"
+                                                                                <select asp-for="SubDistrictId" asp-items="ViewBag.SubDistrict" class=" form-section__form-input"
                                                                                     nzplaceholder="Chọn phường xã của bạn">
                                                                                    <option value="">--- Chọn Phường/Xã ---</option>
                                                                                 </select>
@@ -1507,10 +1478,27 @@
                                                                                 class="h-11 rounded ant-input ng-valid ng-touched ng-dirty form-section__form-input">
                                                                                 <span asp-validation-for="Address" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
                                                                         </div>
+                                                                        <div _ngcontent-serverapp-c148=""
+                                                                            class="flex flex-col gap-1 form-section__form-group" >
+                                                                            <div _ngcontent-serverapp-c148=""
+                                                                                class="text-sm-w500 text-gray-700">Dân tộc
+                                                                                <span _ngcontent-serverapp-c148=""
+                                                                                    class="text-red-500">*</span>
+                                                                            </div>
+                                                                            
+                                                                                <select class="select form-section__form-input"
+                                                                                    asp-for="EthnicGroupId" asp-items="ViewBag.Ethnics" 
+                                                                              
+                                                                                    nzplaceholder="Chọn dân tộc">
+                                                                                   <option value="">--- Chọn dân tộc ---</option>
+                                                                                </select>
+                                                                                
+                                                                            <span asp-validation-for="EthnicGroupId" class="form-section__form-message">Vui lòng nhập mật khẩu</span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <input type="hidden" asp-for="Password" />
-                                                                <input type="hidden" asp-for="PhoneNumber" />
+                                                                <input type="hidden" asp-for="Email" />
                                                               <div _ngcontent-serverapp-c148="" class="py-6 flex md:justify-end"><button _ngcontent-serverapp-c148="" nz-button="" class="w-full md:w-auto md:px-10 button button--login--form hover:opacity-90" >Hoàn tất</button></div>
                                                             </form>
                                                             
@@ -1527,6 +1515,59 @@
                     
                 </nz-spin>
 </app-register>
+@section Alert{
+    <div class="cdk-global-overlay-wrapper" dir="ltr">
+      @if (TempData["AlertMessage"] != null)
+      {
+          <div id="cdk-overlay-9" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
+            <nz-message-container>
+              <div class="ant-message" style="top: 24px;">
+                <nz-message class="ng-tns-c43-75 ng-star-inserted">
+                  <div class="ant-message-notice ng-tns-c43-75 ng-trigger ng-trigger-moveUpMotion">
+                    <div class="ant-message-notice-content ng-tns-c43-75">
+                      <div class="ant-message-custom-content ng-tns-c43-75 ant-message-@TempData["AlertType"]">
+                          @if(TempData["AlertType"]=="success"){
+
+                              <i nz-icon="" nztype="check-circle" class="anticon ng-tns-c43-75 anticon-check-circle ng-star-inserted" style="">
+                                <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                                    class="ng-tns-c43-75" data-icon="check-circle" aria-hidden="true">
+                                    <path
+                                      d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z">
+                                    </path>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                              </i>
+                          }else{
+                             <i nz-icon="" nztype="close-circle"
+                                class="anticon ng-tns-c43-5 anticon-close-circle ng-star-inserted" style=""><svg
+                                    viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em"
+                                    height="1em" class="ng-tns-c43-5" data-icon="close-circle"
+                                    aria-hidden="true">
+                                    <path
+                                        d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 .3L512 465.6l-99.3-118.4-66.1-.3c-4.4 0-8 3.5-8 8 0 1.9.7 3.7 1.9 5.2l130.1 155L340.5 670a8.32 8.32 0 00-1.9 5.2c0 4.4 3.6 8 8 8l66.1-.3L512 564.4l99.3 118.4 66 .3c4.4 0 8-3.5 8-8 0-1.9-.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z">
+                                    </path>
+                                    <path
+                                        d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                             </i>
+
+                          }
+                        <span class="ng-tns-c43-75 ng-star-inserted" style="">@TempData["AlertMessage"]</span>
+                      </div>
+                    </div>
+                  </div>
+                </nz-message>
+              </div>
+            </nz-message-container>
+          </div>
+            
+      } 
+    </div>
+    
+}
 @section JavaScript{
     <script src="~/js/plugins/flatpickr.min.js"></script>
     
@@ -1534,93 +1575,13 @@
         if (document.querySelector('.datetimepicker')) {
             flatpickr('.datetimepicker', {
                 allowInput: false,
-                maxDate: new Date(),
+                maxDate: new Date().fp_incr(-6570),
                 // sideBySide: true,
                 dateFormat: "d/m/Y",
             }); // flatpickr
         }
     </script>
-    <script>
-        var x, i, j, l, ll, selElmnt, a, b, c;
-        /* Look for any elements with the class "custom-select": */
-        x = document.getElementsByClassName("custom-select");
-        l = x.length;
-        for (i = 0; i < l; i++) {
-          selElmnt = x[i].getElementsByTagName("select")[0];
-          ll = selElmnt.length;
-          /* For each element, create a new DIV that will act as the selected item: */
-          a = document.createElement("DIV");
-          a.setAttribute("class", "select-selected");
-          a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-          x[i].appendChild(a);
-          /* For each element, create a new DIV that will contain the option list: */
-          b = document.createElement("DIV");
-          b.setAttribute("class", "select-items select-hide");
-          for (j = 1; j < ll; j++) {
-            /* For each option in the original select element,
-            create a new DIV that will act as an option item: */
-            c = document.createElement("DIV");
-            c.innerHTML = selElmnt.options[j].innerHTML;
-            c.addEventListener("click", function(e) {
-                /* When an item is clicked, update the original select box,
-                and the selected item: */
-                var y, i, k, s, h, sl, yl;
-                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-                sl = s.length;
-                h = this.parentNode.previousSibling;
-                for (i = 0; i < sl; i++) {
-                  if (s.options[i].innerHTML == this.innerHTML) {
-                    s.selectedIndex = i;
-                    h.innerHTML = this.innerHTML;
-                    y = this.parentNode.getElementsByClassName("same-as-selected");
-                    yl = y.length;
-                    for (k = 0; k < yl; k++) {
-                      y[k].removeAttribute("class");
-                    }
-                    this.setAttribute("class", "same-as-selected");
-                    break;
-                  }
-                }
-                h.click();
-            });
-            b.appendChild(c);
-          }
-          x[i].appendChild(b);
-          a.addEventListener("click", function(e) {
-            /* When the select box is clicked, close any other select boxes,
-            and open/close the current select box: */
-            e.stopPropagation();
-            closeAllSelect(this);
-            this.nextSibling.classList.toggle("select-hide");
-            this.classList.toggle("select-arrow-active");
-          });
-        }
-
-        function closeAllSelect(elmnt) {
-          /* A function that will close all select boxes in the document,
-          except the current select box: */
-          var x, y, i, xl, yl, arrNo = [];
-          x = document.getElementsByClassName("select-items");
-          y = document.getElementsByClassName("select-selected");
-          xl = x.length;
-          yl = y.length;
-          for (i = 0; i < yl; i++) {
-            if (elmnt == y[i]) {
-              arrNo.push(i)
-            } else {
-              y[i].classList.remove("select-arrow-active");
-            }
-          }
-          for (i = 0; i < xl; i++) {
-            if (arrNo.indexOf(i)) {
-              x[i].classList.add("select-hide");
-            }
-          }
-        }
-        /* If the user clicks anywhere outside the select box,
-        then close all select boxes: */
-        document.addEventListener("click", closeAllSelect);
-    </script>
+    
     <script>
         var DistrictId = "";
         var ProvinceId = "";
@@ -1633,7 +1594,7 @@
                         type: 'GET',
                         url: '/Login/GetDistrict?ProvinceId= + ' + ProvinceId, 
                         success: function (result) {
-                            var s = '<option >-- Chọn Quận Huyện --</option>';
+                            var s = '<option value="" >-- Chọn Quận Huyện --</option>';
                             for (var i = 0; i < result.length; i++) {
                                 s += '<option value="' + result[i].value +'">' + result[i].text + '</option>';
                             }
@@ -1652,7 +1613,7 @@
                         type: 'GET',
                         url: '/Login/GetSubDistrict?DistrictId= + ' + DistrictId, 
                         success: function (result) {
-                            var s = '<option >-- Chọn Phường Xã --</option>';
+                            var s = '<option value="">-- Chọn Phường Xã --</option>';
                             for (var i = 0; i < result.length; i++) {
                                 s += '<option  value="' + result[i].value +'">' + result[i].text + '</option>';
                             }
@@ -1664,7 +1625,15 @@
            
         });
     </script>
-    <script src="~/js/Validator2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <script>
+         $(document).ready(function () {
+              $('.select').selectize({
+                  sortField: 'text'
+              });
+          });
+    </script>
+    <script src="~/js/Validator1.js"></script>
     <script>
         Validator({
 	        form: "#form-register",
@@ -1680,8 +1649,7 @@
 		        Validator.isRequired('#DistrictId', 'Vui lòng chọn quận huyện.'),
 		        Validator.isRequired('#SubDistrictId', 'Vui lòng chọn phường xã.'),
 		        Validator.isRequired('#Address', 'Vui lòng nhập địa chỉ cụ thể'),
-		        Validator.isRequired('#Email', 'Vui lòng nhập địa chỉ e-mail.'),
-                Validator.isEmail('#Email'),
+		      
 	        ]
         })
     </script>

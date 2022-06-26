@@ -75,6 +75,10 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Controller.ToString()), "controller");
             requestContent.Add(new StringContent(request.ParentId.ToString()), "parentId");
             requestContent.Add(new StringContent(request.Type.ToString()), "type");
+            if (request.Title != null)
+                requestContent.Add(new StringContent(request.Title.ToString()), "title");
+            if (request.Description != null)
+                requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
             var response = await client.PostAsync($"/api/masterData/create-mainmenu", requestContent);
             var result = await response.Content.ReadAsStringAsync();
@@ -118,7 +122,8 @@ namespace DoctorManagement.ApiIntegration
             return await GetAsync<PagedResult<MainMenuVm>>(
               $"/api/masterData/get-paging-mainmenu?pageIndex={request.PageIndex}" +
               $"&pageSize={request.PageSize}" +
-              $"&keyword={request.Keyword}");
+              $"&keyword={request.Keyword}" +
+              $"&type={request.Type}");
         }
 
         public async Task<ApiResult<InformationVm>> GetById()
@@ -162,7 +167,10 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.Company.ToString()), "company");
             requestContent.Add(new StringContent(request.FullAddress.ToString()), "fullAddress");
             requestContent.Add(new StringContent(request.Email.ToString()), "email");
-            requestContent.Add(new StringContent(request.IsDeleted.ToString()), "isDeleted");
+            requestContent.Add(new StringContent(request.AccountBankName.ToString()), "accountBankName");
+            requestContent.Add(new StringContent(request.AccountBank.ToString()), "accountBank");
+            requestContent.Add(new StringContent(request.Content.ToString()), "content");
+            requestContent.Add(new StringContent(request.ServiceFee.ToString()), "serviceFee");
 
             var response = await client.PutAsync($"/api/masterData", requestContent);
             var result = await response.Content.ReadAsStringAsync();
@@ -220,7 +228,10 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.ParentId.ToString()), "parentId");
             requestContent.Add(new StringContent(request.Type.ToString()), "type");
             requestContent.Add(new StringContent(request.IsDeleted.ToString()), "isDeleted");
-
+            if (request.Title != null)
+                requestContent.Add(new StringContent(request.Title.ToString()), "title");
+            if (request.Description != null)
+                requestContent.Add(new StringContent(request.Description.ToString()), "description");
             var response = await client.PutAsync($"/api/masterData/update-mainmenu", requestContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

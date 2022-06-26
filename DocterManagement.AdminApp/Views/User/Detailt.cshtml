@@ -26,13 +26,13 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý tài khoản</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tài khoản quản trị</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Thông tin chi tiết tài khoản quản trị</h6>
 }
 @section Search{
-	<form asp-controller="User" asp-action="Index"  method="get">
+	<form asp-action="Index"  method="get">
 		<div class="input-group">
 			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
 			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
@@ -47,9 +47,9 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Chi tiết tài khoản</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            Thông tin chi tiết tài khoản quản trị
                         </p>
                     </div>
 
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                    
-                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                    <a asp-action="UpdateAdmin" asp-route-id="@Model.Id" class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Chỉnh sửa</a>
                 </div>
                 </div>
            </form>

@@ -49,9 +49,9 @@ namespace DoctorManagement.ApiIntegration
         {
            return  await GetListAsync<PatientVm>($"/api/client/get-patient-profile/{username}");
         }
-        public async Task<ApiResult<List<UserVm>>> GetAllUser(string role)
+        public async Task<ApiResult<List<UserVm>>> GetAllUser(string? role)
         {
-            return await GetListAsync<UserVm>($"/api/client/get-all-user/{role}");
+            return await GetListAsync<UserVm>($"/api/client/get-all-user?role="+role);
         }
 
         public async Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request)
@@ -73,7 +73,7 @@ namespace DoctorManagement.ApiIntegration
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
-        public async Task<ApiResult<bool>> AddInfo(AddPatientInfoRequest request)
+        public async Task<ApiResult<Guid>> AddInfo(AddPatientInfoRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -87,9 +87,9 @@ namespace DoctorManagement.ApiIntegration
             var response = await client.PostAsync($"/api/client/add-patient-info", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<Guid>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+            return JsonConvert.DeserializeObject<ApiErrorResult<Guid>>(result);
         }
     }
 }

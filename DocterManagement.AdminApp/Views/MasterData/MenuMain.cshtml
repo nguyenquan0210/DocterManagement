@@ -27,10 +27,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý phòng khám</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách phòng khám</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="MenuMain">Quản lý tiêu đề menu</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách tiêu đề menu</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Danh sách phòng khám</h6>
+    <h6 class="font-weight-bolder mb-0">Danh sách thông tin tất cả các tiêu đề menu</h6>
 }
 @section Search{
 	<form asp-controller="MasterData" asp-action="MenuMain"  method="get">
@@ -48,16 +48,20 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả phòng khám</h5>
+                            <h5 class="mb-0">Danh sách menu</h5>
                             <p class="text-sm mb-0">
-                               Quản lý tất cả phòng khám.
+                               Danh sách thông tin tất cả các tiêu đề menu.
                             </p>
                         </div>
-                        <div class="ms-auto my-auto mt-lg-0 mt-4">
+                        <div class="ms-auto my-auto mt-lg-0 mt-4 col-6">
                            
                             <div class="ms-auto my-auto">
-                                
-                                <a asp-action="CreateMainMenu" asp-controller="MasterData"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm phòng khám</a>
+                                 <form  asp-action="MenuMain" method="get"
+                                      class="m-4 col-7 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
+                                    <select id ="type" name="type" oninvalid="@ViewBag.Type" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.Types" >
+                                    </select>
+                                </form>
+                                <a asp-action="CreateMainMenu" asp-controller="MasterData"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm menu</a>
                                 
                             </div>
                         </div>
@@ -205,7 +209,12 @@
 
 @section jsFooter{
     <script>
-    
+        if (document.getElementById('type')) {
+            var type = document.getElementById('type');
+            const example = new Choices(type,{
+                searchEnabled: false
+            });
+        }
       
     </script>
     <script src="~/js/plugins/datatables.js"></script>

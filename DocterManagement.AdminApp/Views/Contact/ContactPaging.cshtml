@@ -25,10 +25,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý phòng khám</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách phòng khám</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index ">Quản lý liên hệ</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách liên hệ</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Danh sách phòng khám</h6>
+    <h6 class="font-weight-bolder mb-0">Danh sách Liên hệ</h6>
 }
 @section Search{
 	<form asp-controller="MasterData" asp-action="MenuMain"  method="get">
@@ -46,16 +46,16 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả phòng khám</h5>
+                            <h5 class="mb-0">Danh sách liên hệ</h5>
                             <p class="text-sm mb-0">
-                               Quản lý tất cả phòng khám.
+                               Quản lý tất cả danh sách liên hệ.
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                            
                             <div class="ms-auto my-auto">
                                 
-                                <a asp-action="CreateMainMenu" asp-controller="MasterData"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm phòng khám</a>
+                               
                                 
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                                        
                                         
                                         <td>
-                                            <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-danger") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "Hoạt động" : "đã khóa")</span>
+                                            <span class="badge @(item.IsDeleted == false ? "badge-success" : "badge-warning") badge-sm" id="status_@item.Id">@(item.IsDeleted == false ? "chưa xem" : "đã xem")</span>
                                         </td>
                                         <td class="text-sm">
                                             <a asp-controller = "Contact" asp-action = "DetailtContact" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">

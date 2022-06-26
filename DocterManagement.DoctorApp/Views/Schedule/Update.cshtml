@@ -32,10 +32,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý phòng khám</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm phòng khám</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý lịch khám</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cập nhật lịch khám</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm phòng khám tại thành phố Đà Nẵng</h6>
+    <h6 class="font-weight-bolder mb-0">Cập nhật lịch khám</h6>
 }
 
 
@@ -47,9 +47,9 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Cập nhật lịch khám</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            Lưu ý lịch khám đã có người đặt khám không thể cập nhật trừ khi hủy lịch hẹn.
                         </p>
                     </div>
 
@@ -172,13 +172,9 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
         <script>
 
-           var menu_bd = document.getElementById("menu_clinic");
+           var menu_bd = document.getElementById("menu-schedule");
             menu_bd.classList.add("active");
             menu_bd.classList.remove("collapsed");
-            var a_xbd = document.getElementById("a_createclinic");
-            a_xbd.classList.add("active");
-            var usersExample = document.getElementById("manageclinic");
-            usersExample.classList.add("show");
 
         </script>
 }

@@ -21,7 +21,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Create([FromBody] PostCreateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Create([FromForm] PostCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -29,15 +29,15 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _postService.Create(request);
             if (!result.IsSuccessed)
-                return BadRequest();
+                return BadRequest(result);
 
             return Ok(result);
         }
         /// <summary>
-        /// Xóa bài viết
+        /// Xóa bài viết từ bác sĩ
         /// </summary>
         /// 
-        [HttpDelete("{Id}")]
+        [HttpDelete("deleted-doctor/{Id}")]
         [Authorize]
         public async Task<ActionResult<ApiResult<int>>> Delete([FromRoute] Guid Id)
         {
@@ -46,7 +46,24 @@ namespace DoctorManagement.BackendAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _postService.Delete(Id);
+            var result = await _postService.Delete(Id,true);
+
+            return Ok(result);
+        }
+        /// <summary>
+        /// Xóa bài viết từ admin
+        /// </summary>
+        /// 
+        [HttpDelete("deleted-admin/{Id}")]
+        [Authorize]
+        public async Task<ActionResult<ApiResult<int>>> DeleteAdmin([FromRoute] Guid Id)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _postService.Delete(Id,false);
 
             return Ok(result);
         }
@@ -56,7 +73,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> Update([FromBody] PostUpdateRequest request)
+        public async Task<ActionResult<ApiResult<bool>>> Update([FromForm] PostUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -64,8 +81,8 @@ namespace DoctorManagement.BackendAPI.Controllers
             }
             var result = await _postService.Update(request);
             if (!result.IsSuccessed)
-                return BadRequest();
-            return Ok();
+                return BadRequest(result);
+            return Ok(result);
         }
         /// <summary>
         /// Lấy danh sách phân trang bài viết
@@ -78,6 +95,16 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
+        /// Lấy danh sách phân trang bài viết từ admin
+        /// </summary>
+        /// 
+        [HttpGet("admin/paging")]
+        public async Task<ActionResult<ApiResult<PagedResult<PostVm>>>> GetAllPagingPostAdmin([FromQuery] GetPostPagingRequest request)
+        {
+            var result = await _postService.GetAllPagingAdmin(request);
+            return Ok(result);
+        }
+        /// <summary>
         /// Lấy bài viết theo id
         /// </summary>
         /// 
@@ -86,7 +113,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         {
             var result = await _postService.GetById(Id);
             if (!result.IsSuccessed)
-                return BadRequest("Cannot find post");
+                return BadRequest(result);
             return Ok(result);
         }
         /// <summary>

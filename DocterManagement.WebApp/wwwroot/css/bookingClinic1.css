@@ -6,6 +6,7 @@
 
 
 
+
 .offcanvas-backdrop[_ngcontent-serverApp-c50] {
     position: fixed;
     top: 0px;
@@ -28,7 +29,7 @@
         color: rgb(26 118 227 / var(--tw-text-opacity))
     }
 
-@@media (min-width: 782px) {
+@media (min-width: 782px) {
     #primary-menu[_ngcontent-serverApp-c50] .nav-link[_ngcontent-serverApp-c50]:hover {
         background-color: inherit
     }
@@ -48,7 +49,7 @@
         background-color: rgb(249 250 251 / var(--tw-bg-opacity))
     }
 
-@@media (min-width: 782px) {
+@media (min-width: 782px) {
     #primary-menu[_ngcontent-serverApp-c50] .dropdown-footer[_ngcontent-serverApp-c50] .dropdown-item[_ngcontent-serverApp-c50] {
         display: block
     }
@@ -70,13 +71,13 @@
     display: none !important
 }
 
-@@media (min-width: 782px) {
+@media (min-width: 782px) {
     #primary-menu[_ngcontent-serverApp-c50] .dropdown-toggle[_ngcontent-serverApp-c50] {
         display: flex !important
     }
 }
 
-@@media (max-width: 782px) {
+@media (max-width: 782px) {
     .collapse[_ngcontent-serverApp-c50]:not(.show) {
         display: none
     }
@@ -87,7 +88,7 @@
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
-@@media (min-width: 782px) {
+@media (min-width: 782px) {
     .md\:collapse[_ngcontent-serverApp-c50]:not(.show) {
         display: none
     }
@@ -114,12 +115,12 @@
         }
 }
 
-@@media (min-width: 1024px) {
+@media (min-width: 1024px) {
     .lg\:collapse[_ngcontent-serverApp-c50]:not(.show) {
         display: none
     }
 }
-
+    
 
 
 [_nghost-serverApp-c54] .ant-collapse-content-box {

@@ -15,8 +15,8 @@ namespace DoctorManagement.WebApp.Controllers.Components
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            //if(User.Identity.Name==null) return View();
-            var patients = (await _doctorApiClient.GetPatientProfile("0373951042")).Data;
+            if(User.Identity.Name==null) return View();
+            var patients = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             var patient = patients.FirstOrDefault(x => x.IsPrimary == true);
             ViewBag.PatientName = patient.Name;
             return View();

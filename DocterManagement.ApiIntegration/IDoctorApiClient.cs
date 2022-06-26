@@ -17,7 +17,7 @@ namespace DoctorManagement.ApiIntegration
         Task<ApiResult<PatientVm>> GetByPatientId(Guid Id);
         Task<ApiResult<List<PatientVm>>> GetPatientProfile(string username);
         Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request);
-        Task<ApiResult<bool>> AddInfo(AddPatientInfoRequest request);
-        Task<ApiResult<List<UserVm>>> GetAllUser(string role);
+        Task<ApiResult<Guid>> AddInfo(AddPatientInfoRequest request);
+        Task<ApiResult<List<UserVm>>> GetAllUser(string? role);
     }
 }

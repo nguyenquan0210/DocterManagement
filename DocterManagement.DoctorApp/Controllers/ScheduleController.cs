@@ -1,8 +1,11 @@
 ﻿using DoctorManagement.ApiIntegration;
 using DoctorManagement.Data.Enums;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.System.Statistic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.DoctorApp.Controllers
 {
@@ -10,14 +13,44 @@ namespace DoctorManagement.DoctorApp.Controllers
     {
         private readonly IScheduleApiClient _scheduleApiClient;
         private readonly IConfiguration _configuration;
-
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.DoctorApp.Controllers.Schedule";
         public ScheduleController(IScheduleApiClient ScheduleApiClient,
-            IConfiguration configuration)
+            IConfiguration configuration, IStatisticApiClient statisticApiClient)
         {
+            _statisticApiClient = statisticApiClient;
             _scheduleApiClient = ScheduleApiClient;
             _configuration = configuration;
         }
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
 
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name,
+                    Usertemporary = User.Identity.Name,
+                    Type = "doctor",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
+
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
+        }
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetSchedulePagingRequest()
@@ -27,6 +60,14 @@ namespace DoctorManagement.DoctorApp.Controllers
                 PageSize = pageSize
             };
             var data = await _scheduleApiClient.GetSchedulePagings(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Index",
+                MethodName = "Get",
+                ExtraProperties = data.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             ViewBag.Keyword = keyword;
 
             if (TempData["result"] != null)
@@ -41,6 +82,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             ViewBag.TimeLine = SeletectTimeLine("");
             ViewBag.WeekDay = SeletectWeekDay("");
             ViewBag.Selection = new List<SelectListItem>();
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Create",
+                MethodName = "Get",
+                ExtraProperties = "success",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             return View();
         }
         [HttpGet]
@@ -148,7 +197,14 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return View();
             request.Username = User.Identity.Name;
             var result = await _scheduleApiClient.Create(request);
-
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Create",
+                MethodName = "Post",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Đăt khám thành công";
@@ -163,6 +219,14 @@ namespace DoctorManagement.DoctorApp.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             var result = await _scheduleApiClient.GetById(id);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "Get",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{id: " + id + "}",
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 var Schedule = result.Data;
@@ -189,6 +253,14 @@ namespace DoctorManagement.DoctorApp.Controllers
                 return View();
 
             var result = await _scheduleApiClient.Update(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "Post",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin phòng khám thành công.";
@@ -204,6 +276,14 @@ namespace DoctorManagement.DoctorApp.Controllers
         public async Task<IActionResult> Detailt(Guid id)
         {
             var result = await _scheduleApiClient.GetById(id);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Detailt",
+                MethodName = "Get",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{id: " + id + "}",
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 var ScheduleData = result.Data;

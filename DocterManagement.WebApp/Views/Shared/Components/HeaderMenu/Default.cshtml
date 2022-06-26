@@ -1,0 +1,163 @@
+﻿@using DoctorManagement.ViewModels.Catalog.MasterData
+@{
+    var menus = (List<MainMenuVm>)ViewBag.Menus;
+    var menudrops = (List<MainMenuVm>)ViewBag.Menusdrops;
+    var information = (InformationVm)ViewBag.Information;
+    var i = 0;
+}
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<div _ngcontent-serverapp-c50="" class="mr-auto flex items-center space-x-2"><button _ngcontent-serverapp-c50="" onclick="menuShow()"
+        type="button" aria-label="Toggle navigation"
+        class="primary-menu-toggle border-none bg-transparent md:hidden text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"><span
+            _ngcontent-serverapp-c50="" class="sr-only">Navigation</span><svg _ngcontent-serverApp-c50="" width="24"
+            height="24">
+            <path _ngcontent-serverApp-c50="" d="M5 6h14M5 12h14M5 18h14" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round"></path>
+        </svg></button><a _ngcontent-serverapp-c50="" class="py-2 block" href="/"><img style="width:110px;height:25px"
+            _ngcontent-serverapp-c50="" src="@(Configuration["BaseAddress"] + "/img/" + information.Image)" alt="DoctorMed" class="w-[118px] h-[40px]"></a>
+</div>
+<nav _ngcontent-serverapp-c50="" id="primary-menu" style="    min-width: 30%;"
+    class="absolute md:relative top-0 left-0 transition transform origin-top-right h-screen md:h-auto overflow-scroll md:overflow-visible z-50 bg-white md:bg-transparent md:flex hidden">
+    <div _ngcontent-serverapp-c50="" class="offcanvas-header md:hidden"><button _ngcontent-serverapp-c50=""
+            type="button" aria-label="Toggle navigation" id="primary-menu-close"
+            class="bg-gray-100 rounded-full border-0 p-1 m-3 cursor-pointer primary-menu-toggle"><span
+                _ngcontent-serverapp-c50="" class="sr-only">Close Navigation</span><img _ngcontent-serverapp-c50=""
+                src="~/img/booking/svg/x.svg" class="w-6 h-6"></button></div>
+    <div _ngcontent-serverapp-c50="" class="md:flex items-center">
+        <ul _ngcontent-serverapp-c50="" id="menu-primary"
+            class="px-6 mb-0 md:flex md:pr-0 text-sm font-semibold list-none">
+        @foreach(var item in menus){
+            
+                var menudropitem = menudrops.Where(x=>x.ParentId==item.Id).ToList();
+            
+            <li _ngcontent-serverapp-c50="" class=" menu-item  @(menudropitem==null?"menu-item-type-post_type menu-item-object-page":"menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown group")  nav-item ">
+                <div _ngcontent-serverapp-c50=""
+                    class="border-b border-b-solid -mx-6 px-6 md:border-0 md:px-0 md:-mx-0">
+                    <a _ngcontent-serverapp-c50="" data-toggle="@(menudropitem.Count() == 0?"":"dropdown")" aria-expanded="@(menudropitem.Count() == 0?"":"false")" @(menudropitem .Count() != 0?"":"href=/"+item.Controller+"/"+item.Action)  id="menu-item-dropdown-@i" class="@(menudropitem.Count() == 0?"":"dropdown-toggle") nav-link" >
+                        <span
+                            _ngcontent-serverapp-c50="">@item.Name</span></a>
+                    <ul _ngcontent-serverapp-c50="" aria-labelledby="menu-item-dropdown-@i"
+                        class="dropdown-menu group-hover:block list-none p-0 md:absolute md:hidden md:top-75 md:bg-white md:rounded md:shadow-lg md:ring-1 ring-slate-900/5 overflow-hidden">
+                        @foreach(var menuitem in menudropitem){
+
+                            <li _ngcontent-serverapp-c50=""
+                                class="mt-4 menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                                <a _ngcontent-serverapp-c50="" asp-controller="@menuitem.Controller" asp-action="@menuitem.Action"
+                                    class="dropdown-item flex-col md:items-start md:p-4 md:mx-4 md:rounded-lg">
+                                    <span _ngcontent-serverapp-c50="">@menuitem.Name</span>
+                                    <p _ngcontent-serverapp-c50=""
+                                        class="hidden md:block text-sm font-normal text-gray-600">
+                                        @menuitem.Description </p>
+                                </a>
+                            </li>
+                        }
+                        @if(i==0&& menudropitem!=null){
+                            <li _ngcontent-serverapp-c50=""
+                                class="mt-4 dropdown-footer menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                                <a _ngcontent-serverapp-c50="" href="tel:0373951042" class="dropdown-item"><span
+                                        _ngcontent-serverapp-c50="">Bạn
+                                        cần hỗ trợ? Gọi cho chúng tôi 0373951942</span></a>
+                            </li>
+
+                        }
+                       @* <li _ngcontent-serverapp-c50=""
+                            class="menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                            <a _ngcontent-serverapp-c50="" asp-controller="Home" asp-action="Clinic"
+                                class="dropdown-item flex-col md:items-start md:p-4 md:mx-4 md:rounded-lg">
+                                <span _ngcontent-serverapp-c50="">Đặt khám Phòng khám</span>
+                                <p _ngcontent-serverapp-c50=""
+                                    class="hidden md:block text-sm font-normal text-gray-600">
+                                    Đa dạng chuyên khoa và dịch vụ </p>
+                            </a>
+                        </li>
+                        <li _ngcontent-serverapp-c50=""
+                            class="menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                            <a _ngcontent-serverapp-c50="" asp-controller="Home" asp-action="Hospital"
+                                class="dropdown-item flex-col md:items-start md:p-4 md:mx-4 md:rounded-lg">
+                                <span _ngcontent-serverapp-c50="">Đặt khám
+                                    Bệnh viện</span>
+                                <p _ngcontent-serverapp-c50=""
+                                    class="hidden md:block text-sm font-normal text-gray-600">
+                                    Đặt khám, thanh toán, nhận kết quả </p>
+                            </a>
+                        </li>
+                        <li _ngcontent-serverapp-c50=""
+                            class="menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                            <a _ngcontent-serverapp-c50=""
+                                class="dropdown-item flex-col md:items-start md:p-4 md:mx-4 md:rounded-lg"><span
+                                    _ngcontent-serverapp-c50="">Đặt lịch xét nghiệm</span>
+                                <p _ngcontent-serverapp-c50=""
+                                    class="hidden md:block text-sm font-normal text-gray-600">
+                                    Lấy mẫu xét nghiệm tại nhà </p>
+                            </a>
+                        </li>
+                        <li _ngcontent-serverapp-c50=""
+                            class="mt-4 dropdown-footer menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                            <a _ngcontent-serverapp-c50="" href="tel:0373951042" class="dropdown-item"><span
+                                    _ngcontent-serverapp-c50="">Bạn
+                                    cần hỗ trợ? Gọi cho chúng tôi 0373951942</span></a>
+                        </li>*@
+                    </ul>
+                </div>
+            </li>
+
+            @*<li _ngcontent-serverapp-c50="" class=""><a
+                    _ngcontent-serverapp-c50="" target="_blank" class="nav-link"
+                    href="https://DoctorMed.vn/tu-van-truc-tuyen"><span _ngcontent-serverapp-c50=""> Tư vấn trực
+                        tuyến</span></a></li>
+            <li _ngcontent-serverapp-c50="" class="menu-item menu-item-type-custom menu-item-object-custom nav-item"><a
+                    _ngcontent-serverapp-c50="" target="_blank" class="nav-link" href="https://DoctorMed.vn"><span
+                        _ngcontent-serverapp-c50="">Store</span></a></li>
+
+            <li _ngcontent-serverapp-c50="" class="menu-item menu-item-type-custom menu-item-object-custom nav-item">
+                <div _ngcontent-serverapp-c50=""
+                    class="border-b border-b-solid -mx-6 px-6 md:border-0 md:px-0 md:-mx-0">
+                    <a _ngcontent-serverapp-c50="" target="_blank" class="nav-link"
+                        href="https://DoctorMed.vn/tin-tuc"><span _ngcontent-serverapp-c50="">
+                            Tin Y tế</span></a>
+                </div>
+            </li>*@
+            i++;
+        }
+
+
+        </ul>
+    </div>
+    @*<div _ngcontent-serverapp-c50="" class="md:flex items-center">
+        <ul _ngcontent-serverapp-c50="" id="menu-second"
+            class="px-6 list-none m-0 md:flex md:pl-0 text-sm font-regular">
+            <li _ngcontent-serverapp-c50=""
+                class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown group nav-item">
+                <a _ngcontent-serverapp-c50="" data-toggle="dropdown" aria-expanded="false" id="menu-item-dropdown-60"
+                    class="dropdown-toggle nav-link"><span _ngcontent-serverapp-c50="">Dành cho nhân viên Y
+                        tế</span></a>
+                <ul _ngcontent-serverapp-c50="" aria-labelledby="menu-item-dropdown-60"
+                    class="dropdown-menu list-none p-0 group-hover:block md:absolute md:hidden md:top-75 md:bg-white md:rounded md:shadow-lg md:ring-1 ring-slate-900/5 overflow-hidden">
+                    <li _ngcontent-serverapp-c50=""
+                        class="menu-item menu-item-type-post_type menu-item-object-page nav-item">
+                        <a _ngcontent-serverapp-c50="" target="_blank" class="dropdown-item"
+                            href="https://DoctorMed.vn/hcp"><span _ngcontent-serverapp-c50="">
+                                DoctorMed HCP</span></a>
+                    </li>
+                    <li _ngcontent-serverapp-c50=""
+                        class="menu-item menu-item-type-post_type menu-item-object-page nav-item">
+                        <a _ngcontent-serverapp-c50="" target="_blank" class="dropdown-item"
+                            href="https://y360.vn"><span _ngcontent-serverapp-c50="">Y360</span></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>*@
+    @*<a _ngcontent-serverapp-c50="" href="https://DoctorMed.page.link/apps" target="_blank"
+        class="app-download flex md:hidden items-center px-6 py-4 space-x-2 bg-gray-50 mt-4"><img
+            _ngcontent-serverapp-c50="" src="~/img/booking/png/app_download.webp" alt="download app DoctorMed"
+            class="w-[32px] h-[53px] object-cover">
+        <div _ngcontent-serverapp-c50="" class="block">
+            <p _ngcontent-serverapp-c50="" class="text-sm font-semibold text-gray-800"> Tải
+                ứng dụng DoctorMed </p>
+            <p _ngcontent-serverapp-c50="" class="text-xs font-medium text-gray-500"> Đặt
+                lịch khám và lưu trữ hồ sơ sức khỏe </p>
+        </div>
+    </a>*@
+</nav>

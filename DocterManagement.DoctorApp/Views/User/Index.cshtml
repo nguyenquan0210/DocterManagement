@@ -120,7 +120,7 @@
                   <span class="text-sm">Đổi mật khẩu</span>
                 </a>
               </li>
-              <li class="nav-item pt-2">
+              @*<li class="nav-item pt-2">
                 <a class="nav-link text-body" data-scroll="" href="#2fa">
                   <div class="icon me-2">
                     <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -139,8 +139,8 @@
                   </div>
                   <span class="text-sm">2FA</span>
                 </a>
-              </li>
-              <li class="nav-item pt-2">
+              </li>*@
+             @* <li class="nav-item pt-2">
                 <a class="nav-link text-body" data-scroll="" href="#accounts">
                   <div class="icon me-2">
                     <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 42 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -160,8 +160,8 @@
                   </div>
                   <span class="text-sm">Accounts</span>
                 </a>
-              </li>
-              <li class="nav-item pt-2">
+              </li>*@
+              @*<li class="nav-item pt-2">
                 <a class="nav-link text-body" data-scroll="" href="#notifications">
                   <div class="icon me-2">
                     <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 44 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -181,8 +181,8 @@
                   </div>
                   <span class="text-sm">Notifications</span>
                 </a>
-              </li>
-              <li class="nav-item pt-2">
+              </li>*@
+              @*<li class="nav-item pt-2">
                 <a class="nav-link text-body" data-scroll="" href="#sessions">
                   <div class="icon me-2">
                     <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -202,8 +202,8 @@
                   </div>
                   <span class="text-sm">Sessions</span>
                 </a>
-              </li>
-              <li class="nav-item pt-2">
+              </li>*@
+              @*<li class="nav-item pt-2">
                 <a class="nav-link text-body" data-scroll="" href="#delete">
                   <div class="icon me-2">
                     <svg class="text-dark mb-1" width="16px" height="16px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -222,7 +222,7 @@
                   </div>
                   <span class="text-sm">Delete Account</span>
                 </a>
-              </li>
+              </li>*@
             </ul>
           </div>
         </div>
@@ -396,16 +396,12 @@
                     
 
                          <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <label asp-for="TimeWorking" class="form-label mt-4"></label>
                                 <input asp-for="TimeWorking" placeholder="Thứ 2 17:00 - 19:00 .."  class="multisteps-form__input form-control" />
                                 <span asp-validation-for="TimeWorking" class="text-danger"></span>
                             </div>
-                            <div class="col-6">
-                                <label asp-for="Services" class="form-label mt-4"></label>
-                                <input asp-for="Services" placeholder="Siêu âm .."  class="multisteps-form__input form-control" />
-                                <span asp-validation-for="Services" class="text-danger"></span>
-                            </div>
+                            
                        
                          </div>
                          <div class="row">
@@ -604,7 +600,7 @@
             </form>
             
           </div>
-          <!-- Card Change Password -->
+          @*<!-- Card Change Password -->
           <div class="card mt-4" id="2fa">
             <div class="card-header d-flex">
               <h5 class="mb-0">Two-factor authentication</h5>
@@ -899,7 +895,7 @@
               <button class="btn btn-outline-secondary mb-0 ms-auto" type="button" name="button">Deactivate</button>
               <button class="btn bg-gradient-danger mb-0 ms-2" type="button" name="button">Delete Account</button>
             </div>
-          </div>
+          </div>*@
         </div>
       </div>
     <div id="myModel" onclick="EnableQuesion()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
@@ -987,16 +983,7 @@
             addItems: true
           });
         }
-        if (document.getElementById('Services')) {
-          var Services = document.getElementById('Services');
-          const example = new Choices(Services, {
-            delimiter: '+',
-            editItems: true,
-            maxItemCount: 50,
-            removeItemButton: true,
-            addItems: true
-          });
-        }
+        
         
         if (document.getElementById('ClinicId')) {
             var clinic = document.getElementById('ClinicId');

@@ -142,7 +142,12 @@ namespace DoctorManagement.ApiIntegration
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var response = await client.GetAsync($"/api/users/paging?pageIndex=" +
-                $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&rolename={request.RoleName}");
+                $"{request.PageIndex}&pageSize={request.PageSize}" +
+                $"&keyword={request.Keyword}" +
+                $"&rolename={request.RoleName}" +
+                $"&specialityId={request.SpecialityId}" +
+                $"&searchSpeciality={request.searchSpeciality}" +
+                $"&checkclient={request.checkclient}");
             var body = await response.Content.ReadAsStringAsync();
             var users = JsonConvert.DeserializeObject<ApiSuccessResult<PagedResult<UserVm>>>(body);
             return users;
@@ -282,12 +287,11 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.ClinicId.ToString()), "clinicId");
             requestContent.Add(new StringContent(request.Gender.ToString()), "gender");
             requestContent.Add(new StringContent(request.Dob.ToString()), "dob");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
-            requestContent.Add(new StringContent(request.Educations.ToString()), "educations");
-            requestContent.Add(new StringContent(request.Services.ToString()), "services");
-            requestContent.Add(new StringContent(request.Note.ToString()), "note");
-            requestContent.Add(new StringContent(request.Prizes.ToString()), "prizes");
-            requestContent.Add(new StringContent(request.TimeWorking.ToString()), "timeWorking");
+            if (request.Description!=null) requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if (request.Educations != null) requestContent.Add(new StringContent(request.Educations.ToString()), "educations");
+            if (request.Note != null) requestContent.Add(new StringContent(request.Note.ToString()), "note");
+            if (request.Prizes != null) requestContent.Add(new StringContent(request.Prizes.ToString()), "prizes");
+            if (request.TimeWorking != null) requestContent.Add(new StringContent(request.TimeWorking.ToString()), "timeWorking");
 
             var response = await client.PutAsync($"/api/users/doctor/update-doctor-request/{id}", requestContent);
             var result = await response.Content.ReadAsStringAsync();
@@ -323,6 +327,38 @@ namespace DoctorManagement.ApiIntegration
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await client.PutAsync($"/api/users/changepass", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+        public async Task<ApiResult<bool>> ForgotPassword(ForgotPasswordRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/users/forgot-password", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+        public async Task<ApiResult<bool>> ResetPassword(ResetPasswordRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/users/reset-password", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);

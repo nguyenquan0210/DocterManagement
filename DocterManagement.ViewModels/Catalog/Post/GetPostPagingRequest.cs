@@ -10,5 +10,7 @@ namespace DoctorManagement.ViewModels.Catalog.Post
     public class GetPostPagingRequest : PagingResultBase
     {
         public string? Keyword { get; set; }
+        public Guid? TopicId { get; set; }
+        public string? Usename { get; set; }
     }
 }

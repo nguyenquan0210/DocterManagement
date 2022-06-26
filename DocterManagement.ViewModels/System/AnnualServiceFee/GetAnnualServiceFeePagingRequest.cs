@@ -15,5 +15,6 @@ namespace DoctorManagement.ViewModels.System.AnnualServiceFee
         public string? month { get; set; }
         public string? year { get; set; }
         public StatusAppointment? status { get; set; }
+        public string? UserName { get; set; }
     }
 }

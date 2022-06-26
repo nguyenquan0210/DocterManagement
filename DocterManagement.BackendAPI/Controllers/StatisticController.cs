@@ -34,13 +34,23 @@ namespace DoctorManagement.BackendAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Lấy tất cả danh sách đặt khám
+        /// Lấy tất cả lịch sử hoạt động người dùng
         /// </summary>
         /// 
         [HttpGet("all")]
         public async Task<ActionResult<ApiResult<List<HistoryActiveVm>>>> GetAll([FromQuery] GetHistoryActivePagingRequest request)
         {
             var result = await _statisticService.ListActiveUser(request);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Lấy tất cả chi tiết lịch sử hoạt động người dùng
+        /// </summary>
+        /// 
+        [HttpGet("get-history-active-detailt-all")]
+        public async Task<ActionResult<ApiResult<List<HistoryActiveVm>>>> GetHistoryActiveDetailtAll()
+        {
+            var result = await _statisticService.ListActiveUserDetailt();
             return Ok(result);
         }
     }

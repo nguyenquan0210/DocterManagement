@@ -20,13 +20,26 @@ namespace DoctorManagement.AdminApp.Controllers
 
             base.OnActionExecuting(context);
         }
-
+        public string SetCount(int count)
+        {
+            switch (count)
+            {
+                case >= 1000 and < 1000000:
+                    return count / 1000 + "K";
+                case >= 1000000 and < 1000000000:
+                    return count / 1000000 + "M";
+                case >= 1000000000:
+                    return count / 1000000000 + "B";
+                default:
+                    return count.ToString();
+            }
+        }
         public List<SelectListItem> SeletectDay(string day)
         {
             List<SelectListItem> selectListDay = new List<SelectListItem>();
             for (int i = 1; i <= 31; i++)
             {
-                selectListDay.Add(new SelectListItem(text: "Ng " + i, i < 10 ? ("0" + i.ToString()) : i.ToString()));
+                selectListDay.Add(new SelectListItem(text: "Ng " + i, value: i < 10 ? ("0" + i.ToString()) : i.ToString()));
             }
             var rs = selectListDay.Select(x => new SelectListItem()
             {

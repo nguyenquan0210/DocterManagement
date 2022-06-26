@@ -16,7 +16,6 @@ namespace DoctorManagement.Data.Configuration
             builder.ToTable("CommentsPost");
 
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.CheckComentId).HasMaxLength(100);
             builder.Property(x => x.Description).IsRequired().HasMaxLength(255);
 
             builder.HasOne(x => x.AppUsers).WithMany(x => x.CommentsPosts).HasForeignKey(x => x.UserId);

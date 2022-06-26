@@ -23,10 +23,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý chuyên khoa</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm chuyên khoa</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="MenuMain">Quản lý tiêu đề menu</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cập nhật tiêu đề menu</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm chuyên khoa</h6>
+    <h6 class="font-weight-bolder mb-0">Chỉnh sửa thông tin tiêu đề menu</h6>
 }
 @section Search{
 	<form asp-action="Index"  method="get">
@@ -36,6 +36,7 @@
 		</div>
 	</form>
 }
+
 <div class="container-fluid my-3 py-3">
     <div class="row mb-5">
         <div class="col-lg-12 mt-lg-0 mt-4">
@@ -44,9 +45,9 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Cập nhật tiêu đề</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            Chỉnh sửa thông tin tiêu đề menu.
                         </p>
                     </div>
 
@@ -95,6 +96,20 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
+                            <label asp-for="Title" class="form-label mt-4"></label>
+                            <input asp-for="Title" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-8">
+                            <label asp-for="Description" class="form-label mt-4"></label>
+                            <textarea asp-for="Description" class="multisteps-form__input form-control" ></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
                             <label asp-for="Controller" class="form-label mt-4"></label>
                             <input asp-for="Controller" class="multisteps-form__input form-control" />
                             <span asp-validation-for="Controller" class="text-danger"></span>
@@ -114,7 +129,7 @@
                     </div>
                     <div class="row">
                          <div class="col-6">
-                            <label asp-for="Image" class="form-label "></label>
+                            <label asp-for="Image" class="form-label mt-4"></label>
                             <input asp-for="Image" class="multisteps-form__input form-control" />
                             <span asp-validation-for="Image" class="text-danger"></span>
 
@@ -133,7 +148,7 @@
                     </div>
                     <input type="hidden" asp-for="Id" />
                     <input type="hidden" asp-for="ImageHiden" />
-                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Sửa</button>
                 </div>
                 </div>
            </form>

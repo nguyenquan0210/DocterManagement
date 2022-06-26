@@ -1,8 +1,10 @@
-﻿@model DoctorManagement.ViewModels.System.Users.UserVm
+﻿@using DoctorManagement.Data.Enums
+@model DoctorManagement.ViewModels.System.Users.UserVm
 
 @{
     ViewData["Title"] = "DetailtDoctor";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var i = 0;
 }
 
 
@@ -27,10 +29,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="DetailtDoctor">Thông tin bác sĩ</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết thông tin</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Thông tin chi tiết bac sĩ</h6>
 }
 @section Search{
 	<form asp-controller="User" asp-action="Index"  method="get">
@@ -44,107 +46,272 @@
     <div class="row mb-5">
         <div class="col-lg-12 mt-lg-0 mt-4">
 
-          
+           
+
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Chi tiết bác sĩ</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                           
                         </p>
                     </div>
-                <div class="card-body pt-0">
-                   
-                     <div class="row">
-                       
-                        <div class="col-4 ">
-                                    <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(Configuration["BaseAddress"] + "/img/user-content/" + ViewBag.Img)" alt="">
-                        </div>
-                        <div class="col-8 ">
-                             <div class="row ">
-                                    <div class="col-4">
-                                        <label asp-for="DoctorVm.No" class="form-label mt-4"></label>
-                                        <input asp-for="DoctorVm.No" class="multisteps-form__input form-control"readonly />
 
-                                    </div>
-                                    <div class="col-4">
-                                        <label asp-for="UserName" class="form-label mt-4"></label>
-                                        <input asp-for="UserName" class="multisteps-form__input form-control" readonly />
-                                    </div>
-                                     <div class="col-4">
-                                        <label asp-for="Name" class="form-label mt-4"></label>
-                                        <input asp-for="Name" class="multisteps-form__input form-control" readonly />
-                                    </div>
+                    @if (TempData["AlertMessage"] != null)
+                    {
+
+                        <div id="AlertBox" data-notify="container" class="col-xs-12 col-sm-12 alert @TempData["AlertType"] alert-with-icon hide1" role="alert" data-notify-position="top-center" style="">
+
+                            <span data-notify="title"></span> <span data-notify="message">@TempData["AlertMessage"]</span>
+                            <a href="#" target="_blank" data-notify="url"></a>
+                        </div>
+
+                        <style>
+                            .seachvisble {
+                                display: none;
+                            }
+                        </style>
+                    }
+                <div class="card-body pt-0">
+                     <div class="row">
+                         <div class="col-3">
+                            <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(Configuration["BaseAddress"] + "/img/user-content/" + ViewBag.Img)" alt="">
+
+                        </div>
+                        <div class="col-9">
+                            <div class="row ">
+
+                                <div class="col-8">
+                                    <label asp-for="DoctorVm.FullName" class="form-label mt-4"></label>
+                                    <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Model.DoctorVm.FullName </div>
+
+                                </div>
+                                <div class="col-4">
+                                    <label asp-for="DoctorVm.Gender" class="form-label mt-4"></label>
+                                        @* <select asp-for="Gender" asp-items="ViewBag.Gender" class= "multisteps-form__input form-control" >
+                                    
+                                        </select>*@
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-check mb-3">
+                                                  <input class="form-check-input" type="radio" asp-for="DoctorVm.Gender" value="@Gender.Male" id="customRadio1" readonly>
+                                                  <label class="custom-control-label" for="customRadio1">Name</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check mb-3">
+                                                  <input class="form-check-input" type="radio" asp-for="DoctorVm.Gender" value="@Gender.Female" id="customRadio2" readonly>
+                                                  <label class="custom-control-label" for="customRadio2">Nữ</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row ">
+                                <div class="col-3">
+                                    <label asp-for="DoctorVm.Dob" class="form-label"></label>
+                                    <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Model.DoctorVm.Dob.ToShortDateString() </div>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="DoctorVm.Slug" class="form-label"></label>
+                                    <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Model.DoctorVm.Slug </div>
+                                </div>
+                                <div class="col-3">
+                                    <label asp-for="DoctorVm.Booking" class="form-label"></label>
+                                    <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @(Model.DoctorVm.Booking?"được phép":"không được phép") </div>
+                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-4">
-                                    <label asp-for="Gender" class="form-label mt-4"></label>
-                                    <input  class="multisteps-form__input form-control" readonly value="@ViewBag.Gender"/>
+                                <div class="col-3">
+                                        <label asp-for="DoctorVm.BeforeBookingDay" class="form-label mt-4"></label>
+                                
+                                        <div class="input-group">
+                                          <input type="text" asp-for="DoctorVm.BeforeBookingDay" class="form-control" readonly >
+                                          <span class="input-group-text">ngày</span>
+                                        </div>
                                 </div>
-                                <div class="col-4">
-                                    <label asp-for="Dob" class="form-label mt-4"></label>
-                                    <input value = "@ViewBag.Dob" class="form-control " readonly />
+                                <div class="col-9">
+                                    <label asp-for="DoctorVm.FullAddress" class="form-label mt-4"></label>
+                                    <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Model.DoctorVm.FullName </div>
                                 </div>
-                                <div class="col-4">
-                                     <label asp-for="Status" class="form-label mt-4"></label>
-                                    <input  class="multisteps-form__input form-control" readonly value ="@ViewBag.Status" />
-                                </div>
-                            </div>
-                            <div class = "row" >
-                                 <div class="col-12">
-                                    <label asp-for="DoctorVm.Address" class="form-label mt-4"></label>
-                                    <input asp-for="DoctorVm.Address" class="multisteps-form__input form-control" readonly/>
-                                </div>
-                            </div>
-                             <div class="row">
-
-                                <div class="col-6">
-                                    <label asp-for="Email" class="form-label mt-4"></label>
-                                    <input asp-for="Email" class="multisteps-form__input form-control" readonly/>
-                                </div>
-                                <div class="col-6">
-
-                                    <label asp-for="PhoneNumber" class="form-label mt-4"></label>
-                                    <input asp-for="PhoneNumber" class="multisteps-form__input form-control" readonly />
-                           
-                                </div> 
-                       
-                            </div>
-                        </div>
-                   </div>
-                    
-                   
-                   <div class="row">
-                        <div class="col-7">
-                                <label asp-for="DoctorVm.GetClinic.Name" class="control-label mt-4"></label>
-                               <input asp-for="DoctorVm.GetClinic.Name" class="multisteps-form__input form-control"readonly />
-                               
-                            </div>
-                            <div class="col-5">
-                               @*  <label asp-for="DoctorVm.GetSpeciality.Title" class="control-label mt-4"></label>
-                               <input asp-for="DoctorVm.GetSpeciality.Title" class="multisteps-form__input form-control"readonly />*@
-                            </div>
-                    </div>
-                   
-                 
-                     <div class="row">
-                        <div class="col-12">
-                            <label asp-for="DoctorVm.Intro" class="form-label mt-4"></label>
-                            <div  class="multisteps-form__input form-control"   > 
-                                 @Html.Raw(Model.DoctorVm.Intro)
                              </div>
                             
                         </div>
-                    </div>
-                    <a asp-action="Update" asp-route-id="@Model.Id" class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Chỉnh sửa</a>
+                     </div>
+                     <div class="row ">
+                         @if(Model.DoctorVm.GetClinic.Name != null){
+                            <div class="col-4">
+                                 <label asp-for="DoctorVm.GetClinic" class="control-label mt-4"></label>
+                                 <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Model.DoctorVm.GetClinic.Name </div>
+                            </div>
+
+                         }
+                            <div class="col-8">
+                                 <label asp-for="DoctorVm.GetSpecialities" class="control-label mt-4"></label>
+                                 <div class="row">
+                                    @foreach(var spe in Model.DoctorVm.GetSpecialities)
+                                    {
+                                        <div class="col-3">
+                                            <div class="form-check mb-3">
+                                              <input class="form-check-input" type="radio"  readonly  checked/>
+                                              <label class="custom-control-label" >@spe.Title</label>
+                                            </div>
+                                        </div>
+                                    }
+                                    
+                                    
+                                </div>
+
+                            </div>
+                            
+                     </div>
+                     <div class="row">
+                        <div class="col-12">
+                            <label asp-for="DoctorVm.TimeWorking" class="form-label mt-4"></label>
+                             <div class="row">
+                                    @{
+                                        string[] str = {};
+                                        if(Model.DoctorVm.TimeWorking!= null)
+                                        {
+                                            str = Model.DoctorVm.TimeWorking.Split("+");
+                                        }
+                                    } @if (str.Length!=0){
+                                        for(var time = 0; time < str.Length - 1; time++)
+                                        {
+                                            <div class="col-3">
+                                                <div class="form-check mb-3">
+                                                  <input class="form-check-input" type="radio"  readonly  checked/>
+                                                  <label class="custom-control-label" >@str[time]</label>
+                                                </div>
+                                            </div>
+                                        }
+                                    }   
+                                </div>
+                           
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-6">
+                            <label asp-for="DoctorVm.Educations" class="form-label mt-4"></label>
+                             <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Html.Raw( Model.DoctorVm.Educations) </div>
+                            
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="DoctorVm.Prizes" class="form-label mt-4"></label>
+                             <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Html.Raw( Model.DoctorVm.Prizes) </div>
+                            
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-12">
+                            <label asp-for="DoctorVm.Intro" class="form-label mt-4"></label>
+                             <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Html.Raw( Model.DoctorVm.Intro) </div>
+                            
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-12">
+                            <label asp-for="DoctorVm.Note" class="form-label mt-4"></label>
+                            <div asp-for="" class="classic-editor multisteps-form__input form-control"  > @Html.Raw( Model.DoctorVm.Note) </div>
+                            
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-4">
+                            <label asp-for="DoctorVm.Galleries" class="form-label mt-4"></label>
+                        </div>
+                       
+                         <div class="col-12  "  id="show-file-img">
+                             @if (Model.DoctorVm.Galleries.Count() > 0)
+                                {
+                                    <div class="row form-control dropzone dz-clickable dz-started " >
+                                        @foreach(var img in Model.DoctorVm.Galleries)
+                                         {
+                                             <div class="col-1  dz-preview dz-processing dz-image-preview dz-error dz-complete" id ="row_@img.Id">
+                                                 <div id = "Img_@i" onclick="ConfirmDelete(@i)" data-id="@img.Id" >
+                                                      <div class="dz-image"><img class="col-2 w-100 border-radius-lg shadow-lg mx-auto" data-dz-thumbnail="" alt="" src="@(Configuration["BaseAddress"] + "/img/" + img.Name)"></div>
+                                                      <div class="dz-details"><div class="dz-size"></div><div class="dz-filename"></div></div>
+                                                      
+                                                    </div>
+                                                </div>
+                                                i++;
+                                        }
+                                        
+                                    </div>
+                                }
+                         </div>
+                     </div>
+                     <input asp-for="Id" type = "hidden"/>
+                    
+                      @* @Html.TextBoxFor(x=>x.GetGalleries, new{ type = "hidden"})*@
+                            
+                       @* <input asp-for="Galleries" type = "hidden"/>*@
+                       
+                       @for (int g = 0; g < Model.DoctorVm.Galleries.Count(); g++)
+                        {
+                            @Html.TextBoxFor(x=>x.DoctorVm.Galleries[g].Id, new{ type = "hidden"})
+                            @Html.TextBoxFor(x=>x.DoctorVm.Galleries[g].Name, new{ type = "hidden"})
+                        }
+                    
+                      <a asp-action="Update" asp-route-id="@Model.Id" class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</a>
                 </div>
                 </div>
-    
+         
 
 
         </div>
     </div>
+    <div id="myModel" onclick="EnableQuesion()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-warning swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
+            <div class="swal2-icon swal2-warning swal2-icon-show" style="display: flex;">
+                <div class="swal2-icon-content">!</div>
+            </div>
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">Bạn có chắc không?</h2>
+            <div id="quesion" class="swal2-html-container" style="display: block;">Bạn sẽ không thể hoàn nguyên điều này!</div>
+            <div class="swal2-actions">
+                <div class="swal2-loader"></div>
+                <button id="okok" type="button" class="swal2-confirm btn bg-gradient-success" aria-label="" onclick="Delete()" style="display: inline-block;">Có, xóa nó!</button>
+                <button type="button" class="swal2-cancel btn bg-gradient-danger" aria-label="" onclick="Enable()" style="display: inline-block;">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+    <div id="loaderDir" onclick="EnableDel()" class="swal2-container swal2-center swal2-backdrop-show delete_none" style="overflow-y: auto;">
+        <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-success swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
 
+            <div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;">
+                <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div>
+                <span class="swal2-success-line-tip"></span>
+                <span class="swal2-success-line-long"></span>
+                <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div>
+                <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
+            </div>
+
+            <h2 class="swal2-title" id="swal2-title" style="display: block;">
+                <font style="vertical-align: inherit;">
+                    <font id = "title" style="vertical-align: inherit;">Đã xóa!</font>
+                </font>
+            </h2>
+            <div class="swal2-html-container" style="display: block;">
+                <font style="vertical-align: inherit;">
+                    <font id = "descript" style="vertical-align: inherit;">Tệp của bạn đã bị xóa.</font>
+                </font>
+            </div>
+
+
+
+            <div class="swal2-actions">
+                <div class="swal2-loader"></div>
+                <button type="button" onclick="Enable()" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">
+                    <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">VÂNG</font></font>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+    <input type="hidden" id="hiddenEmployeeId" />
+    <input type="hidden" id="checkDeleteAll" />
 </div>
 
 @section jsFooter{
@@ -157,20 +324,13 @@
     <script src="~/js/plugins/dragula/dragula.min.js"></script>
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
     <script>
-
         var menu_bd = document.getElementById("menu_acc");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_cteacc");
+        var a_xbd = document.getElementById("a_acc");
         a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_accc");
-        a_acc.classList.add("active");
         var dashboardsExamples = document.getElementById("QUANLYTAIKHOAN");
         dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("quanlynhanvien");
-        usersExample.classList.add("show");
-
-
     </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
     <script>

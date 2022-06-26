@@ -24,10 +24,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý chuyên khoa</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm chuyên khoa</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="MenuMain">Quản lý tiêu đề menu</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết tiêu đề menu</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm chuyên khoa</h6>
+    <h6 class="font-weight-bolder mb-0">Chi tiết thông tin tiêu đề menu</h6>
 }
 @section Search{
 	<form asp-action="Index"  method="get">
@@ -46,9 +46,9 @@
                     <div class="card-header">
                         <div class="d-lg-flex">
                             <div>
-                                 <h5>Thông tin liên hệ</h5>
+                                 <h5>Thông tin menu</h5>
                                 <p class="text-sm mb-0">
-                                    Chi tiết thông tin liên hệ
+                                    Chi tiết thông tin tiêu đề menu.
                                 </p>
                             </div>
                             <div class="ms-auto my-auto mt-lg-0 mt-4 ">
@@ -126,9 +126,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
-                    
+                    <a asp-action="UpdateMainMenu" asp-route-id="@Model.Id" class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Chỉnh sửa</a>
                 </div>
                 </div>
         

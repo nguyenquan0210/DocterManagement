@@ -42,10 +42,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="DetailtDoctor">Thông tin bác sĩ</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cập nhật thông tin</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Chỉnh sửa thông tin bác sĩ</h6>
 }
 @section Search{
 	<form asp-controller="User" asp-action="Index"  method="get">
@@ -63,9 +63,9 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Cập nhật bác sĩ</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            
                         </p>
                     </div>
 
@@ -191,7 +191,7 @@
                             <div class="col-4">
                                  <label asp-for="ClinicId" class="control-label mt-4"></label>
                                 <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
-                                    <option>-- Chọn phòng khám --</option>
+                                    <option value="">-- Chọn phòng khám --</option>
                                 </select>
                                 <span asp-validation-for="ClinicId" class="text-danger"></span>
                             </div>
@@ -208,16 +208,12 @@
                     
 
                      <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <label asp-for="TimeWorking" class="form-label mt-4"></label>
-                            <textarea asp-for="TimeWorking" class="classic-editor form-control datetimepicker"  >  </textarea>
+                            <input asp-for="TimeWorking" placeholder="Thứ 2 17:00 - 19:00 .."  class="multisteps-form__input form-control" />
                             <span asp-validation-for="TimeWorking" class="text-danger"></span>
                         </div>
-                        <div class="col-6">
-                            <label asp-for="Services" class="form-label mt-4"></label>
-                            <textarea asp-for="Services" class="classic-editor multisteps-form__input form-control" >  </textarea>
-                            <span asp-validation-for="Services" class="text-danger"></span>
-                        </div>
+                        
                        
                      </div>
                      <div class="row">
@@ -266,10 +262,12 @@
                             <span asp-validation-for="Galleries" class="text-danger"></span>
                         </div>
                         <div class="col-12  " id="file_img" >
-                         </div>
-                         <div class="col-12  "  id="show-file-img">
-                             @if (images.Count() > 0)
+                        </div>
+                        <div class="col-12  "  id="show-file-img">
+                            @if (Model.GetGalleries != null)
+                             if (Model.GetGalleries.Count > 0)
                                 {
+                                    var demo  = Model.GetGalleries;
                                     <div class="row form-control dropzone dz-clickable dz-started mt-4" >
                                         @foreach(var img in images)
                                          {
@@ -311,6 +309,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                     @for (int g = 0; g < Model.GetGalleries.Count(); g++)
+                                    {
+                                        @Html.TextBoxFor(x=>x.GetGalleries[g].Id, new{ type = "hidden"})
+                                        @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
+                                    }
                                 }
                          </div>
                      </div>
@@ -320,13 +323,9 @@
                             
                        @* <input asp-for="Galleries" type = "hidden"/>*@
                        
-                       @for (int g = 0; g < Model.GetGalleries.Count(); g++)
-                        {
-                            @Html.TextBoxFor(x=>x.GetGalleries[g].Id, new{ type = "hidden"})
-                            @Html.TextBoxFor(x=>x.GetGalleries[g].Name, new{ type = "hidden"})
-                        }
+                      
                     
-                      <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                      <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Sửa</button>
                 </div>
                 </div>
            </form>
@@ -391,6 +390,16 @@
     <script src="~/js/plugins/flatpickr.min.js"></script>
     <script src="~/js/plugins/dropzone.min.js"></script>
     <script>
+        if (document.getElementById('TimeWorking')) {
+          var TimeWorking = document.getElementById('TimeWorking');
+          const example = new Choices(TimeWorking, {
+            delimiter: '+',
+            editItems: true,
+            maxItemCount: 7,
+            removeItemButton: true,
+            addItems: true
+          });
+        }
         if (document.getElementById('ClinicId')) {
             var clinic = document.getElementById('ClinicId');
             const example = new Choices(clinic);
@@ -527,8 +536,8 @@
                     success: function (result) {
                         if (result.response == 2) {
                             $("#row_" + empId).remove();
-                            if(@images.Count == 1){
-                                $("#show-file-img").empty();
+                            if(@images == @null){
+                                    $("#show-file-img").empty();
                             }
                               $("#title").html("Xóa Thành Công");
                             $("#descript").html("Xóa người dùng thành công.");
@@ -602,14 +611,10 @@
         var menu_bd = document.getElementById("menu_acc");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_cteacc");
+        var a_xbd = document.getElementById("a_acc");
         a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_accc");
-        a_acc.classList.add("active");
         var dashboardsExamples = document.getElementById("QUANLYTAIKHOAN");
         dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("quanlynhanvien");
-        usersExample.classList.add("show");
     </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
     <script>
@@ -618,7 +623,7 @@
           ClassicEditor
             .create( userItem, {
                 toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
-        
+                ckfinder: { uploadUrl: '/index/UploadImage' }
             } )
             .catch( error => {
                 console.log( error );

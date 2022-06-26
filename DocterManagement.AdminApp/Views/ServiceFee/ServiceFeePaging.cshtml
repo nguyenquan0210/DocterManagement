@@ -27,31 +27,35 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách tài khoản</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark">Quản lý thu phí dịch vụ</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách thu phí dịch vụ</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Danh sách nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Danh sách thu phí dịch vụ</h6>
 }
 @section Search{
-	<form asp-controller="User" asp-action="Index"  method="get">
+	<form  asp-action="ServiceFeePaging"  method="get">
 		<div class="input-group">
 			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
 			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
 		</div>
 	</form>
 }
-
+<style>
+    
+.choices__list--dropdown .choices__item--selectable {
+    padding-right: 10px !important;
+}
+</style>
 <div class="container-fluid py-4">
     <div class="row mt-4">
-		<div class="col-lg-12">
+		<div class="col-lg-8">
 			<div class="card z-index-2">
 				<div class="card-header pb-0">
 					<div class="d-lg-flex">
 						<div>
-							<h5 class="mb-0">Tất cả thành phố</h5>
+							<h5 class="mb-0">Danh sách thu phí dịch vụ</h5>
 							<p class="text-sm">
 								<i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
-								<span class="font-weight-bold">tăng thêm 4%</span> vào năm 2021
 							</p>
 						</div>
 						<div class="col-7 ms-auto my-auto mt-lg-0">
@@ -101,6 +105,46 @@
 				</div>
 			</div>
 		</div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="card h-100">
+            <div class="card-header pb-0 p-3">
+              <div class="d-flex justify-content-between">
+                <h6 class="mb-0">Thống kê số lượng nộp phí phân loại</h6>
+                <button type="button" class="btn btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" >
+                  @ViewBag.Count 
+                </button>
+              </div>
+            </div>
+            <div class="card-body pb-0 p-3 mt-4">
+              <div class="row">
+                <div class="col-7 text-start">
+                  <div class="chart">
+                    <canvas id="chart-pie" class="chart-canvas" height="200"></canvas>
+                  </div>
+                </div>
+                <div class="col-5 my-auto">
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-info"></i>
+                    <span class="text-dark text-xs">Đã nộp</span>
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-secondary"></i>
+                    <span class="text-dark text-xs">Chưa nộp</span>
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-danger"></i>
+                    <span class="text-dark text-xs">Đã hủy</span>
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                      <i class="bg-dark"></i>
+                      <span class="text-dark text-xs">Chờ duyệt</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+        
+          </div>
+        </div>
 	</div>
     <div class="row mt-4">
         <div class="col-12">
@@ -109,15 +153,15 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả tài khoản</h5>
+                            <h5 class="mb-0">Danh sách đóng phí</h5>
                             <p class="text-sm mb-0">
-                                Chỉ có người quảng trị mới quản lý tất cả tài khoản.
+                                Phí dịch vụ được tạo mới theo năm.
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4 col-4">
                            
                             <div class="ms-auto my-auto">
-                                 <form  asp-action="ServiceFeePaging" method="get" class="m-4 col-12 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
+                                 <form  asp-action="ServiceFeePaging" method="get" class="m-4 col-11 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
                                     <input type="hidden" name="month" value="@ViewBag.Month" />
 									<input type="hidden" name="year" value="@ViewBag.Year"/>
 									<input type="hidden" name="day" value="@ViewBag.Day"/>
@@ -169,7 +213,7 @@
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Doctor.No</h6></td>
                                         <td class="text-xs font-weight-bold">
                                             <div class="d-flex align-items-center">
-                                                <img src="@(item.Doctor.Img.Contains("default") ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/user-content/" + @item.Doctor.Img)" class="avatar avatar-xs me-2" alt="user image">
+                                                <img src="@(item.Doctor.Img.Contains("default") ? @Configuration["BaseAddress"] + "/img/user-content/user_default.png" : @Configuration["BaseAddress"] + "/img/" + @item.Doctor.Img)" class="avatar avatar-xs me-2" alt="user image">
                                                 <span>@item.Doctor.FullName</span>
                                             </div>
                                         </td>
@@ -278,7 +322,8 @@
         if (document.getElementById('role')) {
             var category = document.getElementById('role');
             const example = new Choices(category,{
-                searchEnabled: false
+                searchEnabled: false,
+                itemSelectText: 'chọn'
             });
         }
       
@@ -385,21 +430,13 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
 
     <script>
-
         var menu_bd = document.getElementById("menu_acc");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_acc");
-        a_xbd.classList.add("active");
-        var a_acc = document.getElementById("a_accc");
+        var a_acc = document.getElementById("a_service");
         a_acc.classList.add("active");
         var dashboardsExamples = document.getElementById("QUANLYTAIKHOAN");
         dashboardsExamples.classList.add("show");
-        var usersExample = document.getElementById("quanlynhanvien");
-        usersExample.classList.add("show");
-
-
-
     </script>
 
     <script src="~/js/plugins/datatables.js"></script>
@@ -409,25 +446,106 @@
 		if (document.getElementById('choices-day')) {
             var element = document.getElementById('choices-day');
             const example = new Choices(element, {
-                searchEnabled: true
+                searchEnabled: true,
+                itemSelectText: 'chọn'
             });
         };
         if (document.getElementById('choices-month')) {
             var element = document.getElementById('choices-month');
             const example = new Choices(element, {
-                searchEnabled: false
+                searchEnabled: false,
+                itemSelectText: 'chọn'
             });
         };
         if (document.getElementById('choices-year')) {
             var element = document.getElementById('choices-year');
             const example = new Choices(element, {
-                searchEnabled: true
+                searchEnabled: true,
+                itemSelectText: 'chọn'
             });
         };
     </script>
 
 <script>
+    var ctx2 = document.getElementById("chart-pie").getContext("2d");
+    var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
 
+    gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
+    gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+    gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
+
+    var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
+
+    gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
+    gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+    gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
+
+
+    // Pie chart
+    var userindex = @Html.Raw(ViewBag.StatisticPie);
+    var labeluser = []; 
+    var datauser = [];        
+
+    $.each(userindex, function (index, item) {        
+         labeluser.push(item.Text);       
+         datauser.push(item.Value) ;      
+    }) 
+    console.log(labeluser);
+    console.log(datauser);
+    new Chart(ctx2, {
+      type: "pie",
+      data: {
+        labels:labeluser,
+        datasets: [{
+          label: "Projects",
+          weight: 9,
+          cutout: 0,
+          tension: 0.9,
+          pointRadius: 2,
+          borderWidth: 2,
+          backgroundColor: ['#17c1e8', '#8392ab', '#ea0606', '#3A416F'],
+          data: datauser,
+          fill: false
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+            },
+            ticks: {
+              display: false
+            }
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+            },
+            ticks: {
+              display: false,
+            }
+          },
+        },
+      },
+    });
 	var dateindex = @Html.Raw(ViewBag.Statitic);
 	UserGetMonth(dateindex);
 
@@ -509,7 +627,7 @@
             datasets: [
               {
                 type: "line",
-                label: "Custommer",
+                label: "Khách Hàng",
                 tension: 0.4,
                 borderWidth: 0,
                 pointRadius: 0,
@@ -521,7 +639,7 @@
                 fill: true,
               },{
                 type: "bar",
-                label: "Amount(/tr vnđ)",
+                label: "Tổng tiền(/10tr vnđ)",
                 weight: 5,
                 tension: 0.4,
                 borderWidth: 0,

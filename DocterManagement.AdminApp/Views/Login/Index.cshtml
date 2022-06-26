@@ -72,8 +72,8 @@
                                 </div>
                                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                                     <p class="mb-4 text-sm mx-auto">
-                                        Không có tài khoản?
-                                        <a href="@Url.Action("DangKy", "Signup")" class="text-info text-gradient font-weight-bold">Đăng ký</a>
+                                        quên mật khẩu?
+                                        <a asp-action="ForgotPassword" class="text-info text-gradient font-weight-bold">Gửi mail</a>
                                     </p>
                                 </div>
                             </div>
@@ -83,6 +83,23 @@
                                 <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image: url('../../img/curved-images/curved9.jpg')"></div>
                             </div>
                         </div>
+                    </div>
+                    <div class="position-fixed bottom-1 end-1 z-index-2" style="top:100px;">
+                        @if (TempData["AlertMessage"] != null)
+                           {
+                                 <div class="toast fade show p-2 bg-gradient-@TempData["AlertType"]" role="alert" aria-live="assertive" id="@TempData["AlertId"]" aria-atomic="true">
+                                  <div class="toast-header bg-transparent border-0">
+                                    <i class="ni ni-check-bold text-white me-2"></i>
+                                    <span class="me-auto text-white font-weight-bold">Cập nhật thông tin</span>
+                                    <small class="text-white">vừa xong</small>
+                                    <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+                                  </div>
+                                  <hr class="horizontal dark m-0">
+                                  <div class="toast-body text-white">
+                                    @TempData["AlertMessage"]
+                                  </div>
+                                </div>
+                           } 
                     </div>
                 </div>
             </div>

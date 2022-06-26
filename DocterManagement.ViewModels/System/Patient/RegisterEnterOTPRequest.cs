@@ -8,7 +8,7 @@ namespace DoctorManagement.ViewModels.System.Patient
 {
     public class RegisterEnterOTPRequest
     {
-        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
         public string Otp_1 { get; set; }
         public string Otp_2 { get; set; }
         public string Otp_3 { get; set; }

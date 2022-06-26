@@ -2,6 +2,7 @@
 using DoctorManagement.Data.Entities;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Common;
+using DoctorManagement.ViewModels.System.Patient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<ApiResult<Guid>>> Create([FromBody] AppointmentCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -74,7 +75,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpPut("cancel-appointment")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<ApiResult<bool>>> CanceledAppointment([FromBody] AppointmentCancelRequest request)
         {
             if (!ModelState.IsValid)
@@ -93,7 +94,28 @@ namespace DoctorManagement.BackendAPI.Controllers
         [HttpGet("paging")]
         public async Task<ActionResult<ApiResult<PagedResult<AppointmentVm>>>> GetAllPaging([FromQuery] GetAppointmentPagingRequest request)
         {
+            await _appointmentService.AddExpired(request);
             var user = await _appointmentService.GetAllPaging(request);
+            return Ok(user);
+        }
+        /// <summary>
+        /// Lấy danh sách đặt khám phân trang
+        /// </summary>
+        /// 
+        [HttpGet("paging-patient")]
+        public async Task<ActionResult<ApiResult<PagedResult<PatientVm>>>> GetAllPatient([FromQuery] GetAppointmentPagingRequest request)
+        {
+            var user = await _appointmentService.GetAllPatient(request);
+            return Ok(user);
+        }
+        /// <summary>
+        /// Lấy danh sách đặt khám phân trang
+        /// </summary>
+        /// 
+        [HttpGet("paging-rating")]
+        public async Task<ActionResult<ApiResult<PagedResult<AppointmentVm>>>> GetAllPagingRating([FromQuery] GetAppointmentPagingRequest request)
+        {
+            var user = await _appointmentService.GetAllPagingRating(request);
             return Ok(user);
         }
         /// <summary>
@@ -113,9 +135,9 @@ namespace DoctorManagement.BackendAPI.Controllers
         /// </summary>
         /// 
         [HttpGet("all")]
-        public async Task<ActionResult<ApiResult<List<AppointmentVm>>>> GetAll()
+        public async Task<ActionResult<ApiResult<List<AppointmentVm>>>> GetAll(string? UserNameDoctor)
         {
-            var result = await _appointmentService.GetAll();
+            var result = await _appointmentService.GetAll(UserNameDoctor);
             return Ok(result);
         }
     }

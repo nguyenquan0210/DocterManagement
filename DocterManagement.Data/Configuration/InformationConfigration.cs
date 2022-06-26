@@ -25,6 +25,7 @@ namespace DoctorManagement.Data.Configuration
             builder.Property(x => x.AccountBank).IsRequired().HasMaxLength(100);
             builder.Property(x => x.AccountBankName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Content).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.MapFrame).HasMaxLength(int.MaxValue);
         }
     }
 }

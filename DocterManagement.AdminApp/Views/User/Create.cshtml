@@ -7,7 +7,7 @@
 }
 
 @section Search{
-	<form asp-controller="User" asp-action="Index"  method="get">
+	<form asp-action="Index"  method="get">
 		<div class="input-group">
 			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
 			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
@@ -33,10 +33,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="@Url.Action("Index", "BaiDang")">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý tài khoản</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm tài khoản</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Thêm tài khoản</h6>
 }
 
 
@@ -48,9 +48,9 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Thêm Tài khoản bác sĩ</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            
                         </p>
                     </div>
 
@@ -65,7 +65,7 @@
 
                         <style>
                             .seachvisble {
-                                display: none;
+                                display: block;
                             }
                         </style>
                     }
@@ -97,7 +97,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-check mb-3">
-                                          <input class="form-check-input" type="radio" asp-for="Gender" value="@Gender.Male" id="customRadio1">
+                                          <input class="form-check-input" checked type="radio" asp-for="Gender" value="@Gender.Male" id="customRadio1">
                                           <label class="custom-control-label" for="customRadio1">Name</label>
                                         </div>
                                     </div>
@@ -183,21 +183,28 @@
                         </div>
                     </div>
                     <div class="row ">
-                            <div class="col-4">
+                            <div class="col-6">
                                 <label asp-for="ClinicId" class="control-label mt-4"></label>
                                 <select asp-for="ClinicId" asp-items="ViewBag.Clinic" class= "multisteps-form__input form-control" >
                                     <option value="">-- Chọn phòng khám --</option>
                                 </select>
                                 <span asp-validation-for="ClinicId" class="text-danger"></span>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <label asp-for="SpecialityId" class="control-label mt-4"></label>
-                                <select asp-for="SpecialityId" asp-items="ViewBag.Speciality" class= " multisteps-form__input form-control" >
+                                <select asp-for="SpecialityId" class= " multisteps-form__input form-control" >
                                 </select>
                                 <span asp-validation-for="SpecialityId" class="text-danger"></span>
                             </div>
-                        <div class="col-4">
-                            <label asp-for="Slug" class="form-label mt-4"></label>
+                            <div class="col-3">
+                                <label asp-for="IsPrimary" class="form-label "></label>
+                                   <div class="form-check form-switch ps-0">
+                                       <input asp-for="IsPrimary" type="checkbox" class="form-check-input mt-1 ms-auto "  />
+                                   </div>
+                                <span asp-validation-for="IsPrimary" class="text-danger"></span>
+                            </div>
+                        <div class="col-6">
+                            <label asp-for="Slug" class="form-label "></label>
                             <input asp-for="Slug" class="multisteps-form__input form-control"  />
                             <span asp-validation-for="Slug" class="text-danger"></span>
                         </div>
@@ -267,12 +274,21 @@
             }); // flatpickr
         }
 
-      if (document.getElementById('SpecialityId')) {
-          var Speciality = document.getElementById('SpecialityId');
-          const examples = new Choices(Speciality, {
-          removeItemButton: true
-         });
-      }
+      
+      var dateindex = @Html.Raw(ViewBag.SetChoices);
+         if (document.getElementById('SpecialityId')) {
+             
+             var Speciality = document.getElementById('SpecialityId');
+              const examples = new Choices(Speciality, {
+              removeItemButton: true
+             });
+             examples.setChoices(
+               dateindex,
+                'value',
+                'label',
+                false,
+              );
+         }
 
     </script>
    <script>

@@ -47,9 +47,9 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Thêm phòng khám</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
+                            
                         </p>
                     </div>
 
@@ -70,15 +70,15 @@
                     }
                 <div class="card-body pt-0">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-8">
                             <label asp-for="Name" class="form-label"></label>
                             <input asp-for="Name" class="multisteps-form__input form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
 
                         </div>
-                        <div class="col-6">
+                        <div class="col-12">
                             <label asp-for="Description" class="form-label"></label>
-                            <input asp-for="Description" class="multisteps-form__input form-control" />
+                            <textarea asp-for="Description" class="multisteps-form__input form-control classic-editor" ></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
 
                         </div>
@@ -119,7 +119,21 @@
                         </div>    
                          
                             
-                        </div>
+                        <div class="col-12">
+                            <label asp-for="MapUrl" class="form-labe  mt-4l"></label>
+                            <input asp-for="MapUrl" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="MapUrl" class="text-danger"></span>
+
+                        </div>    
+                            
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label asp-for="Note" class="form-label  mt-4"></label>
+                            <textarea asp-for="Note" class="multisteps-form__input form-control" ></textarea>
+                            <span asp-validation-for="Note" class="text-danger"></span>
+                        </div>    
+                    </div>
                     <div class="row">
                         <div class="col-6">
                             <label asp-for="ImgLogo" class="form-label "></label>
@@ -295,6 +309,21 @@
         var usersExample = document.getElementById("manageclinic");
         usersExample.classList.add("show");
 
+    </script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
+    <script>
+        var allEditors = document.querySelectorAll(".classic-editor");
+        allEditors.forEach(function(userItem) {
+          ClassicEditor
+            .create( userItem, {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+                ckfinder: { uploadUrl: '/index/UploadImage' }
+            } )
+            .catch( error => {
+                console.log( error );
+            } );
+        });
+     
     </script>
 }
 

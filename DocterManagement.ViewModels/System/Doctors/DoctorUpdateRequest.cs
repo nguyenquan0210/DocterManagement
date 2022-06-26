@@ -31,7 +31,7 @@ namespace DoctorManagement.ViewModels.System.Doctors
         [Display(Name = "Chuyên Khoa")]
         public ICollection<Guid> Specialities { get; set; }
         [Display(Name = "Phòng Khám")]
-        public Guid ClinicId { get; set; }
+        public Guid? ClinicId { get; set; }
         [Display(Name = "Cho phép đặt khám")]
         public bool Booking { get; set; }
         [Display(Name = "MapUrl")]
@@ -50,8 +50,7 @@ namespace DoctorManagement.ViewModels.System.Doctors
         public Guid DistrictId { get; set; }
         [Display(Name = "Phường/xã")]
         public Guid SubDistrictId { get; set; }
-        [Display(Name = "Dịch vụ khám bệnh")]
-        public string? Services { get; set; }
+        
         [Display(Name = "Giải thưởng")]
         public string? Prizes { get; set; }
         [Display(Name = "Học vấn")]

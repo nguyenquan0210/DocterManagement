@@ -13,5 +13,9 @@ namespace DoctorManagement.ApiIntegration
         Task<List<StatisticActive>> GetServiceFeeStatiticYear(GetHistoryActivePagingRequest request);
         Task<List<StatisticActive>> GetServiceFeeStatiticDay(GetHistoryActivePagingRequest request);
         Task<List<StatisticActive>> GetServiceFeeStatiticMonth(GetHistoryActivePagingRequest request);
+
+        Task<ApiResult<bool>> AddActiveUser(HistoryActiveCreateRequest request);
+        Task<List<HistoryActiveVm>> GetAllHistory();
+        Task<List<HistoryActiveDetailtVm>> ListActiveUserDetailt();
     }
 }

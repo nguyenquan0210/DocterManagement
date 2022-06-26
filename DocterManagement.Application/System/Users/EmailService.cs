@@ -26,16 +26,23 @@ namespace DoctorManagement.Application.System.Users
 
         public async Task SendEmailForEmailConfirmation(UserEmailOptions userEmailOptions)
         {
-            userEmailOptions.Subject = UpdatePlaceHolders("Hello {{UserName}}, Confirm your email id.", userEmailOptions.PlaceHolders);
+            userEmailOptions.Subject = UpdatePlaceHolders("Xin chào {{UserName}}, xác nhận mật khẩu.", userEmailOptions.PlaceHolders);
 
             userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("EmailConfirm"), userEmailOptions.PlaceHolders);
 
             await SendEmail(userEmailOptions);
         }
+        public async Task SendEmailForEmailConfirmationRegister(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolders("Xin chào{{UserName}}, xác nhân email.", userEmailOptions.PlaceHolders);
 
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("EmailConfirmRegister"), userEmailOptions.PlaceHolders);
+
+            await SendEmail(userEmailOptions);
+        }
         public async Task SendEmailForForgotPassword(UserEmailOptions userEmailOptions)
         {
-            userEmailOptions.Subject = UpdatePlaceHolders("Hello {{UserName}}, reset your password.", userEmailOptions.PlaceHolders);
+            userEmailOptions.Subject = UpdatePlaceHolders("Xin chào {{UserName}}, cài lại mật khẩu.", userEmailOptions.PlaceHolders);
 
             userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("ForgotPassword"), userEmailOptions.PlaceHolders);
 
@@ -54,6 +61,14 @@ namespace DoctorManagement.Application.System.Users
             userEmailOptions.Subject = UpdatePlaceHolders("Xin chào {{UserName}}, có bệnh nhân đặt lịnh khám của bạn.", userEmailOptions.PlaceHolders);
 
             userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("Appointment"), userEmailOptions.PlaceHolders);
+
+            await SendEmail(userEmailOptions);
+        }
+        public async Task SendEmailServiceFee(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolders("Thông báo nộp phí dịch vụ.", userEmailOptions.PlaceHolders);
+
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("ServiceFee"), userEmailOptions.PlaceHolders);
 
             await SendEmail(userEmailOptions);
         }
@@ -122,6 +137,6 @@ namespace DoctorManagement.Application.System.Users
             }
 
             return text;
-        }
+         }
     }
 }

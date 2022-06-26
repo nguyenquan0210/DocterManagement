@@ -64,13 +64,15 @@ namespace DoctorManagement.ApiIntegration
                 ByteArrayContent bytes = new ByteArrayContent(data);
                 requestContent.Add(bytes, "imgLogo", request.ImgLogo.FileName);
             }
-
-          
             requestContent.Add(new StringContent(request.LocationId.ToString()), "locationId");
             requestContent.Add(new StringContent(request.DistrictId.ToString()), "districtId");
             requestContent.Add(new StringContent(request.Name.ToString()), "name");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if(request.Description!=null)requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if(request.Note!=null)requestContent.Add(new StringContent(request.Note.ToString()), "note");
             requestContent.Add(new StringContent(request.Address.ToString()), "address");
+            requestContent.Add(new StringContent(request.MapUrl.ToString()), "mapUrl");
+            if (request.Service != null) requestContent.Add(new StringContent(request.Service.ToString()), "service");
+            if (request.Contact != null) requestContent.Add(new StringContent(request.Contact.ToString()), "contact");
 
             var response = await client.PostAsync($"/api/clinic", requestContent);
             var result = await response.Content.ReadAsStringAsync();
@@ -149,9 +151,13 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.LocationId.ToString()), "locationId");
             requestContent.Add(new StringContent(request.DistrictId.ToString()), "districtId");
             requestContent.Add(new StringContent(request.Name.ToString()), "name");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if (request.Description != null) requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if (request.Note != null) requestContent.Add(new StringContent(request.Note.ToString()), "note");
             requestContent.Add(new StringContent(request.Address.ToString()), "address");
             requestContent.Add(new StringContent(request.Status.ToString()), "status");
+            requestContent.Add(new StringContent(request.MapUrl.ToString()), "mapUrl");
+            if (request.Service != null) requestContent.Add(new StringContent(request.Service.ToString()), "service");
+            if (request.Contact != null) requestContent.Add(new StringContent(request.Contact.ToString()), "contact");
 
             var response = await client.PutAsync($"/api/clinic", requestContent);
             var result = await response.Content.ReadAsStringAsync();

@@ -31,10 +31,10 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý tài khoản</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm nhân viên</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý thông tin quản trị</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cập nhật thông tin quản trị</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Thêm nhân viên</h6>
+    <h6 class="font-weight-bolder mb-0">Chỉnh sửa thông tin quản trị</h6>
 }
 
 
@@ -46,9 +46,8 @@
                 @Html.AntiForgeryToken()
                 <div class="card mt-4" id="basic-info">
                     <div class="card-header">
-                        <h5>Thêm Tài khoản</h5>
+                        <h5>Cập nhật thông tin liên hệ quản trị</h5>
                         <p class="text-sm mb-0">
-                            Tài khoản nhân viên.
                         </p>
                     </div>
 
@@ -96,16 +95,41 @@
                             <span asp-validation-for="TimeWorking" class="text-danger"></span>
 
                         </div>    
-                        
                         <div class="col-8">
                             <label asp-for="FullAddress" class="form-label mt-4"></label>
                             <input asp-for="FullAddress" class="multisteps-form__input form-control" />
                             <span asp-validation-for="FullAddress" class="text-danger"></span>
 
                         </div>    
-                         
-                            
-                        </div>
+                    </div>
+                     <div class="row " >
+                        <div class="col-6">
+                            <label asp-for="AccountBankName" class="form-label mt-4"></label>
+                            <input asp-for="AccountBankName" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="AccountBankName" class="text-danger"></span>
+
+                        </div>    
+                        <div class="col-6">
+                            <label asp-for="AccountBank" class="form-label mt-4"></label>
+                            <input asp-for="AccountBank" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="AccountBank" class="text-danger"></span>
+
+                        </div>    
+                    </div>
+                     <div class="row " >
+                        <div class="col-4">
+                            <label asp-for="ServiceFee" class="form-label mt-4"></label>
+                            <input asp-for="ServiceFee" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="ServiceFee" class="text-danger"></span>
+
+                        </div>    
+                        <div class="col-8">
+                            <label asp-for="Content" class="form-label mt-4"></label>
+                            <input asp-for="Content" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Content" class="text-danger"></span>
+
+                        </div>    
+                    </div>
                     <div class="row">
                         <div class="col-6 mt-4">
                             <label asp-for="Image" class="form-label "></label>
@@ -114,7 +138,7 @@
 
                         </div>
                          <div class="col-2 text-center mt-5 ">
-                               <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(Configuration["BaseAddress"] + "/img/masterdata-content/" + ViewBag.Image)" alt="">
+                               <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(Configuration["BaseAddress"] + "/img/" + ViewBag.Image)" alt="">
                          </div>
                          <div class="col-4">
                             <label asp-for="IsDeleted" class="form-label mt-4"></label>
@@ -130,7 +154,7 @@
                     
                      <input asp-for="Id" type = "hidden"/>
                    
-                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Tạo</button>
+                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Sửa</button>
                 </div>
                 </div>
            </form>
@@ -162,9 +186,14 @@
 	var menu_bd = document.getElementById("menu-masterdata");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a-uda-info");
+
+        var a_xbd = document.getElementById("a_information");
         a_xbd.classList.add("active");
-        var usersExample = document.getElementById("masterdata");
+         var a_acc = document.getElementById("a-uda-info");
+        a_acc.classList.add("active");
+        var dashboardsExamples = document.getElementById("masterdata");
+        dashboardsExamples.classList.add("show");
+        var usersExample = document.getElementById("information");
         usersExample.classList.add("show");
 </script>
 }

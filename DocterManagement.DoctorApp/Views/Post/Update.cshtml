@@ -1,0 +1,305 @@
+﻿@model DoctorManagement.ViewModels.Catalog.Post.PostUpdateRequest
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@section Search{
+	<form asp-action="Index"  method="get">
+		<div class="input-group">
+			<button type="submit" class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></button>
+			<input name="keyword" type="text" class="form-control" placeholder="Type here..." value ="@ViewBag.Keyword">
+		</div>
+	</form>
+}
+<style>
+    .dropzone .dz-preview .dz-error-mark svg {
+    display: none;
+    }
+    .dropzone .dz-preview:hover .dz-error-mark svg {
+    display: block;
+    }
+</style>
+
+@section Header{
+    <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li class="breadcrumb-item text-sm">
+            <a class="opacity-3 text-dark" href="javascript:;">
+                <svg width="12px" height="12px" class="mb-1" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <title>Bác Sĩ </title>
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-1716.000000, -439.000000)" fill="#252f40" fill-rule="nonzero">
+                            <g transform="translate(1716.000000, 291.000000)">
+                                <g transform="translate(0.000000, 148.000000)">
+                                    <path d="M46.7199583,10.7414583 L40.8449583,0.949791667 C40.4909749,0.360605034 39.8540131,0 39.1666667,0 L7.83333333,0 C7.1459869,0 6.50902508,0.360605034 6.15504167,0.949791667 L0.280041667,10.7414583 C0.0969176761,11.0460037 -1.23209662e-05,11.3946378 -1.23209662e-05,11.75 C-0.00758042603,16.0663731 3.48367543,19.5725301 7.80004167,19.5833333 L7.81570833,19.5833333 C9.75003686,19.5882688 11.6168794,18.8726691 13.0522917,17.5760417 C16.0171492,20.2556967 20.5292675,20.2556967 23.494125,17.5760417 C26.4604562,20.2616016 30.9794188,20.2616016 33.94575,17.5760417 C36.2421905,19.6477597 39.5441143,20.1708521 42.3684437,18.9103691 C45.1927731,17.649886 47.0084685,14.8428276 47.0000295,11.75 C47.0000295,11.3946378 46.9030823,11.0460037 46.7199583,10.7414583 Z"></path>
+                                    <path d="M39.198,22.4912623 C37.3776246,22.4928106 35.5817531,22.0149171 33.951625,21.0951667 L33.92225,21.1107282 C31.1430221,22.6838032 27.9255001,22.9318916 24.9844167,21.7998837 C24.4750389,21.605469 23.9777983,21.3722567 23.4960833,21.1018359 L23.4745417,21.1129513 C20.6961809,22.6871153 17.4786145,22.9344611 14.5386667,21.7998837 C14.029926,21.6054643 13.533337,21.3722507 13.0522917,21.1018359 C11.4250962,22.0190609 9.63246555,22.4947009 7.81570833,22.4912623 C7.16510551,22.4842162 6.51607673,22.4173045 5.875,22.2911849 L5.875,44.7220845 C5.875,45.9498589 6.7517757,46.9451667 7.83333333,46.9451667 L19.5833333,46.9451667 L19.5833333,33.6066734 L27.4166667,33.6066734 L27.4166667,46.9451667 L39.1666667,46.9451667 C40.2482243,46.9451667 41.125,45.9498589 41.125,44.7220845 L41.125,22.2822926 C40.4887822,22.4116582 39.8442868,22.4815492 39.198,22.4912623 Z"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+            </a>
+        </li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý bài viết</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Thêm bài viết</li>
+    </ol>
+    <h6 class="font-weight-bolder mb-0">Thêm bài viết theo chủ đề</h6>
+}
+
+
+<div class="container-fluid my-3 py-3">
+    <div class="row mb-5">
+        <div class="col-lg-12 mt-lg-0 mt-4">
+
+           <form asp-action="Update" enctype="multipart/form-data" method="post">
+                @Html.AntiForgeryToken()
+                <div class="card mt-4" id="basic-info">
+                    <div class="card-header">
+                        <h5>Thêm bài viết</h5>
+                        <p class="text-sm mb-0">
+                            Bài viết tốt có thể tăng độ theo dõi của các bệnh nhân.
+                        </p>
+                    </div>
+
+                    @if (TempData["AlertMessage"] != null)
+                    {
+
+                        <div id="AlertBox" data-notify="container" class="col-xs-12 col-sm-12 alert @TempData["AlertType"] alert-with-icon hide1" role="alert" data-notify-position="top-center" style="">
+
+                            <span data-notify="title"></span> <span data-notify="message">@TempData["AlertMessage"]</span>
+                            <a href="#" target="_blank" data-notify="url"></a>
+                        </div>
+
+                        <style>
+                            .seachvisble {
+                                display: none;
+                            }
+                        </style>
+                    }
+                <div class="card-body pt-0">
+                    <div class="row">
+                        <div class="col-8">
+                            <label asp-for="Title" class="form-label"></label>
+                            <input asp-for="Title" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-4">
+                            <label asp-for="TopicId" class="control-label"></label>
+                            <select asp-for="TopicId" asp-items="ViewBag.Menus" class= "multisteps-form__input form-control" >
+                                <option value="">-- Chọn chủ đề --</option>
+                            </select>
+                            <span asp-validation-for="TopicId" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                       
+                        <div class="col-6">
+                            <label asp-for="ImageFile" class="form-label  mt-4"></label>
+                            <input asp-for="ImageFile" class="multisteps-form__input form-control" />
+                            <span asp-validation-for="ImageFile" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-2 text-center mt-4 ">
+                              <img id="src_img" class="w-100 border-radius-lg shadow-lg mx-auto" src="@(Configuration["BaseAddress"] + "/img/" + @Model.ImageText)" alt="">
+                        </div>
+                        <div class="col-2">
+                              <label asp-for="Status" class="form-label"></label>
+                              <div class="form-check form-switch ps-0">
+                                  <input asp-for="Status" type="checkbox" class="form-check-input mt-1 ms-auto "  />
+                              </div>
+                              <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                     </div>
+                     <div class="row">
+                        
+                        <div class="col-12">
+                            <label asp-for="Content" class="form-label  mt-4"></label>
+                            <textarea asp-for="Content" class="classic-editor multisteps-form__input form-control"  >  </textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label  mt-4"></label>
+                            <textarea asp-for="Description" class="classic-editor multisteps-form__input form-control"  >  </textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+
+                        </div>
+
+                    </div>
+                    <input type="hidden" asp-for="DoctorId"  />
+                    <input type="hidden" asp-for="Id"  />
+                   
+                    <button class="btn bg-gradient-dark btn-sm float-end mt-6 mb-0">Sửa</button>
+                </div>
+                </div>
+           </form>
+
+       
+        </div>
+    </div>
+   
+</div>
+
+@section jsFooter{
+   
+     <script>
+         if (document.getElementById('TopicId')) {
+            var TopicId = document.getElementById('TopicId');
+            const example = new Choices(TopicId);
+        }
+     </script>
+     <script>
+       
+        $("#ImageFile").change(function (event) {
+            var file = event.target.files;
+            $("#src_img").attr("src", window.URL.createObjectURL(file[0]));
+        });
+        $("#ImageFile").change(function () {
+            var file = $('#ImageFile').val();
+            $("#ImageFile").attr("value", file.slice(12));
+        });
+      
+    </script>
+    
+    <script>
+       class MyUploadAdapter {
+            constructor( loader ) {
+                // The file loader instance to use during the upload.
+                this.loader = loader;
+            }
+
+            // Starts the upload process.
+            upload() {
+                return this.loader.file
+                    .then( file => new Promise( ( resolve, reject ) => {
+                        this._initRequest();
+                        this._initListeners( resolve, reject, file );
+                        this._sendRequest( file );
+                    } ) );
+            }
+
+            // Aborts the upload process.
+            abort() {
+                if ( this.xhr ) {
+                    this.xhr.abort();
+                }
+            }
+
+            // Initializes the XMLHttpRequest object using the URL passed to the constructor.
+            _initRequest() {
+                const xhr = this.xhr = new XMLHttpRequest();
+
+                // Note that your request may look different. It is up to you and your editor
+                // integration to choose the right communication channel. This example uses
+                // a POST request with JSON as a data structure but your configuration
+                // could be different.
+                xhr.open( 'POST', '@Url.Action("UploadImage","Post")', true );
+                xhr.responseType = 'json';
+            }
+
+            // Initializes XMLHttpRequest listeners.
+            _initListeners( resolve, reject, file ) {
+                const xhr = this.xhr;
+                const loader = this.loader;
+                const genericErrorText = `Couldn't upload file: ${ file.name }.`;
+
+                xhr.addEventListener( 'error', () => reject( genericErrorText ) );
+                xhr.addEventListener( 'abort', () => reject() );
+                xhr.addEventListener( 'load', () => {
+                    const response = xhr.response;
+
+                    // This example assumes the XHR server's "response" object will come with
+                    // an "error" which has its own "message" that can be passed to reject()
+                    // in the upload promise.
+                    //
+                    // Your integration may handle upload errors in a different way so make sure
+                    // it is done properly. The reject() function must be called when the upload fails.
+                    if ( !response || response.error ) {
+                        return reject( response && response.error ? response.error.message : genericErrorText );
+                    }
+
+                    // If the upload is successful, resolve the upload promise with an object containing
+                    // at least the "default" URL, pointing to the image on the server.
+                    // This URL will be used to display the image in the content. Learn more in the
+                    // UploadAdapter#upload documentation.
+                    resolve( {
+                        default: response.url
+                    } );
+                } );
+
+                // Upload progress when it is supported. The file loader has the #uploadTotal and #uploaded
+                // properties which are used e.g. to display the upload progress bar in the editor
+                // user interface.
+                if ( xhr.upload ) {
+                    xhr.upload.addEventListener( 'progress', evt => {
+                        if ( evt.lengthComputable ) {
+                            loader.uploadTotal = evt.total;
+                            loader.uploaded = evt.loaded;
+                        }
+                    } );
+                }
+            }
+
+            // Prepares the data and sends the request.
+            _sendRequest( file ) {
+                // Prepare the form data.
+                const data = new FormData();
+
+                data.append('file', file );
+
+                // Important note: This is the right place to implement security mechanisms
+                // like authentication and CSRF protection. For instance, you can use
+                // XMLHttpRequest.setRequestHeader() to set the request headers containing
+                // the CSRF token generated earlier by your application.
+
+                // Send the request.
+                this.xhr.send( data );
+            }
+        }
+
+        // ...
+
+        function MyCustomUploadAdapterPlugin( editor ) {
+            editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+                // Configure the URL to the upload script in your back-end here!
+                return new MyUploadAdapter( loader );
+            };
+        }
+
+        // ...
+
+        ClassicEditor
+            .create( document.querySelector( '#Description' ), {
+                extraPlugins: [ MyCustomUploadAdapterPlugin ],
+
+                // ...
+            } )
+            .catch( error => {
+                console.log( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector( '#Content' ), {
+                // ...
+            } )
+            .catch( error => {
+                console.log( error );
+            } );
+    </script>
+    
+    @* Kanban scripts *@
+    <script src="~/js/plugins/dragula/dragula.min.js"></script>
+    <script src="~/js/plugins/jkanban/jkanban.js"></script>
+    <script>
+        var menu_bd = document.getElementById("menu-post");
+        menu_bd.classList.add("active");
+        menu_bd.classList.remove("collapsed");
+       
+    </script>
+}

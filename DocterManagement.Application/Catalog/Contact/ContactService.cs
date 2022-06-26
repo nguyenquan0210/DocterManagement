@@ -33,7 +33,7 @@ namespace DoctorManagement.Application.Catalog.Contact
             _context.Contacts.Add(contact);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Tạo liện hệ không thành công!");
         }
 
         public async Task<ApiResult<int>> DeleteContact(Guid Id)
@@ -107,7 +107,9 @@ namespace DoctorManagement.Application.Catalog.Contact
         public async Task<ApiResult<ContactVm>> GetByIdContact(Guid Id)
         {
             var contacts = await _context.Contacts.FindAsync(Id);
-            if (contacts == null) return new ApiErrorResult<ContactVm>("Null");
+            if (contacts.IsDeleted == false) contacts.IsDeleted = true;
+            await _context.SaveChangesAsync();
+            if (contacts == null) return new ApiErrorResult<ContactVm>("Liên hệ không được xác nhận!");
             var rs = new ContactVm()
             {
                 Id = contacts.Id,
@@ -124,12 +126,13 @@ namespace DoctorManagement.Application.Catalog.Contact
         public async Task<ApiResult<bool>> UpdateContact(ContactUpdateRequest request)
         {
             var speciality = await _context.Contacts.FindAsync(request.Id);
-            if (speciality == null) return new ApiSuccessResult<bool>(false);
+            if (speciality == null) return new ApiErrorResult<bool>("Liên hệ không được xác nhận!");
          
             speciality.IsDeleted = request.IsDeleted;
           
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool>(true);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiErrorResult<bool>("Cập nhật không thành công!");
         }
     }
 }

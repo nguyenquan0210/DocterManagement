@@ -29,11 +29,11 @@ namespace DoctorManagement.Application.Catalog.Speciality
         public async Task<ApiResult<bool>> Create(SpecialityCreateRequest request)
         {
             string year = DateTime.Now.ToString("yy");
-            int count = await _context.Specialities.Where(x => x.No.Contains("SP-" + year)).CountAsync();
+            int count = await _context.Specialities.Where(x => x.No.Contains("DTMSP" + year)).CountAsync();
             string str = "";
-            if (count < 9) str = "SP-" + DateTime.Now.ToString("yy") + "-00" + (count + 1);
-            else if (count < 99) str = "SP-" + DateTime.Now.ToString("yy") + "-0" + (count + 1);
-            else if (count < 999) str = "SP-" + DateTime.Now.ToString("yy") + "-" + (count + 1);
+            if (count < 9) str = "DTMSP" + DateTime.Now.ToString("yy") + "00" + (count + 1);
+            else if (count < 99) str = "DTMSP" + DateTime.Now.ToString("yy") + "0" + (count + 1);
+            else if (count < 999) str = "DTMSP" + DateTime.Now.ToString("yy") + "" + (count + 1);
             var specialities = new Specialities()
             {
                 Title = request.Title,
@@ -46,7 +46,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
             _context.Specialities.Add(specialities);
             var rs = await _context.SaveChangesAsync();
             if(rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Tạo chuyên khoa không thành công!");
         }
         private async Task<string> SaveFile(IFormFile? file, string folderName)
         {
@@ -62,16 +62,12 @@ namespace DoctorManagement.Application.Catalog.Speciality
             var speciality = await _context.Specialities.FindAsync(Id);
             int check = 0;
             if (speciality == null) return new ApiSuccessResult<int>(check);
-            if (speciality.IsDeleted = false)
+            if (speciality.IsDeleted == false)
             {
                 speciality.IsDeleted = true;
                 check = 1;
             }
-            else
-            {
-                _context.Specialities.Remove(speciality);
-                check = 2;
-            }
+          
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>(check);
         }
@@ -129,7 +125,7 @@ namespace DoctorManagement.Application.Catalog.Speciality
         public async Task<ApiResult<SpecialityVm>> GetById(Guid Id)
         {
             var speciality = await _context.Specialities.FindAsync(Id);
-            if (speciality == null) return new ApiErrorResult<SpecialityVm>("null");
+            if (speciality == null) return new ApiErrorResult<SpecialityVm>("Chuyên khoa không được xác nhận!");
             var rs = new SpecialityVm()
             {
                 Id = speciality.Id,
@@ -157,8 +153,9 @@ namespace DoctorManagement.Application.Catalog.Speciality
                 speciality.Img = await SaveFile(request.Img, SPECIALITY_CONTENT_FOLDER_NAME);
             }
 
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool>(true);
+            var rs = await _context.SaveChangesAsync();
+            if (rs != 0) return new ApiSuccessResult<bool>(true);
+            return new ApiErrorResult<bool>("Cập nhật chuyên khoa không thành công!");
         }
     }
 }

@@ -16,11 +16,10 @@ namespace DoctorManagement.Data.Configuration
             builder.ToTable("Rates");
 
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Title).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.Description).HasMaxLength(100);
+            builder.Property(x => x.Title).HasMaxLength(100);
+            builder.Property(x => x.Description).HasMaxLength(255);
 
             builder.HasOne(x => x.Appointments).WithOne(x => x.Rates).HasForeignKey<Rates>(x => x.AppointmentId);
-            builder.HasOne(x => x.Doctors).WithMany(x => x.Rates).HasForeignKey(x => x.UserId);
         }
     }
 }

@@ -301,7 +301,7 @@
                                                         <div _ngcontent-serverapp-c189="" class="flex gap-4"><img
                                                                 _ngcontent-serverapp-c189="" width="64" height="64" loading="lazy"
                                                                 class="rounded-full w-16 h-16 object-cover ring-1 ring-slate-100"
-                                                                src="@(Configuration["BaseAddress"] + "/img/user-content/" + item.Img)"
+                                                                src="@(Configuration["BaseAddress"] + "/img/" + item.Img)"
                                                                 alt="@(item.LastName + " " + item.FirstName)">
                                                             <div _ngcontent-serverapp-c189="" class="flex flex-col overflow-hidden">
                                                                 <div _ngcontent-serverapp-c189=""
@@ -311,7 +311,17 @@
                                                                     asp-action="Index" asp-controller="Doctor" asp-route-id="@item.UserId"
                                                                     style="pointer-events: auto;">@(item.LastName + " " + item.FirstName)</a>
                                                                 <p _ngcontent-serverapp-c189="" class="text-sm mt-2 line-clamp-2">
-                                                                    <span _ngcontent-serverapp-c189="" class="text-gray-600">@item.GetSpecialities.FirstOrDefault().Title</span><span _ngcontent-serverapp-c189=""
+                                                                    <span _ngcontent-serverapp-c189="" class="text-gray-600">
+                                                                        @{
+                                                                            var text="";
+                                                                            var i =1;
+                                                                            foreach (var speciality in item.GetSpecialities)
+                                                                            {
+                                                                                text = text + speciality.Title + (i==item.GetSpecialities.Count()?"" :"-") ;
+                                                                                i++;
+                                                                            }
+                                                                        }
+                                                                        @text</span><span _ngcontent-serverapp-c189=""
                                                                         class="px-1 ng-star-inserted">·</span>
                                                                     <span _ngcontent-serverapp-c189=""
                                                                         class="text-gray-800 font-medium">@item.GetClinic.Name
@@ -344,17 +354,17 @@
                                 và tiện lợi hơn với đầy đủ các chuyên khoa</p>
                         </div>
                         <div _ngcontent-serverapp-c192=""
-                            class="max-w-7xl mx-auto text-center relative overflow-hidden mt-8 lg:mt-12 ng-star-inserted">
-                            <div _ngcontent-serverapp-c192=""
-                                class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-8 transition-all">
+                            class="max-w-7xl mx-auto text-center relative overflow-hidden mt-8 lg:mt-12 ng-tns-c207-4 ng-star-inserted">
+                            <div _ngcontent-serverapp-c192="" id="speciality"
+                                class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-8 ng-tns-c207-4 ng-trigger ng-trigger-collapse ng-animating" style="height:100px">
                                 @foreach(var item in specialities)
                                 {
                                     <app-special-block _ngcontent-serverapp-c192="" _nghost-serverapp-c191=""
                                                 class="ng-star-inserted">
-                                        <div _ngcontent-serverapp-c191="" class="flex flex-col items-center"><a
+                                        <div _ngcontent-serverapp-c191="" class="flex flex-col items-center"><a asp-action="DoctorSpecialityDemo" asp-controller="Doctor" asp-route-specialityid="@item.Id"
                                                 _ngcontent-serverapp-c191="" class="rounded-full mb-2 bg-primary/10"><img
                                                     _ngcontent-serverapp-c191="" alt="icon-special" height="60" width="60"
-                                                    src="@(Configuration["BaseAddress"] + "/img/" + item.Img)" class=" ng-lazyloading"></a><a
+                                                    src="@(Configuration["BaseAddress"] + "/img/" + item.Img)" class=" ng-lazyloading"></a><a asp-action="DoctorSpecialityDemo" asp-controller="Doctor" asp-route-specialityid="@item.Id"
                                                 _ngcontent-serverapp-c191=""
                                                 class="text-sm-w400 text-center hover:text-[#1890ff] xl:text-base"> @item.Title
                                             </a></div>
@@ -363,14 +373,22 @@
                             </div>
                         </div>
                         
-                        <div _ngcontent-serverapp-c192=""
+                        <div id ="seemore" _ngcontent-serverapp-c192="" style="display:flex"
                             class="relative flex pt-6 pb-4 justify-center items-center mx-auto text-primary cursor-pointer bg-white transition-all">
-                            <svg _ngcontent-serverApp-c192="" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <svg _ngcontent-serverApp-c192="" width="24" height="24" viewBox="0 0 24 24" fill="none" 
                                 xmlns="http://www.w3.org/2000/svg" class="mr-2">
                                 <path _ngcontent-serverApp-c192=""
                                     d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.53 13.03L12.53 16.03C12.38 16.18 12.19 16.25 12 16.25C11.81 16.25 11.62 16.18 11.47 16.03L8.47 13.03C8.18 12.74 8.18 12.26 8.47 11.97C8.76 11.68 9.24 11.68 9.53 11.97L11.25 13.69V8.5C11.25 8.09 11.59 7.75 12 7.75C12.41 7.75 12.75 8.09 12.75 8.5V13.69L14.47 11.97C14.76 11.68 15.24 11.68 15.53 11.97C15.82 12.26 15.82 12.74 15.53 13.03Z"
                                     fill="currentColor"></path>
                             </svg> Xem thêm </div>
+                        <div id="collapse" _ngcontent-serverapp-c192="" style="display:none"
+                            class="relative flex pt-6 pb-4 justify-center items-center mx-auto text-primary cursor-pointer bg-white transition-all">
+                            <svg _ngcontent-serverApp-c192="" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                                xmlns="http://www.w3.org/2000/svg" class="mr-2 rotate-180">
+                                <path _ngcontent-serverApp-c192=""
+                                    d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.53 13.03L12.53 16.03C12.38 16.18 12.19 16.25 12 16.25C11.81 16.25 11.62 16.18 11.47 16.03L8.47 13.03C8.18 12.74 8.18 12.26 8.47 11.97C8.76 11.68 9.24 11.68 9.53 11.97L11.25 13.69V8.5C11.25 8.09 11.59 7.75 12 7.75C12.41 7.75 12.75 8.09 12.75 8.5V13.69L14.47 11.97C14.76 11.68 15.24 11.68 15.53 11.97C15.82 12.26 15.82 12.74 15.53 13.03Z"
+                                    fill="currentColor"></path>
+                            </svg> Thu gọn </div>
                     </section>
                 </app-specialties>
                 <app-list-doctor _ngcontent-serverapp-c194="" _nghost-serverapp-c193="">
@@ -437,28 +455,43 @@
                     </section>
                     
                 </app-carousel-intro>
-                <app-download _ngcontent-serverapp-c194="" _nghost-serverapp-c69="">
+                <app-download _ngcontent-serverapp-c71="" _nghost-serverapp-c69="">
                     <section _ngcontent-serverapp-c69="" id="download"
-                        class="bg-gradient-to-t md:bg-gradient-to-r from-[#00C6FB] to-[#0758D8] md:mt-12">
+                        class="bg-gradient-to-t md:bg-gradient-to-r from-[#00C6FB] to-[#0758D8]">
                         <div _ngcontent-serverapp-c69="" class="max-w-7xl mx-auto md:grid md:grid-cols-12">
                             <div _ngcontent-serverapp-c69=""
                                 class="px-4 py-6 lg:py-12 text-white space-y-6 md:col-span-5 lg:col-span-4">
-                                <h2 _ngcontent-serverapp-c69="" class="text-2xl md:text-4xl font-bold text-white">Tải
-                                    ứng dụng DoctorMed</h2>
-                                    <ul _ngcontent-serverapp-c69="" class="space-y-4">
-                                        <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img _ngcontent-serverapp-c69=""
-                                                width="24" height="24" alt="icon" class="mr-1  ng-lazyloaded"
-                                                src="~/img/booking/svg/iconCheck.svg"><span _ngcontent-serverapp-c69="" class="text-white">Đặt khám
-                                                Bác sĩ - Phòng khám - Bệnh viện</span></li>
-                                        
-                                        <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img _ngcontent-serverapp-c69=""
-                                                width="24" height="24" alt="icon" class="mr-1  ng-lazyloaded"
-                                                src="~/img/booking/svg/iconCheck.svg"><span _ngcontent-serverapp-c69="" class="text-white">Trả kết
-                                                quả khám, lưu trữ hồ sơ</span></li>
-                                        
-                                        
-                                    </ul>
-                                <div _ngcontent-serverapp-c69="" class="flex gap-4 justify-center md:justify-start"><a
+                                <h2 _ngcontent-serverapp-c69="" class="text-2xl md:text-4xl font-bold text-white">Hãy sử dụng DoctorMed</h2>
+                                <ul _ngcontent-serverapp-c69="" class="space-y-4">
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg/hospital.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Đặt lịch khám bệnh và xét
+                                            nghiệm</span></li>
+                                    
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded" src="~/img/booking/svg/like.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Đặt lịch khám bệnh với các phòng khám</span></li>
+                                    
+                                    <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg//shield-security.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Lưu trữ hồ sơ sức khỏe</span>
+                                    </li>
+                                    
+                                   @* <li _ngcontent-serverapp-c69="" class="flex items-center ng-star-inserted"><img
+                                            _ngcontent-serverapp-c69="" width="24" height="24" alt="icon"
+                                            class="mr-1  ng-lazyloaded"
+                                            src="~/img/booking/svg/wallet-minus.svg"><span
+                                            _ngcontent-serverapp-c69="" class="text-white">Thanh toán dịch vụ trực
+                                            tuyến</span></li>*@
+                                    
+                                    
+                                </ul>
+                               @* <div _ngcontent-serverapp-c69="" class="flex gap-4 justify-center md:justify-start"><a
                                         _ngcontent-serverapp-c69="" target="_blank"
                                         href="https://play.google.com/store/apps/details?id=com.DoctorMed.info"><img
                                             _ngcontent-serverapp-c69="" width="135" height="40" loading="lazy"
@@ -470,7 +503,7 @@
                                             _ngcontent-serverapp-c69="" width="120" height="40" loading="lazy"
                                             src="~/img/booking/svg/apple-store.svg"
                                             title="Tải ứng dụng đặt khám trên Apple Store"
-                                            alt="Tải ứng dụng đặt khám trên Apple Store"></a></div>
+                                            alt="Tải ứng dụng đặt khám trên Apple Store"></a></div>*@
                             </div>
                             <div _ngcontent-serverapp-c69=""
                                 class="md:col-span-7 lg:col-span-8 relative overflow-hidden md:overflow-visible flex items-end justify-center">
@@ -479,8 +512,9 @@
                                     class="absolute top-0 lg:-top-1/2">
                                 <div _ngcontent-serverapp-c69=""
                                     class="invisible md:visible absolute z-10 bottom-0 max-w-[195.8px] md:max-w-full">
-                                    <img _ngcontent-serverapp-c69="" lazyload="~/img/booking/png/ip13.webp"
-                                        class="w-full md:max-h-[350px] object-cover ng-lazyloading"></div>
+                                    <img _ngcontent-serverapp-c69="" 
+                                        class="w-full md:max-h-[350px] object-cover  ng-lazyloaded"
+                                        src="~/img/booking/png/Clinic/Feature2.webp"></div>
                             </div>
                         </div>
                     </section>
@@ -488,10 +522,76 @@
                 <router-outlet _ngcontent-serverapp-c194=""></router-outlet>
                 
 </app-doctors>
+@section Alert{
+    <div class="cdk-global-overlay-wrapper" dir="ltr">
+      @if (TempData["AlertMessage"] != null)
+      {
+          <div id="cdk-overlay-9" class="cdk-overlay-pane" style="z-index: 1010; position: static;">
+            <nz-message-container>
+              <div class="ant-message" style="top: 24px;">
+                <nz-message class="ng-tns-c43-75 ng-star-inserted">
+                  <div class="ant-message-notice ng-tns-c43-75 ng-trigger ng-trigger-moveUpMotion">
+                    <div class="ant-message-notice-content ng-tns-c43-75">
+                      <div class="ant-message-custom-content ng-tns-c43-75 ant-message-@TempData["AlertType"]">
+                          @if(TempData["AlertType"]=="success"){
+
+                              <i nz-icon="" nztype="check-circle" class="anticon ng-tns-c43-75 anticon-check-circle ng-star-inserted" style="">
+                                <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em" height="1em"
+                                    class="ng-tns-c43-75" data-icon="check-circle" aria-hidden="true">
+                                    <path
+                                      d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z">
+                                    </path>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                              </i>
+                          }else{
+                             <i nz-icon="" nztype="close-circle"
+                                class="anticon ng-tns-c43-5 anticon-close-circle ng-star-inserted" style=""><svg
+                                    viewBox="64 64 896 896" focusable="false" fill="currentColor" width="1em"
+                                    height="1em" class="ng-tns-c43-5" data-icon="close-circle"
+                                    aria-hidden="true">
+                                    <path
+                                        d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 .3L512 465.6l-99.3-118.4-66.1-.3c-4.4 0-8 3.5-8 8 0 1.9.7 3.7 1.9 5.2l130.1 155L340.5 670a8.32 8.32 0 00-1.9 5.2c0 4.4 3.6 8 8 8l66.1-.3L512 564.4l99.3 118.4 66 .3c4.4 0 8-3.5 8-8 0-1.9-.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z">
+                                    </path>
+                                    <path
+                                        d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                                    </path>
+                                </svg>
+                             </i>
+
+                          }
+                        <span class="ng-tns-c43-75 ng-star-inserted" style="">@TempData["AlertMessage"]</span>
+                      </div>
+                    </div>
+                  </div>
+                </nz-message>
+              </div>
+            </nz-message-container>
+          </div>
+            
+      } 
+    </div>
+    
+}
 @section JavaScript{
     <script>
          var doctor = document.getElementById("doctor");
             doctor.classList.add("selected");
+         $('#collapse').onclick
+         $(document).ready(function(){
+          $("#collapse").click(function(){
+            $("#collapse").css("display","none");
+            $("#seemore").css("display","flex");
+            $('#speciality').css("height","100px");
+          });
+          $("#seemore").click(function(){
+            $("#seemore").css("display","none");
+            $("#collapse").css("display","flex");
+            $('#speciality').css("height","");
+          });
+        });
     </script>
 }
 

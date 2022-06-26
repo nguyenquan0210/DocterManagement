@@ -2,10 +2,12 @@
 using DoctorManagement.ViewModels.System.Statistic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,14 +48,27 @@ namespace DoctorManagement.ApiIntegration
                 duration = decimal.Parse((duration / 3600).ToString("F"));
                 model.Add(new StatisticActive
                 {
+                    
                     date = i == 1 ? "thg " + fromdate.ToString("MM/yyyy") : "thg " + fromdate.ToString("MM"),
-                    qty = data.Data.Where(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy")).Sum(x => x.Qty),
-                    count = data.Data.Count(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy")),
+                    qty = his.Sum(x => x.Qty),
+                    count = his.DistinctBy(x => x.User).Count(),
                     duration = duration
                 });
                 fromdate = fromdate.AddMonths(1);
             }
             return model.OrderBy(x => x.date).ToList();
+        }
+        public async Task<List<HistoryActiveVm>> GetAllHistory()
+        {
+            var data = await GetListAsync<HistoryActiveVm>(
+                $"/api/statistic/all");
+            return data.Data.OrderByDescending(x => x.CreatedAt).ToList();
+        }
+        public async Task<List<HistoryActiveDetailtVm>> ListActiveUserDetailt()
+        {
+            var data = await GetListAsync<HistoryActiveDetailtVm>(
+                $"/api/statistic/get-history-active-detailt-all");
+            return data.Data.OrderByDescending(x => x.Count).ToList();
         }
         public async Task<List<StatisticActive>> GetServiceFeeStatiticDay(GetHistoryActivePagingRequest request)
         {
@@ -76,8 +91,8 @@ namespace DoctorManagement.ApiIntegration
                 model.Add(new StatisticActive
                 {
                     date = i == 1 ? fromdate.ToString("HH dd/MM/yyyy") : fromdate.ToString("HH") + "h",
-                    qty = data.Data.Where(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH")).Sum(x => x.Qty),
-                    count = data.Data.Count(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH")),
+                    qty = his.Sum(x => x.Qty),
+                    count = his.DistinctBy(x => x.User).Count(),
                     duration = duration
                 });
                 fromdate = fromdate.AddHours(1);
@@ -107,14 +122,32 @@ namespace DoctorManagement.ApiIntegration
                     model.Add(new StatisticActive
                     {
                         date = i == 1 ? "Ng " + fromdate.ToString("dd/MM/yyyy") : "Ng " + fromdate.ToString("dd"),
-                        qty = data.Data.Where(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")).Sum(x => x.Qty),
-                        count = data.Data.Count(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")),
+                        qty = his.Sum(x => x.Qty),
+                        count = his.DistinctBy(x=>x.User).Count(),
                         duration = duration
                     });
                 }
                 fromdate = fromdate.AddDays(1);
             }
             return model.OrderBy(x => x.date).ToList();
+        }
+
+        public async Task<ApiResult<bool>> AddActiveUser(HistoryActiveCreateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/statistic/", httpContent);
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
         }
     }
 }

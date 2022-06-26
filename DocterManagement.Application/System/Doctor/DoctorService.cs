@@ -2,6 +2,7 @@
 using DoctorManagement.Data.Entities;
 using DoctorManagement.ViewModels.Catalog.Clinic;
 using DoctorManagement.ViewModels.Catalog.Location;
+using DoctorManagement.ViewModels.Catalog.Service;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.Common;
 using DoctorManagement.ViewModels.System.Doctors;
@@ -22,42 +23,64 @@ namespace DoctorManagement.Application.System.Doctor
     public class DoctorService : IDoctorService
     {
         private readonly UserManager<AppUsers> _userManager;
+        private readonly RoleManager<AppRoles> _roleManager;
         private readonly DoctorManageDbContext _context;
         private readonly IConfiguration _config;
         private const string GALLERY_CONTENT_FOLDER_NAME = "gallery-content";
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
         public DoctorService(UserManager<AppUsers> userManager,
             IConfiguration config,
-            DoctorManageDbContext context)
+            DoctorManageDbContext context, RoleManager<AppRoles> roleManager)
         {
             _config = config;
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
-
+       
         public async Task<ApiResult<List<DoctorVm>>> GetTopFavouriteDoctors()
         {
             var query = from d in _context.Doctors
                         select d;
-            var doctors = await query.Select(x => new DoctorVm()
+            var doctors = new List<DoctorVm>();
+            var ratings = from r in _context.Rates select r;
+            var specialities = from s in _context.ServicesSpecialities select s;
+            foreach (var item in query.ToList())
             {
-                UserId = x.UserId,
-                Img = x.Img,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Prefix = x.Prefix,
-                GetSpecialities= x.ServicesSpecialities.Select(x=> new GetSpecialityVm()
+                var ratingdoctor = ratings.Where(x => x.Appointments.DoctorId == item.UserId);
+                var count = await ratingdoctor.CountAsync();
+                double rating = count == 0 ? 0 :(await ratingdoctor.SumAsync(x => x.Rating)) / count;
+                var clinic = await _context.Clinics.FindAsync(item.ClinicId);
+                var user = await _context.AppUsers.FindAsync(item.UserId);
+                var doctor = new DoctorVm()
                 {
-                    Id = x.SpecialityId,
-                    Title = x.Specialities.Title
-                }).ToList(),
-                GetClinic = new GetClinicVm()
-                {
-                    Id = x.ClinicId.Value,
-                    Name = x.Clinics.Name
-                }
-               
-            }).ToListAsync();
+                    UserId = item.UserId,
+                    Img = USER_CONTENT_FOLDER_NAME + "/" +  item.Img,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    Prefix = item.Prefix,
+                    Rating = rating,
+                    No = item.No,
+                    User = new UserVm()
+                    {
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber
+                    },
+                    GetSpecialities = specialities.Where(x=>x.DoctorId == item.UserId).Select(x => new GetSpecialityVm()
+                    {
+                        Id = x.SpecialityId,
+                        Title = x.Specialities.Title
+                    }).ToList(),
+                    GetClinic = clinic == null ? new GetClinicVm() : new GetClinicVm()
+                    {
+                        Id = clinic.Id,
+                        Name = clinic.Name
+                    }
+                };
+                doctors.Add(doctor);
+            }
+           
             return new ApiSuccessResult<List<DoctorVm>>(doctors);
         }
         public async Task<ApiResult<DoctorVm>> GetById(Guid id)
@@ -68,6 +91,7 @@ namespace DoctorManagement.Application.System.Doctor
             {
                 return new ApiErrorResult<DoctorVm>("User không tồn tại");
             }
+            var users = await _context.AppUsers.FindAsync(id);
             var clinic = await _context.Clinics.FindAsync(doctor != null ? doctor.ClinicId : new Guid());
             var specialities = from s in _context.ServicesSpecialities
                                join spe in _context.Specialities on s.SpecialityId equals spe.Id
@@ -80,7 +104,7 @@ namespace DoctorManagement.Application.System.Doctor
                         select new { r, a };
 
             var galleries = _context.Galleries.Where(x => x.DoctorId == doctor.UserId);
-
+            var service = from ser in _context.Services where ser.DoctorId == doctor.UserId select ser;
             var location = await _context.Locations.FindAsync(doctor.LocationId);
             var district = await _context.Locations.FindAsync(location.ParentId);
             var province = await _context.Locations.FindAsync(district.ParentId);
@@ -96,7 +120,19 @@ namespace DoctorManagement.Application.System.Doctor
                 FullAddress = fulladdreess,
                 Img = USER_CONTENT_FOLDER_NAME + "/" + doctor.Img,
                 No = doctor.No,
-                Services = doctor.Services,
+                User = new UserVm()
+                {
+                    PhoneNumber = users.PhoneNumber,
+                    Email = users.Email,
+                    UserName = users.UserName,
+                },
+                Services = service.Select(s => new ServiceVm()
+                {
+                    Id = s.Id,
+                    Description = s.Description,
+                    ServiceName = s.ServiceName,
+                    Price = s.Price,
+                }).ToList(),
                 Slug = doctor.Slug,
                 Booking = doctor.Booking,
                 Dob = doctor.Dob,
@@ -112,7 +148,7 @@ namespace DoctorManagement.Application.System.Doctor
                 View = doctor.View,
                 TimeWorking = doctor.TimeWorking,
                 Location = new LocationVm() { Id = location.Id, Name = location.Name, District = new DistrictVm() { Id = district.Id, Name = district.Name, Province = new ProvinceVm() { Id = province.Id, Name = province.Name } } },
-                GetClinic = new GetClinicVm() { Id = clinic.Id, Name = clinic.Name },
+                GetClinic = clinic == null? new GetClinicVm(): new GetClinicVm() { Id = clinic.Id, Name = clinic.Name },
                 GetSpecialities = specialities.Select(x => new GetSpecialityVm() { Id = x.spe.Id, Title = x.spe.Title }).ToList(),
                 Rates = rates.Select(x => new RateVm() { Id = x.r.Id, Rating = x.r.Rating }).ToList(),
                 Galleries = galleries.Select(x => new GalleryVm() { Id = x.Id, Name = GALLERY_CONTENT_FOLDER_NAME + "/" + x.Img }).ToList(),
@@ -147,6 +183,8 @@ namespace DoctorManagement.Application.System.Doctor
                 IsPrimary = patient.IsPrimary,
                 RelativePhone = patient.RelativePhone,
                 RelativeName = patient.RelativeName,
+                RelativeEmail = patient.RelativeEmail,
+                EthnicId = patient.EthnicId,
                 Id = patient.PatientId,
                 Identitycard = patient.Identitycard,
                 Ethnics = new EthnicVm()
@@ -175,6 +213,10 @@ namespace DoctorManagement.Application.System.Doctor
                 Id = x.p.PatientId,
                 UserId = x.p.UserId,
                 Img = x.p.Img,
+                Text = "Bn",
+                DobText = x.p.Dob.ToShortDateString(),
+                GenderText = x.p.Gender == Data.Enums.Gender.Male?"Nam":"Nữ",
+                RelativeName = x.p.RelativeName,
                 Name = x.p.Name,
                 Address = x.p.Address,
                 FullAddress = x.p.Address + ", " + x.sd.Name+", " + x.d.Name + ", " + x.pro.Name ,
@@ -196,12 +238,24 @@ namespace DoctorManagement.Application.System.Doctor
         public async Task<ApiResult<bool>> UpdateInfo(UpdatePatientInfoRequest request)
         {
             var patient = await _context.Patients.FindAsync(request.Id);
+            var role = await _roleManager.FindByNameAsync("patient");
             var location = await _context.Locations.FindAsync(request.LocationId);
             var district = await _context.Locations.FindAsync(location.ParentId);
             var province = await _context.Locations.FindAsync(district.ParentId);
             var fullAddress = request.Address + ", " + location.Name + ", " + district.Name + ", " + province.Name;
-            if (patient == null) return new ApiErrorResult<bool>("");
-
+            if (patient == null) return new ApiErrorResult<bool>("Tài khoản này không xác thực!");
+            var user = await _userManager.FindByIdAsync(patient.UserId.ToString());
+            var check = await _context.AppUsers.Where(x => x.Email == request.RelativeEmail && x.Id != patient.UserId && x.RoleId == role.Id).ToListAsync();
+            if (check.FirstOrDefault() != null)
+            {
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
+            }
+            if (patient.IsPrimary && request.RelativeEmail != patient.RelativeEmail)
+            {
+                
+                await _userManager.ChangeEmailAsync(user,request.RelativeEmail, await _userManager.GenerateChangeEmailTokenAsync(user, request.RelativeEmail));
+                patient.RelativeEmail = request.RelativeEmail;
+            }
             patient.LocationId = request.LocationId;
             patient.Name = request.Name;
             patient.FullAddress = fullAddress;
@@ -212,17 +266,17 @@ namespace DoctorManagement.Application.System.Doctor
             patient.EthnicId = request.EthnicId;
             patient.RelativeName = request.RelativeName;
             patient.RelativePhone = request.RelativePhone;
-            patient.RelativeEmail = request.RelativeEmail;
+          
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("");
+            return new ApiErrorResult<bool>("Thông tin của bạn không thay đổi?");
         }
 
-        public async Task<ApiResult<bool>> AddInfo(AddPatientInfoRequest request)
+        public async Task<ApiResult<Guid>> AddInfo(AddPatientInfoRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             var patiens = _context.Patients.Where(x => x.IsPrimary && x.UserId == user.Id);
-            if (user == null) return new ApiErrorResult<bool>("Tài khoản tạo hồ sơ không được phép!");
+            if (user == null) return new ApiErrorResult<Guid>("Tài khoản không được phép tạo hồ sơ !");
             string year = DateTime.Now.ToString("yy");
             string month = DateTime.Now.ToString("MM");
             int count = await _context.Patients.Where(x => x.No.Contains("DMP" + year + month)).CountAsync();
@@ -256,8 +310,8 @@ namespace DoctorManagement.Application.System.Doctor
             };
             await _context.Patients.AddAsync(patient);
             var rs = await _context.SaveChangesAsync();
-            if (rs != 0) return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("Thêm hồ sơ bệnh không thành công!");
+            if (rs != 0) return new ApiSuccessResult<Guid>(patient.PatientId);
+            return new ApiErrorResult<Guid>("Thêm hồ sơ bệnh không thành công!");
         }
 
         public async Task<ApiResult<List<UserVm>>> GetAllUser(string? role)
@@ -294,6 +348,7 @@ namespace DoctorManagement.Application.System.Doctor
                         Address = x.Doctors.Address,
                         Img = x.Doctors.Img,
                         No = x.Doctors.No,
+                        Dob = x.Doctors.Dob
                         //GetSpecialities = x new GetSpecialityVm() { Id = x.Doctors.Specialities.Id , Title = x.Doctors.Specialities.Title },
                         //GetClinic = new GetClinicVm() { Id= x.Doctors.Clinics.Id , Name = x.Doctors.Clinics.Name }
                     } : new DoctorVm(),

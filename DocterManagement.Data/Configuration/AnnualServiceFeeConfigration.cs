@@ -19,6 +19,7 @@ namespace DoctorManagement.Data.Configuration
 
             builder.Property(x => x.Image).HasMaxLength(100);
             builder.Property(x => x.AccountBank).HasMaxLength(100);
+            builder.Property(x => x.BankName).HasMaxLength(100);
             builder.Property(x => x.Type).IsRequired().HasMaxLength(100);
             builder.Property(x => x.No).IsRequired().HasMaxLength(100);
             builder.Property(x => x.TuitionPaidFreeText).HasMaxLength(100);

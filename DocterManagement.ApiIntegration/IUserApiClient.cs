@@ -37,7 +37,8 @@ namespace DoctorManagement.ApiIntegration
         Task<ApiResult<bool>> UpdatePatient(Guid id, UserUpdatePatientRequest request);
 
         Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request);
-
+        Task<ApiResult<bool>> ForgotPassword(ForgotPasswordRequest request);
+        Task<ApiResult<bool>> ResetPassword(ResetPasswordRequest model);
         Task<ApiResult<UserVm>> GetById(Guid id);
 
         Task<ApiResult<UserVm>> GetByUserName(string username);

@@ -49,7 +49,7 @@ namespace DoctorManagement.ApiIntegration
                 requestContent.Add(bytes, "img", request.Img.FileName);
             }
             requestContent.Add(new StringContent(request.Title.ToString()), "title");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if(request.Description!=null) requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
             var response = await client.PostAsync($"/api/speciality", requestContent);
             var result = await response.Content.ReadAsStringAsync();
@@ -105,7 +105,7 @@ namespace DoctorManagement.ApiIntegration
             requestContent.Add(new StringContent(request.IsDeleted.ToString()), "isDeleted");
             requestContent.Add(new StringContent(request.SortOrder.ToString()), "sortOrder");
             requestContent.Add(new StringContent(request.Title.ToString()), "title");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            if(request.Description!=null)requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
             var response = await client.PutAsync($"/api/speciality", requestContent);
             var result = await response.Content.ReadAsStringAsync();

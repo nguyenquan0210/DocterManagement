@@ -1,8 +1,13 @@
 ﻿using DoctorManagement.ApiIntegration;
+using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Appointment;
 using DoctorManagement.ViewModels.Catalog.Schedule;
+using DoctorManagement.ViewModels.System.Patient;
+using DoctorManagement.ViewModels.System.Statistic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace DoctorManagement.WebApp.Controllers
 {
@@ -16,9 +21,12 @@ namespace DoctorManagement.WebApp.Controllers
         private readonly IScheduleApiClient _scheduleApiClient;
         private readonly IAppointmentApiClient _appointmentApiClient;
         private readonly IClinicApiClient _clinicalApiClient;
+        private readonly ILocationApiClient _locationApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.WebApp.Controllers.Home";
         public BookingController(ILogger<HomeController> logger, IUserApiClient userApiClient, IDoctorApiClient doctorApiClient,
             ISpecialityApiClient specialityApiClient, IScheduleApiClient scheduleApiClient, IAppointmentApiClient appointmentApiClient,
-            IClinicApiClient clinicApiClient)
+            IClinicApiClient clinicApiClient, ILocationApiClient locationApiClient, IStatisticApiClient statisticApiClient)
         {
             _logger = logger;
             _userApiClient = userApiClient;
@@ -27,6 +35,40 @@ namespace DoctorManagement.WebApp.Controllers
             _scheduleApiClient = scheduleApiClient;
             _appointmentApiClient = appointmentApiClient;
             _clinicalApiClient = clinicApiClient;
+            _locationApiClient = locationApiClient;
+            _statisticApiClient = statisticApiClient;
+        }
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? usertemporary = null;
+            string? user = null;
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
+                usertemporary = currentHistory.Usertemporary;
+                user = currentHistory.User;
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name == null ? user : User.Identity.Name,
+                    Usertemporary = (usertemporary == null && User.Identity.Name == null) ? ("patient" + new Random().Next(10000000, 99999999) + new Random().Next(10000000, 99999999)) : (usertemporary == null ? User.Identity.Name : usertemporary),
+                    Type = user == null ? "passersby" : "patient",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
+
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
         }
         public IActionResult Index()
         {
@@ -38,12 +80,24 @@ namespace DoctorManagement.WebApp.Controllers
         }
         public async Task<IActionResult> BookingDoctorSetPatient(Guid doctorid, Guid scheduleid)
         {
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
             ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Doctor = (await _doctorApiClient.GetById(doctorid)).Data;
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(doctorid)).Data.ToList();
             ViewBag.GetScheduleDoctor = getScheduleDoctor;
             var slot = await _scheduleApiClient.GetByScheduleSlotId(scheduleid);
-            if(slot.IsSuccessed)
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".BookingDoctorSetPatient",
+                MethodName = "GET",
+                ExtraProperties = slot.IsSuccessed ? "success" : "error",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
+            if (slot.IsSuccessed)
             {
                 ViewBag.Date = slot.Data.Schedule.CheckInDate;
                 ViewBag.TimeSpan = slot.Data.FromTime.ToString().Substring(0, 5) + "-" + slot.Data.ToTime.ToString().Substring(0, 5);
@@ -60,7 +114,10 @@ namespace DoctorManagement.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> BookingDoctorSetPatient(AppointmentCreateRequest request)
         {
-            
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
             ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Doctor = (await _doctorApiClient.GetById(request.DoctorId)).Data;
             var getScheduleDoctor = (await _scheduleApiClient.GetScheduleDoctor(request.DoctorId)).Data.ToList();
@@ -73,28 +130,115 @@ namespace DoctorManagement.WebApp.Controllers
             }
             if (!ModelState.IsValid) return View(request);
             var result = await _appointmentApiClient.Create(request);
-            if (result.IsSuccessed)
+            var historyactive = new HistoryActiveCreateRequest()
             {
-                return RedirectToAction("BookingSuccess", new { Id = result.Data });
+                ServiceName = NAMESAPACE + ".BookingDoctorSetPatient",
+                MethodName = "POST",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
+            if (!result.IsSuccessed)
+            {
+                TempData["AlertMessage"] = result.Message;
+                TempData["AlertType"] = "error";
+                TempData["AlertId"] = "errorToast";
+                return View(request);
             }
-            return View(request);
+
+            TempData["AlertMessage"] = "Đăng nhập thành công.";
+            TempData["AlertType"] = "success";
+            TempData["AlertId"] = "successToast";
+            return RedirectToAction("BookingSuccess", new { Id = result.Data });
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddInfoParent(AddPatientInfoParentRequest request)
+        {
+            if (!ModelState.IsValid) RedirectToAction("BookingDoctorSetPatient", new { doctorid = request.doctorid, scheduleid = request.scheduleid });
+            var add = new AddPatientInfoRequest()
+            {
+                Address = request.Address,
+                DistrictId = request.DistrictId,
+                Dob = request.Dob,
+                EthnicId = request.EthnicId,
+                Gender = request.Gender,
+                Identitycard = request.Identitycard,
+                LocationId = request.LocationId,
+                Name = request.Name,
+                ProvinceId = request.ProvinceId,
+                RelativeEmail = request.RelativeEmail,
+                RelativeName = request.RelativeName,
+                RelativePhone = request.RelativePhone,
+                UserName = request.UserName,
+            };
+            await _doctorApiClient.AddInfo(add);
+            return RedirectToAction("BookingDoctorSetPatient",new { doctorid = request.doctorid, scheduleid = request.scheduleid });
+          
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddInfoParentBookingClinic(AddPatientInfoParentRequest request)
+        {
+            if (!ModelState.IsValid) return Json(null);
+            var add = new AddPatientInfoRequest()
+            {
+                Address = request.Address,
+                DistrictId = request.DistrictId,
+                Dob = request.Dob,
+                EthnicId = request.EthnicId,
+                Gender = request.Gender,
+                Identitycard = request.Identitycard,
+                LocationId = request.LocationId,
+                Name = request.Name,
+                ProvinceId = request.ProvinceId,
+                RelativeEmail = request.RelativeEmail,
+                RelativeName = request.RelativeName,
+                RelativePhone = request.RelativePhone,
+                UserName = request.UserName,
+            };
+            await _doctorApiClient.AddInfo(add);
+            var patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
+            return Json(patient);
+
         }
         public async Task<IActionResult> BookingClinicSetDoctor(Guid clinicId)
         {
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
             ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(clinicId)).Data;
-
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".BookingClinicSetDoctor",
+                MethodName = "GET",
+                ExtraProperties = "",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> BookingClinicSetDoctor(AppointmentCreateRequest request)
         {
+            ViewBag.Ethnics = await _userApiClient.GetAllEthnicGroup();
+            ViewBag.Province = await _locationApiClient.GetAllProvince(new Guid());
+            ViewBag.District = new List<SelectListItem>();
+            ViewBag.SubDistrict = new List<SelectListItem>();
             request.IsDoctor = false;
             ViewBag.Patient = (await _doctorApiClient.GetPatientProfile(User.Identity.Name)).Data;
             ViewBag.Clinic = (await _clinicalApiClient.GetById(request.ClinicId.Value)).Data;
             
             if (!ModelState.IsValid) return View(request);
             var result = await _appointmentApiClient.Create(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".BookingClinicSetDoctor",
+                MethodName = "POST",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 return RedirectToAction("BookingSuccess", new { Id = result.Data });
@@ -135,7 +279,7 @@ namespace DoctorManagement.WebApp.Controllers
                     {
                         DateTime = dateTo.ToShortDateString(),
                         day = dateTo.Day,
-                        DateNow = dateTo.ToShortDateString() == dateNow.ToShortDateString() ? true : false,
+                        DateNow = dateTo.ToShortDateString() == DateTime.Now.ToShortDateString() ? true : false,
                         IsActive = schedule == null ? false : true
                     };
                     dateTo = dateTo.AddDays(1);

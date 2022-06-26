@@ -28,10 +28,13 @@
                 </svg>
             </a>
         </li>
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý lịch khám</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách lịch khám</li>
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý đặt khám</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Danh sách lịch hẹn</li>
     </ol>
-    <h6 class="font-weight-bolder mb-0">Danh sách lịch khám theo tuần lễ</h6>
+    <h6 class="font-weight-bolder mb-0">Danh sách @(ViewBag.Status=="pending"?"Lịch hẹn quá hạn":
+                                ViewBag.Status=="approved"?"Lịch hẹn chờ khám bệnh":
+                                ViewBag.Status=="complete"?"Lịch hẹn Đã khám bệnh":
+                                ViewBag.Status=="cancel"?"Lịch hẹn đã hủy":"Tất cả lịch hẹn") </h6>
 }
 @section Search{
 	<form asp-action="Index"  method="get">
@@ -50,16 +53,23 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">Tất cả lịch khám</h5>
+                            <h5 class="mb-0">@(ViewBag.Status=="pending"?"Lịch hẹn quá hạn":
+                                ViewBag.Status=="approved"?"Lịch hẹn chờ khám bệnh":
+                                ViewBag.Status=="complete"?"Lịch hẹn Đã khám bệnh":
+                                ViewBag.Status=="cancel"?"Lịch hẹn đã hủy":"Tất cả lịch hẹn")</h5>
                             <p class="text-sm mb-0">
-                                Lịch khám được tạo theo ngày trong tuần.
+                                Lịch hẹn được tạo theo lịch khám.
                             </p>
                         </div>
-                        <div class="ms-auto my-auto mt-lg-0 mt-4 ">
+                        <div class="ms-auto my-auto mt-lg-0 mt-4  col-3 ">
                            
                             <div class="ms-auto my-auto">
+                                <form  asp-action="Index" method="get" class="m-4 col-11 d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
+                                    <input type="hidden" name ="check" value="true" />
+                                    <select id ="seletedstatus" name="status" oninvalid="@ViewBag.Status" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.LStatus" >
+                                    </select>
+                                </form>
                                 
-                                <a asp-action="Create"  class="btn bg-gradient-info btn-sm mb-0">+&nbsp; Thêm lịch khám</a>
                                 
                             </div>
                         </div>
@@ -85,8 +95,8 @@
                         <table class="table table-flush" id="list">
                             <thead class="thead-light">
                                 <tr>
+                                    <th>STT</th>
                                     <th>Mã phiếu khám</th>
-                                    <th>STT phiếu khám</th>
                                     <th>Ngày khám</th>
                                     <th>Tên Bệnh nhân</th>
                                     <th>Số điện thoại</th>
@@ -101,8 +111,8 @@
                                 @foreach (var item in Model.Items)
                                 {
                                     <tr id="row_@item.Id">
-                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Stt</h6></td>
+                                        <td class="text-sm"><h6 class="ms-3 my-auto">@item.No</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@(item.SlotSchedule.FromTime.ToString().Substring(0,5)+" - "+ item.Schedule.CheckInDate.ToShortDateString())</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Patient.Name</h6></td>
                                         <td class="text-sm"><h6 class="ms-3 my-auto">@item.Patient.RelativePhone</h6></td>
@@ -115,10 +125,10 @@
                                             badge-sm" id="status_@item.Id">
                                                 @(item.Status==StatusAppointment.approved?"Đã đặt khám":
                                                                 item.Status==StatusAppointment.cancel?"Đã hủy":
-                                                                item.Status==StatusAppointment.complete?"Đã khám bệnh":"Đợi xử lý")</span>
+                                                                item.Status==StatusAppointment.complete?"Đã khám bệnh":"Lịch hẹn quá hạn")</span>
                                         </td>
                                         <td class="text-sm">
-                                            <a  asp-action = "DetailtAppointment" asp-route-id = "@item.Id" data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
+                                            <a  asp-action = "DetailtAppointment"  asp-route-id = "@item.Id" class="mx-3"  data-bs-toggle="tooltip" data-bs-original-title="Xem chi tiết">
                                                 <i class="fas fa-eye text-secondary"></i>
                                             </a>
                                            @* <a  asp-action = "Update" asp-route-id = "@item.Id" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="sửa">
@@ -135,13 +145,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Thứ</th>
+                                    <th>STT</th>
+                                   <th>Mã phiếu khám</th>
                                     <th>Ngày khám</th>
-                                    <th>Từ thời gian</th>
-                                    <th>Đến thời gian</th>
-                                    <th>Số lượng</th>
-                                    <th>Số lượng sẵn có</th>
-                                    <th>Số lượng đã đặt</th>
+                                    <th>Tên Bệnh nhân</th>
+                                    <th>Số điện thoại</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -208,10 +216,20 @@
 </div>
 
 @section jsFooter{
-   
+    <script> 
+        if (document.getElementById('seletedstatus')) {
+            var seletedstatus = document.getElementById('seletedstatus');
+            const example = new Choices(seletedstatus, {
+                searchEnabled: false,
+            });
+        }
+        
+    </script>
     <script src="~/js/plugins/datatables.js"></script>
      
     <script>
+       
+       
         if (document.getElementById('list')) {
             const dataTableSearch = new simpleDatatables.DataTable("#list", {
                 searchable: false,
@@ -311,12 +329,12 @@
     <script src="~/js/plugins/jkanban/jkanban.js"></script>
 
     <script>
-         var menu_bd = document.getElementById("menu_speciality");
+        var menu_bd = document.getElementById("menu-appointment");
         menu_bd.classList.add("active");
         menu_bd.classList.remove("collapsed");
-        var a_xbd = document.getElementById("a_speciality");
+        var a_xbd = document.getElementById("a-appointment");
         a_xbd.classList.add("active");
-        var usersExample = document.getElementById("managespeciality");
-        usersExample.classList.add("show");
+        var dashboardsExamples = document.getElementById("manageappointment");
+        dashboardsExamples.classList.add("show");
     </script>
 }

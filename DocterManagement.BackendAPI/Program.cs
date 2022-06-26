@@ -33,6 +33,9 @@ using DoctorManagement.Application.Catalog.MasterData;
 using DoctorManagement.Application.System.AnnualServiceFee;
 using DoctorManagement.Application.System.StatisticService;
 using DoctorManagement.Application.Catalog.Contact;
+using DoctorManagement.Application.Catalog.Medicine;
+using DoctorManagement.Application.Catalog.Servicce;
+using DoctorManagement.Application.Catalog.Topic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +70,9 @@ builder.Services.AddTransient<IDoctorService, DoctorService>();
 builder.Services.AddTransient<IMasterDataService, MasterDataService>();
 builder.Services.AddTransient<IAnnualServiceFeeService, AnnualServiceFeeService>();
 builder.Services.AddTransient<IStatisticService, StatisticService>();
+builder.Services.AddTransient<IMedicineService, MedicineService>();
+builder.Services.AddTransient<IServicesService, ServicesService>();
+builder.Services.AddTransient<ITopicService, TopicService>();
 builder.Services.AddTransient<IContactService, ContactService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddHttpClient<ITwilioRestClient, TwilioClient>();

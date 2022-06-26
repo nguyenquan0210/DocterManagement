@@ -60,16 +60,11 @@ namespace DoctorManagement.Application.Common
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
         }
-        public async Task<ImagesVm> SaveFileImgAsync(Stream mediaBinaryStream, string fileName)
+        public async Task SaveFileImgAsync(Stream mediaBinaryStream, string fileName, string folderName)
         {
-            var filePath = Path.Combine(_userContentFolder, fileName);
+            var filePath = Path.Combine(Path.Combine(_contentFolder, folderName), fileName);
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
-            return new ImagesVm()
-            {
-                FileUrl = Path.Combine(_configuration["Application:AppDomain"], Path.Combine(IMG_CONTENT_FOLDER_NAME, USER_CONTENT_FOLDER_NAME)),
-                Container = USER_CONTENT_FOLDER_NAME
-            };
         }
 
         public async Task DeleteFileAsync(string fileName)

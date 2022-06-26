@@ -57,11 +57,11 @@ namespace DoctorManagement.ApiIntegration
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var demo = JsonConvert.DeserializeObject<ApiSuccessResult<List<T>>>(body);
-                var data = JsonConvert.DeserializeObject(body, typeof(ApiSuccessResult<List<T>>));
-                return (ApiResult<List<T>>)data;
+                //var data = JsonConvert.DeserializeObject(body, typeof(ApiSuccessResult<List<T>>));
+                return JsonConvert.DeserializeObject<ApiSuccessResult<List<T>>>(body);
+                //return (ApiResult<List<T>>)data;
             }
-            throw new Exception(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<List<T>>>(body);
         }
         protected async Task<ApiResult<TResponse>> GetAsync<TResponse>(string url)
         {

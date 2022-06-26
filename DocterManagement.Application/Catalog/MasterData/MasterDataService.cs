@@ -29,7 +29,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             var MasterDatas =  _context.Informations.FirstOrDefault();
           
            
-            if (MasterDatas == null) return new ApiErrorResult<InformationVm>("");
+            if (MasterDatas == null) return new ApiErrorResult<InformationVm>("Thông tin không được xác nhân!");
             var rs = new InformationVm()
             {
                 Id = MasterDatas.Id,
@@ -38,8 +38,13 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 Email = MasterDatas.Email,
                 FullAddress = MasterDatas.FullAddress,
                 Hotline = MasterDatas.Hotline,
-                Image = MasterDatas.Image,
+                Image = MASTERDATA_CONTENT_FOLDER_NAME +"/"+ MasterDatas.Image,
                 TimeWorking = MasterDatas.TimeWorking,
+                AccountBank = MasterDatas.AccountBank,
+                AccountBankName = MasterDatas.AccountBankName,
+                ServiceFee = MasterDatas.ServiceFee,
+                Content = MasterDatas.Content,
+                MapFrame = MasterDatas.MapFrame,
             };
 
             return new ApiSuccessResult<InformationVm>(rs);
@@ -51,13 +56,17 @@ namespace DoctorManagement.Application.Catalog.MasterData
         {
             
             var informations = await _context.Informations.FindAsync(request.Id);
-            if (informations == null) return new ApiErrorResult<bool>("Null");
+            if (informations == null) return new ApiErrorResult<bool>("Thông tin không được xác nhân!");
             informations.Hotline = request.Hotline;
             informations.TimeWorking = request.TimeWorking;
             informations.FullAddress = request.FullAddress;
             informations.IsDeleted = request.IsDeleted;
             informations.Company = request.Company;
             informations.Email = request.Email;
+            informations.Content = request.Content;
+            informations.AccountBank = request.AccountBank;
+            informations.AccountBankName = request.AccountBankName;
+            informations.ServiceFee = request.ServiceFee;
             if (request.Image != null)
             {
                 if (informations.Image != null && informations.Image != "default") await _storageService.DeleteFileAsyncs(informations.Image, MASTERDATA_CONTENT_FOLDER_NAME);
@@ -78,7 +87,6 @@ namespace DoctorManagement.Application.Catalog.MasterData
         }
         public async Task<ApiResult<bool>> CreateMainMenu(MainMenuCreateRequest request)
         {
-           
             var mainMenu = new MainMenus()
             {
                 Name = request.Name,
@@ -87,9 +95,11 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 Controller = request.Controller,
                 CratedAt = DateTime.Now,
                 IsDeleted = false,
-                Type = request.Type=="0"? "MenuHeader": request.Type == "2" ? "MenuPanner":"MenuHeaderDrop",
+                Type = request.Type == "0" ? "MenuHeader" : request.Type == "2" ? "MenuPanner" : request.Type == "1" ? "MenuHeaderDrop" : request.Type == "3" ? "Topic" : request.Type == "4" ? "Category" : "Categoryfeature",
                 ParentId = request.ParentId.Value==null ? Guid.NewGuid() : request.ParentId.Value,
-                Image = "default"
+                Image = "default",
+                Title = request.Title,
+                Description = request.Description,
             };
             if(request.Image!= null)
             {
@@ -98,7 +108,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             _context.MainMenus.Add(mainMenu);
             var rs = await _context.SaveChangesAsync();
             if (rs != 0) return new ApiSuccessResult<bool>(true);
-            return new ApiSuccessResult<bool>(false);
+            return new ApiErrorResult<bool>("Tạo menu không thành công!");
         }
        
         public async Task<ApiResult<int>> DeleteMainMenu(Guid Id)
@@ -131,6 +141,8 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 CratedAt = x.CratedAt,
                 ParentId = x.ParentId,
                 Type = x.Type,
+                Title = x.Title,
+                Description = x.Description,
             }).ToListAsync();
             return new ApiSuccessResult<List<MainMenuVm>>(rs);
         }
@@ -146,7 +158,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
             }
             if (!string.IsNullOrEmpty(request.Type))
             {
-                query = query.Where(x => x.Type.Contains(request.Type));
+                query = query.Where(x => x.Type == request.Type);
             }
             int totalRow = await query.CountAsync();
            
@@ -164,6 +176,8 @@ namespace DoctorManagement.Application.Catalog.MasterData
                     CratedAt = x.CratedAt,
                     ParentId = x.ParentId,
                     Type = x.Type,
+                    Title = x.Title,
+                    Description = x.Description,
                 }).ToListAsync();
 
             var pagedResult = new PagedResult<MainMenuVm>()
@@ -179,7 +193,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
         public async Task<ApiResult<MainMenuVm>> GetByIdMainMenu(Guid Id)
         {
             var MainMenu = await _context.MainMenus.FindAsync(Id);
-            if (MainMenu == null) return new ApiErrorResult<MainMenuVm>("Null");
+            if (MainMenu == null) return new ApiErrorResult<MainMenuVm>("Menu không được xác nhân!");
             var menuparent = new MainMenus();
             if(MainMenu.ParentId != Guid.Empty) menuparent = await _context.MainMenus.FindAsync(MainMenu.ParentId);
             var rs = new MainMenuVm()
@@ -196,7 +210,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
                 Type = MainMenu.Type,
                 Description = MainMenu.Description,
                 Title = MainMenu.Title,
-                ParentName = menuparent.Name
+                ParentName = menuparent.Name,
             };
             return new ApiSuccessResult<MainMenuVm>(rs);
         }
@@ -204,8 +218,10 @@ namespace DoctorManagement.Application.Catalog.MasterData
         public async Task<ApiResult<bool>> UpdateMainMenu(MainMenuUpdateRequest request)
         {
             var MainMenu = await _context.MainMenus.FindAsync(request.Id);
-            if (MainMenu == null) return new ApiErrorResult<bool>("menu không tồn tại!");
+            if (MainMenu == null) return new ApiErrorResult<bool>("Menu không được xác nhân!");
             MainMenu.Name = request.Name;
+            MainMenu.Title = request.Title;
+            MainMenu.Description = request.Description;
             MainMenu.SortOrder = request.SortOrder;
             MainMenu.Controller = request.Controller;
             MainMenu.IsDeleted = request.IsDeleted;
@@ -314,7 +330,7 @@ namespace DoctorManagement.Application.Catalog.MasterData
         public async Task<ApiResult<EthnicsVm>> GetByIdEthnic(Guid Id)
         {
             var MainMenu = await _context.Ethnics.FindAsync(Id);
-            if (MainMenu == null) return new ApiErrorResult<EthnicsVm>("Null");
+            if (MainMenu == null) return new ApiErrorResult<EthnicsVm>("Dân tộc không được xác nhân!");
             var rs = new EthnicsVm()
             {
                 Id = MainMenu.Id,

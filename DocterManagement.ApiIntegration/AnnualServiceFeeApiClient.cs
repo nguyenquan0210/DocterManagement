@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -74,7 +75,8 @@ namespace DoctorManagement.ApiIntegration
                 $"&day={request.day}" +
                 $"&month={request.month}" +
                 $"&year={request.year}" +
-                $"&status={request.status}");
+                $"&status={request.status}" +
+                $"&userName={request.UserName}");
         }
         public async Task<ApiResult<AnnualServiceFeeVm>> GetById(Guid Id)
         {
@@ -85,7 +87,7 @@ namespace DoctorManagement.ApiIntegration
         {
             var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
                 $"/api/annualServiceFee/paging?pageIndex={1}" +
-                $"&pageSize={10000}" +
+                $"&pageSize={1000000000}" +
                 $"&keyword={request.Keyword}" +
                 $"&day={request.day}" +
                 $"&month={request.month}" +
@@ -94,13 +96,12 @@ namespace DoctorManagement.ApiIntegration
             var fromdate = DateTime.Parse("01/01/" + request.year);
             var datenews = data.Data.Items.Where(x => x.CreatedAt.ToString("yyyy") == request.year).Select(x => x.CreatedAt.ToString("MM/yyyy")).Distinct();
             List<StatisticNews> model = new List<StatisticNews>();
-
             for (var i = 1; i <= 12; i++)
             {
                 model.Add(new StatisticNews
                 {
                     date = i == 1 ? "thg " + fromdate.ToString("MM/yyyy") : "thg " + fromdate.ToString("MM") ,
-                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy")).Sum(x=>x.TuitionPaidFreeNumBer))/1000000 ,
+                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy")).Sum(x=>x.TuitionPaidFreeNumBer))/10000000 ,
                     count = data.Data.Items.Count(x => x.CreatedAt.ToString("MM/yyyy") == fromdate.ToString("MM/yyyy"))
                 });
                 fromdate = fromdate.AddMonths(1);
@@ -111,7 +112,7 @@ namespace DoctorManagement.ApiIntegration
         {
             var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
                 $"/api/annualServiceFee/paging?pageIndex={1}" +
-                $"&pageSize={10000}" +
+                $"&pageSize={1000000000}" +
                 $"&keyword={request.Keyword}" +
                 $"&day={request.day}" +
                 $"&month={request.month}" +
@@ -128,7 +129,7 @@ namespace DoctorManagement.ApiIntegration
                 model.Add(new StatisticNews
                 {
                     date = i==1 ? fromdate.ToString("HH dd/MM/yyyy ") : fromdate.ToString("HH") + "h",
-                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH")).Sum(x => x.TuitionPaidFreeNumBer)) / 1000000,
+                    amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH")).Sum(x => x.TuitionPaidFreeNumBer)) / 10000000,
                     count = data.Data.Items.Count(x => x.CreatedAt.ToString("dd/MM/yyyy HH") == fromdate.ToString("dd/MM/yyyy HH"))
                 });
                 fromdate = fromdate.AddHours(1);
@@ -139,7 +140,7 @@ namespace DoctorManagement.ApiIntegration
         {
             var data = await GetAsync<PagedResult<AnnualServiceFeeVm>>(
                 $"/api/annualServiceFee/paging?pageIndex={1}" +
-                $"&pageSize={10000}" +
+                $"&pageSize={1000000000}" +
                 $"&keyword={request.Keyword}" +
                 $"&day={request.day}" +
                 $"&month={request.month}" +
@@ -157,7 +158,7 @@ namespace DoctorManagement.ApiIntegration
                     model.Add(new StatisticNews
                     {
                         date = i == 1 ? "Ng " + fromdate.ToString("dd/MM/yyyy") : "Ng "+ fromdate.ToString("dd"),
-                        amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")).Sum(x => x.TuitionPaidFreeNumBer)) / 1000000,
+                        amount = (data.Data.Items.Where(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy")).Sum(x => x.TuitionPaidFreeNumBer)) / 10000000,
                         count = data.Data.Items.Count(x => x.CreatedAt.ToString("dd/MM/yyyy") == fromdate.ToString("dd/MM/yyyy"))
                     });
 
@@ -189,20 +190,37 @@ namespace DoctorManagement.ApiIntegration
         public async Task<ApiResult<bool>> PaymentServiceFeeDoctor(AnnualServiceFeePaymentDoctorRequest request)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var requestContent = new MultipartFormDataContent();
+            if (request.Image != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.Image.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Image.OpenReadStream().Length);
+                }
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "image", request.Image.FileName);
+            }
+            requestContent.Add(new StringContent(request.Id.ToString()), "id");
+            requestContent.Add(new StringContent(request.NeedToPay.ToString()), "needToPay");
+            requestContent.Add(new StringContent(request.Contingency.ToString()), "contingency");
+            requestContent.Add(new StringContent(request.TuitionPaidFreeText.ToString()), "tuitionPaidFreeText");
+            requestContent.Add(new StringContent(request.TuitionPaidFreeNumBer.ToString()), "tuitionPaidFreeNumBer");
+            requestContent.Add(new StringContent(request.BankName.ToString()), "bankName");
+            requestContent.Add(new StringContent(request.AccountBank.ToString()), "accountBank");
+            requestContent.Add(new StringContent(request.TransactionCode.ToString()), "transactionCode");
+            if(request.Note!=null)requestContent.Add(new StringContent(request.Note.ToString()), "note");
 
-            var response = await client.PutAsync($"/api/annualServiceFee/payment-service-fee-doctor", httpContent);
-            var body = await response.Content.ReadAsStringAsync();
+            var response = await client.PutAsync($"/api/annualServiceFee/payment-service-fee-doctor", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
     }
 }

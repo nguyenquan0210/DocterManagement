@@ -11,12 +11,14 @@ namespace DoctorManagement.Application.System.Users
     {
         Task SendTestEmail(UserEmailOptions userEmailOptions);
 
+        Task SendEmailForEmailConfirmationRegister(UserEmailOptions userEmailOptions);
         Task SendEmailForEmailConfirmation(UserEmailOptions userEmailOptions);
 
         Task SendEmailForForgotPassword(UserEmailOptions userEmailOptions);
 
         Task SendEmailChangePassword(UserEmailOptions userEmailOptions);
         Task SendEmailAppoitment(UserEmailOptions userEmailOptions);
+        Task SendEmailServiceFee(UserEmailOptions userEmailOptions);
         Task SendEmailCancelAppoitment(UserEmailOptions userEmailOptions);
     }
 }

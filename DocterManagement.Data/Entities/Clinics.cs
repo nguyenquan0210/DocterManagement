@@ -13,6 +13,8 @@ namespace DoctorManagement.Data.Entities
         public string Name { get; set; }
         public string ImgLogo { get; set; }
         public string Description { get; set; }
+        public string Contact { get; set; }
+        public string Service { get; set; }
         public string Address { get; set; }
         public string FullAddress { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -34,7 +34,7 @@
 	<li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" asp-action="Index">Quản lý phòng khám</a></li>
 	<li class="breadcrumb-item text-sm text-dark active" aria-current="page">Chi tiết phòng khám</li>
 </ol>
-<h6 class="font-weight-bolder mb-0">Chi tiết phòng khám, các bác sĩ chuyên khoa liên quan</h6>
+<h6 class="font-weight-bolder mb-0">Chi tiết phòng khám</h6>
 }
 @section Search{
 <form asp-action="Index" method="get">
@@ -116,41 +116,47 @@
 					<div class="col-lg-6 mx-auto">
 						<h3 class="mt-lg-0 mt-4">@Model.Name</h3>
 						<div class="rating">
-							<i class="fas fa-star" aria-hidden="true"></i>
-							<i class="fas fa-star" aria-hidden="true"></i>
-							<i class="fas fa-star" aria-hidden="true"></i>
-							<i class="fas fa-star" aria-hidden="true"></i>
-							<i class="fas fa-star-half-alt" aria-hidden="true"></i>
+							@for(var star = 1; star <=5; star++)
+							{
+								if(star+0.5<= Model.Rating){ 								
+									<i class="fas fa-star" aria-hidden="true"></i>								
+								}else if(star<=  Model.Rating){ 								
+									<i class="fas fa-star-half-alt" aria-hidden="true"></i>								
+								}
+								else								
+								{																
+									<i class="fa fa-star-o" aria-hidden="true"></i>								
+								}								
+							}																
+							
 						</div>
 						<br>
-						@*<h6 class="mb-0 mt-3">Price</h6>
-						<h5>$1,419</h5>*@
+						
 						<span class="badge   @(Model.Status == Status.Active ? "badge-success" : Model.Status == Status.InActive ? "badge-danger": "badge-warning ")">
 							@(Model.Status == Status.Active ? "Đang hoạt động" : Model.Status == Status.InActive ? "Tạp dừng hoạt động": "Ngừng hoạt động")
 						</span>
 						<br>
-						<label class="mt-4">Mô tả</label>
-						<p class="form-control">
-									@Model.Description
-						</p>
-						@*<ul>
-							<li>The most beautiful curves of this swivel stool adds an elegant touch to any environment</li>
-							<li>Memory swivel seat returns to original seat position</li>
-							<li>Comfortable integrated layered chair seat cushion design</li>
-							<li>Fully assembled! No assembly required</li>
-						</ul>*@
+					
 						<div class="row mt-4">
 							<div class="col-lg-12 mt-lg-0 mt-2">
 								<label>Địa chỉ</label>
 								<p class="form-control">
-									@Model.Address
+									@Model.FullAddress
 								</p>
 							</div>
 							
 						</div>
+						<label class="mt-4">Ghi chú</label>
+						<div class="form-control">
+									@Html.Raw(Model.Note)
+						</div>
+						<label class="mt-4">Mô tả</label>
+						<div class="form-control">
+									@Html.Raw(Model.Description)
+						</div>
 						<div class="row mt-4">
 							<div class="col-lg-5">
-								<a class="btn bg-gradient-primary mb-0 mt-lg-auto w-100" asp-action="Update" asp-route-userName="@User.Identity.Name">chỉnh sửa</a>
+								<a class="btn bg-gradient-primary mb-0 mt-lg-auto w-100" asp-action="Update">chỉnh sửa</a>
 							</div>
 						</div>
 					</div>
@@ -162,12 +168,12 @@
 							<table class="table align-items-center mb-0">
 								<thead>
 									<tr>
+										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
 										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bác sĩ</th>
 										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">E-mail</th>
 										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Điện thoại</th>
 										<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Đánh giá</th>
-										<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Availability</th>
-										<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
+										
 									</tr>
 								</thead>
 								<tbody>
@@ -176,6 +182,9 @@
 											foreach(var item in Model.DoctorVms)
 											{
 											<tr>
+												<td class="align-middle ">
+													<span class="text-secondary text-sm">@item.No</span>
+												</td>
 												<td>
 													<div class="d-flex px-2 py-1">
 														<div>
@@ -218,52 +227,10 @@
 														
 													</div>
 												</td>
-												<td class="align-middle text-sm">
-													<div class="progress mx-auto">
-														<div class="progress-bar bg-gradient-success" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-												</td>
-												<td class="align-middle text-center">
-													<span class="text-secondary text-sm">@item.No</span>
-												</td>
+												
 											</tr>
 											}
 										}
-										
-									
-								
-									<tr>
-										<td>
-											<div class="d-flex px-2 py-1">
-												<div>
-													<img src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/assets/img/ecommerce/chair-wood.jpg" class="avatar avatar-md me-3" alt="table image">
-												</div>
-												<div class="d-flex flex-column justify-content-center">
-													<h6 class="mb-0 text-sm">Modern Square</h6>
-												</div>
-											</div>
-										</td>
-										<td>
-											<p class="text-sm text-secondary mb-0">$59.99</p>
-										</td>
-										<td>
-											<div class="rating ms-lg-n4">
-												<i class="fas fa-star" aria-hidden="true"></i>
-												<i class="fas fa-star" aria-hidden="true"></i>
-												<i class="fas fa-star" aria-hidden="true"></i>
-												<i class="fas fa-star" aria-hidden="true"></i>
-												<i class="fas fa-star-half-alt" aria-hidden="true"></i>
-											</div>
-										</td>
-										<td class="align-middle text-sm">
-											<div class="progress mx-auto">
-												<div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-											</div>
-										</td>
-										<td class="align-middle text-center">
-											<span class="text-secondary text-sm">001992</span>
-										</td>
-									</tr>
 								</tbody>
 							</table>
 						</div>
@@ -273,38 +240,6 @@
 		</div>
 	</div>
 </div>
-<footer class="footer pt-3  ">
-	<div class="container-fluid">
-		<div class="row align-items-center justify-content-lg-between">
-			<div class="col-lg-6 mb-lg-0 mb-4">
-				<div class="copyright text-center text-sm text-muted text-lg-start">
-					© <script>
-					 document.write(new Date().getFullYear())
-					</script>,
-					made with <i class="fa fa-heart"></i> by
-					<a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-					for a better web.
-				</div>
-			</div>
-			<div class="col-lg-6">
-				<ul class="nav nav-footer justify-content-center justify-content-lg-end">
-					<li class="nav-item">
-						<a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</footer>
 </div>
 @section jsFooter{
 

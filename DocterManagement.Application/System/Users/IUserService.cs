@@ -17,6 +17,8 @@ namespace DoctorManagement.Application.System.Users
         Task<ApiResult<string>> CheckPhone(RegisterEnterPhoneRequest request);
         Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request);
 
+        Task<ApiResult<bool>> ForgotPassword(ForgotPasswordRequest request);
+        Task<ApiResult<bool>> ResetPassword(ResetPasswordRequest model);
         Task<ApiResult<bool>> Register(PublicRegisterRequest request);
 
         Task<ApiResult<bool>> ManageRegister(ManageRegisterRequest request);

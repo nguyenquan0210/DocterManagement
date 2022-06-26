@@ -4,6 +4,7 @@ using DoctorManagement.Utilities.Constants;
 using DoctorManagement.ViewModels.Catalog.Speciality;
 using DoctorManagement.ViewModels.System.Doctors;
 using DoctorManagement.ViewModels.System.Models;
+using DoctorManagement.ViewModels.System.Statistic;
 using DoctorManagement.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -18,17 +19,57 @@ namespace DoctorManagement.DoctorApp.Controllers
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
         private readonly ILocationApiClient _locationApiClient;
+        private readonly IStatisticApiClient _statisticApiClient;
+        private readonly string NAMESAPACE = "DoctorManagement.DoctorApp.Controllers.User";
 
         public UserController(IUserApiClient userApiClient,
-                        IConfiguration configuration, ILocationApiClient locationApiClient)
+                        IConfiguration configuration, ILocationApiClient locationApiClient, IStatisticApiClient statisticApiClient)
         {
+            _statisticApiClient = statisticApiClient;
             _userApiClient = userApiClient;
             _configuration = configuration;
             _locationApiClient = locationApiClient;
         }
+        public async Task HistoryActive(HistoryActiveCreateRequest request)
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.History);
+            string? ServiceName = null;
+            if (session != null)
+            {
+                var currentHistory = JsonConvert.DeserializeObject<HistoryActiveCreateRequest>(session);
+                currentHistory.ToTime = DateTime.Now;
+                ServiceName = currentHistory.ServiceName + request.MethodName;
+                if (ServiceName != request.ServiceName + request.MethodName) await _statisticApiClient.AddActiveUser(currentHistory);
+
+            }
+            if (ServiceName == null || ServiceName != request.ServiceName + request.MethodName)
+            {
+                var history = new HistoryActiveCreateRequest()
+                {
+                    User = User.Identity.Name,
+                    Usertemporary = User.Identity.Name,
+                    Type = "doctor",
+                    ServiceName = request.ServiceName,
+                    MethodName = request.MethodName,
+                    ExtraProperties = request.ExtraProperties,
+                    Parameters = request.Parameters,
+                    FromTime = DateTime.Now
+                };
+
+                HttpContext.Session.SetString(SystemConstants.History, JsonConvert.SerializeObject(history));
+            }
+        }
         public async Task<IActionResult> Index()
         {
             var result = await _userApiClient.GetByUserName(User.Identity.Name);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Index",
+                MethodName = "Get",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{}",
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 var user = result.Data;
@@ -50,7 +91,6 @@ namespace DoctorManagement.DoctorApp.Controllers
                     ClinicId = user.DoctorVm.GetClinic.Id,
                     Img = user.DoctorVm.Img,
                     Description = user.DoctorVm.Intro,
-                    Services = user.DoctorVm.Services,
                     Slug = user.DoctorVm.Slug.Replace("-" + user.DoctorVm.No, ""),
                     Educations = user.DoctorVm.Educations,
                     Prefix = user.DoctorVm.Prefix,
@@ -103,7 +143,6 @@ namespace DoctorManagement.DoctorApp.Controllers
                 ClinicId = request.ClinicId,
                 Img = request.Img,
                 Description = request.Description,
-                Services = request.Services,
                 Slug = request.Slug,
                 Educations = request.Educations,
                 Prefix = request.Prefix,
@@ -121,6 +160,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             if (!ModelState.IsValid)
                 return View(updateRequest);
             var result = await _userApiClient.DoctorUpdateProfile(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Index",
+                MethodName = "Get",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin thành công";
@@ -142,9 +189,17 @@ namespace DoctorManagement.DoctorApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> Update(Guid id)
+        public async Task<IActionResult> Update()
         {
             var result = await _userApiClient.GetByUserName(User.Identity.Name);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "Get",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = "{user: " + User.Identity.Name + "}",
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 var user = result.Data;
@@ -166,7 +221,6 @@ namespace DoctorManagement.DoctorApp.Controllers
                     ClinicId = user.DoctorVm.GetClinic.Id,
                     //img = user.DoctorVm.Img,
                     Description = user.DoctorVm.Intro,
-                    Services = user.DoctorVm.Services,
                     Slug = user.DoctorVm.Slug.Replace("-" + user.DoctorVm.No, ""),
                     Educations = user.DoctorVm.Educations,
                     Prefix = user.DoctorVm.Prefix,
@@ -223,30 +277,39 @@ namespace DoctorManagement.DoctorApp.Controllers
             ViewBag.SubDistrict = await _locationApiClient.GetAllSubDistrict(new Guid(), request.DistrictId);
             var getallspecialities = await _userApiClient.GetAllSpeciality(new Guid());
             var specialities = new List<GetSpecialityVm>();
-            foreach (var spe in getallspecialities)
+            if(request.Specialities!=null)
+            foreach (var spe in request.Specialities)
             {
                 var speciality = new GetSpecialityVm()
                 {
-                    Id = new Guid(spe.Value),
+                    Id = spe,
                     IsDeleted = false,
-                    Title = spe.Text
+                    Title = getallspecialities.FirstOrDefault(x => x.Value == spe.ToString()).Text,
                 };
                 specialities.Add(speciality);
             }
 
-            ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(specialities));
+            ViewBag.SetChoices = JsonConvert.SerializeObject(await SeletectSpecialities(specialities)); ;
             if (!ModelState.IsValid)
-                return View();
+                return View(request);
 
             var result = await _userApiClient.DoctorUpdateRequest(request.Id, request);
-                if (result.IsSuccessed)
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".Update",
+                MethodName = "Post",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
+            if (result.IsSuccessed)
                 {
                     TempData["AlertMessage"] = "Thay đổi thông tin thành công";
                     TempData["AlertType"] = "alert-success";
                     return RedirectToAction("DetailtDoctor", new { userName = User.Identity.Name});
                 }
 
-                ModelState.AddModelError("", result.Message);
+               
                 return View(request);
         }
         [HttpGet]
@@ -286,9 +349,9 @@ namespace DoctorManagement.DoctorApp.Controllers
         }
        
         [HttpGet]
-        public async Task<IActionResult> DetailtDoctor(string userName)
+        public async Task<IActionResult> DetailtDoctor()
         {
-            var result = await _userApiClient.GetByUserName(userName);
+            var result = await _userApiClient.GetByUserName(User.Identity.Name);
             if (result.IsSuccessed)
             {
                 var user = result.Data;
@@ -296,19 +359,8 @@ namespace DoctorManagement.DoctorApp.Controllers
                 ViewBag.Gender = user.Gender == Gender.Male ? "Nam" : "Nữ";
                 ViewBag.Dob = user.Dob.ToShortDateString();
                 ViewBag.Status = user.Status == Status.NotActivate ? "Ngừng hoạt động" : user.Status == Status.Active ? "Hoạt động" : "không hoạt động";
-                var updateRequest = new UserVm()
-                {
-                    Email = user.Email,
-                    Name = user.Name,
-                    PhoneNumber = user.PhoneNumber,
-                    Id = user.Id,
-                    Address = user.Address,
-                    Img = user.Img,
-                    UserName = user.UserName,
-                    GetRole = user.GetRole,
-                    DoctorVm = user.DoctorVm,
-                };
-                return View(updateRequest);
+               
+                return View(user);
             }
             return RedirectToAction("Error", "Home");
         }
@@ -325,6 +377,14 @@ namespace DoctorManagement.DoctorApp.Controllers
             if (!ModelState.IsValid)
                 return View();
             var result = await _userApiClient.ChangePassword(request);
+            var historyactive = new HistoryActiveCreateRequest()
+            {
+                ServiceName = NAMESAPACE + ".ChangePassword",
+                MethodName = "Post",
+                ExtraProperties = result.IsSuccessed ? "success" : "error",
+                Parameters = JsonConvert.SerializeObject(request),
+            };
+            await HistoryActive(historyactive);
             if (result.IsSuccessed)
             {
                 TempData["AlertMessage"] = "Thay đổi thông tin thành công";
@@ -348,6 +408,18 @@ namespace DoctorManagement.DoctorApp.Controllers
         public async Task<IActionResult> IsBooking(Guid doctorId)
         {
             var result = await _userApiClient.IsBooking(doctorId);
+            return Json(new { response = result });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteImg(Guid imgId)
+        {
+            var result = await _userApiClient.DeleteImg(imgId);
+            return Json(new { response = result });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllImg(Guid doctorId)
+        {
+            var result = await _userApiClient.DeleteAllImg(doctorId);
             return Json(new { response = result });
         }
         [HttpPost]

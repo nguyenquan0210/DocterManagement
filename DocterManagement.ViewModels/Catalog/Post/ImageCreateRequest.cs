@@ -10,6 +10,5 @@ namespace DoctorManagement.ViewModels.Catalog.Post
     public class ImageCreateRequest
     {
         public IFormFile File { get; set; }
-        public string? Watermark { get; set; }
     }
 }

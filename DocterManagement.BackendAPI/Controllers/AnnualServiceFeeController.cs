@@ -34,7 +34,7 @@ namespace DoctorManagement.BackendAPI.Controllers
         public async Task<ActionResult<ApiResult<AnnualServiceFeeVm>>> GetById(Guid Id)
         {
             var result = await _annualServiceFeeService.GetById(Id);
-            if (result == null)
+            if (!result.IsSuccessed)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -47,8 +47,8 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _annualServiceFeeService.CanceledServiceFee(request);
-            if (result == null)
-                return BadRequest();
+            if (!result.IsSuccessed)
+                return BadRequest(result);
             return Ok(result);
         }
         [HttpGet("approved-service-fee/{Id}")]
@@ -60,8 +60,8 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _annualServiceFeeService.ApprovedServiceFee(Id);
-            if (result == null)
-                return BadRequest();
+            if (!result.IsSuccessed)
+                return BadRequest(result);
             return Ok(result);
         }
         [HttpPut("payment-service-fee")]
@@ -73,21 +73,22 @@ namespace DoctorManagement.BackendAPI.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _annualServiceFeeService.PaymentServiceFee(request);
-            if (result == null)
-                return BadRequest();
+            if (!result.IsSuccessed)
+                return BadRequest(result);
             return Ok(result);
         }
         [HttpPut("payment-service-fee-doctor")]
         [Authorize]
-        public async Task<ActionResult<ApiResult<bool>>> PaymentServiceFeeDoctor([FromBody] AnnualServiceFeePaymentDoctorRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResult<bool>>> PaymentServiceFeeDoctor([FromForm] AnnualServiceFeePaymentDoctorRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _annualServiceFeeService.PaymentServiceFeeDoctor(request);
-            if (result == null)
-                return BadRequest();
+            if (!result.IsSuccessed)
+                return BadRequest(result);
             return Ok(result);
         }
     }
