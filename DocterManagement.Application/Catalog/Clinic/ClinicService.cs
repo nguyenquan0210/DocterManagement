@@ -196,15 +196,20 @@ namespace DoctorManagement.Application.Catalog.Clinic
                 foreach (var clinic in query)
                 {
                     var i = 0;
-                    foreach (var d in clinic.c.Doctors)
+                    if (clinic.c.Doctors != null)
                     {
-
-                        var cd = checkdocter.FirstOrDefault(x => x.UserId== d.UserId);
-                        if (cd != null || clinic.c.Name.Contains(request.Keyword))
+                        foreach (var d in clinic.c.Doctors)
                         {
-                            i++;
+
+                            var cd = checkdocter.FirstOrDefault(x => x.UserId == d.UserId);
+                            if (cd != null || clinic.c.Name.Contains(request.Keyword))
+                            {
+                                i++;
+                            }
                         }
+
                     }
+                   
                     if (i == 0)
                     {
                         query = query.Where(x => x.c.Id != clinic.c.Id);
