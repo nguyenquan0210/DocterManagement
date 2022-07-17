@@ -65,7 +65,7 @@ namespace DoctorManagement.Application.System.AnnualServiceFee
                             InitialAmount = information.ServiceFee,
                             TuitionPaidFreeNumBer=0,
                             Contingency = item.Contingency > information.ServiceFee?item.Contingency - information.ServiceFee:0,
-                            Type = item.Contingency > information.ServiceFee ? item.Type:"Chưa Nộp",
+                            Type = item.Contingency > information.ServiceFee ? item.Type:"chưa Nộp",
                             PaidDate = new DateTime(),
                             No = str
                         };
