@@ -583,7 +583,7 @@
                                     <img _ngcontent-serverapp-c169=""
                                         defaultimage="../assets/img/placeholder.svg" alt=""
                                         class="w-[60px] h-[60px] object-scale-down rounded-full lazyload  ng-lazyloaded"
-                                        src="@(Configuration["BaseAddress"] + "/img/user-content/" + Model.Doctor.Img)">
+                                        src="@(Configuration["BaseAddress"] + "/img/" + Model.Doctor.Img)">
                                 </div>
                                 
                                 
@@ -693,9 +693,9 @@
             
             <section _ngcontent-serverapp-c172=""
                 class="flex flex-row justify-center items-center p-4 gap-[10px] ng-star-inserted"><a
-                    _ngcontent-serverapp-c172="" routerlink="/lich-kham"
+                    _ngcontent-serverapp-c172="" 
                     class="cursor-pointer border-white w-full md:w-auto font-semibold text-sm leading-17 bg-white shadow px-4 py-3 rounded"
-                    href="/lich-kham?id=6285afdf8881b81104d4bd7e"> Xem phiếu khám</a>
+                    asp-controller="Profile" asp-action="Appointment" asp-route-id ="@Model.Id"> Xem phiếu khám</a>
                 
             </section>
             
